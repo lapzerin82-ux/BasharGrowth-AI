@@ -1,0 +1,25 @@
+{
+  "short_name": "BasharGrowthAI",
+  "name": "BasharGrowthAI – Pediatric Growth Calculator",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0f172a",
+  "background_color": "#0f172a",
+  "description": "Professional pediatric growth tracking with WHO & CDC standards.",
+  "categories": ["medical", "health", "productivity"]
+}
