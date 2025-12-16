@@ -30,9 +30,13 @@ jobs:
     - name: Get dependencies
       run: flutter pub get
     
+    - name: Regenerate Android Files
+      # This deletes my manual files and lets Flutter create fresh, valid ones
+      run: |
+        rm -rf android
+        flutter create --platforms android .
+
     - name: Build APK (Debug)
-      # Building without --release uses debug keys automatically
-      # and bypasses the need for manual gradlew execution
       run: flutter build apk --debug
       
 
