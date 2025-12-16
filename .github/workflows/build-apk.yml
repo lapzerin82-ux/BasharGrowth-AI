@@ -36,15 +36,15 @@ jobs:
         rm -rf android
         flutter create --platforms android .
 
-    - name: Build APK (Debug) with Logging
-      run: flutter build apk --debug > build_log.txt 2>&1 || true
+    - name: Build APK (Debug)
+      run: flutter build apk --debug
       
-    - name: Upload Build Log
+    - name: Upload APK artifact
       uses: actions/upload-artifact@v4
-      if: always()
       with:
-        name: build-logs
-        path: build_log.txt
+        name: pediatric-growth-monitor-apk
+        path: build/app/outputs/flutter-apk/app-debug.apk
+        retention-days: 30
       
 
       
