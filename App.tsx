@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import InputForm from './components/InputForm';
 import ResultsDashboard from './components/ResultsDashboard';
 import GeminiInsight from './components/GeminiInsight';
+import DoctorCaseCalculator from './components/DoctorCaseCalculator';
 import { calculateGrowth } from './services/calculationService';
 import { GrowthCalculation, Sex, MeasurementMethod, UserInput, GrowthHormoneResult } from './types';
 
@@ -152,9 +153,10 @@ const App: React.FC = () => {
 
        {/* --- Main Content --- */}
        <main className="max-w-4xl mx-auto px-4 py-10 space-y-10">
-           <InputForm 
-              input={input} 
-              onChange={setInput} 
+           <DoctorCaseCalculator />
+           <InputForm
+              input={input}
+              onChange={setInput}
               onCalculate={handleCalculate}
               onReset={handleReset}
            />
