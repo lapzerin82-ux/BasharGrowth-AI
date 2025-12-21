@@ -104,8 +104,7 @@ class _InputFormState extends State<InputForm> {
               
               // Sex
               DropdownButtonFormField<String>(
-                // ignore: deprecated_member_use
-                value: _data.sex,
+                initialValue: _data.sex,
                 decoration: const InputDecoration(labelText: 'Sex', border: OutlineInputBorder()),
                 items: const [
                   DropdownMenuItem(value: 'M', child: Text('Male')),
