@@ -1,104 +1,80 @@
 import 'package:flutter/material.dart';
-import 'input_form.dart';
-import 'result_summary.dart';
-import 'growth_calculations.dart';
-import 'growth_standards.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const CaseCalculatorApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class CaseCalculatorApp extends StatelessWidget {
+  const CaseCalculatorApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Pediatric Growth Monitor',
+      title: 'Clinic Case Calculator',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
-        brightness: Brightness.light,
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.indigo,
           brightness: Brightness.light,
         ),
       ),
-      home: const GrowthMonitorHome(),
+      home: const CaseCalculatorHome(),
     );
   }
 }
 
-class GrowthMonitorHome extends StatefulWidget {
-  const GrowthMonitorHome({Key? key}) : super(key: key);
+class CaseCalculatorHome extends StatefulWidget {
+  const CaseCalculatorHome({Key? key}) : super(key: key);
 
   @override
-  State<GrowthMonitorHome> createState() => _GrowthMonitorHomeState();
+  State<CaseCalculatorHome> createState() => _CaseCalculatorHomeState();
 }
 
-class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
-  List<GrowthResultData> results = [];
-  Map<String, double>? mph;
-  Map<String, dynamic>? boneAgeResult;
+class _CaseCalculatorHomeState extends State<CaseCalculatorHome> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _startController = TextEditingController();
+  final TextEditingController _endController = TextEditingController();
+  final TextEditingController _feeController =
+      TextEditingController(text: '4000');
+  final TextEditingController _doctorRateController =
+      TextEditingController(text: '0.8375');
+  bool _includeEndNumber = false;
 
-  void _handleCalculate(PatientData data) {
-    final ageMonths = calculateAgeMonths(data.dob!, data.measurementDate);
-    final newResults = <GrowthResultData>[];
+  int? _cases;
+  double? _totalFees;
+  double? _doctorShare;
+  double? _governmentShare;
 
-    // 1. Weight for Age
-    final wfaData = getRelevantDataset(data.sex, 'weight', ageMonths);
-    final wfaDataset = wfaData['dataset'] as List<LMSDataPoint>;
-    
-    if (wfaDataset.isNotEmpty) {
-      final lms = getLMSForAge(wfaDataset, ageMonths);
-      if (lms != null && data.weight != null) {
-        final z = calculateZScore(data.weight!, lms);
-        final p = calculatePercentile(z);
-        newResults.add(GrowthResultData(
-          measure: 'Weight-for-Age',
-          value: data.weight!,
-          zScore: z,
-          percentile: p,
-          classification: interpretWeightForAge(z),
-          standard: wfaData['standardName'] as String,
-        ));
-      }
+  @override
+  void dispose() {
+    _startController.dispose();
+    _endController.dispose();
+    _feeController.dispose();
+    _doctorRateController.dispose();
+    super.dispose();
+  }
+
+  void _calculate() {
+    if (!_formKey.currentState!.validate()) {
+      return;
     }
 
-    // 2. BMI (if >= 2y)
-    if (ageMonths >= 24 && data.height != null && data.weight != null && data.height! > 0) {
-      final bmi = calculateBMI(data.weight!, data.height!);
-      newResults.add(GrowthResultData(
-        measure: 'BMI',
-        value: bmi,
-        zScore: null,
-        percentile: null,
-        classification: 'Data Required',
-        standard: 'CDC BMI',
-      ));
-    }
+    final start = int.parse(_startController.text.trim());
+    final end = int.parse(_endController.text.trim());
+    final fee = double.parse(_feeController.text.trim());
+    final doctorRate = double.parse(_doctorRateController.text.trim());
+
+    final cases = end - start + (_includeEndNumber ? 1 : 0);
+    final totalFees = cases * fee;
+    final doctorShare = totalFees * doctorRate;
+    final governmentShare = totalFees - doctorShare;
 
     setState(() {
-      results = newResults;
-      
-      // MPH
-      if (data.motherHeight != null && data.fatherHeight != null) {
-        mph = calculateMidParentalHeight(
-          data.motherHeight!,
-          data.fatherHeight!,
-          data.sex,
-        );
-      } else {
-        mph = null;
-      }
-      
-      // Bone Age
-      if (data.boneAgeMonths != null) {
-        boneAgeResult = analyzeBoneAge(ageMonths, data.boneAgeMonths);
-      } else {
-        boneAgeResult = null;
-      }
+      _cases = cases;
+      _totalFees = totalFees;
+      _doctorShare = doctorShare;
+      _governmentShare = governmentShare;
     });
   }
 
@@ -118,72 +94,22 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
         ),
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Header
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.health_and_safety, size: 40, color: Theme.of(context).primaryColor),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ShaderMask(
-                                  shaderCallback: (bounds) => LinearGradient(
-                                    colors: [Colors.indigo.shade600, Colors.green.shade500],
-                                  ).createShader(bounds),
-                                  child: const Text(
-                                    'Pediatric Growth Monitor',
-                                    style: TextStyle(
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Precision growth assessment using WHO (0-5y) & CDC (2-20y) standards',
-                                  style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                
+                const SizedBox(height: 8),
+                _Header(),
                 const SizedBox(height: 16),
-                
-                // Input Form
-                InputForm(onCalculate: _handleCalculate),
-                
+                _buildFormCard(context),
                 const SizedBox(height: 16),
-                
-                // Results
-                if (results.isNotEmpty)
-                  ResultSummary(
-                    results: results,
-                    mph: mph,
-                    boneAgeAnalysis: boneAgeResult,
-                  ),
-                
+                if (_cases != null) _buildResultsCard(context),
                 const SizedBox(height: 24),
-                
-                // Disclaimer
                 Center(
                   child: Text(
-                    'Disclaimer: This tool is for clinical decision support only.\nValidate all findings with clinical judgment.',
+                    _includeEndNumber
+                        ? 'Cases = End number − Start number + 1.'
+                        : 'Cases = End number − Start number (based on the provided list examples).',
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                   ),
@@ -192,6 +118,236 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildFormCard(BuildContext context) {
+    return Card(
+      elevation: 8,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.calculate, color: Theme.of(context).primaryColor),
+                  const SizedBox(width: 8),
+                  Text('Case Inputs',
+                      style: Theme.of(context).textTheme.headlineSmall),
+                ],
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _startController,
+                decoration: const InputDecoration(
+                  labelText: 'Start number (S)',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Enter a start number';
+                  }
+                  if (int.tryParse(value.trim()) == null) {
+                    return 'Start number must be an integer';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _endController,
+                decoration: const InputDecoration(
+                  labelText: 'End number (E)',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Enter an end number';
+                  }
+                  final end = int.tryParse(value.trim());
+                  if (end == null) {
+                    return 'End number must be an integer';
+                  }
+                  final start = int.tryParse(_startController.text.trim());
+                  if (start != null && end < start) {
+                    return 'End number must be greater than start';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Include end number'),
+                subtitle: const Text('Use +1 when the end ticket is counted.'),
+                value: _includeEndNumber,
+                onChanged: (value) {
+                  setState(() {
+                    _includeEndNumber = value;
+                  });
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _feeController,
+                decoration: const InputDecoration(
+                  labelText: 'Fee per case (IQD)',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Enter the fee per case';
+                  }
+                  if (double.tryParse(value.trim()) == null) {
+                    return 'Fee must be a number';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _doctorRateController,
+                decoration: const InputDecoration(
+                  labelText: 'Doctor share rate (r)',
+                  border: OutlineInputBorder(),
+                  helperText: 'Default: 0.8375 (83.75%)',
+                ),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Enter the doctor share rate';
+                  }
+                  final rate = double.tryParse(value.trim());
+                  if (rate == null) {
+                    return 'Rate must be a number';
+                  }
+                  if (rate < 0 || rate > 1) {
+                    return 'Rate must be between 0 and 1';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _calculate,
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: const Text('Calculate',
+                      style: TextStyle(fontSize: 16)),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildResultsCard(BuildContext context) {
+    final doctorRate = double.parse(_doctorRateController.text.trim());
+    final governmentRate = 1 - doctorRate;
+
+    return Card(
+      elevation: 8,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Results', style: Theme.of(context).textTheme.headlineSmall),
+            const SizedBox(height: 16),
+            _ResultRow(label: 'Total cases', value: _cases!.toString()),
+            _ResultRow(
+              label: 'Total fees (IQD)',
+              value: _totalFees!.toStringAsFixed(0),
+            ),
+            _ResultRow(
+              label: 'Doctor share (${(doctorRate * 100).toStringAsFixed(2)}%)',
+              value: _doctorShare!.toStringAsFixed(0),
+            ),
+            _ResultRow(
+              label:
+                  'Government share (${(governmentRate * 100).toStringAsFixed(2)}%)',
+              value: _governmentShare!.toStringAsFixed(0),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _Header extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(Icons.local_hospital,
+            size: 40, color: Theme.of(context).primaryColor),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Clinic Case Calculator',
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Calculate total cases, doctor share, and government share',
+                style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _ResultRow extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const _ResultRow({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            child: Text(
+              label,
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          ),
+        ],
       ),
     );
   }
