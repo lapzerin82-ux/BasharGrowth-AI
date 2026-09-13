@@ -27,7 +27,7 @@ class PatientData {
 class InputForm extends StatefulWidget {
   final Function(PatientData) onCalculate;
 
-  const InputForm({Key? key, required this.onCalculate}) : super(key: key);
+  const InputForm({super.key, required this.onCalculate});
 
   @override
   State<InputForm> createState() => _InputFormState();

@@ -25,11 +25,11 @@ class ResultSummary extends StatelessWidget {
   final Map<String, dynamic>? boneAgeAnalysis;
 
   const ResultSummary({
-    Key? key,
+    super.key,
     required this.results,
     this.mph,
     this.boneAgeAnalysis,
-  }) : super(key: key);
+  });
 
   Color _getStatusColor(String classification) {
     if (classification == 'Reference data unavailable') {

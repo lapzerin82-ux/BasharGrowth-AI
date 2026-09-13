@@ -74,17 +74,21 @@ final List<LMSDataPoint> cdcGirlBMI = [];
 LMSParameters? getLMSForAge(List<LMSDataPoint> dataset, double ageMonths) {
   if (dataset.isEmpty) return null;
   
-  if (ageMonths < dataset.first.ageMonths) return LMSParameters(
-    l: dataset.first.l,
-    m: dataset.first.m,
-    s: dataset.first.s,
-  );
-  
-  if (ageMonths > dataset.last.ageMonths) return LMSParameters(
-    l: dataset.last.l,
-    m: dataset.last.m,
-    s: dataset.last.s,
-  );
+  if (ageMonths < dataset.first.ageMonths) {
+    return LMSParameters(
+      l: dataset.first.l,
+      m: dataset.first.m,
+      s: dataset.first.s,
+    );
+  }
+
+  if (ageMonths > dataset.last.ageMonths) {
+    return LMSParameters(
+      l: dataset.last.l,
+      m: dataset.last.m,
+      s: dataset.last.s,
+    );
+  }
 
   for (int i = 0; i < dataset.length - 1; i++) {
     final p1 = dataset[i];
