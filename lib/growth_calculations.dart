@@ -122,3 +122,82 @@ String interpretBMIForAgeCDC(double percentile) {
   if (percentile < 95) return 'Overweight';
   return 'Obese';
 }
+
+/// Classifications that warrant an urgent-attention flag in the UI.
+const List<String> redFlagClassifications = [
+  'Severe Underweight',
+  'Severe Stunting',
+  'Severe Wasting',
+  'Severe Overweight',
+  'Obese',
+];
+
+bool isRedFlag(String classification) =>
+    redFlagClassifications.contains(classification);
+
+/// Calendar-accurate age breakdown (years, months, days).
+///
+/// A naive `daysSinceBirth ~/ 30` estimate misrepresents age because
+/// months vary from 28-31 days; this walks calendar fields instead so the
+/// displayed age matches what a clinician would compute by hand.
+class AgeBreakdown {
+  final int years;
+  final int months;
+  final int days;
+
+  const AgeBreakdown({
+    required this.years,
+    required this.months,
+    required this.days,
+  });
+
+  @override
+  String toString() => '${years}y ${months}m ${days}d';
+}
+
+/// Computes a calendar-accurate age breakdown between [dob] and [asOf].
+AgeBreakdown calculateAgeBreakdown(DateTime dob, DateTime asOf) {
+  if (asOf.isBefore(dob)) {
+    return const AgeBreakdown(years: 0, months: 0, days: 0);
+  }
+
+  int years = asOf.year - dob.year;
+  int months = asOf.month - dob.month;
+  int days = asOf.day - dob.day;
+
+  if (days < 0) {
+    months -= 1;
+    final daysInPreviousMonth = DateTime(asOf.year, asOf.month, 0).day;
+    days += daysInPreviousMonth;
+    // A single month's borrow can still leave `days` negative when dob's
+    // day-of-month exceeds the borrowed month's length (e.g. Jan 31 -> Mar
+    // 1, borrowing only Feb's 28 days). Clamp rather than borrow again,
+    // which would risk overshooting `months` for this inherently ambiguous
+    // calendar edge case.
+    if (days < 0) days = 0;
+  }
+
+  if (months < 0) {
+    years -= 1;
+    months += 12;
+  }
+
+  return AgeBreakdown(years: years, months: months, days: days);
+}
+
+/// Validates a measurement against plausible physiologic bounds, returning
+/// an error message for the form, or null if the value is acceptable.
+/// These are sanity bounds to catch data-entry mistakes (e.g. a misplaced
+/// decimal point), not diagnostic thresholds.
+String? validateMeasurement(
+  String label,
+  double? value, {
+  required double min,
+  required double max,
+}) {
+  if (value == null) return '$label must be a valid number';
+  if (value < min || value > max) {
+    return '$label should be between $min and $max';
+  }
+  return null;
+}

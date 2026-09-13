@@ -7,14 +7,18 @@ This is a **complete Flutter (Dart)** implementation of the Pediatric Growth Mon
 ### ✅ Core Features
 - **WHO Standards (0-5 years)** and **CDC References (2-20 years)**
 - **Z-score** and **Percentile** calculations using LMS method
+- **Weight-for-Age**, **Length/Height-for-Age**, **Weight-for-Length** (<2y), and **BMI-for-Age** (≥2y)
 - **Mid-Parental Height (MPH)** calculation with target range
 - **Bone Age Analysis** (flags >20% discrepancy)
 - **Clinical Interpretations** (Underweight, Stunting, Wasting, Overweight, Obesity)
+- **Calendar-accurate age calculation** (years/months/days), not a naive day-count estimate
+- **Plausibility validation** on entered measurements to catch data-entry mistakes
+- **Red-flag banner** surfacing severe findings that warrant urgent clinical attention
 
 ### 📱 Mobile-First Design
 - Material Design 3 with gradient backgrounds
 - Responsive forms with date pickers
-- Color-coded status badges (Green/Amber/Red)
+- Color-coded status badges (Green/Amber/Red/Grey for unavailable reference data)
 - Professional data tables
 
 ## 🚀 How to Build APK
@@ -68,9 +72,17 @@ flutter_app/
 ```
 
 ## 📊 Data Accuracy
-The app includes **embedded LMS data** for key age points (0-60 months WHO, 2-20 years CDC stub). For full clinical precision, update `growth_standards.dart` with complete datasets from:
+The app includes **embedded LMS data** for weight-for-age only (key age points, 0-60 months WHO boys/girls, CDC boys stub). Length/height-for-age, weight-for-length, CDC girls' weight, and BMI-for-age datasets are intentionally left **empty** in `growth_standards.dart` rather than populated with placeholder numbers — for a clinical decision-support tool, a wrong number is worse than an honest gap. When a dataset is empty, the app surfaces a grey **"Reference data unavailable"** badge for that measure instead of a computed result, so the gap is visible to the clinician rather than silently missing.
+
+To complete the datasets, populate the `TODO(clinical-data)`-marked lists in `growth_standards.dart` with official LMS tables from:
 - WHO: https://www.who.int/childgrowth/standards/
 - CDC: https://www.cdc.gov/growthcharts/
+
+## 🧪 Testing
+Unit tests for the calculation engine (Z-score/percentile math, age breakdown, MPH, bone age, interpretation thresholds, validation) live in `test/growth_calculations_test.dart`. Run them with:
+```bash
+flutter test
+```
 
 ## 🔧 Troubleshooting
 

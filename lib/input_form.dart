@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'growth_calculations.dart' show calculateAgeBreakdown, validateMeasurement;
 
 class PatientData {
   DateTime? dob;
@@ -39,22 +40,27 @@ class _InputFormState extends State<InputForm> {
 
   void _updateAge() {
     if (_data.dob != null) {
-      final diff = _data.measurementDate.difference(_data.dob!);
-      final years = diff.inDays ~/ 365;
-      final months = (diff.inDays % 365) ~/ 30;
-      final days = diff.inDays % 30;
+      final breakdown = calculateAgeBreakdown(_data.dob!, _data.measurementDate);
       setState(() {
-        _ageDisplay = '${years}y ${months}m ${days}d';
+        _ageDisplay = breakdown.toString();
       });
     }
   }
 
   Future<void> _selectDate(BuildContext context, bool isDOB) async {
+    final firstDate = isDOB ? DateTime(1900) : (_data.dob ?? DateTime(1900));
+    final lastDate = isDOB ? _data.measurementDate : DateTime.now();
+
+    var initialDate = _data.dob ?? DateTime(2020);
+    if (!isDOB) initialDate = _data.measurementDate;
+    if (initialDate.isBefore(firstDate)) initialDate = firstDate;
+    if (initialDate.isAfter(lastDate)) initialDate = lastDate;
+
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: isDOB ? DateTime(2020) : _data.measurementDate,
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
     );
     if (picked != null) {
       setState(() {
@@ -141,11 +147,14 @@ class _InputFormState extends State<InputForm> {
                   hintText: 'e.g., 12.5',
                 ),
                 keyboardType: TextInputType.number,
-                validator: (val) => val == null || val.isEmpty ? 'Required' : null,
+                validator: (val) {
+                  if (val == null || val.isEmpty) return 'Required';
+                  return validateMeasurement('Weight', double.tryParse(val), min: 0.3, max: 150);
+                },
                 onSaved: (val) => _data.weight = double.tryParse(val ?? ''),
               ),
               const SizedBox(height: 16),
-              
+
               // Height
               TextFormField(
                 decoration: const InputDecoration(
@@ -154,7 +163,10 @@ class _InputFormState extends State<InputForm> {
                   hintText: 'e.g., 85.0',
                 ),
                 keyboardType: TextInputType.number,
-                validator: (val) => val == null || val.isEmpty ? 'Required' : null,
+                validator: (val) {
+                  if (val == null || val.isEmpty) return 'Required';
+                  return validateMeasurement('Height', double.tryParse(val), min: 20, max: 200);
+                },
                 onSaved: (val) => _data.height = double.tryParse(val ?? ''),
               ),
               const SizedBox(height: 24),
@@ -174,6 +186,10 @@ class _InputFormState extends State<InputForm> {
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.number,
+                validator: (val) {
+                  if (val == null || val.isEmpty) return null;
+                  return validateMeasurement("Mother's height", double.tryParse(val), min: 100, max: 200);
+                },
                 onSaved: (val) => _data.motherHeight = double.tryParse(val ?? ''),
               ),
               const SizedBox(height: 16),
@@ -184,16 +200,24 @@ class _InputFormState extends State<InputForm> {
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.number,
+                validator: (val) {
+                  if (val == null || val.isEmpty) return null;
+                  return validateMeasurement("Father's height", double.tryParse(val), min: 100, max: 220);
+                },
                 onSaved: (val) => _data.fatherHeight = double.tryParse(val ?? ''),
               ),
               const SizedBox(height: 16),
-              
+
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Bone Age (Months)',
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.number,
+                validator: (val) {
+                  if (val == null || val.isEmpty) return null;
+                  return validateMeasurement('Bone age', double.tryParse(val), min: 0, max: 240);
+                },
                 onSaved: (val) => _data.boneAgeMonths = double.tryParse(val ?? ''),
               ),
               const SizedBox(height: 24),

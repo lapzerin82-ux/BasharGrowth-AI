@@ -41,6 +41,35 @@ final List<LMSDataPoint> cdcBoyWeight = [
   LMSDataPoint(ageMonths: 240, l: 0, m: 70, s: 0.15),
 ];
 
+// TODO(clinical-data): Populate from the official CDC 2000 Growth Reference
+// (https://www.cdc.gov/growthcharts/). Left empty rather than guessed so the
+// app honestly reports "Reference data unavailable" instead of silently
+// using inaccurate figures for a clinical decision-support tool.
+final List<LMSDataPoint> cdcGirlWeight = [];
+
+// TODO(clinical-data): Populate from WHO Length/Height-for-Age standards
+// (https://www.who.int/childgrowth/standards/) — 0-60 months.
+final List<LMSDataPoint> whoBoyHeight = [];
+final List<LMSDataPoint> whoGirlHeight = [];
+
+// TODO(clinical-data): Populate from the CDC Stature-for-Age Reference
+// (https://www.cdc.gov/growthcharts/) — 2-20 years.
+final List<LMSDataPoint> cdcBoyHeight = [];
+final List<LMSDataPoint> cdcGirlHeight = [];
+
+// TODO(clinical-data): Populate from WHO Weight-for-Length standards
+// (https://www.who.int/childgrowth/standards/). Note the independent
+// variable for this chart is recumbent length in cm, not age — the
+// `ageMonths` field on LMSDataPoint is reused to hold that x-axis value
+// when interpolating with `getLMSForAge`.
+final List<LMSDataPoint> whoBoyWeightForLength = [];
+final List<LMSDataPoint> whoGirlWeightForLength = [];
+
+// TODO(clinical-data): Populate from the CDC BMI-for-Age Reference
+// (https://www.cdc.gov/growthcharts/) — 2-20 years.
+final List<LMSDataPoint> cdcBoyBMI = [];
+final List<LMSDataPoint> cdcGirlBMI = [];
+
 /// Get LMS for a specific age using linear interpolation
 LMSParameters? getLMSForAge(List<LMSDataPoint> dataset, double ageMonths) {
   if (dataset.isEmpty) return null;
@@ -74,38 +103,56 @@ LMSParameters? getLMSForAge(List<LMSDataPoint> dataset, double ageMonths) {
   return null;
 }
 
-/// Get relevant dataset based on sex, measure type, and age
+const String _whoStandard = 'WHO Child Growth Standards';
+const String _cdcStandard = 'CDC Growth Reference (2000)';
+
+/// Get relevant dataset based on sex, measure type, and age.
+///
+/// Selection logic: WHO standards apply to weight/height under 5y (60m);
+/// CDC references apply from 5y onward. Weight-for-length is a WHO chart
+/// used under 2y and is superseded by CDC BMI-for-age from 2y onward.
 Map<String, dynamic> getRelevantDataset(
   String sex,
   String measureType,
   double ageMonths,
 ) {
-  // Selection Logic: WHO < 60m, CDC >= 60m
-  // Exception: BMI uses CDC >= 24m
-  bool isWHO = true;
-  if (measureType == 'bmi' && ageMonths >= 24) {
-    isWHO = false;
-  } else if (ageMonths >= 60) {
-    isWHO = false;
-  }
+  final bool isMale = sex == 'M';
 
-  if (measureType == 'weight') {
-    if (sex == 'M') {
+  switch (measureType) {
+    case 'weight':
+      final isWHO = ageMonths < 60;
       return {
-        'dataset': isWHO ? whoBoyWeight : cdcBoyWeight,
-        'standardName': isWHO ? 'WHO Child Growth Standards' : 'CDC Growth Reference (2000)',
+        'dataset': isWHO
+            ? (isMale ? whoBoyWeight : whoGirlWeight)
+            : (isMale ? cdcBoyWeight : cdcGirlWeight),
+        'standardName': isWHO ? _whoStandard : _cdcStandard,
       };
-    } else {
-      return {
-        'dataset': isWHO ? whoGirlWeight : <LMSDataPoint>[],
-        'standardName': isWHO ? 'WHO Child Growth Standards' : 'CDC Growth Reference (2000)',
-      };
-    }
-  }
 
-  // Fallback for other measure types
-  return {
-    'dataset': <LMSDataPoint>[],
-    'standardName': 'Unknown',
-  };
+    case 'height':
+      final isWHO = ageMonths < 60;
+      return {
+        'dataset': isWHO
+            ? (isMale ? whoBoyHeight : whoGirlHeight)
+            : (isMale ? cdcBoyHeight : cdcGirlHeight),
+        'standardName': isWHO ? _whoStandard : _cdcStandard,
+      };
+
+    case 'weightForLength':
+      return {
+        'dataset': isMale ? whoBoyWeightForLength : whoGirlWeightForLength,
+        'standardName': _whoStandard,
+      };
+
+    case 'bmi':
+      return {
+        'dataset': isMale ? cdcBoyBMI : cdcGirlBMI,
+        'standardName': _cdcStandard,
+      };
+
+    default:
+      return {
+        'dataset': <LMSDataPoint>[],
+        'standardName': 'Unknown',
+      };
+  }
 }

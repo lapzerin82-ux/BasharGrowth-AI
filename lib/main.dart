@@ -46,13 +46,12 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
     final ageMonths = calculateAgeMonths(data.dob!, data.measurementDate);
     final newResults = <GrowthResultData>[];
 
-    // 1. Weight for Age
-    final wfaData = getRelevantDataset(data.sex, 'weight', ageMonths);
-    final wfaDataset = wfaData['dataset'] as List<LMSDataPoint>;
-    
-    if (wfaDataset.isNotEmpty) {
-      final lms = getLMSForAge(wfaDataset, ageMonths);
-      if (lms != null && data.weight != null) {
+    // 1. Weight-for-Age
+    if (data.weight != null) {
+      final wfaData = getRelevantDataset(data.sex, 'weight', ageMonths);
+      final wfaDataset = wfaData['dataset'] as List<LMSDataPoint>;
+      final lms = wfaDataset.isNotEmpty ? getLMSForAge(wfaDataset, ageMonths) : null;
+      if (lms != null) {
         final z = calculateZScore(data.weight!, lms);
         final p = calculatePercentile(z);
         newResults.add(GrowthResultData(
@@ -63,20 +62,92 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
           classification: interpretWeightForAge(z),
           standard: wfaData['standardName'] as String,
         ));
+      } else {
+        newResults.add(GrowthResultData(
+          measure: 'Weight-for-Age',
+          value: data.weight!,
+          classification: 'Reference data unavailable',
+          standard: wfaData['standardName'] as String,
+        ));
       }
     }
 
-    // 2. BMI (if >= 2y)
-    if (ageMonths >= 24 && data.height != null && data.weight != null && data.height! > 0) {
-      final bmi = calculateBMI(data.weight!, data.height!);
-      newResults.add(GrowthResultData(
-        measure: 'BMI',
-        value: bmi,
-        zScore: null,
-        percentile: null,
-        classification: 'Data Required',
-        standard: 'CDC BMI',
-      ));
+    // 2. Length/Height-for-Age
+    if (data.height != null) {
+      final hfaData = getRelevantDataset(data.sex, 'height', ageMonths);
+      final hfaDataset = hfaData['dataset'] as List<LMSDataPoint>;
+      final lms = hfaDataset.isNotEmpty ? getLMSForAge(hfaDataset, ageMonths) : null;
+      if (lms != null) {
+        final z = calculateZScore(data.height!, lms);
+        final p = calculatePercentile(z);
+        newResults.add(GrowthResultData(
+          measure: 'Length/Height-for-Age',
+          value: data.height!,
+          zScore: z,
+          percentile: p,
+          classification: interpretLengthHeightForAge(z),
+          standard: hfaData['standardName'] as String,
+        ));
+      } else {
+        newResults.add(GrowthResultData(
+          measure: 'Length/Height-for-Age',
+          value: data.height!,
+          classification: 'Reference data unavailable',
+          standard: hfaData['standardName'] as String,
+        ));
+      }
+    }
+
+    // 3. Weight-for-Length (<2y) or BMI-for-Age (>=2y)
+    if (data.weight != null && data.height != null && data.height! > 0) {
+      if (ageMonths < 24) {
+        final wflData = getRelevantDataset(data.sex, 'weightForLength', ageMonths);
+        final wflDataset = wflData['dataset'] as List<LMSDataPoint>;
+        final lms = wflDataset.isNotEmpty ? getLMSForAge(wflDataset, data.height!) : null;
+        if (lms != null) {
+          final z = calculateZScore(data.weight!, lms);
+          final p = calculatePercentile(z);
+          newResults.add(GrowthResultData(
+            measure: 'Weight-for-Length',
+            value: data.weight!,
+            zScore: z,
+            percentile: p,
+            classification: interpretWeightForLength(z),
+            standard: wflData['standardName'] as String,
+          ));
+        } else {
+          newResults.add(GrowthResultData(
+            measure: 'Weight-for-Length',
+            value: data.weight!,
+            classification: 'Reference data unavailable',
+            standard: wflData['standardName'] as String,
+          ));
+        }
+      } else {
+        final bmi = calculateBMI(data.weight!, data.height!);
+        final bmiData = getRelevantDataset(data.sex, 'bmi', ageMonths);
+        final bmiDataset = bmiData['dataset'] as List<LMSDataPoint>;
+        final lms = bmiDataset.isNotEmpty ? getLMSForAge(bmiDataset, ageMonths) : null;
+        if (lms != null) {
+          final z = calculateZScore(bmi, lms);
+          final p = calculatePercentile(z);
+          newResults.add(GrowthResultData(
+            measure: 'BMI-for-Age',
+            value: bmi,
+            zScore: z,
+            percentile: p,
+            classification: interpretBMIForAgeCDC(p),
+            standard: bmiData['standardName'] as String,
+          ));
+        } else {
+          newResults.add(GrowthResultData(
+            measure: 'BMI-for-Age',
+            value: bmi,
+            classification: 'Reference data unavailable',
+            standard: bmiData['standardName'] as String,
+          ));
+        }
+      }
     }
 
     setState(() {

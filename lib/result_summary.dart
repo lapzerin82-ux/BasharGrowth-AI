@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'growth_calculations.dart' show isRedFlag;
 
 class GrowthResultData {
   final String measure;
@@ -31,7 +32,9 @@ class ResultSummary extends StatelessWidget {
   }) : super(key: key);
 
   Color _getStatusColor(String classification) {
-    if (classification == 'Normal' || classification == 'Healthy weight') {
+    if (classification == 'Reference data unavailable') {
+      return Colors.grey;
+    } else if (classification == 'Normal' || classification == 'Healthy weight') {
       return Colors.green;
     } else if (classification.contains('Severe') || classification == 'Obese') {
       return Colors.red;
@@ -44,6 +47,11 @@ class ResultSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     if (results.isEmpty) return const SizedBox.shrink();
 
+    final flaggedMeasures = results
+        .where((r) => isRedFlag(r.classification))
+        .map((r) => '${r.measure}: ${r.classification}')
+        .toList();
+
     return Card(
       elevation: 8,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -54,7 +62,45 @@ class ResultSummary extends StatelessWidget {
           children: [
             Text('Growth Assessment', style: Theme.of(context).textTheme.headlineSmall),
             const SizedBox(height: 16),
-            
+
+            if (flaggedMeasures.isNotEmpty) ...[
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade50,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.red.shade200),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(Icons.warning_amber_rounded, color: Colors.red.shade700),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Red Flag: Findings requiring urgent clinical attention',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red.shade800,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            flaggedMeasures.join(' · '),
+                            style: TextStyle(color: Colors.red.shade900, fontSize: 13),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+
             // Results Table
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
