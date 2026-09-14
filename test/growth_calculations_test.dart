@@ -79,6 +79,29 @@ void main() {
     });
   });
 
+  group('calculateValueForZ', () {
+    test('round-trips with calculateZScore (L != 0)', () {
+      final lms = LMSParameters(l: 0.5, m: 12.5, s: 0.11);
+      for (final z in [-3.0, -2.0, -1.0, 0.0, 1.0, 2.0, 3.0]) {
+        final value = calculateValueForZ(z, lms);
+        expect(calculateZScore(value, lms), closeTo(z, 1e-6));
+      }
+    });
+
+    test('round-trips with calculateZScore (L == 0)', () {
+      final lms = LMSParameters(l: 0, m: 20, s: 0.1);
+      for (final z in [-2.0, 0.0, 2.0]) {
+        final value = calculateValueForZ(z, lms);
+        expect(calculateZScore(value, lms), closeTo(z, 1e-9));
+      }
+    });
+
+    test('returns the median at Z=0', () {
+      final lms = LMSParameters(l: 0.3, m: 15, s: 0.12);
+      expect(calculateValueForZ(0, lms), closeTo(15.0, 1e-9));
+    });
+  });
+
   group('calculatePercentile', () {
     test('z=0 maps to the 50th percentile', () {
       expect(calculatePercentile(0), closeTo(50.0, 0.01));

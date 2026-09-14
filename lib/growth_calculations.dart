@@ -35,6 +35,16 @@ double calculateZScore(double value, LMSParameters lms) {
   }
 }
 
+/// Computes the measurement value at a given Z-score — the inverse of
+/// [calculateZScore] — used to draw percentile/SD curves on a growth chart.
+double calculateValueForZ(double z, LMSParameters lms) {
+  if (lms.l == 0) {
+    return lms.m * exp(lms.s * z);
+  } else {
+    return lms.m * pow(1 + lms.l * lms.s * z, 1 / lms.l);
+  }
+}
+
 /// Approximation of standard normal CDF to calculate percentile
 double calculatePercentile(double z) {
   const p = 0.3275911;

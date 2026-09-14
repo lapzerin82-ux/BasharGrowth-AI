@@ -3,6 +3,7 @@ import 'input_form.dart';
 import 'result_summary.dart';
 import 'growth_calculations.dart';
 import 'growth_standards.dart';
+import 'growth_chart.dart' show hasEnoughResolutionForChart;
 
 void main() {
   runApp(const MyApp());
@@ -61,6 +62,8 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
           percentile: p,
           classification: interpretWeightForAge(z),
           standard: wfaData['standardName'] as String,
+          chartDataset: hasEnoughResolutionForChart(wfaDataset) ? wfaDataset : null,
+          ageMonths: ageMonths,
         ));
       } else {
         newResults.add(GrowthResultData(

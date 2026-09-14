@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'growth_calculations.dart' show isRedFlag;
+import 'growth_standards.dart' show LMSDataPoint;
+import 'growth_chart.dart';
 
 class GrowthResultData {
   final String measure;
@@ -8,6 +10,8 @@ class GrowthResultData {
   final double? percentile;
   final String classification;
   final String standard;
+  final List<LMSDataPoint>? chartDataset;
+  final double? ageMonths;
 
   GrowthResultData({
     required this.measure,
@@ -16,6 +20,8 @@ class GrowthResultData {
     this.percentile,
     required this.classification,
     required this.standard,
+    this.chartDataset,
+    this.ageMonths,
   });
 }
 
@@ -135,7 +141,22 @@ class ResultSummary extends StatelessWidget {
                 }).toList(),
               ),
             ),
-            
+
+            // Growth Charts (only for measures with a dataset dense enough
+            // to plot a faithful curve — see hasEnoughResolutionForChart)
+            for (final r in results)
+              if (r.chartDataset != null && r.ageMonths != null) ...[
+                const SizedBox(height: 24),
+                GrowthChart(
+                  title: '${r.measure} vs. ${r.standard}',
+                  dataset: r.chartDataset!,
+                  patientAgeMonths: r.ageMonths!,
+                  patientValue: r.value,
+                  classification: r.classification,
+                  yAxisLabel: r.measure.contains('BMI') ? 'kg/m²' : 'kg',
+                ),
+              ],
+
             // MPH Section
             if (mph != null) ...[
               const SizedBox(height: 24),
