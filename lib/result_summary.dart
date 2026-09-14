@@ -162,6 +162,7 @@ class ResultSummary extends StatelessWidget {
                       ? 'kg/m²'
                       : (r.measure.contains('Height') ? 'cm' : 'kg'),
                   xAxisUnit: r.chartXUnit,
+                  percentileZ: r.standard.contains('CDC') ? cdcPercentileZ : whoPercentileZ,
                 ),
               ],
 

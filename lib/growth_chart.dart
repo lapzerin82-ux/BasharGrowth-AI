@@ -5,20 +5,26 @@ import 'growth_calculations.dart';
 import 'growth_standards.dart';
 
 /// Chart colors sourced from the dataviz skill's validated reference
-/// palette: a single sequential "blue" hue for the WHO median/band series,
-/// and the fixed status palette for the patient's point marker — so
-/// severity is never carried by hue alone (the classification badge text
-/// elsewhere on the screen backs it up).
+/// palette: the sequential "blue" ordinal ramp for the percentile curves
+/// (darkest at the median, lighter toward the outer percentiles — an
+/// ordinal ramp, since each step encodes distance from the median, not an
+/// unrelated category), and the fixed status palette for the patient's
+/// point marker so severity is never carried by hue alone (the
+/// classification badge text elsewhere on the screen backs it up).
 class _ChartColors {
-  static const median = Color(0xFF2A78D6);
-  static const band = Color(0xFFB7D3F6);
-  static const cutoff = Color(0xFF898781);
   static const gridline = Color(0xFFE1E0D9);
   static const axisLabel = Color(0xFF898781);
   static const legendLabel = Color(0xFF52514E);
   static const good = Color(0xFF0CA30C);
   static const warning = Color(0xFFFAB219);
   static const critical = Color(0xFFD03B3B);
+
+  // Sequential blue ramp, darkest to lightest (references/palette.md).
+  static const rampStep600 = Color(0xFF184F95);
+  static const rampStep450 = Color(0xFF2A78D6);
+  static const rampStep350 = Color(0xFF5598E7);
+  static const rampStep300 = Color(0xFF6DA7EC);
+  static const rampStep250 = Color(0xFF86B6EF); // safe floor: 2.06:1 on white
 }
 
 Color _markerColorFor(String classification) {
@@ -30,6 +36,33 @@ Color _markerColorFor(String classification) {
   }
   return _ChartColors.warning;
 }
+
+/// Standard normal distribution quantiles (the inverse CDF) — universal
+/// statistical constants, not clinical measurement data, and not
+/// approximated: these are WHO's and CDC's own documented values for the
+/// percentile curves their printed growth charts use.
+///
+/// WHO's 5-curve chart format (3rd/15th/50th/85th/97th) — see WHO's
+/// Child Growth Standards technical documentation.
+const Map<int, double> whoPercentileZ = {
+  3: -1.881,
+  15: -1.036,
+  50: 0,
+  85: 1.036,
+  97: 1.881,
+};
+
+/// CDC's 7-curve chart format (5th/10th/25th/50th/75th/90th/95th) — the
+/// standard percentiles on the printed CDC 2000 growth charts.
+const Map<int, double> cdcPercentileZ = {
+  5: -1.645,
+  10: -1.282,
+  25: -0.674,
+  50: 0,
+  75: 0.674,
+  90: 1.282,
+  95: 1.645,
+};
 
 /// A dataset needs enough anchor points, spaced closely enough, for a
 /// linear-in-LMS-space interpolation to look like a faithful curve rather
@@ -45,9 +78,51 @@ bool hasEnoughResolutionForChart(List<LMSDataPoint> dataset) {
   return true;
 }
 
-/// Plots a patient's measurement against the WHO/CDC median and normal
-/// range (±2 SD) for the relevant growth standard, using only datasets
-/// with [hasEnoughResolutionForChart].
+/// Draws a small bold percentile-number label at a spot's exact canvas
+/// position, as fl_chart computes it — reusing the library's own layout
+/// rather than re-deriving axis padding by hand. Used only on each
+/// percentile curve's rightmost point (see `checkToShowDot` in build()).
+class _PercentileLabelPainter extends FlDotPainter {
+  final String label;
+  final Color color;
+  final bool bold;
+
+  _PercentileLabelPainter({required this.label, required this.color, this.bold = false});
+
+  @override
+  void draw(Canvas canvas, FlSpot spot, Offset offsetInCanvas) {
+    final painter = TextPainter(
+      text: TextSpan(
+        text: label,
+        style: TextStyle(
+          fontSize: 10,
+          fontWeight: bold ? FontWeight.bold : FontWeight.w600,
+          color: color,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    painter.paint(canvas, offsetInCanvas + Offset(4, -painter.height / 2));
+  }
+
+  @override
+  Size getSize(FlSpot spot) => const Size(20, 14);
+
+  @override
+  Color get mainColor => color;
+
+  @override
+  FlDotPainter lerp(FlDotPainter a, FlDotPainter b, double t) => t < 0.5 ? a : b;
+
+  @override
+  List<Object?> get props => [label, color, bold];
+}
+
+/// Plots a patient's measurement against the standard WHO/CDC percentile
+/// curves for the relevant growth standard — the same 3rd/15th/50th/85th/
+/// 97th (WHO) or 5th/10th/25th/50th/75th/90th/95th (CDC) curves shown on
+/// the official printed growth charts — using only datasets with
+/// [hasEnoughResolutionForChart].
 class GrowthChart extends StatelessWidget {
   final String title;
   final List<LMSDataPoint> dataset;
@@ -59,6 +134,7 @@ class GrowthChart extends StatelessWidget {
   final String classification;
   final String yAxisLabel;
   final String xAxisUnit;
+  final Map<int, double> percentileZ;
 
   const GrowthChart({
     super.key,
@@ -69,17 +145,18 @@ class GrowthChart extends StatelessWidget {
     required this.classification,
     required this.yAxisLabel,
     this.xAxisUnit = 'm',
+    this.percentileZ = whoPercentileZ,
   });
 
   /// The LMS inverse transform (value = M·(1+LSZ)^(1/L)) is only
   /// well-behaved near the median: for a handful of ages in the CDC
-  /// BMI-for-age tables, L swings negative enough that the ±3 SD tail
+  /// BMI-for-age tables, L swings negative enough that an extreme Z
   /// pushes (1+LSZ) to near zero (or negative), and raising that to a
   /// negative fractional power explodes toward infinity or turns complex.
   /// This is a known LMS/Box-Cox edge case at extreme Z, not a data error
-  /// (Z=±2 never triggers it in any of the embedded datasets — see
-  /// test/growth_chart_test.dart). Skip the point rather than plot or
-  /// let it distort the axis scale.
+  /// (it never triggers within the ±1.881 range these percentile curves
+  /// use — see test/growth_chart_test.dart). Skip the point rather than
+  /// plot it or let it distort the axis scale.
   double? _safeValueForZ(double z, LMSParameters lms) {
     final value = calculateValueForZ(z, lms);
     if (!value.isFinite) return null;
@@ -103,47 +180,35 @@ class GrowthChart extends StatelessWidget {
     return spots;
   }
 
-  LineChartBarData _curveLine(
-    List<FlSpot> spots, {
-    required Color color,
-    double width = 2,
-    List<int>? dashArray,
-  }) {
-    return LineChartBarData(
-      spots: spots,
-      isCurved: false,
-      color: color,
-      barWidth: width,
-      dashArray: dashArray,
-      dotData: const FlDotData(show: false),
-    );
+  /// Colors curves by rank distance from the median (an ordinal ramp, not
+  /// a categorical one) so the 50th percentile — the line clinicians
+  /// reference most — reads as the most prominent.
+  Color _rampColorForRank(int rankFromMedian) {
+    const steps = [
+      _ChartColors.rampStep600,
+      _ChartColors.rampStep450,
+      _ChartColors.rampStep350,
+      _ChartColors.rampStep300,
+      _ChartColors.rampStep250,
+    ];
+    return steps[rankFromMedian.clamp(0, steps.length - 1)];
   }
 
   @override
   Widget build(BuildContext context) {
-    final minAge = min(dataset.first.ageMonths, patientX);
-    final maxAge = max(dataset.last.ageMonths, patientX);
-    final clampedPatientAge = patientX.clamp(
-      dataset.first.ageMonths,
-      dataset.last.ageMonths,
-    );
+    final dataMinAge = dataset.first.ageMonths;
+    final dataMaxAge = dataset.last.ageMonths;
+    final clampedPatientAge = patientX.clamp(dataMinAge, dataMaxAge);
 
-    final median = _curveAtZ(0, dataset.first.ageMonths, dataset.last.ageMonths);
-    final upper2 = _curveAtZ(2, dataset.first.ageMonths, dataset.last.ageMonths);
-    final lower2 = _curveAtZ(-2, dataset.first.ageMonths, dataset.last.ageMonths);
-    final upper3 = _curveAtZ(3, dataset.first.ageMonths, dataset.last.ageMonths);
-    final lower3 = _curveAtZ(-3, dataset.first.ageMonths, dataset.last.ageMonths);
+    final sortedPercentiles = percentileZ.keys.toList()..sort();
+    final medianRank = sortedPercentiles.indexOf(50);
 
-    // Size the axis off the median and normal-range (±2 SD) band — the
-    // chart's actual informative content — rather than the ±3 SD tails,
-    // which can (rarely, and only well outside the normal range) hit the
-    // LMS edge case described on _safeValueForZ. A ±3 SD point that
-    // survives that filter but still lands outside this range simply
-    // draws off the visible frame instead of distorting the whole scale.
+    final curves = <int, List<FlSpot>>{
+      for (final p in sortedPercentiles) p: _curveAtZ(percentileZ[p]!, dataMinAge, dataMaxAge),
+    };
+
     final allY = [
-      ...median.map((s) => s.y),
-      ...upper2.map((s) => s.y),
-      ...lower2.map((s) => s.y),
+      for (final spots in curves.values) ...spots.map((s) => s.y),
       patientValue,
     ];
     final rawMinY = allY.reduce(min) * 0.9;
@@ -161,9 +226,15 @@ class GrowthChart extends StatelessWidget {
     }
     final minY = (rawMinY / yStep).floor() * yStep;
     final maxY = (rawMaxY / yStep).ceil() * yStep;
-    final yInterval = yStep;
 
-    double ageInterval = ((maxAge - minAge) / 5).ceilToDouble();
+    // Reserve blank space on the right for direct end-of-line percentile
+    // labels (the convention on the official printed charts), and enough
+    // to cover the patient marker if their age exceeds the dataset.
+    final dataSpan = dataMaxAge - dataMinAge;
+    final chartMinX = min(dataMinAge, patientX);
+    final chartMaxX = max(dataMaxAge, patientX) + dataSpan * 0.12;
+
+    double ageInterval = (dataSpan / 5).ceilToDouble();
     if (ageInterval < 1) ageInterval = 1;
 
     final markerColor = _markerColorFor(classification);
@@ -177,14 +248,14 @@ class GrowthChart extends StatelessWidget {
           height: 240,
           child: LineChart(
             LineChartData(
-              minX: minAge,
-              maxX: maxAge,
+              minX: chartMinX,
+              maxX: chartMaxX,
               minY: minY,
               maxY: maxY,
               gridData: FlGridData(
                 show: true,
                 drawVerticalLine: false,
-                horizontalInterval: yInterval,
+                horizontalInterval: yStep,
                 getDrawingHorizontalLine: (_) => const FlLine(
                   color: _ChartColors.gridline,
                   strokeWidth: 1,
@@ -199,20 +270,25 @@ class GrowthChart extends StatelessWidget {
                     showTitles: true,
                     interval: ageInterval,
                     reservedSize: 26,
-                    getTitlesWidget: (value, meta) => SideTitleWidget(
-                      axisSide: meta.axisSide,
-                      child: Text(
-                        '${value.toInt()}$xAxisUnit',
-                        style: const TextStyle(fontSize: 10, color: _ChartColors.axisLabel),
-                      ),
-                    ),
+                    getTitlesWidget: (value, meta) {
+                      // Suppress ticks fl_chart would otherwise draw inside
+                      // the reserved label margin past the real data range.
+                      if (value > dataMaxAge + 0.5) return const SizedBox.shrink();
+                      return SideTitleWidget(
+                        axisSide: meta.axisSide,
+                        child: Text(
+                          '${value.toInt()}$xAxisUnit',
+                          style: const TextStyle(fontSize: 10, color: _ChartColors.axisLabel),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 leftTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
                     reservedSize: 34,
-                    interval: yInterval,
+                    interval: yStep,
                     getTitlesWidget: (value, meta) => Text(
                       value.toStringAsFixed(0),
                       style: const TextStyle(fontSize: 10, color: _ChartColors.axisLabel),
@@ -230,15 +306,30 @@ class GrowthChart extends StatelessWidget {
                   }).toList(),
                 ),
               ),
-              betweenBarsData: [
-                BetweenBarsData(fromIndex: 2, toIndex: 3, color: _ChartColors.band.withOpacity(0.45)),
-              ],
               lineBarsData: [
-                _curveLine(lower3, color: _ChartColors.cutoff, width: 1, dashArray: const [4, 4]), // 0
-                _curveLine(upper3, color: _ChartColors.cutoff, width: 1, dashArray: const [4, 4]), // 1
-                _curveLine(lower2, color: Colors.transparent, width: 0), // 2
-                _curveLine(upper2, color: Colors.transparent, width: 0), // 3
-                _curveLine(median, color: _ChartColors.median, width: 2.5), // 4
+                for (final p in sortedPercentiles)
+                  () {
+                    final rank = (sortedPercentiles.indexOf(p) - medianRank).abs();
+                    final isMedian = p == 50;
+                    final color = _rampColorForRank(rank);
+                    final spots = curves[p]!;
+                    return LineChartBarData(
+                      spots: spots,
+                      isCurved: false,
+                      color: color,
+                      barWidth: isMedian ? 2.5 : 1.4,
+                      dotData: FlDotData(
+                        show: true,
+                        checkToShowDot: (spot, bar) => spots.isNotEmpty && spot.x == spots.last.x,
+                        getDotPainter: (spot, percent, bar, index) => _PercentileLabelPainter(
+                          label: '$p',
+                          color: color,
+                          bold: isMedian,
+                        ),
+                      ),
+                    );
+                  }(),
+                // Patient's own measurement as a single highlighted point.
                 LineChartBarData(
                   spots: [FlSpot(clampedPatientAge.toDouble(), patientValue)],
                   barWidth: 0,
@@ -251,7 +342,7 @@ class GrowthChart extends StatelessWidget {
                       strokeColor: Colors.white,
                     ),
                   ),
-                ), // 5
+                ),
               ],
             ),
           ),
@@ -261,8 +352,7 @@ class GrowthChart extends StatelessWidget {
           spacing: 16,
           runSpacing: 4,
           children: [
-            _legendItem(_ChartColors.median, 'WHO median'),
-            _legendItem(_ChartColors.band.withOpacity(0.7), 'Normal range (±2 SD)'),
+            _legendItem(_ChartColors.rampStep600, 'Percentile curves (labeled)'),
             _legendItem(markerColor, 'This measurement'),
           ],
         ),
