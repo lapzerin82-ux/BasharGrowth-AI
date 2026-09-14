@@ -232,7 +232,7 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Precision growth assessment using WHO (0-5y) & CDC (2-20y) standards',
+                                  'Precision growth assessment using the CDC 2000 Growth Charts (birth-20y)',
                                   style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
                                 ),
                               ],

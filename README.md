@@ -5,9 +5,9 @@
 This is a **complete Flutter (Dart)** implementation of the Pediatric Growth Monitor app, featuring:
 
 ### ✅ Core Features
-- **WHO Standards (0-5 years)** and **CDC References (2-20 years)**
+- **CDC 2000 Growth Charts** (birth–20 years) — the same "Set 2" chart bundle NCHS/CDC publishes: recumbent Length-for-Age (birth–36mo) transitioning to standing Stature-for-Age (2–20y), Weight-for-Age (one continuous birth–20y curve), Weight-for-Length (birth–36mo), and BMI-for-Age (2–20y)
 - **Z-score** and **Percentile** calculations using LMS method
-- **Weight-for-Age**, **Length/Height-for-Age**, **Weight-for-Length** (<2y), and **BMI-for-Age** (≥2y)
+- **Growth-curve charts** matching the official printed charts' own percentile sets exactly: 3rd/10th/25th/50th/75th/90th/97th for weight, length/stature, and weight-for-length; 3rd/10th/25th/50th/75th/**85th**/90th/**95th**/97th for BMI-for-age (the chart's own overweight/obesity cutoffs)
 - **Mid-Parental Height (MPH)** calculation with target range
 - **Bone Age Analysis** (flags >20% discrepancy)
 - **Clinical Interpretations** (Underweight, Stunting, Wasting, Overweight, Obesity)
@@ -65,18 +65,17 @@ flutter_app/
 │   ├── input_form.dart           # Patient data input
 │   ├── result_summary.dart       # Results display
 │   ├── growth_calculations.dart  # Core math logic
-│   └── growth_standards.dart     # WHO/CDC LMS data
+│   ├── growth_chart.dart         # Percentile-curve chart widget
+│   └── growth_standards.dart     # CDC 2000 LMS data
 ├── android/                      # Android configuration
 ├── pubspec.yaml                  # Dependencies
 └── README.md                     # This file
 ```
 
 ## 📊 Data Accuracy
-The app includes **embedded LMS data** for weight-for-age only (key age points, 0-60 months WHO boys/girls, CDC boys stub). Length/height-for-age, weight-for-length, CDC girls' weight, and BMI-for-age datasets are intentionally left **empty** in `growth_standards.dart` rather than populated with placeholder numbers — for a clinical decision-support tool, a wrong number is worse than an honest gap. When a dataset is empty, the app surfaces a grey **"Reference data unavailable"** badge for that measure instead of a computed result, so the gap is visible to the clinician rather than silently missing.
+All LMS reference data in `growth_standards.dart` reproduces the **CDC 2000 Growth Charts** exactly — the same charts published at https://www.cdc.gov/growthcharts/, covering birth–36 months and 2–20 years for both sexes. It was extracted programmatically (not hand-typed) from CDC's own [`CDCAnthro`](https://github.com/CDC-DNPAO/CDCAnthro) R package — the reference software CDC itself uses to compute these percentiles — so the embedded values match the printed charts precisely rather than being approximated.
 
-To complete the datasets, populate the `TODO(clinical-data)`-marked lists in `growth_standards.dart` with official LMS tables from:
-- WHO: https://www.who.int/childgrowth/standards/
-- CDC: https://www.cdc.gov/growthcharts/
+If a chart ever can't be shown for a given measure/age/sex combination, the app surfaces a grey **"Reference data unavailable"** badge instead of a fabricated number — for a clinical decision-support tool, a wrong number is worse than an honest gap.
 
 ## 🧪 Testing
 Unit tests for the calculation engine (Z-score/percentile math, age breakdown, MPH, bone age, interpretation thresholds, validation) live in `test/growth_calculations_test.dart`. Run them with:

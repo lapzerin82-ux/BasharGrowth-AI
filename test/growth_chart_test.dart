@@ -25,27 +25,25 @@ void main() {
 
     test('rejects a two-point dataset spanning years (the unsafe case)', () {
       // What growth_standards.dart's datasets looked like before being
-      // populated from WHO's and CDC's own official reference software:
-      // real anchor points, but too sparse to interpolate a faithful
-      // curve shape.
+      // populated from CDC's own official reference software: real
+      // anchor points, but too sparse to interpolate a faithful curve
+      // shape.
       final dataset = [_p(0), _p(60)];
       expect(hasEnoughResolutionForChart(dataset), isFalse);
     });
   });
 
   group('populated growth_standards.dart datasets', () {
-    test('all eight WHO/CDC datasets have chart-quality resolution', () {
+    test('all ten CDC 2000 datasets have chart-quality resolution', () {
       for (final entry in {
-        'whoBoyWeight': whoBoyWeight,
-        'whoGirlWeight': whoGirlWeight,
-        'whoBoyHeight': whoBoyHeight,
-        'whoGirlHeight': whoGirlHeight,
-        'whoBoyWeightForLength': whoBoyWeightForLength,
-        'whoGirlWeightForLength': whoGirlWeightForLength,
         'cdcBoyWeight': cdcBoyWeight,
         'cdcGirlWeight': cdcGirlWeight,
-        'cdcBoyHeight': cdcBoyHeight,
-        'cdcGirlHeight': cdcGirlHeight,
+        'cdcBoyLength': cdcBoyLength,
+        'cdcGirlLength': cdcGirlLength,
+        'cdcBoyStature': cdcBoyStature,
+        'cdcGirlStature': cdcGirlStature,
+        'cdcBoyWeightForLength': cdcBoyWeightForLength,
+        'cdcGirlWeightForLength': cdcGirlWeightForLength,
         'cdcBoyBMI': cdcBoyBMI,
         'cdcGirlBMI': cdcGirlBMI,
       }.entries) {

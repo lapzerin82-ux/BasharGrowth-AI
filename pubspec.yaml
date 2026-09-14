@@ -1,5 +1,5 @@
 name: pediatric_growth_monitor
-description: Precision growth assessment using WHO (0-5y) & CDC (2-20y) standards.
+description: Precision growth assessment using the CDC 2000 Growth Charts (birth-20y).
 publish_to: 'none'
 version: 1.0.0+1
 

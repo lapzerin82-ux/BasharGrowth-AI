@@ -4,7 +4,7 @@
 
 ## 📱 Pediatric Growth Monitoring Application
 
-A professional Flutter mobile application for precision growth assessment using **WHO (0-5 years)** and **CDC (2-20 years)** standards.
+A professional Flutter mobile application for precision growth assessment using the **CDC 2000 Growth Charts (birth–20 years)**.
 
 ### ✨ Features
 - ✅ **Z-score & Percentile Calculations** using LMS method
@@ -47,9 +47,7 @@ flutter build apk --release
 ```
 
 ### 📊 Growth Data
-The app includes embedded LMS data for demonstration. For full clinical accuracy, update `lib/growth_standards.dart` with complete datasets from:
-- WHO: https://www.who.int/childgrowth/standards/
-- CDC: https://www.cdc.gov/growthcharts/
+`lib/growth_standards.dart` embeds the exact CDC 2000 Growth Chart LMS data (https://www.cdc.gov/growthcharts/), extracted programmatically from CDC's own [`CDCAnthro`](https://github.com/CDC-DNPAO/CDCAnthro) reference package rather than approximated.
 
 ### 📂 Project Structure
 ```
@@ -58,7 +56,7 @@ lib/
 ├── input_form.dart           # Patient data input
 ├── result_summary.dart       # Results display
 ├── growth_calculations.dart  # Core math logic
-└── growth_standards.dart     # WHO/CDC LMS data
+└── growth_standards.dart     # CDC 2000 LMS data
 ```
 
 ### 🤝 Contributing

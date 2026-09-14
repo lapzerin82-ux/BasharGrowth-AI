@@ -116,7 +116,7 @@ String interpretLengthHeightForAge(double z) {
   return 'Normal';
 }
 
-/// Interprets Weight-for-Length Z-score (WHO < 5y)
+/// Interprets Weight-for-Length Z-score (used under 2 years)
 String interpretWeightForLength(double z) {
   if (z < -3) return 'Severe Wasting';
   if (z < -2) return 'Wasting';

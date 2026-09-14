@@ -39,29 +39,34 @@ Color _markerColorFor(String classification) {
 
 /// Standard normal distribution quantiles (the inverse CDF) — universal
 /// statistical constants, not clinical measurement data, and not
-/// approximated: these are WHO's and CDC's own documented values for the
-/// percentile curves their printed growth charts use.
+/// approximated: these are the exact percentiles printed on the CDC 2000
+/// growth charts (see growth_standards.dart's file header).
 ///
-/// WHO's 5-curve chart format (3rd/15th/50th/85th/97th) — see WHO's
-/// Child Growth Standards technical documentation.
-const Map<int, double> whoPercentileZ = {
+/// The 7-curve set used on the weight-for-age, length/stature-for-age,
+/// and weight-for-length charts.
+const Map<int, double> cdcStandardPercentileZ = {
   3: -1.881,
-  15: -1.036,
-  50: 0,
-  85: 1.036,
-  97: 1.881,
-};
-
-/// CDC's 7-curve chart format (5th/10th/25th/50th/75th/90th/95th) — the
-/// standard percentiles on the printed CDC 2000 growth charts.
-const Map<int, double> cdcPercentileZ = {
-  5: -1.645,
   10: -1.282,
   25: -0.674,
   50: 0,
   75: 0.674,
   90: 1.282,
+  97: 1.881,
+};
+
+/// The 9-curve set used only on the BMI-for-age chart, which adds the
+/// clinical overweight (85th) and obesity (95th) cutoffs on top of the
+/// standard 7.
+const Map<int, double> cdcBmiPercentileZ = {
+  3: -1.881,
+  10: -1.282,
+  25: -0.674,
+  50: 0,
+  75: 0.674,
+  85: 1.036,
+  90: 1.282,
   95: 1.645,
+  97: 1.881,
 };
 
 /// A dataset needs enough anchor points, spaced closely enough, for a
@@ -118,17 +123,17 @@ class _PercentileLabelPainter extends FlDotPainter {
   List<Object?> get props => [label, color, bold];
 }
 
-/// Plots a patient's measurement against the standard WHO/CDC percentile
-/// curves for the relevant growth standard — the same 3rd/15th/50th/85th/
-/// 97th (WHO) or 5th/10th/25th/50th/75th/90th/95th (CDC) curves shown on
-/// the official printed growth charts — using only datasets with
-/// [hasEnoughResolutionForChart].
+/// Plots a patient's measurement against the exact CDC 2000 percentile
+/// curves for the relevant chart — the same 3rd/10th/25th/50th/75th/90th/
+/// 97th (or, for BMI, 3rd/10th/25th/50th/75th/85th/90th/95th/97th) curves
+/// shown on the official printed CDC growth charts — using only datasets
+/// with [hasEnoughResolutionForChart].
 class GrowthChart extends StatelessWidget {
   final String title;
   final List<LMSDataPoint> dataset;
   /// The patient's position on the X axis — age in months for every chart
-  /// except Weight-for-Length, where WHO plots against recumbent length
-  /// (cm) instead, per [xAxisUnit].
+  /// except Weight-for-Length, which plots against recumbent length (cm)
+  /// instead, per [xAxisUnit].
   final double patientX;
   final double patientValue;
   final String classification;
@@ -145,7 +150,7 @@ class GrowthChart extends StatelessWidget {
     required this.classification,
     required this.yAxisLabel,
     this.xAxisUnit = 'm',
-    this.percentileZ = whoPercentileZ,
+    this.percentileZ = cdcStandardPercentileZ,
   });
 
   /// The LMS inverse transform (value = M·(1+LSZ)^(1/L)) is only
