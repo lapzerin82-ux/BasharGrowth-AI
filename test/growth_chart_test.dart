@@ -24,10 +24,37 @@ void main() {
     });
 
     test('rejects a two-point dataset spanning years (the unsafe case)', () {
-      // Mirrors whoGirlWeight / cdcBoyWeight in growth_standards.dart: real
-      // anchor points, but too sparse to interpolate a faithful curve shape.
+      // What growth_standards.dart's datasets looked like before being
+      // populated from WHO's and CDC's own official reference software:
+      // real anchor points, but too sparse to interpolate a faithful
+      // curve shape.
       final dataset = [_p(0), _p(60)];
       expect(hasEnoughResolutionForChart(dataset), isFalse);
+    });
+  });
+
+  group('populated growth_standards.dart datasets', () {
+    test('all eight WHO/CDC datasets have chart-quality resolution', () {
+      for (final entry in {
+        'whoBoyWeight': whoBoyWeight,
+        'whoGirlWeight': whoGirlWeight,
+        'whoBoyHeight': whoBoyHeight,
+        'whoGirlHeight': whoGirlHeight,
+        'whoBoyWeightForLength': whoBoyWeightForLength,
+        'whoGirlWeightForLength': whoGirlWeightForLength,
+        'cdcBoyWeight': cdcBoyWeight,
+        'cdcGirlWeight': cdcGirlWeight,
+        'cdcBoyHeight': cdcBoyHeight,
+        'cdcGirlHeight': cdcGirlHeight,
+        'cdcBoyBMI': cdcBoyBMI,
+        'cdcGirlBMI': cdcGirlBMI,
+      }.entries) {
+        expect(
+          hasEnoughResolutionForChart(entry.value),
+          isTrue,
+          reason: '${entry.key} should have chart-quality resolution',
+        );
+      }
     });
   });
 }

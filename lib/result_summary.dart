@@ -11,7 +11,11 @@ class GrowthResultData {
   final String classification;
   final String standard;
   final List<LMSDataPoint>? chartDataset;
-  final double? ageMonths;
+  /// The patient's X-axis position for [chartDataset] — age in months for
+  /// every chart except Weight-for-Length, where it's recumbent length
+  /// (cm); see [chartXUnit].
+  final double? chartX;
+  final String chartXUnit;
 
   GrowthResultData({
     required this.measure,
@@ -21,7 +25,8 @@ class GrowthResultData {
     required this.classification,
     required this.standard,
     this.chartDataset,
-    this.ageMonths,
+    this.chartX,
+    this.chartXUnit = 'm',
   });
 }
 
@@ -145,15 +150,18 @@ class ResultSummary extends StatelessWidget {
             // Growth Charts (only for measures with a dataset dense enough
             // to plot a faithful curve — see hasEnoughResolutionForChart)
             for (final r in results)
-              if (r.chartDataset != null && r.ageMonths != null) ...[
+              if (r.chartDataset != null && r.chartX != null) ...[
                 const SizedBox(height: 24),
                 GrowthChart(
                   title: '${r.measure} vs. ${r.standard}',
                   dataset: r.chartDataset!,
-                  patientAgeMonths: r.ageMonths!,
+                  patientX: r.chartX!,
                   patientValue: r.value,
                   classification: r.classification,
-                  yAxisLabel: r.measure.contains('BMI') ? 'kg/m²' : 'kg',
+                  yAxisLabel: r.measure.contains('BMI')
+                      ? 'kg/m²'
+                      : (r.measure.contains('Height') ? 'cm' : 'kg'),
+                  xAxisUnit: r.chartXUnit,
                 ),
               ],
 

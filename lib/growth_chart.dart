@@ -51,29 +51,55 @@ bool hasEnoughResolutionForChart(List<LMSDataPoint> dataset) {
 class GrowthChart extends StatelessWidget {
   final String title;
   final List<LMSDataPoint> dataset;
-  final double patientAgeMonths;
+  /// The patient's position on the X axis — age in months for every chart
+  /// except Weight-for-Length, where WHO plots against recumbent length
+  /// (cm) instead, per [xAxisUnit].
+  final double patientX;
   final double patientValue;
   final String classification;
   final String yAxisLabel;
+  final String xAxisUnit;
 
   const GrowthChart({
     super.key,
     required this.title,
     required this.dataset,
-    required this.patientAgeMonths,
+    required this.patientX,
     required this.patientValue,
     required this.classification,
     required this.yAxisLabel,
+    this.xAxisUnit = 'm',
   });
+
+  /// The LMS inverse transform (value = M·(1+LSZ)^(1/L)) is only
+  /// well-behaved near the median: for a handful of ages in the CDC
+  /// BMI-for-age tables, L swings negative enough that the ±3 SD tail
+  /// pushes (1+LSZ) to near zero (or negative), and raising that to a
+  /// negative fractional power explodes toward infinity or turns complex.
+  /// This is a known LMS/Box-Cox edge case at extreme Z, not a data error
+  /// (Z=±2 never triggers it in any of the embedded datasets — see
+  /// test/growth_chart_test.dart). Skip the point rather than plot or
+  /// let it distort the axis scale.
+  double? _safeValueForZ(double z, LMSParameters lms) {
+    final value = calculateValueForZ(z, lms);
+    if (!value.isFinite) return null;
+    if (value <= 0 || value > lms.m * 4 || value < lms.m * 0.25) return null;
+    return value;
+  }
 
   List<FlSpot> _curveAtZ(double z, double minAge, double maxAge) {
     final spots = <FlSpot>[];
     for (double age = minAge; age < maxAge; age += 1) {
       final lms = getLMSForAge(dataset, age);
-      if (lms != null) spots.add(FlSpot(age, calculateValueForZ(z, lms)));
+      if (lms == null) continue;
+      final value = _safeValueForZ(z, lms);
+      if (value != null) spots.add(FlSpot(age, value));
     }
     final lmsEnd = getLMSForAge(dataset, maxAge);
-    if (lmsEnd != null) spots.add(FlSpot(maxAge, calculateValueForZ(z, lmsEnd)));
+    if (lmsEnd != null) {
+      final value = _safeValueForZ(z, lmsEnd);
+      if (value != null) spots.add(FlSpot(maxAge, value));
+    }
     return spots;
   }
 
@@ -95,9 +121,9 @@ class GrowthChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final minAge = min(dataset.first.ageMonths, patientAgeMonths);
-    final maxAge = max(dataset.last.ageMonths, patientAgeMonths);
-    final clampedPatientAge = patientAgeMonths.clamp(
+    final minAge = min(dataset.first.ageMonths, patientX);
+    final maxAge = max(dataset.last.ageMonths, patientX);
+    final clampedPatientAge = patientX.clamp(
       dataset.first.ageMonths,
       dataset.last.ageMonths,
     );
@@ -108,10 +134,16 @@ class GrowthChart extends StatelessWidget {
     final upper3 = _curveAtZ(3, dataset.first.ageMonths, dataset.last.ageMonths);
     final lower3 = _curveAtZ(-3, dataset.first.ageMonths, dataset.last.ageMonths);
 
+    // Size the axis off the median and normal-range (±2 SD) band — the
+    // chart's actual informative content — rather than the ±3 SD tails,
+    // which can (rarely, and only well outside the normal range) hit the
+    // LMS edge case described on _safeValueForZ. A ±3 SD point that
+    // survives that filter but still lands outside this range simply
+    // draws off the visible frame instead of distorting the whole scale.
     final allY = [
       ...median.map((s) => s.y),
-      ...upper3.map((s) => s.y),
-      ...lower3.map((s) => s.y),
+      ...upper2.map((s) => s.y),
+      ...lower2.map((s) => s.y),
       patientValue,
     ];
     final rawMinY = allY.reduce(min) * 0.9;
@@ -170,7 +202,7 @@ class GrowthChart extends StatelessWidget {
                     getTitlesWidget: (value, meta) => SideTitleWidget(
                       axisSide: meta.axisSide,
                       child: Text(
-                        '${value.toInt()}m',
+                        '${value.toInt()}$xAxisUnit',
                         style: const TextStyle(fontSize: 10, color: _ChartColors.axisLabel),
                       ),
                     ),
@@ -192,7 +224,7 @@ class GrowthChart extends StatelessWidget {
                 touchTooltipData: LineTouchTooltipData(
                   getTooltipItems: (spots) => spots.map((s) {
                     return LineTooltipItem(
-                      '${s.y.toStringAsFixed(1)} $yAxisLabel @ ${s.x.toStringAsFixed(0)}m',
+                      '${s.y.toStringAsFixed(1)} $yAxisLabel @ ${s.x.toStringAsFixed(0)}$xAxisUnit',
                       const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
                     );
                   }).toList(),

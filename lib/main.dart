@@ -63,7 +63,7 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
           classification: interpretWeightForAge(z),
           standard: wfaData['standardName'] as String,
           chartDataset: hasEnoughResolutionForChart(wfaDataset) ? wfaDataset : null,
-          ageMonths: ageMonths,
+          chartX: ageMonths,
         ));
       } else {
         newResults.add(GrowthResultData(
@@ -90,6 +90,8 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
           percentile: p,
           classification: interpretLengthHeightForAge(z),
           standard: hfaData['standardName'] as String,
+          chartDataset: hasEnoughResolutionForChart(hfaDataset) ? hfaDataset : null,
+          chartX: ageMonths,
         ));
       } else {
         newResults.add(GrowthResultData(
@@ -117,6 +119,9 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
             percentile: p,
             classification: interpretWeightForLength(z),
             standard: wflData['standardName'] as String,
+            chartDataset: hasEnoughResolutionForChart(wflDataset) ? wflDataset : null,
+            chartX: data.height!,
+            chartXUnit: 'cm',
           ));
         } else {
           newResults.add(GrowthResultData(
@@ -141,6 +146,8 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
             percentile: p,
             classification: interpretBMIForAgeCDC(p),
             standard: bmiData['standardName'] as String,
+            chartDataset: hasEnoughResolutionForChart(bmiDataset) ? bmiDataset : null,
+            chartX: ageMonths,
           ));
         } else {
           newResults.add(GrowthResultData(
