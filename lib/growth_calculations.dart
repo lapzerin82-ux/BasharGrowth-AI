@@ -122,3 +122,12 @@ String interpretBMIForAgeCDC(double percentile) {
   if (percentile < 95) return 'Overweight';
   return 'Obese';
 }
+
+/// Interprets Head Circumference-for-Age Z-score (WHO 0-5y)
+String interpretHeadCircumferenceForAge(double z) {
+  if (z < -3) return 'Severe Microcephaly';
+  if (z < -2) return 'Microcephaly';
+  if (z > 3) return 'Severe Macrocephaly';
+  if (z > 2) return 'Macrocephaly';
+  return 'Normal';
+}

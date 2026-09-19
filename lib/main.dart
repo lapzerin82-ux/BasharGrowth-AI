@@ -62,14 +62,47 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
     // 2. BMI (if >= 2y)
     if (ageMonths >= 24 && data.height != null && data.weight != null && data.height! > 0) {
       final bmi = calculateBMI(data.weight!, data.height!);
+      final bmiData = getRelevantDataset(data.sex, 'bmi', ageMonths);
+      final bmiDataset = bmiData['dataset'] as List<LMSDataPoint>;
+      final bmiLms = bmiDataset.isNotEmpty ? getLMSForAge(bmiDataset, ageMonths) : null;
+
+      double? bmiZ;
+      double? bmiP;
+      var bmiClassification = 'Data Required';
+      if (bmiLms != null) {
+        bmiZ = calculateZScore(bmi, bmiLms);
+        bmiP = calculatePercentile(bmiZ);
+        bmiClassification = interpretBMIForAgeCDC(bmiP);
+      }
+
       newResults.add(GrowthResultData(
         measure: 'BMI',
         value: bmi,
-        zScore: null,
-        percentile: null,
-        classification: 'Data Required',
-        standard: 'CDC BMI',
+        zScore: bmiZ,
+        percentile: bmiP,
+        classification: bmiClassification,
+        standard: bmiData['standardName'] as String,
       ));
+    }
+
+    // 3. Head Circumference for Age (WHO standard, 0-60 months)
+    final hcData = getRelevantDataset(data.sex, 'hc', ageMonths);
+    final hcDataset = hcData['dataset'] as List<LMSDataPoint>;
+
+    if (hcDataset.isNotEmpty && data.headCircumference != null) {
+      final lms = getLMSForAge(hcDataset, ageMonths);
+      if (lms != null) {
+        final z = calculateZScore(data.headCircumference!, lms);
+        final p = calculatePercentile(z);
+        newResults.add(GrowthResultData(
+          measure: 'Head Circumference-for-Age',
+          value: data.headCircumference!,
+          zScore: z,
+          percentile: p,
+          classification: interpretHeadCircumferenceForAge(z),
+          standard: hcData['standardName'] as String,
+        ));
+      }
     }
 
     setState(() {

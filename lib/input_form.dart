@@ -7,6 +7,7 @@ class PatientData {
   String sex;
   double? weight;
   double? height;
+  double? headCircumference;
   DateTime measurementDate;
   double? boneAgeMonths;
   double? motherHeight;
@@ -17,6 +18,7 @@ class PatientData {
     this.sex = 'M',
     this.weight,
     this.height,
+    this.headCircumference,
     DateTime? measurementDate,
     this.boneAgeMonths,
     this.motherHeight,
@@ -146,6 +148,18 @@ class _InputFormState extends State<InputForm> {
                 keyboardType: TextInputType.number,
                 validator: (val) => val == null || val.isEmpty ? 'Required' : null,
                 onSaved: (val) => _data.height = double.tryParse(val ?? ''),
+              ),
+              const SizedBox(height: 16),
+
+              // Head Circumference
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Head Circumference (cm, optional)',
+                  prefixIcon: Icon(Icons.psychology, color: AppColors.teal),
+                  hintText: 'e.g., 46.0 — assessed up to age 5',
+                ),
+                keyboardType: TextInputType.number,
+                onSaved: (val) => _data.headCircumference = double.tryParse(val ?? ''),
               ),
               const SizedBox(height: 24),
 
