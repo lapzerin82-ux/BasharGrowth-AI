@@ -52,7 +52,6 @@ build/
 **/ios/Runner/GeneratedPluginRegistrant.*
 
 # Web
-lib/generated_plugin_registrant.dart
 
 # Symbolication
 app.*.symbols

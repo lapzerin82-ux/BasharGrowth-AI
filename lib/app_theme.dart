@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 /// Bright, friendly color palette used throughout the app.
 class AppColors {
@@ -26,8 +25,10 @@ class AppTheme {
       ),
     );
 
-    final headingFont = GoogleFonts.baloo2TextTheme(base.textTheme);
-    final bodyFont = GoogleFonts.quicksandTextTheme(base.textTheme);
+    const headingFamily = 'Baloo2';
+    const bodyFamily = 'Quicksand';
+    final headingFont = base.textTheme.apply(fontFamily: headingFamily);
+    final bodyFont = base.textTheme.apply(fontFamily: bodyFamily);
 
     return base.copyWith(
       scaffoldBackgroundColor: const Color(0xFFFDF6FF),
@@ -41,7 +42,7 @@ class AppTheme {
         ),
         titleLarge: headingFont.titleLarge?.copyWith(fontWeight: FontWeight.w700),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 6,
         shadowColor: AppColors.purple.withOpacity(0.25),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
