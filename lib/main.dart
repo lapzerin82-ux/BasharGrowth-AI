@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'app_theme.dart';
 import 'input_form.dart';
 import 'result_summary.dart';
 import 'growth_calculations.dart';
@@ -14,17 +15,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Pediatric Growth Monitor',
+      title: 'PediaGrowth',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
-        brightness: Brightness.light,
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.indigo,
-          brightness: Brightness.light,
-        ),
-      ),
+      theme: AppTheme.light(),
       home: const GrowthMonitorHome(),
     );
   }
@@ -105,93 +98,110 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Colors.blue.shade50,
-              Colors.indigo.shade50,
-            ],
-          ),
-        ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Header
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.health_and_safety, size: 40, color: Theme.of(context).primaryColor),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ShaderMask(
-                                  shaderCallback: (bounds) => LinearGradient(
-                                    colors: [Colors.indigo.shade600, Colors.green.shade500],
-                                  ).createShader(bounds),
-                                  child: const Text(
-                                    'Pediatric Growth Monitor',
-                                    style: TextStyle(
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Precision growth assessment using WHO (0-5y) & CDC (2-20y) standards',
-                                  style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                
-                const SizedBox(height: 16),
-                
-                // Input Form
-                InputForm(onCalculate: _handleCalculate),
-                
-                const SizedBox(height: 16),
-                
-                // Results
-                if (results.isNotEmpty)
-                  ResultSummary(
-                    results: results,
-                    mph: mph,
-                    boneAgeAnalysis: boneAgeResult,
-                  ),
-                
-                const SizedBox(height: 24),
-                
-                // Disclaimer
-                Center(
-                  child: Text(
-                    'Disclaimer: This tool is for clinical decision support only.\nValidate all findings with clinical judgment.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-                  ),
-                ),
-              ],
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFFFFF3E0),
+                  Color(0xFFFDF6FF),
+                  Color(0xFFE8FBF3),
+                ],
+              ),
             ),
           ),
-        ),
+          const BubbleBackground(),
+          SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [AppColors.purple, AppColors.pink],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(28),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.purple.withOpacity(0.3),
+                          blurRadius: 20,
+                          offset: const Offset(0, 10),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        const StickerBadge(emoji: '🧒', color: Colors.white, size: 56),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'PediaGrowth 🌱',
+                                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 26,
+                                    ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Fun & precise growth tracking with WHO (0–5y) & CDC (2–20y) standards',
+                                style: TextStyle(fontSize: 13, color: Colors.white.withOpacity(0.9)),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Input Form
+                  InputForm(onCalculate: _handleCalculate),
+
+                  const SizedBox(height: 20),
+
+                  // Results
+                  if (results.isNotEmpty)
+                    ResultSummary(
+                      results: results,
+                      mph: mph,
+                      boneAgeAnalysis: boneAgeResult,
+                    ),
+
+                  const SizedBox(height: 24),
+
+                  // Disclaimer
+                  Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: AppColors.yellow.withOpacity(0.25),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Text(
+                        '💡 For clinical decision support only.\nAlways validate findings with clinical judgment.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 12, color: Colors.brown.shade700),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

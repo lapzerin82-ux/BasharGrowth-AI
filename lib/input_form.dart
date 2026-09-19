@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'app_theme.dart';
 
 class PatientData {
   DateTime? dob;
@@ -71,8 +72,6 @@ class _InputFormState extends State<InputForm> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 8,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Form(
@@ -80,64 +79,55 @@ class _InputFormState extends State<InputForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Icon(Icons.person, color: Theme.of(context).primaryColor),
-                  const SizedBox(width: 8),
-                  Text('Patient Demographics', style: Theme.of(context).textTheme.headlineSmall),
-                ],
-              ),
+              const SectionTitle(emoji: '🧒', title: 'Patient Demographics', color: AppColors.purpleDark),
               const SizedBox(height: 16),
-              
+
               // DOB
               ListTile(
+                leading: const Text('🎂', style: TextStyle(fontSize: 22)),
                 title: const Text('Date of Birth'),
                 subtitle: Text(_data.dob == null ? 'Not selected' : DateFormat('yyyy-MM-dd').format(_data.dob!)),
-                trailing: const Icon(Icons.calendar_today),
+                trailing: const Icon(Icons.calendar_today, color: AppColors.purple),
                 onTap: () => _selectDate(context, true),
               ),
               if (_ageDisplay.isNotEmpty)
                 Padding(
-                  padding: const EdgeInsets.only(left: 16, bottom: 8),
-                  child: Text('Age: $_ageDisplay', style: TextStyle(color: Colors.grey[600])),
+                  padding: const EdgeInsets.only(left: 16, top: 6, bottom: 8),
+                  child: Text('🕐 Age: $_ageDisplay', style: const TextStyle(color: AppColors.purpleDark, fontWeight: FontWeight.w600)),
                 ),
-              
+              const SizedBox(height: 8),
+
               // Sex
               DropdownButtonFormField<String>(
                 // ignore: deprecated_member_use
                 value: _data.sex,
-                decoration: const InputDecoration(labelText: 'Sex', border: OutlineInputBorder()),
+                decoration: const InputDecoration(labelText: 'Sex', prefixIcon: Icon(Icons.face, color: AppColors.pink)),
                 items: const [
-                  DropdownMenuItem(value: 'M', child: Text('Male')),
-                  DropdownMenuItem(value: 'F', child: Text('Female')),
+                  DropdownMenuItem(value: 'M', child: Text('👦 Male')),
+                  DropdownMenuItem(value: 'F', child: Text('👧 Female')),
                 ],
                 onChanged: (val) => setState(() => _data.sex = val ?? 'M'),
               ),
               const SizedBox(height: 16),
-              
+
               // Measurement Date
               ListTile(
+                leading: const Text('📅', style: TextStyle(fontSize: 22)),
                 title: const Text('Measurement Date'),
                 subtitle: Text(DateFormat('yyyy-MM-dd').format(_data.measurementDate)),
-                trailing: const Icon(Icons.calendar_today),
+                trailing: const Icon(Icons.calendar_today, color: AppColors.purple),
                 onTap: () => _selectDate(context, false),
               ),
               const SizedBox(height: 24),
-              
-              Row(
-                children: [
-                  Icon(Icons.straighten, color: Theme.of(context).primaryColor),
-                  const SizedBox(width: 8),
-                  Text('Anthropometry', style: Theme.of(context).textTheme.headlineSmall),
-                ],
-              ),
+
+              const SectionTitle(emoji: '📏', title: 'Anthropometry', color: AppColors.teal),
               const SizedBox(height: 16),
-              
+
               // Weight
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Weight (kg)',
-                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.monitor_weight, color: AppColors.teal),
                   hintText: 'e.g., 12.5',
                 ),
                 keyboardType: TextInputType.number,
@@ -145,12 +135,12 @@ class _InputFormState extends State<InputForm> {
                 onSaved: (val) => _data.weight = double.tryParse(val ?? ''),
               ),
               const SizedBox(height: 16),
-              
+
               // Height
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Length/Height (cm)',
-                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.height, color: AppColors.teal),
                   hintText: 'e.g., 85.0',
                 ),
                 keyboardType: TextInputType.number,
@@ -158,49 +148,45 @@ class _InputFormState extends State<InputForm> {
                 onSaved: (val) => _data.height = double.tryParse(val ?? ''),
               ),
               const SizedBox(height: 24),
-              
-              Row(
-                children: [
-                  Icon(Icons.family_restroom, color: Theme.of(context).primaryColor),
-                  const SizedBox(width: 8),
-                  Text('Clinical Context (Optional)', style: Theme.of(context).textTheme.headlineSmall),
-                ],
-              ),
+
+              const SectionTitle(emoji: '👪', title: 'Clinical Context (Optional)', color: AppColors.coral),
               const SizedBox(height: 16),
-              
+
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: "Mother's Height (cm)",
-                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.woman, color: AppColors.coral),
                 ),
                 keyboardType: TextInputType.number,
                 onSaved: (val) => _data.motherHeight = double.tryParse(val ?? ''),
               ),
               const SizedBox(height: 16),
-              
+
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: "Father's Height (cm)",
-                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.man, color: AppColors.coral),
                 ),
                 keyboardType: TextInputType.number,
                 onSaved: (val) => _data.fatherHeight = double.tryParse(val ?? ''),
               ),
               const SizedBox(height: 16),
-              
+
               TextFormField(
                 decoration: const InputDecoration(
                   labelText: 'Bone Age (Months)',
-                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.accessibility_new, color: AppColors.coral),
                 ),
                 keyboardType: TextInputType.number,
                 onSaved: (val) => _data.boneAgeMonths = double.tryParse(val ?? ''),
               ),
-              const SizedBox(height: 24),
-              
+              const SizedBox(height: 28),
+
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(
+                child: GradientButton(
+                  label: 'Calculate Growth',
+                  emoji: '🚀',
                   onPressed: () {
                     if (_formKey.currentState!.validate() && _data.dob != null) {
                       _formKey.currentState!.save();
@@ -211,11 +197,6 @@ class _InputFormState extends State<InputForm> {
                       );
                     }
                   },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                  ),
-                  child: const Text('Calculate Growth', style: TextStyle(fontSize: 16)),
                 ),
               ),
             ],
