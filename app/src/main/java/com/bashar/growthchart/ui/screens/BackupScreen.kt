@@ -45,6 +45,7 @@ import com.bashar.growthchart.core.backup.BackupCodec
 import com.bashar.growthchart.core.model.BackupContents
 import com.bashar.growthchart.ui.components.AppTopBar
 import com.bashar.growthchart.ui.components.SectionCard
+import com.bashar.growthchart.ui.components.textSlot
 import com.bashar.growthchart.ui.components.exportDir
 import com.bashar.growthchart.ui.components.shareFile
 import kotlinx.coroutines.launch
@@ -118,7 +119,7 @@ fun BackupScreen(container: AppContainer, active: ActiveSession, restoreFirst: B
                     Text("Creates one encrypted file (AES-256) with every patient, measurement and note. Choose a backup password — it is needed to restore the file on any device and cannot be recovered.")
                     OutlinedTextField(pw, { pw = it }, label = { Text("Backup password") }, singleLine = true,
                         visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        isError = pwError != null, supportingText = pwError?.let { { Text(it) } }, modifier = Modifier.fillMaxWidth())
+                        isError = pwError != null, supportingText = textSlot(pwError), modifier = Modifier.fillMaxWidth())
                     OutlinedTextField(pw2, { pw2 = it }, label = { Text("Repeat password") }, singleLine = true,
                         visualTransformation = PasswordVisualTransformation(), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                         modifier = Modifier.fillMaxWidth())

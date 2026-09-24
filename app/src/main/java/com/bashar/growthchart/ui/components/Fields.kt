@@ -41,6 +41,10 @@ fun parseNumber(text: String): Double? = text.trim().replace(',', '.').toDoubleO
 
 private const val DAY_MS = 86_400_000L
 
+/** Optional text slot (supportingText, label…) with an explicitly composable lambda. */
+fun textSlot(text: String?): (@Composable () -> Unit)? =
+    if (text == null) null else @Composable { Text(text) }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DateField(
@@ -59,7 +63,7 @@ fun DateField(
         placeholder = { Text("dd/mm/yyyy") },
         singleLine = true,
         isError = error != null,
-        supportingText = (error ?: helper)?.let { { Text(it) } },
+        supportingText = textSlot(error ?: helper),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
         trailingIcon = {
             IconButton(onClick = { showPicker = true }) { Icon(Icons.Default.DateRange, contentDescription = "Pick date") }
@@ -100,7 +104,7 @@ fun NumberField(
         singleLine = true,
         suffix = { Text(suffix) },
         isError = error != null,
-        supportingText = (error ?: helper)?.let { { Text(it) } },
+        supportingText = textSlot(error ?: helper),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Next),
         modifier = modifier.fillMaxWidth(),
     )

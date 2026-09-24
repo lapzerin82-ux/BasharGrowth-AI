@@ -45,6 +45,7 @@ import com.bashar.growthchart.ui.components.AppTopBar
 import com.bashar.growthchart.ui.components.DateField
 import com.bashar.growthchart.ui.components.NumberField
 import com.bashar.growthchart.ui.components.SectionCard
+import com.bashar.growthchart.ui.components.textSlot
 import com.bashar.growthchart.ui.components.parseDate
 import com.bashar.growthchart.ui.components.parseNumber
 import kotlinx.coroutines.delay
@@ -136,7 +137,11 @@ fun PatientEditScreen(
     val errWeight = rangeError(weight, 0.3, 250.0, "kg")
     val errFather = rangeError(father, 120.0, 230.0, "cm")
     val errMother = rangeError(mother, 110.0, 220.0, "cm")
-    val errMph = if (mphManual) rangeError(mphText, 130.0, 210.0, "cm") ?: if (mphText.isBlank()) "Enter MPH or switch off manual entry" else null else null
+    val errMph = when {
+        !mphManual -> null
+        mphText.isBlank() -> "Enter MPH or switch off manual entry"
+        else -> rangeError(mphText, 130.0, 210.0, "cm")
+    }
     val valid = listOf(errName, errSex, errFile, errDob, errMDate, errHeight, errWeight, errFather, errMother, errMph).all { it == null }
 
     fun save() {
@@ -175,7 +180,7 @@ fun PatientEditScreen(
             val w = Modifier.widthIn(max = 640.dp)
             SectionCard("Patient", w) {
                 OutlinedTextField(name, { name = it }, label = { Text("Patient name") }, singleLine = true, isError = err(errName) != null,
-                    supportingText = err(errName)?.let { { Text(it) } }, modifier = Modifier.fillMaxWidth())
+                    supportingText = textSlot(err(errName)), modifier = Modifier.fillMaxWidth())
                 Text("Sex", style = MaterialTheme.typography.labelLarge)
                 SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
                     Sex.entries.forEachIndexed { i, s ->
@@ -187,7 +192,7 @@ fun PatientEditScreen(
                 }
                 err(errSex)?.let { Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall) }
                 OutlinedTextField(fileNo, { fileNo = it }, label = { Text("File / medical record number") }, singleLine = true,
-                    isError = err(errFile) != null, supportingText = err(errFile)?.let { { Text(it) } }, modifier = Modifier.fillMaxWidth())
+                    isError = err(errFile) != null, supportingText = textSlot(err(errFile)), modifier = Modifier.fillMaxWidth())
                 duplicate?.let { d ->
                     Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)) {
                         Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
