@@ -1,5 +1,0 @@
-Analyzing flutter_app...                                        
-
-   info - 'value' is deprecated and shouldn't be used. Use initialValue instead. This will set the initial value for the form field. This feature was deprecated after v3.33.0-1.0.pre - lib\input_form.dart:107:17 - deprecated_member_use
-
-1 issue found. (ran in 15.3s)

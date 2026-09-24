@@ -1,0 +1,6 @@
+<resources>
+    <style name="Theme.GrowthChart" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">#FF0B5563</item>
+        <item name="android:windowBackground">#FFF7FAFB</item>
+    </style>
+</resources>
