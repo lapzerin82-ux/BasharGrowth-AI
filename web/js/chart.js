@@ -2,6 +2,7 @@
 // Everything is computed: curves from LMS, each red × at (exact age in months, measured value).
 import { centileValue, zValue, invNorm, MPH_RANGE, fmtNum, DAYS_PER_MONTH } from "./growth.js";
 import * as G from "./growth.js";
+import { drawPointLabels } from "./labels.js";
 
 export function niceStep(span, n) {
   if (span <= 0) return 1;
@@ -131,10 +132,10 @@ export function drawChart(ctx, W, H, data, vp, u) {
     pts.forEach((p, i) => (i ? ctx.lineTo(X(p.age), Y(p.v)) : ctx.moveTo(X(p.age), Y(p.v)))); ctx.stroke();
   }
   pts.forEach((p) => cross(ctx, X(p.age), Y(p.v), p.latest, u, p.id === data.sel));
-  if (data.showPct) pts.forEach((p) => {
-    const t = G.pctShort(G.assess(m, sex, p.age, p.v));
-    if (t) haloTxt(ctx, t, X(p.age) + 9 * u, Y(p.v) - 7 * u, font(14, true), p.latest ? "#8a0008" : "#b0000e", u);
-  });
+  if (data.showPct) {
+    const items = pts.map((q) => ({ x: X(q.age), y: Y(q.v), text: G.pctShort(G.assess(m, sex, q.age, q.v)), color: q.latest ? "#8a0008" : "#b0000e" })).filter((it) => it.text);
+    drawPointLabels(ctx, items, { size: 19 * u, font: `800 ${19 * u}px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`, r: 8 * u });
+  }
   ctx.restore();
 
   ctx.strokeStyle = "#505a64"; ctx.lineWidth = u; ctx.strokeRect(L, T, pw, ph);

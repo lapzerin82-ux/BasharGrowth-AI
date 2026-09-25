@@ -2,6 +2,7 @@
 // written onto them: each measurement is a red × at (exact age, value) using an axis calibration
 // fitted to the printed grid lines, and the sheet's own form fields are filled in.
 import * as G from "./growth.js";
+import { drawPointLabels } from "./labels.js";
 
 let META = null;
 const images = {};
@@ -119,11 +120,9 @@ export function drawSheet(ctx, W, H, s, img, vp, data) {
   }
   pts.forEach((z) => cross(ctx, px(s, z.age), py(s, z.key, z.v), z.latest, k, z.id === data.sel));
   if (data.showPct) {
-    const ref = G.getRef(s.ref);
-    pts.forEach((z) => {
-      const t = G.pctShort(G.assess(ref.measures[z.key], p.sex, z.age, z.v));
-      if (t) halo(ctx, t, px(s, z.age) + 5, py(s, z.key, z.v) - 4, 8.5, z.latest ? "#8a0008" : "#b0000e", true);
-    });
+    const ref = G.getRef(s.ref), size = 13;
+    const items = pts.map((z) => ({ x: px(s, z.age), y: py(s, z.key, z.v), text: G.pctShort(G.assess(ref.measures[z.key], p.sex, z.age, z.v)), color: z.latest ? "#8a0008" : "#b0000e" })).filter((it) => it.text);
+    drawPointLabels(ctx, items, { size, font: `800 ${size}px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`, r: 4.5 });
   }
   ctx.restore();
   return { toScreen: (x, y) => [x * scale + ox, y * scale + oy], toPage: (X, Y) => [(X - ox) / scale, (Y - oy) / scale], scale };

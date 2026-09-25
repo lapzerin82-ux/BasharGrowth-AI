@@ -41,19 +41,22 @@ export async function buildPdf(p, ms, family, connect, clinician, invs = [], get
     for (const line of doc.splitTextToSize(text, W - 2 * M)) { ensure(14); doc.text(line, M, y); y += 13; }
   }
   y += 8; h2("Growth measurements");
-  const cols = [M, M + 68, M + 160, M + 222, M + 345, M + 400];
-  const head = () => { doc.setFont("helvetica", "bold"); doc.setFontSize(9.5); ["Date", "Age", "Height (cm)", "Height percentile", "Weight (kg)", "Weight percentile"].forEach((t, i) => doc.text(t, cols[i], y)); y += 5; doc.setDrawColor(200); doc.line(M, y, W - M, y); y += 12; doc.setFont("helvetica", "normal"); };
+  const cols = [M, M + 80, M + 210, M + 360];
+  const head = () => { doc.setFont("helvetica", "bold"); doc.setFontSize(9.5); ["Date", "Age", "Height (percentile)", "Weight (percentile)"].forEach((t, i) => doc.text(t, cols[i], y)); y += 5; doc.setDrawColor(200); doc.line(M, y, W - M, y); y += 12; doc.setFont("helvetica", "normal"); };
   head();
   const refsUsed = new Set();
   for (const m of ms) {
     if (y + 26 > H - 40) { newPage(); head(); }
     const age = G.exactAge(p.dob, m.date).months;
-    const cellA = (key, v) => {
-      if (v == null || age < 0) return "-";
+    // e.g. "120 cm (25%)" and "23 kg (2%)"
+    const cellA = (key, v, unit) => {
+      if (v == null) return "-";
+      if (age < 0) return `${v} ${unit}`;
       const ref = G.getRef(G.defaultRefFor(family, age)); refsUsed.add(ref.shortTitle);
-      return G.fmtAssess(G.assess(ref.measures[key], p.sex, age, v));
+      return G.withPct(v, unit, G.assess(ref.measures[key], p.sex, age, v));
     };
-    [G.fmtDate(m.date), G.exactAge(p.dob, m.date).text, m.height ?? "-", cellA("height", m.height), m.weight ?? "-", cellA("weight", m.weight)]
+    doc.setFontSize(10);
+    [G.fmtDate(m.date), G.exactAge(p.dob, m.date).text, cellA("height", m.height, "cm"), cellA("weight", m.weight, "kg")]
       .forEach((t, i) => doc.text(String(t), cols[i], y));
     y += 13;
     if (m.notes) { doc.setFontSize(8); doc.setTextColor(80); for (const l of doc.splitTextToSize("Note: " + m.notes, W - 2 * M - 70)) { doc.text(l, cols[1], y); y += 10; } doc.setTextColor(0); doc.setFontSize(9.5); }
@@ -61,7 +64,7 @@ export async function buildPdf(p, ms, family, connect, clinician, invs = [], get
   }
   if (!ms.length) { doc.text("No measurements recorded.", M, y); y += 14; }
   y += 8; doc.setFontSize(8); doc.setTextColor(80);
-  for (const l of doc.splitTextToSize(`Percentiles calculated with the LMS method using ${G.FAMILIES[family]}; references used: ${[...refsUsed].join(", ") || "-"}. Age is exact chronological age (days / 30.4375 months). For clinical decision support only.`, W - 2 * M)) { ensure(10); doc.text(l, M, y); y += 10; }
+  for (const l of doc.splitTextToSize(`Percentiles (in brackets) calculated with the LMS method using ${G.FAMILIES[family]}; references used: ${[...refsUsed].join(", ") || "-"}. Age is exact chronological age (days / 30.4375 months). For clinical decision support only.`, W - 2 * M)) { ensure(10); doc.text(l, M, y); y += 10; }
   doc.setTextColor(0);
 
   // investigations (numbers)

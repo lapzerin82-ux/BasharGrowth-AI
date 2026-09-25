@@ -152,3 +152,12 @@ export function pctShort(a) {
   if (p < 0.1) return "<P0.1"; if (p > 99.9) return ">P99.9";
   return "P" + (p < 1 || p > 99 ? (Math.round(p * 10) / 10) : Math.min(99, Math.max(1, Math.round(p))));
 }
+
+/** Value with percentile in brackets, e.g. "120 cm (25%)", "23 kg (2%)", "95 cm (0.4%)". */
+export function withPct(value, unit, a) {
+  const v = `${value} ${unit}`;
+  if (!a) return v;
+  const p = a.p;
+  const t = p < 0.1 ? "<0.1" : p > 99.9 ? ">99.9" : p < 1 || p > 99 ? String(Math.round(p * 10) / 10) : String(Math.min(99, Math.max(1, Math.round(p))));
+  return `${v} (${t}%)`;
+}

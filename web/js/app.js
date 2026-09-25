@@ -2,6 +2,7 @@ import * as G from "./growth.js";
 import * as S from "./store.js";
 import { drawChart, fullBounds, zoomVp, clampVp, buildChart } from "./chart.js";
 import { Sync, newSyncCode } from "./sync.js";
+import { INV_CATS, unitFor, FEATURE_GROUPS, COMPLAINTS } from "./catalog.js";
 import { loadSheets, sheetMeta, sheetFor, sheetImage, sheetPoints, drawSheet, px, py, viewForAge as sheetViewForAge } from "./sheet.js";
 
 const $app = document.getElementById("app");
@@ -176,7 +177,6 @@ function viewList(mode) {
 }
 
 // ------------------------------------------------------------ patient form
-const FEATURES = ["Short stature", "Tall stature", "Poor weight gain / failure to thrive", "Obesity", "Growth deceleration", "Early puberty", "Delayed puberty", "Dysmorphic features", "Disproportionate body segments", "Midline defects", "Chronic illness", "Developmental delay", "Headache / visual problems", "GI symptoms"];
 function viewPatientForm(id) {
   const p = id ? session.patients.get(id) : null;
   if (id && !p) return go("#home");
@@ -212,11 +212,11 @@ function viewPatientForm(id) {
     </section>
     <section class="card stack"><h2>Main complaint <small class="muted">(optional)</small></h2>
       <input id="complaint" list="complaints" placeholder="e.g. Short stature, poor weight gain…" value="${esc(p?.complaint)}" aria-label="Main complaint">
-      <datalist id="complaints">${FEATURES.slice(0, 7).map((f) => `<option value="${esc(f)}">`).join("")}</datalist>
+      <datalist id="complaints">${COMPLAINTS.map((f) => `<option value="${esc(f)}">`).join("")}</datalist>
     </section>
     <section class="card stack"><h2>Clinical features <small class="muted">(optional)</small></h2>
-      <div class="chips" id="chips">${FEATURES.map((f) => `<button type="button" class="chip" data-f="${esc(f)}">${esc(f)}</button>`).join("")}</div>
-      <textarea id="features" rows="4" placeholder="History, examination, pubertal stage (Tanner), body proportions, dysmorphism…" aria-label="Clinical features">${esc(p?.features)}</textarea>
+      <div id="chips" class="chipgroups">${Object.entries(FEATURE_GROUPS).map(([g, list]) => `<details${g === "General" || g === "Growth & nutrition" ? " open" : ""}><summary>${esc(g)}</summary><div class="chips">${list.map((f) => `<button type="button" class="chip" data-f="${esc(f)}">${esc(f)}</button>`).join("")}</div></details>`).join("")}</div>
+      <textarea id="features" rows="4" placeholder="History and examination findings, e.g. vital signs, systemic examination, pubertal stage (Tanner)…" aria-label="Clinical features">${esc(p?.features)}</textarea>
       <p class="hint">Tap a chip to add it to the text; edit freely.</p>
     </section>
     <section class="card stack"><h2>Notes <small class="muted">(optional)</small></h2><textarea id="notes" rows="3" aria-label="Notes">${esc(p?.notes)}</textarea></section>
@@ -288,7 +288,7 @@ function viewPatient(id) {
   const mphTxt = p.mph ? `${G.fmtNum(p.mph)} cm = ${G.fmtAssess({ p: tgt.pct })} at 20 y (target ${G.fmtNum(p.mph - 8.5)}–${G.fmtNum(p.mph + 8.5)} cm)${p.mphManual ? ", manual" : ""}` : "not recorded";
   const cell = (m, key) => {
     const v = key === "height" ? m.height : m.weight; if (v == null) return "–";
-    return `${v} ${key === "height" ? "cm" : "kg"}<small>${G.fmtAssess(assessFor(p, m, key))}</small>`;
+    return esc(G.withPct(v, key === "height" ? "cm" : "kg", assessFor(p, m, key)));
   };
   $app.innerHTML = bar(pname(p), true, `<a class="icon" href="#edit/${id}" aria-label="Edit patient">✎</a><button class="icon" id="del" aria-label="Delete patient">🗑</button>`) + `
   <main class="page">
@@ -313,7 +313,7 @@ function viewPatient(id) {
     </div>
     <section class="card"><h2>Measurements (${ms.length})</h2>
       ${ms.length ? `<p class="hint">Percentiles: ${G.FAMILIES[settings.family]}. Tap a row to edit.</p>
-      <div class="scrollx"><table class="mt"><thead><tr><th>Date</th><th>Age</th><th>Height</th><th>Weight</th></tr></thead><tbody>
+      <div class="scrollx"><table class="mt"><thead><tr><th>Date</th><th>Age</th><th>Height (percentile)</th><th>Weight (percentile)</th></tr></thead><tbody>
       ${[...ms].reverse().map((m) => `<tr data-m="${m.id}"><td>${G.fmtDate(m.date)}</td><td>${G.exactAge(p.dob, m.date).text}</td><td>${cell(m, "height")}</td><td>${cell(m, "weight")}</td></tr>${m.notes ? `<tr class="nt" data-m="${m.id}"><td colspan="4">${esc(m.notes)}</td></tr>` : ""}`).join("")}
       </tbody></table></div>` : `<p class="muted">No measurements yet.</p>`}
     </section>
@@ -613,17 +613,6 @@ function viewSettings() {
 }
 
 // ------------------------------------------------------------ investigations
-const INV_CATS = {
-  "Hematology": ["Hemoglobin (Hb)", "WBC", "Platelets", "MCV", "Ferritin", "Serum iron", "ESR", "CRP"],
-  "Biochemistry": ["Creatinine", "Urea", "Sodium", "Potassium", "Calcium", "Phosphate", "Alkaline phosphatase", "ALT", "AST", "Albumin", "Glucose", "HbA1c", "25-OH vitamin D"],
-  "Endocrine": ["TSH", "Free T4", "IGF-1", "IGFBP-3", "GH peak (stimulation test)", "Cortisol (8 am)", "LH", "FSH", "Testosterone", "Estradiol", "Prolactin"],
-  "Celiac / GI": ["tTG-IgA", "Total IgA", "EMA", "Fecal calprotectin"],
-  "Bone age / X-ray": ["Bone age (Greulich–Pyle)", "Bone age (TW3)", "Skeletal survey", "Chest X-ray"],
-  "Imaging": ["Brain / pituitary MRI", "Abdominal ultrasound", "Pelvic ultrasound", "Echocardiography"],
-  "Urine": ["Urinalysis", "Urine protein/creatinine ratio", "Urine osmolality"],
-  "Genetics": ["Karyotype", "Chromosomal microarray", "SHOX analysis", "Gene panel / exome"],
-  "Other": [],
-};
 const photoUrls = new Map(); // fileId -> object URL (decrypted on demand)
 async function photoUrl(fid) {
   if (photoUrls.has(fid)) return photoUrls.get(fid);
@@ -694,7 +683,7 @@ function viewInvestigation(pid, iid) {
     <section class="card stack">
       <div class="two">
         <label>Date<input id="d" type="date" min="${p.dob}" max="${G.todayIso()}" value="${x?.date || G.todayIso()}"></label>
-        <label>Section<select id="cat">${Object.keys(INV_CATS).map((c) => `<option ${c === (x?.category || "Endocrine") ? "selected" : ""}>${esc(c)}</option>`).join("")}</select></label>
+        <label>Section<select id="cat">${Object.keys(INV_CATS).concat(x?.category && !INV_CATS[x.category] ? [x.category] : []).map((c) => `<option ${c === (x?.category || "Hematology") ? "selected" : ""}>${esc(c)}</option>`).join("")}</select></label>
       </div>
       <h2>Results</h2>
       <div id="rows" class="stack"></div>
@@ -717,7 +706,7 @@ function viewInvestigation(pid, iid) {
   </form></main>`;
   bindBack();
   const $ = (i) => document.getElementById(i);
-  const fillTests = () => { $("tests").innerHTML = (INV_CATS[$("cat").value] || []).map((t) => `<option value="${esc(t)}">`).join(""); };
+  const fillTests = () => { $("tests").innerHTML = (INV_CATS[$("cat").value] || []).map(([t]) => `<option value="${esc(t)}">`).join(""); };
   const renderRows = () => {
     $("rows").innerHTML = rows.map((r, i) => `<div class="resrow" data-i="${i}">
       <input placeholder="Test" list="tests" data-f="test" value="${esc(r.test)}" aria-label="Test">
@@ -727,7 +716,13 @@ function viewInvestigation(pid, iid) {
       <button type="button" class="icon rm" aria-label="Remove row">✕</button></div>`).join("");
     $("rows").querySelectorAll(".resrow").forEach((el) => {
       const i = +el.dataset.i;
-      el.querySelectorAll("input").forEach((inp) => inp.oninput = () => { rows[i][inp.dataset.f] = inp.value; });
+      el.querySelectorAll("input").forEach((inp) => inp.oninput = () => {
+        rows[i][inp.dataset.f] = inp.value;
+        if (inp.dataset.f === "test") { // pre-fill the usual unit for a known test if the unit is still empty
+          const u = unitFor(inp.value), ub = el.querySelector('[data-f="unit"]');
+          if (u && !ub.value) { ub.value = u; rows[i].unit = u; }
+        }
+      });
       el.querySelector(".rm").onclick = () => { rows.splice(i, 1); if (!rows.length) rows.push({ test: "", value: "", unit: "", ref: "" }); renderRows(); };
     });
   };
