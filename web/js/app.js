@@ -1,10 +1,12 @@
 import * as G from "./growth.js";
 import * as S from "./store.js";
 import { drawChart, fullBounds, zoomVp, clampVp, buildChart } from "./chart.js";
+import { Sync, newSyncCode } from "./sync.js";
 import { loadSheets, sheetMeta, sheetFor, sheetImage, sheetPoints, drawSheet, px, py, viewForAge as sheetViewForAge } from "./sheet.js";
 
 const $app = document.getElementById("app");
 let session = null;
+let sync = null;
 let installEvt = null;
 window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installEvt = e; if (location.hash === "#home" || !location.hash) route(); });
 
@@ -64,6 +66,7 @@ async function route() {
     case "edit": return viewPatientForm(a);
     case "p": return viewPatient(a);
     case "m": return viewMeasure(a, b || null);
+    case "inv": return viewInvestigation(a, b || null);
     case "chart": return viewChart(a, b || "height");
     case "backup": return viewBackup(a === "restore");
     case "settings": return viewSettings();
@@ -94,11 +97,11 @@ function viewUnlock() {
     e.preventDefault();
     const err = document.getElementById("err"), btn = document.getElementById("go");
     err.hidden = true; btn.disabled = true;
-    try { session = await S.signIn(document.getElementById("email").value, document.getElementById("pw").value); navigator.storage?.persist?.(); location.hash = "#home"; route(); }
+    try { session = await S.signIn(document.getElementById("email").value, document.getElementById("pw").value); navigator.storage?.persist?.(); await initSync(); location.hash = "#home"; route(); }
     catch (ex) { err.textContent = ex.message; err.hidden = false; btn.disabled = false; }
   };
   document.getElementById("fresh").onclick = () => confirmBox("Start without the old records?", "The old records stay stored (still locked) on this device; you can restore a backup at any time.", "Start", async () => {
-    session = await S.createDeviceWorkspace(); location.hash = "#home"; route();
+    session = await S.createDeviceWorkspace(); await initSync(); location.hash = "#home"; route();
   });
 }
 
@@ -131,7 +134,7 @@ function viewHome() {
   const recent = session.recent(6);
   $app.innerHTML = bar("Pediatric Growth Chart", false) + `
   <main class="page">
-    <div class="who"><b>${n} patient${n === 1 ? "" : "s"}</b><small>Stored encrypted on this device · works offline · back up regularly</small></div>
+    <div class="who"><b>${n} patient${n === 1 ? "" : "s"}</b><small id="syncline">${syncText()}</small></div>
     ${installEvt ? `<button class="install" id="inst">Install app on this device</button>` : ""}
     <nav class="tiles">
       ${tiles.map(([t, i, h]) => `<a class="tile" href="${h}">${icon(i)}<span>${t}</span></a>`).join("")}
@@ -288,6 +291,7 @@ function viewPatient(id) {
       <a class="primary" href="#m/${id}">+ Add measurement</a>
       <a class="tonal" href="#chart/${id}/height">Height chart</a>
       <a class="tonal" href="#chart/${id}/weight">Weight chart</a>
+      <a class="tonal" href="#inv/${id}">+ Investigation</a>
       <button class="ghost" id="pdf">Export PDF</button>
     </div>
     <section class="card"><h2>Measurements (${ms.length})</h2>
@@ -296,10 +300,12 @@ function viewPatient(id) {
       ${[...ms].reverse().map((m) => `<tr data-m="${m.id}"><td>${G.fmtDate(m.date)}</td><td>${G.exactAge(p.dob, m.date).text}</td><td>${cell(m, "height")}</td><td>${cell(m, "weight")}</td></tr>${m.notes ? `<tr class="nt" data-m="${m.id}"><td colspan="4">${esc(m.notes)}</td></tr>` : ""}`).join("")}
       </tbody></table></div>` : `<p class="muted">No measurements yet.</p>`}
     </section>
+    ${investigationsSection(p)}
   </main>`;
   bindBack();
   $app.querySelectorAll("tr[data-m]").forEach((tr) => tr.onclick = () => go(`#m/${id}/${tr.dataset.m}`));
-  document.getElementById("del").onclick = () => confirmBox(`Delete ${p.name}?`, `The patient and all ${ms.length} measurements will be permanently deleted from this device. This cannot be undone.`, "Delete", async () => {
+  bindInvestigationsSection();
+  document.getElementById("del").onclick = () => confirmBox(`Delete ${p.name}?`, `The patient, all ${ms.length} measurements and all investigations will be permanently deleted${sync?.enabled ? " on all synced devices" : " from this device"}. This cannot be undone.`, "Delete", async () => {
     await session.deletePatient(id); toast("Patient deleted"); go("#home");
   }, true);
   document.getElementById("pdf").onclick = () => pdfDialog(p);
@@ -308,14 +314,14 @@ function viewPatient(id) {
 
 function pdfDialog(p) {
   const d = document.createElement("dialog");
-  d.innerHTML = `<h3>Export patient report (PDF)</h3><p>Patient information, notes, the measurement table, and height- and weight-for-age charts with every red × marker.</p>
+  d.innerHTML = `<h3>Export patient report (PDF)</h3><p>Patient information, notes, measurements, investigations (with photos), and the growth charts with every red × marker.</p>
   <div class="row end"><button class="ghost" value="c">Cancel</button><button class="tonal" value="share">Share / print</button><button class="primary" value="save">Download</button></div>`;
   document.body.append(d); d.showModal();
   d.querySelectorAll("button").forEach((b) => b.onclick = async () => {
     d.close(); d.remove(); if (b.value === "c") return;
     toast("Creating PDF…");
     const { buildPdf } = await import("./pdf.js");
-    const blob = await buildPdf(p, session.measurementsFor(p.id), settings.family, settings.connect, session.email);
+    const blob = await buildPdf(p, session.measurementsFor(p.id), settings.family, settings.connect, session.email === "this device" ? "clinician" : session.email, session.investigationsFor(p.id), (id) => session.getFile(id));
     await saveOrShare(blob, `GrowthReport_${(p.fileNumber || p.name).replace(/[^A-Za-z0-9._-]+/g, "_")}_${G.todayIso()}.pdf`, b.value === "share");
   });
 }
@@ -541,7 +547,7 @@ function viewBackup(restoreFirst) {
     $("be").textContent = pw.length < 8 ? "Use at least 8 characters." : pw !== $("bp2").value ? "Passwords do not match." : "";
     if ($("be").textContent) return;
     toast("Encrypting backup…");
-    const bytes = await S.encodeBackup(session.exportContents(), pw);
+    const bytes = await S.encodeBackup(await session.exportContents(), pw);
     const stamp = new Date().toISOString().slice(0, 16).replace(/[-:T]/g, "").replace(/^(\d{8})/, "$1_");
     await saveOrShare(new Blob([bytes], { type: "application/octet-stream" }), `GrowthChart_backup_${stamp}.bgcbackup`, share);
   };
@@ -555,7 +561,7 @@ function viewBackup(restoreFirst) {
       const c = await S.decodeBackup(new Uint8Array(await f.arrayBuffer()), $("rp").value);
       const replace = $app.querySelector('input[name="mode"]:checked').value === "replace";
       const go2 = async () => { const r = await session.restore(c, replace);
-        confirmBox("Restore complete", `Restored ${r.np} patients and ${r.nm} measurements${r.skipped ? ` (${r.skipped} older copies skipped)` : ""}.`, "OK", () => go("#home")); };
+        confirmBox("Restore complete", `Restored ${r.np} patients, ${r.nm} measurements and ${r.ni} investigations${r.skipped ? ` (${r.skipped} older copies skipped)` : ""}.`, "OK", () => go("#home")); };
       if (replace) confirmBox("Replace all records?", `This account will contain exactly the ${c.patients.length} patients in the backup. Records not in the backup are deleted.`, "Replace", go2, true);
       else go2();
     } catch (ex) { $("re").textContent = ex.message; }
@@ -571,7 +577,8 @@ function viewSettings() {
       <p class="hint">Chooses the chart from the child's age and is used for the percentiles in tables and reports. Any chart can still be picked on the chart screen.</p></section>
     <section class="card stack"><h2>Display</h2>
       <label class="switch"><input type="checkbox" id="cl" ${settings.connect ? "checked" : ""}> Connect measurements with a line (trajectory)</label></section>
-    <section class="card stack"><h2>Account & storage</h2>
+    <section class="card stack" id="synccard"><h2>Sync between phone and computer</h2><div id="syncbody"></div></section>
+    <section class="card stack"><h2>Storage on this device</h2>
       <p class="hint">Records are encrypted (AES-256) with a key kept by this browser and stored on this device only. Clearing the browser's site data or uninstalling the app deletes them, so make regular backups. To use the same records on another device, restore a backup there.</p>
       <p class="hint" id="pers"></p></section>
     <section class="card stack"><h2>Original CDC growth charts</h2>
@@ -584,7 +591,223 @@ function viewSettings() {
   bindBack();
   $app.querySelectorAll('input[name="fam"]').forEach((r) => r.onchange = () => { settings.family = r.value; toast("Saved"); });
   document.getElementById("cl").onchange = (e) => { settings.connect = e.target.checked; };
+  renderSyncCard();
   navigator.storage?.persisted?.().then((ok) => { document.getElementById("pers").textContent = ok ? "Storage is marked persistent: the browser will not clear it automatically." : "Tip: install the app to the home screen so the browser keeps its storage."; });
+}
+
+// ------------------------------------------------------------ investigations
+const INV_CATS = {
+  "Hematology": ["Hemoglobin (Hb)", "WBC", "Platelets", "MCV", "Ferritin", "Serum iron", "ESR", "CRP"],
+  "Biochemistry": ["Creatinine", "Urea", "Sodium", "Potassium", "Calcium", "Phosphate", "Alkaline phosphatase", "ALT", "AST", "Albumin", "Glucose", "HbA1c", "25-OH vitamin D"],
+  "Endocrine": ["TSH", "Free T4", "IGF-1", "IGFBP-3", "GH peak (stimulation test)", "Cortisol (8 am)", "LH", "FSH", "Testosterone", "Estradiol", "Prolactin"],
+  "Celiac / GI": ["tTG-IgA", "Total IgA", "EMA", "Fecal calprotectin"],
+  "Bone age / X-ray": ["Bone age (Greulich–Pyle)", "Bone age (TW3)", "Skeletal survey", "Chest X-ray"],
+  "Imaging": ["Brain / pituitary MRI", "Abdominal ultrasound", "Pelvic ultrasound", "Echocardiography"],
+  "Urine": ["Urinalysis", "Urine protein/creatinine ratio", "Urine osmolality"],
+  "Genetics": ["Karyotype", "Chromosomal microarray", "SHOX analysis", "Gene panel / exome"],
+  "Other": [],
+};
+const photoUrls = new Map(); // fileId -> object URL (decrypted on demand)
+async function photoUrl(fid) {
+  if (photoUrls.has(fid)) return photoUrls.get(fid);
+  const bytes = await session.getFile(fid); if (!bytes) return null;
+  const url = URL.createObjectURL(new Blob([bytes], { type: "image/jpeg" })); photoUrls.set(fid, url); return url;
+}
+async function fillThumbs(root) {
+  for (const img of root.querySelectorAll("img[data-fid]")) {
+    const url = await photoUrl(img.dataset.fid);
+    if (url) img.src = url; else img.replaceWith(Object.assign(document.createElement("span"), { className: "thumb missing", textContent: "Photo not yet synced" }));
+  }
+}
+function viewPhoto(fid) {
+  photoUrl(fid).then((url) => {
+    if (!url) return toast("This photo is not on this device yet. Sync to download it.");
+    const d = document.createElement("dialog"); d.className = "photo";
+    d.innerHTML = `<img src="${url}" alt="Investigation photo"><div class="row end"><a class="ghost" href="${url}" target="_blank" rel="noopener">Open full size</a><button class="primary" value="c">Close</button></div>`;
+    document.body.append(d); d.showModal(); d.querySelector("button").onclick = () => { d.close(); d.remove(); };
+  });
+}
+
+function investigationsSection(p) {
+  const list = session.investigationsFor(p.id);
+  const byCat = {};
+  for (const x of list) (byCat[x.category] ||= []).push(x);
+  const entry = (x) => `<div class="inv" data-inv="${x.id}">
+      <div class="invhead"><b>${G.fmtDate(x.date)}</b><span class="muted">${esc(G.exactAge(p.dob, x.date).short)}</span></div>
+      ${(x.results || []).filter((r) => r.test || r.value).map((r) => `<div class="invrow"><span>${esc(r.test)}</span><b>${esc(r.value)} ${esc(r.unit || "")}</b>${r.ref ? `<small class="muted">ref ${esc(r.ref)}</small>` : ""}</div>`).join("")}
+      ${x.notes ? `<p class="hint pre">${esc(x.notes)}</p>` : ""}
+      ${(x.photos || []).length ? `<div class="thumbs">${x.photos.map((f) => `<img data-fid="${f.id}" alt="Investigation photo" class="thumb">`).join("")}</div>` : ""}
+    </div>`;
+  return `<section class="card" id="invsec"><div class="row"><h2 class="grow">Investigations (${list.length})</h2><a class="tonal small" href="#inv/${p.id}">+ Add</a></div>
+    ${list.length ? Object.keys(INV_CATS).filter((c) => byCat[c]).concat(Object.keys(byCat).filter((c) => !INV_CATS[c]))
+      .map((c) => `<h3 class="invcat">${esc(c)}</h3>${byCat[c].map(entry).join("")}`).join("")
+      : `<p class="muted">No investigations yet. Add results as numbers, or take a photo of the report.</p>`}
+  </section>`;
+}
+function bindInvestigationsSection() {
+  const sec = document.getElementById("invsec"); if (!sec) return;
+  const pid = location.hash.split("/")[1];
+  sec.querySelectorAll("[data-inv]").forEach((el) => el.onclick = (e) => {
+    const img = e.target.closest("img[data-fid]");
+    if (img) { e.stopPropagation(); viewPhoto(img.dataset.fid); } else go(`#inv/${pid}/${el.dataset.inv}`);
+  });
+  fillThumbs(sec);
+}
+
+async function processPhoto(file) {
+  // Downscale large camera images (max 2000 px) and store as JPEG to keep the database and sync small.
+  const bmp = await createImageBitmap(file, { imageOrientation: "from-image" }).catch(() => createImageBitmap(file));
+  const k = Math.min(1, 2000 / Math.max(bmp.width, bmp.height));
+  const c = document.createElement("canvas"); c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+  c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+  const blob = await new Promise((r) => c.toBlob(r, "image/jpeg", 0.85));
+  return { bytes: new Uint8Array(await blob.arrayBuffer()), w: c.width, h: c.height };
+}
+
+function viewInvestigation(pid, iid) {
+  const p = session.patients.get(pid); if (!p) return go("#home");
+  const x = iid ? session.investigations.get(iid) : null;
+  if (iid && !x) return go(`#p/${pid}`);
+  let photos = [...(x?.photos || [])];
+  const added = []; // photos stored during this edit (removed again if the form is abandoned)
+  const rows = x?.results?.length ? x.results.map((r) => ({ ...r })) : [{ test: "", value: "", unit: "", ref: "" }];
+  $app.innerHTML = bar(x ? "Edit Investigation" : "Add Investigation", true, x ? `<button class="icon" id="del" aria-label="Delete investigation">🗑</button>` : "") + `
+  <main class="page"><form id="f" class="stack" novalidate>
+    <section class="card"><h2>${esc(p.name)}</h2><p class="muted">File ${esc(p.fileNumber)} · DOB ${G.fmtDate(p.dob)}</p></section>
+    <section class="card stack">
+      <div class="two">
+        <label>Date<input id="d" type="date" min="${p.dob}" max="${G.todayIso()}" value="${x?.date || G.todayIso()}"></label>
+        <label>Section<select id="cat">${Object.keys(INV_CATS).map((c) => `<option ${c === (x?.category || "Endocrine") ? "selected" : ""}>${esc(c)}</option>`).join("")}</select></label>
+      </div>
+      <h2>Results</h2>
+      <div id="rows" class="stack"></div>
+      <button type="button" class="ghost" id="addrow">+ Add result row</button>
+      <datalist id="tests"></datalist>
+      <label>Notes / interpretation<textarea id="n" rows="2">${esc(x?.notes)}</textarea></label>
+    </section>
+    <section class="card stack"><h2>Photos of reports / images</h2>
+      <div class="thumbs" id="thumbs"></div>
+      <div class="row wrap">
+        <button type="button" class="tonal" id="cambtn">📷 Take photo</button>
+        <button type="button" class="ghost" id="filebtn">Upload photo</button>
+      </div>
+      <input type="file" id="cam" accept="image/*" capture="environment" hidden>
+      <input type="file" id="file" accept="image/*" multiple hidden>
+      <p class="hint">The camera opens on phones; on a computer choose an image file. Photos are stored encrypted and synced with your other devices.</p>
+    </section>
+    <p class="err" id="err" hidden></p>
+    <button class="primary">Save investigation</button>
+  </form></main>`;
+  bindBack();
+  const $ = (i) => document.getElementById(i);
+  const fillTests = () => { $("tests").innerHTML = (INV_CATS[$("cat").value] || []).map((t) => `<option value="${esc(t)}">`).join(""); };
+  const renderRows = () => {
+    $("rows").innerHTML = rows.map((r, i) => `<div class="resrow" data-i="${i}">
+      <input placeholder="Test" list="tests" data-f="test" value="${esc(r.test)}" aria-label="Test">
+      <input placeholder="Result" data-f="value" value="${esc(r.value)}" aria-label="Result">
+      <input placeholder="Unit" data-f="unit" value="${esc(r.unit)}" aria-label="Unit">
+      <input placeholder="Reference range" data-f="ref" value="${esc(r.ref)}" aria-label="Reference range">
+      <button type="button" class="icon rm" aria-label="Remove row">✕</button></div>`).join("");
+    $("rows").querySelectorAll(".resrow").forEach((el) => {
+      const i = +el.dataset.i;
+      el.querySelectorAll("input").forEach((inp) => inp.oninput = () => { rows[i][inp.dataset.f] = inp.value; });
+      el.querySelector(".rm").onclick = () => { rows.splice(i, 1); if (!rows.length) rows.push({ test: "", value: "", unit: "", ref: "" }); renderRows(); };
+    });
+  };
+  const renderThumbs = () => {
+    $("thumbs").innerHTML = photos.map((f) => `<div class="tw"><img data-fid="${f.id}" class="thumb" alt="Photo"><button type="button" class="icon rm" data-rm="${f.id}" aria-label="Remove photo">✕</button></div>`).join("");
+    fillThumbs($("thumbs"));
+    $("thumbs").querySelectorAll("img").forEach((img) => img.onclick = () => viewPhoto(img.dataset.fid));
+    $("thumbs").querySelectorAll("[data-rm]").forEach((b) => b.onclick = () => { photos = photos.filter((f) => f.id !== b.dataset.rm); renderThumbs(); });
+  };
+  const addFiles = async (files) => {
+    for (const f of files) {
+      try {
+        toast("Saving photo…");
+        const { bytes, w, h } = await processPhoto(f);
+        const id = await session.putFile(bytes);
+        added.push(id); photos.push({ id, w, h });
+      } catch { toast("Could not read this image."); }
+    }
+    renderThumbs();
+  };
+  $("cat").onchange = fillTests; fillTests(); renderRows(); renderThumbs();
+  $("addrow").onclick = () => { rows.push({ test: "", value: "", unit: "", ref: "" }); renderRows(); $("rows").lastElementChild.querySelector("input").focus(); };
+  $("cambtn").onclick = () => $("cam").click();
+  $("filebtn").onclick = () => $("file").click();
+  $("cam").onchange = (e) => { addFiles([...e.target.files]); e.target.value = ""; };
+  $("file").onchange = (e) => { addFiles([...e.target.files]); e.target.value = ""; };
+  let saved = false;
+  window.addEventListener("hashchange", async function cleanup() {
+    window.removeEventListener("hashchange", cleanup);
+    if (!saved) for (const id of added) await session.deleteFile(id); // abandoned: discard photos taken in this visit
+  });
+  $("f").onsubmit = async (e) => {
+    e.preventDefault();
+    const results = rows.map((r) => ({ test: r.test.trim(), value: r.value.trim(), unit: r.unit.trim(), ref: r.ref.trim() })).filter((r) => r.test || r.value);
+    const d = $("d").value;
+    const err = !d ? "Choose the date." : d < p.dob ? "The date is before the date of birth." : !results.length && !photos.length ? "Add at least one result or photo." : "";
+    $("err").textContent = err; $("err").hidden = !err; if (err) return;
+    // photos removed from an existing entry are deleted from storage
+    for (const f of x?.photos || []) if (!photos.find((q) => q.id === f.id)) await session.deleteFile(f.id);
+    saved = true;
+    await session.saveInvestigation({ id: x?.id, patientId: pid, date: d, category: $("cat").value, results, notes: $("n").value.trim(), photos });
+    toast("Investigation saved");
+    history.back();
+  };
+  $("del")?.addEventListener("click", () => confirmBox("Delete this investigation?", "Its results and photos will be deleted" + (sync?.enabled ? " on all synced devices." : "."), "Delete", async () => {
+    saved = true; await session.deleteInvestigation(x.id); toast("Deleted"); history.back();
+  }, true));
+}
+
+// ------------------------------------------------------------ sync
+async function initSync() {
+  sync = new Sync(session);
+  session.onChange = () => sync.schedule();
+  sync.on(() => {
+    const el = document.getElementById("syncline"); if (el) el.textContent = syncText();
+    if (document.getElementById("syncbody")) renderSyncCard();
+  });
+  await sync.load().catch(() => false);
+  if (sync.enabled) sync.sync().then((r) => { if (r && r.down) route(); }).catch(() => {});
+  if (!initSync.timer) {
+    initSync.timer = setInterval(() => { if (document.visibilityState === "visible" && sync?.enabled) sync.sync().then((r) => { if (r?.down && !document.querySelector("form, dialog[open]")) route(); }).catch(() => {}); }, 60000);
+    document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && sync?.enabled) sync.sync().then((r) => { if (r?.down && !document.querySelector("form, dialog[open]")) route(); }).catch(() => {}); });
+  }
+}
+function syncText() {
+  if (!sync || !sync.enabled) return "Stored encrypted on this device · works offline";
+  const st = sync.status;
+  const t = (ms) => new Date(ms).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  switch (st.state) {
+    case "running": return "Syncing…";
+    case "done": case "idle": return st.at ? `Synced ${t(st.at)} · encrypted` : "Sync on";
+    case "offline": return "Offline · changes will sync when connected";
+    case "error": return "Sync problem: " + st.message;
+    default: return "Sync on";
+  }
+}
+function renderSyncCard() {
+  const box = document.getElementById("syncbody"); if (!box) return;
+  if (sync?.enabled) {
+    box.innerHTML = `<p><b>${esc(syncText())}</b></p>
+      <p class="hint">Enter this sync code on your other devices (phone, computer) to see the same patients:</p>
+      <p class="code" id="codetxt">${esc(sync.code)}</p>
+      <div class="row wrap"><button class="primary" id="snow">Sync now</button><button class="ghost" id="scopy">Copy code</button><button class="ghost" id="soff">Stop syncing on this device</button></div>
+      <p class="hint">Records and photos are encrypted on the device with a key made from this code before they are uploaded; the server cannot read them. Anyone with the code can read your records, so keep it private.</p>`;
+    document.getElementById("snow").onclick = () => sync.sync().then((r) => toast(`Synced: ${r.down} received, ${r.up} sent`)).catch((e) => toast(e.message));
+    document.getElementById("scopy").onclick = () => navigator.clipboard?.writeText(sync.code).then(() => toast("Code copied")).catch(() => toast("Select the code and copy it"));
+    document.getElementById("soff").onclick = () => confirmBox("Stop syncing on this device?", "Records stay on this device. Other devices keep syncing with each other.", "Stop", async () => { await sync.disable(); renderSyncCard(); });
+    return;
+  }
+  box.innerHTML = `<p class="hint">Use the same patients on your phone and computer. Changes, investigations and photos synchronise automatically, end-to-end encrypted.</p>
+    <div class="row wrap"><button class="primary" id="snew">Start syncing (create code)</button></div>
+    <p class="hint">Already syncing on another device? Enter its sync code:</p>
+    <div class="row wrap"><input id="sjoin" placeholder="ABCD-EFGH-JKLM-NPQR-STUV" autocomplete="off" autocapitalize="characters" style="flex:1 1 220px"><button class="tonal" id="sjoinb">Join</button></div>
+    <p class="err" id="serr" hidden></p>`;
+  const fail = (e) => { const el = document.getElementById("serr"); if (el) { el.textContent = e.message; el.hidden = false; } };
+  document.getElementById("snew").onclick = () => sync.enable(newSyncCode()).then(() => { toast("Sync started"); renderSyncCard(); }).catch(async (e) => { await sync.disable(); renderSyncCard(); fail(e); });
+  document.getElementById("sjoinb").onclick = () => sync.enable(document.getElementById("sjoin").value).then((r) => { toast(`Joined: ${r.down} records received`); renderSyncCard(); }).catch(async (e) => { if (!e.offline) await sync.disable(); renderSyncCard(); fail(e); });
 }
 
 // ------------------------------------------------------------ start
@@ -596,7 +819,7 @@ function viewSettings() {
   if (res && res.locked) { unlockLocked = res.locked; session = null; }
   else if (res) session = res;
   else { try { session = await S.createDeviceWorkspace(); } catch { session = null; } }
-  if (session) navigator.storage?.persist?.();
+  if (session) { navigator.storage?.persist?.(); await initSync(); }
   route();
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
 })();

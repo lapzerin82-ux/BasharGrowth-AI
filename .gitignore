@@ -21,3 +21,7 @@ google-services.json
 
 # Generated web upload bundle (rebuild from web/)
 PediatricGrowthChart-web.zip
+
+# Netlify / npm
+node_modules/
+.netlify/

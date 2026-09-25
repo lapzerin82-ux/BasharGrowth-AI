@@ -1,0 +1,12 @@
+{
+  "name": "pediatric-growth-chart-web",
+  "private": true,
+  "description": "Netlify functions for the Pediatric Growth Chart web app (static files are in web/).",
+  "type": "module",
+  "dependencies": {
+    "@netlify/blobs": "^11.1.1"
+  },
+  "devDependencies": {
+    "@netlify/functions": "^6.0.0"
+  }
+}

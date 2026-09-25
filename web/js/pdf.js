@@ -12,7 +12,7 @@ function loadJsPdf() {
   });
 }
 
-export async function buildPdf(p, ms, family, connect, clinician) {
+export async function buildPdf(p, ms, family, connect, clinician, invs = [], getFile = null) {
   const { jsPDF } = await loadJsPdf();
   const doc = new jsPDF({ unit: "pt", format: "a4" });
   const W = 595, H = 842, M = 40;
@@ -61,6 +61,26 @@ export async function buildPdf(p, ms, family, connect, clinician) {
   for (const l of doc.splitTextToSize(`Percentiles calculated with the LMS method using ${G.FAMILIES[family]}; references used: ${[...refsUsed].join(", ") || "-"}. Age is exact chronological age (days / 30.4375 months). For clinical decision support only.`, W - 2 * M)) { ensure(10); doc.text(l, M, y); y += 10; }
   doc.setTextColor(0);
 
+  // investigations (numbers)
+  if (invs.length) {
+    y += 10; h2("Investigations");
+    const ic = [M, M + 62, M + 150, M + 300, M + 400];
+    const ihead = () => { doc.setFont("helvetica", "bold"); doc.setFontSize(9.5); ["Date", "Section", "Test", "Result", "Reference"].forEach((t, i) => doc.text(t, ic[i], y)); y += 5; doc.setDrawColor(200); doc.line(M, y, W - M, y); y += 12; doc.setFont("helvetica", "normal"); };
+    ihead();
+    for (const x of [...invs].sort((a, b) => a.date.localeCompare(b.date))) {
+      const rows = (x.results || []).length ? x.results : [{ test: (x.photos || []).length ? `(${x.photos.length} photo${x.photos.length > 1 ? "s" : ""})` : "", value: "", unit: "", ref: "" }];
+      rows.forEach((r, i) => {
+        if (y + 16 > H - 40) { newPage(); ihead(); }
+        doc.setFontSize(9);
+        [i ? "" : G.fmtDate(x.date), i ? "" : x.category, r.test || "", `${r.value || ""} ${r.unit || ""}`.trim(), r.ref || ""]
+          .forEach((t, j) => doc.text(doc.splitTextToSize(String(t), (ic[j + 1] || W - M) - ic[j] - 4)[0] || "", ic[j], y));
+        y += 12;
+      });
+      if (x.notes) { doc.setFontSize(8); doc.setTextColor(80); for (const l of doc.splitTextToSize("Note: " + x.notes, W - 2 * M - 62)) { if (y + 12 > H - 40) newPage(); doc.text(l, ic[1], y); y += 10; } doc.setTextColor(0); }
+      doc.setDrawColor(230); doc.line(M, y - 8, W - M, y - 8);
+    }
+  }
+
   // charts: every chart that holds this child's measurements (the chart for the current age if none)
   const views = [...new Set(ms.map((m) => viewForAge(family, G.exactAge(p.dob, m.date).months)))];
   if (!views.length) views.push(viewForAge(family, G.exactAge(p.dob, today).months));
@@ -85,6 +105,16 @@ export async function buildPdf(p, ms, family, connect, clinician) {
       doc.text(doc.splitTextToSize(`Red × = measurement (circled = latest), plotted at exact chronological age. Source: ${d.ref.source}`, 800), 20, 578);
       doc.setTextColor(0);
     }
+  }
+  // photos of investigation reports, one per page
+  if (getFile) for (const x of [...invs].sort((a, b) => a.date.localeCompare(b.date))) for (const f of x.photos || []) {
+    const bytes = await getFile(f.id); if (!bytes) continue;
+    const url = await new Promise((r) => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(new Blob([bytes], { type: "image/jpeg" })); });
+    footer(); doc.addPage("a4", "p"); page++; onSheet = false;
+    doc.setFont("helvetica", "bold"); doc.setFontSize(12); doc.setTextColor(...teal);
+    doc.text(`${x.category} · ${G.fmtDate(x.date)} · ${p.name} (File ${p.fileNumber})`, M, M + 4); doc.setTextColor(0); doc.setFont("helvetica", "normal");
+    const maxW = W - 2 * M, maxH = H - 2 * M - 40, iw = f.w || 1000, ih = f.h || 1000, k = Math.min(maxW / iw, maxH / ih);
+    doc.addImage(url, "JPEG", M + (maxW - iw * k) / 2, M + 16, iw * k, ih * k);
   }
   footer();
   return doc.output("blob");

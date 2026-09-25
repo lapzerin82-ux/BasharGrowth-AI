@@ -45,6 +45,19 @@ and stored only in that browser on that device. Clearing the browser's site data
 so back up regularly. Backups (`.bgcbackup`) are interchangeable between the web and Android apps.
 The web version has no cloud sync; move data between devices with Backup/Restore.
 
+
+### Investigations and sync (web version)
+
+* **Investigations** (patient record → "+ Investigation"): date, section (hematology, biochemistry,
+  endocrine, celiac/GI, bone age/X-ray, imaging, urine, genetics, other), any number of result rows
+  (test, value, unit, reference range), notes, and photos taken with the phone camera or uploaded
+  from a computer. Included in backups and in the PDF report.
+* **Sync between phone and computer** (Settings → Sync): create a sync code on one device, enter it on
+  the others. Records and photos are encrypted on the device (AES-256, key derived from the code)
+  and stored by the site's `/api/sync` Netlify function in Netlify Blobs; the server cannot read them.
+  Sync requires the site to be deployed **from GitHub** (Netlify builds `netlify/functions`);
+  a zip/drag-and-drop deploy has no functions, so the app then works per device only.
+
 ## Install the APK on a phone
 
 1. Get `PediatricGrowthChart.apk`:
