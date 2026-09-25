@@ -1,5 +1,5 @@
 // Offline support: every file the app needs is cached on first visit.
-const CACHE = "pgc-v4";
+const CACHE = "pgc-v5";
 const FILES = [
   "./", "index.html", "app.css", "manifest.webmanifest",
   "js/app.js", "js/growth.js", "js/store.js", "js/chart.js", "js/pdf.js", "js/sheet.js",

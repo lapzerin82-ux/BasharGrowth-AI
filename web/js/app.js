@@ -55,9 +55,9 @@ async function route() {
   const h = location.hash.slice(1) || "home";
   const [view, a, b] = h.split("/");
   window.scrollTo(0, 0);
-  if (!session && view !== "login") return viewLogin();
+  if (!session) return viewUnlock();
   switch (view) {
-    case "login": return session ? go("#home") : viewLogin();
+    case "login": return go("#home");
     case "home": return viewHome();
     case "list": return viewList(a || "browse");
     case "new": return viewPatientForm(null);
@@ -73,37 +73,33 @@ async function route() {
 window.addEventListener("hashchange", route);
 
 // ------------------------------------------------------------ login
-async function viewLogin(mode = "signin") {
-  const email = await S.lastEmail();
-  const reg = mode === "register";
+let unlockLocked = [];
+/** Shown only when records from an earlier version (which had sign-in) exist and are not yet opened. */
+function viewUnlock() {
   $app.innerHTML = `
   <main class="login">
     <svg viewBox="0 0 24 24" class="logo" aria-hidden="true"><path d="M3.5 18.5l6-6 4 4L22 6.9l-1.4-1.4-7.1 8-4-4L2 17z"/></svg>
     <h1 class="brand">Pediatric Growth Chart</h1>
-    <p class="sub">${reg ? "Create a clinician account on this device" : "Clinician sign-in"}</p>
+    <p class="sub">Open your existing records (one time only)</p>
     <form id="f" class="stack narrow">
-      <label>Email / username<input id="email" type="email" autocomplete="username" required value="${esc(reg ? "" : email)}"></label>
-      <label>Password<input id="pw" type="password" autocomplete="${reg ? "new-password" : "current-password"}" required></label>
-      ${reg ? `<label>Repeat password<input id="pw2" type="password" autocomplete="new-password" required><small>At least 8 characters. It encrypts your records and cannot be recovered.</small></label>` : ""}
+      <p class="hint">This app no longer asks for a sign-in. Records saved with the earlier version are protected by the password you used then. Enter it once; afterwards the app opens directly.</p>
+      <label>Email used before<select id="email">${unlockLocked.map((e) => `<option>${esc(e)}</option>`).join("")}</select></label>
+      <label>Password<input id="pw" type="password" autocomplete="current-password" required></label>
       <p class="err" id="err" hidden></p>
-      <button class="primary" id="go">${reg ? "Create account" : "Sign in"}</button>
-      <button type="button" class="ghost" id="sw">${reg ? "I already have an account" : "Create account"}</button>
+      <button class="primary" id="go">Open records</button>
+      <button type="button" class="ghost" id="fresh">Start without the old records</button>
     </form>
-    <p class="fine">Records are encrypted and stored only on this device. They work offline. Use Backup to move them to another phone.</p>
   </main>`;
-  document.getElementById("sw").onclick = () => viewLogin(reg ? "signin" : "register");
   document.getElementById("f").onsubmit = async (e) => {
     e.preventDefault();
     const err = document.getElementById("err"), btn = document.getElementById("go");
-    err.hidden = true; btn.disabled = true; btn.textContent = "Please wait…";
-    try {
-      const em = document.getElementById("email").value, pw = document.getElementById("pw").value;
-      if (reg && pw !== document.getElementById("pw2").value) throw new Error("Passwords do not match.");
-      session = reg ? await S.register(em, pw) : await S.signIn(em, pw);
-      navigator.storage?.persist?.();
-      go("#home"); if (location.hash === "#home") route();
-    } catch (ex) { err.textContent = ex.message; err.hidden = false; btn.disabled = false; btn.textContent = reg ? "Create account" : "Sign in"; }
+    err.hidden = true; btn.disabled = true;
+    try { session = await S.signIn(document.getElementById("email").value, document.getElementById("pw").value); navigator.storage?.persist?.(); location.hash = "#home"; route(); }
+    catch (ex) { err.textContent = ex.message; err.hidden = false; btn.disabled = false; }
   };
+  document.getElementById("fresh").onclick = () => confirmBox("Start without the old records?", "The old records stay stored (still locked) on this device; you can restore a backup at any time.", "Start", async () => {
+    session = await S.createDeviceWorkspace(); location.hash = "#home"; route();
+  });
 }
 
 // ------------------------------------------------------------ home
@@ -135,18 +131,15 @@ function viewHome() {
   const recent = session.recent(6);
   $app.innerHTML = bar("Pediatric Growth Chart", false) + `
   <main class="page">
-    <div class="who"><b>Signed in as ${esc(session.email)}</b><small>${n} patient${n === 1 ? "" : "s"} · stored encrypted on this device</small></div>
+    <div class="who"><b>${n} patient${n === 1 ? "" : "s"}</b><small>Stored encrypted on this device · works offline · back up regularly</small></div>
     ${installEvt ? `<button class="install" id="inst">Install app on this device</button>` : ""}
     <nav class="tiles">
       ${tiles.map(([t, i, h]) => `<a class="tile" href="${h}">${icon(i)}<span>${t}</span></a>`).join("")}
-      <button class="tile" id="logout">${icon("out")}<span>Logout</span></button>
+
     </nav>
     ${recent.length ? `<h2>Recently updated</h2><div class="plist">${recent.map(patientRow).join("")}</div>` : ""}
   </main>`;
   document.getElementById("inst")?.addEventListener("click", async () => { installEvt.prompt(); await installEvt.userChoice; installEvt = null; route(); });
-  document.getElementById("logout").onclick = () => confirmBox("Log out?", "Your records stay encrypted on this device and will be available when you sign in again.", "Log out", async () => {
-    await S.signOut(); session = null; go("#login");
-  });
 }
 
 function confirmBox(title, text, okText, onOk, danger) {
@@ -579,8 +572,7 @@ function viewSettings() {
     <section class="card stack"><h2>Display</h2>
       <label class="switch"><input type="checkbox" id="cl" ${settings.connect ? "checked" : ""}> Connect measurements with a line (trajectory)</label></section>
     <section class="card stack"><h2>Account & storage</h2>
-      <p>Signed in as <b>${esc(session.email)}</b>.</p>
-      <p class="hint">Records are encrypted with a key protected by your password and stored in this browser only. Clearing the browser's site data or uninstalling the app deletes them, so make regular backups. To use the same records on another device, restore a backup there.</p>
+      <p class="hint">Records are encrypted (AES-256) with a key kept by this browser and stored on this device only. Clearing the browser's site data or uninstalling the app deletes them, so make regular backups. To use the same records on another device, restore a backup there.</p>
       <p class="hint" id="pers"></p></section>
     <section class="card stack"><h2>Original CDC growth charts</h2>
       <p class="hint">${esc(sheetMeta()?.source || "")}</p><p class="hint">${esc(sheetMeta()?.calibration || "")}</p></section>
@@ -599,7 +591,12 @@ function viewSettings() {
 (async function start() {
   try { await G.loadReferences(); await loadSheets(); }
   catch { $app.innerHTML = `<main class="page"><p class="err">Could not load growth reference data. Connect to the internet once and reload.</p></main>`; return; }
-  try { session = await S.restoreSession(); } catch { session = null; }
+  let res = null;
+  try { res = await S.openDirect(); } catch { res = null; }
+  if (res && res.locked) { unlockLocked = res.locked; session = null; }
+  else if (res) session = res;
+  else { try { session = await S.createDeviceWorkspace(); } catch { session = null; } }
+  if (session) navigator.storage?.persist?.();
   route();
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
 })();
