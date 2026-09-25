@@ -161,3 +161,20 @@ export function withPct(value, unit, a) {
   const t = p < 0.1 ? "<0.1" : p > 99.9 ? ">99.9" : p < 1 || p > 99 ? String(Math.round(p * 10) / 10) : String(Math.min(99, Math.max(1, Math.round(p))));
   return `${v} (${t}%)`;
 }
+
+/** Date of birth estimated from an age (years, months, days) on a given date — calendar subtraction. */
+export function dobFromAge(onIso, y, m, d) {
+  const [yy, mm, dd] = onIso.split("-").map(Number);
+  let total = yy * 12 + (mm - 1) - (y * 12 + m);
+  const ty = Math.floor(total / 12), tm = total % 12 + 1;
+  const day = Math.min(dd, new Date(Date.UTC(ty, tm, 0)).getUTCDate());
+  const t = Date.UTC(ty, tm - 1, day) - d * 86400000;
+  return new Date(t).toISOString().slice(0, 10);
+}
+/** "01/11/2018" or "≈ 01/11/2018 (estimated from age 7 y 10 m on 24/09/2026)". */
+export function fmtDob(p, long = true) {
+  if (!p.dobEstimated) return fmtDate(p.dob);
+  const a = p.ageEntered;
+  const ageTxt = a ? [a.y ? `${a.y} y` : "", a.m ? `${a.m} m` : "", a.d ? `${a.d} d` : ""].filter(Boolean).join(" ") || "0 d" : "";
+  return long && a ? `≈ ${fmtDate(p.dob)} (estimated from age ${ageTxt} on ${fmtDate(a.on)})` : `≈ ${fmtDate(p.dob)} (estimated)`;
+}

@@ -164,3 +164,4 @@ h2 small { font-weight: 400; font-size: 13px; }
 .chipgroups details { border-top: 1px solid var(--line); padding: 6px 0; }
 .chipgroups summary { cursor: pointer; font-weight: 600; font-size: 14px; color: var(--teal); padding: 4px 0; }
 .chipgroups .chips { margin-top: 6px; }
+.three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }

@@ -123,7 +123,7 @@ const icon = (k) => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${ICON
 
 const pname = (p) => p.name || (p.fileNumber ? `File ${p.fileNumber}` : "Unnamed patient");
 function patientRow(p) {
-  return `<a class="prow" href="#p/${p.id}"><span><b>${esc(pname(p))}</b><small>File ${esc(p.fileNumber)} · ${p.sex === "F" ? "Female" : "Male"} · DOB ${G.fmtDate(p.dob)}</small></span><em>${G.exactAge(p.dob, G.todayIso()).short}</em></a>`;
+  return `<a class="prow" href="#p/${p.id}"><span><b>${esc(pname(p))}</b><small>File ${esc(p.fileNumber)} · ${p.sex === "F" ? "Female" : "Male"} · DOB ${esc(G.fmtDob(p, false))}</small></span><em>${G.exactAge(p.dob, G.todayIso()).short}</em></a>`;
 }
 
 function viewHome() {
@@ -192,7 +192,18 @@ function viewPatientForm(id) {
       </fieldset><small class="e" data-for="sex"></small>
       <label>File / medical record number (optional)<input id="file" value="${esc(p?.fileNumber)}"><small class="e" data-for="file"></small></label>
       <div id="dup"></div>
-      <label>Date of birth<input id="dob" type="date" required max="${G.todayIso()}" value="${esc(p?.dob)}"><small class="e" data-for="dob"></small></label>
+      <label id="dobwrap">Date of birth<input id="dob" type="date" required max="${G.todayIso()}" value="${esc(p?.dobEstimated ? "" : p?.dob)}"><small class="e" data-for="dob"></small></label>
+      <label class="switch"><input type="checkbox" id="dobunk" ${p?.dobEstimated ? "checked" : ""}> Birth date not known – enter age instead</label>
+      <div id="agewrap" class="stack" hidden>
+        <div class="three">
+          <label>Years<input id="ay" inputmode="numeric" value="${esc(p?.ageEntered?.y ?? "")}"></label>
+          <label>Months<input id="am" inputmode="numeric" value="${esc(p?.ageEntered?.m ?? "")}"></label>
+          <label>Days (optional)<input id="ad" inputmode="numeric" value="${esc(p?.ageEntered?.d ?? "")}"></label>
+        </div>
+        <label>Age on (date)<input id="aon" type="date" max="${G.todayIso()}" value="${esc(p?.ageEntered?.on || G.todayIso())}"></label>
+        <small class="e" data-for="age"></small>
+        <p class="hint">The date of birth is estimated from this age and marked as estimated everywhere. Ages at later visits are counted from this estimate.</p>
+      </div>
       <p class="hint" id="agenow"></p>
     </section>
     ${isNew ? `<section class="card stack"><h2>First measurement</h2>
@@ -231,8 +242,17 @@ function viewPatientForm(id) {
     if ($("man").checked) return num($("mph").value);
     return s && f && m && !rangeErr($("fa").value, 120, 230, "cm") && !rangeErr($("mo").value, 110, 220, "cm") ? G.mph(s, f, m) : null;
   };
+  // estimated date of birth when the real one is unknown
+  const ageParts = () => ({ y: parseInt($("ay").value) || 0, m: parseInt($("am").value) || 0, d: parseInt($("ad").value) || 0, on: $("aon").value });
+  const dobValue = () => {
+    if (!$("dobunk").checked) return $("dob").value;
+    const a = ageParts();
+    return a.on && (a.y || a.m || a.d || $("ay").value.trim() !== "") ? G.dobFromAge(a.on, a.y, a.m, a.d) : "";
+  };
   const update = () => {
-    const dob = $("dob").value;
+    $("dobwrap").hidden = $("dobunk").checked; $("agewrap").hidden = !$("dobunk").checked;
+    if ($("dobunk").checked && isNew && !$("aon").dataset.touched) $("aon").value = $("mdate").value || G.todayIso();
+    const dob = dobValue();
     $("agenow").textContent = dob && dob <= G.todayIso() ? "Age today: " + G.exactAge(dob, G.todayIso()).text : "";
     if (isNew) {
       const d = $("mdate").value;
@@ -244,7 +264,8 @@ function viewPatientForm(id) {
     const dup = session.byFileNumber($("file").value);
     $("dup").innerHTML = dup && dup.id !== id ? `<div class="note">File ${esc(dup.fileNumber)} already belongs to <b>${esc(pname(dup))}</b> (DOB ${G.fmtDate(dup.dob)}). <a href="#p/${dup.id}">Open this patient</a></div>` : "";
   };
-  $app.querySelector("form").addEventListener("input", update); update();
+  $("aon").addEventListener("input", () => { $("aon").dataset.touched = "1"; });
+  $app.querySelector("form").addEventListener("input", update); $("dobunk").addEventListener("change", update); update();
   $("chips").querySelectorAll(".chip").forEach((c) => c.onclick = () => {
     const t = $("features"), f = c.dataset.f;
     if (!t.value.toLowerCase().includes(f.toLowerCase())) t.value = t.value.trim() ? `${t.value.trim()}\n${f}` : f;
@@ -253,9 +274,14 @@ function viewPatientForm(id) {
 
   $("f").onsubmit = async (e) => {
     e.preventDefault();
-    const errs = {}, today = G.todayIso(), dob = $("dob").value;
+    const errs = {}, today = G.todayIso(), dob = dobValue();
     if (!sexVal()) errs.sex = "Select sex";
-    if (!dob) errs.dob = "Required"; else if (dob > today) errs.dob = "In the future";
+    if ($("dobunk").checked) {
+      const a = ageParts();
+      if (!$("ay").value.trim() && !$("am").value.trim() && !$("ad").value.trim()) errs.age = "Enter the age (years and/or months)";
+      else if (a.y > 20 || a.m > 11 || a.d > 31 || a.y < 0 || a.m < 0 || a.d < 0) errs.age = "Years 0–20, months 0–11, days 0–31";
+      else if (!a.on) errs.age = "Enter the date the age refers to";
+    } else if (!dob) errs.dob = "Required"; else if (dob > today) errs.dob = "In the future";
     for (const [k, lo, hi] of [["fa", 120, 230], ["mo", 110, 220]]) { const r = rangeErr($(k).value, lo, hi, "cm"); if (r) errs[k] = r; }
     if ($("man").checked) { const r = $("mph").value.trim() ? rangeErr($("mph").value, 130, 210, "cm") : "Enter MPH or switch off manual entry"; if (r) errs.mph = r; }
     let hasM = false;
@@ -271,6 +297,7 @@ function viewPatientForm(id) {
     if (Object.keys(errs).length) return;
     const pid = await session.savePatient({
       id: p?.id, name: $("name").value.trim(), sex: sexVal(), fileNumber: $("file").value.trim(), dob,
+      dobEstimated: $("dobunk").checked, ageEntered: $("dobunk").checked ? ageParts() : null,
       father: num($("fa").value), mother: num($("mo").value), mph: calcMph(), mphManual: $("man").checked, notes: $("notes").value.trim(),
       complaint: $("complaint").value.trim(), features: $("features").value.trim(),
     });
@@ -295,7 +322,7 @@ function viewPatient(id) {
     <section class="card"><h2>Patient information</h2>
       <dl class="info">
         <dt>Name</dt><dd>${esc(p.name || "–")}</dd><dt>Sex</dt><dd>${p.sex === "F" ? "Female" : "Male"}</dd>
-        <dt>File number</dt><dd>${esc(p.fileNumber)}</dd><dt>Date of birth</dt><dd>${G.fmtDate(p.dob)}</dd>
+        <dt>File number</dt><dd>${esc(p.fileNumber)}</dd><dt>Date of birth</dt><dd>${esc(G.fmtDob(p))}</dd>
         <dt>Current age</dt><dd>${G.exactAge(p.dob, G.todayIso()).text}</dd>
         ${p.father ? `<dt>Father's height</dt><dd>${p.father} cm</dd>` : ""}${p.mother ? `<dt>Mother's height</dt><dd>${p.mother} cm</dd>` : ""}
         <dt>Mid-parental height</dt><dd>${mphTxt}</dd>
@@ -349,7 +376,7 @@ function viewMeasure(pid, mid) {
   const m = mid ? session.measurements.get(mid) : null;
   $app.innerHTML = bar(m ? "Edit Measurement" : "Add Measurement", true, m ? `<button class="icon" id="del" aria-label="Delete measurement">🗑</button>` : "") + `
   <main class="page"><form id="f" class="stack" novalidate>
-    <section class="card"><h2>${esc(pname(p))}</h2><p class="muted">File ${esc(p.fileNumber)} · ${p.sex === "F" ? "Female" : "Male"} · DOB ${G.fmtDate(p.dob)}</p></section>
+    <section class="card"><h2>${esc(pname(p))}</h2><p class="muted">File ${esc(p.fileNumber)} · ${p.sex === "F" ? "Female" : "Male"} · DOB ${esc(G.fmtDob(p, false))}</p></section>
     <section class="card stack"><h2>Measurement</h2>
       <label>Measurement date<input id="d" type="date" min="${p.dob}" max="${G.todayIso()}" value="${m?.date || G.todayIso()}"><small class="e" data-for="d"></small></label>
       <p class="hi" id="age"></p>
@@ -679,7 +706,7 @@ function viewInvestigation(pid, iid) {
   const rows = x?.results?.length ? x.results.map((r) => ({ ...r })) : [{ test: "", value: "", unit: "", ref: "" }];
   $app.innerHTML = bar(x ? "Edit Investigation" : "Add Investigation", true, x ? `<button class="icon" id="del" aria-label="Delete investigation">🗑</button>` : "") + `
   <main class="page"><form id="f" class="stack" novalidate>
-    <section class="card"><h2>${esc(pname(p))}</h2><p class="muted">File ${esc(p.fileNumber)} · DOB ${G.fmtDate(p.dob)}</p></section>
+    <section class="card"><h2>${esc(pname(p))}</h2><p class="muted">File ${esc(p.fileNumber)} · DOB ${esc(G.fmtDob(p, false))}</p></section>
     <section class="card stack">
       <div class="two">
         <label>Date<input id="d" type="date" min="${p.dob}" max="${G.todayIso()}" value="${x?.date || G.todayIso()}"></label>

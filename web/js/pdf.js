@@ -15,6 +15,12 @@ function loadJsPdf() {
 export async function buildPdf(p, ms, family, connect, clinician, invs = [], getFile = null) {
   const { jsPDF } = await loadJsPdf();
   const doc = new jsPDF({ unit: "pt", format: "a4" });
+  // The built-in PDF fonts only cover Western European characters: map symbols outside that set.
+  const MAP = { "≈": "approx.", "≤": "<=", "≥": ">=", "⁰": "^0", "⁴": "^4", "⁵": "^5", "⁶": "^6", "⁷": "^7", "⁸": "^8", "⁹": "^9", "₀": "0", "₁": "1", "₂": "2", "₃": "3", "₄": "4", "→": "->", "↑": "up", "↓": "down", "✓": "yes", "•": "-", "’": "'", "‘": "'", "“": '"', "”": '"' };
+  const safe = (t) => String(t).replace(/[≈≤≥⁰⁴-⁹₀-₄→↑↓✓•‘’“”]/g, (c) => MAP[c] ?? c).replace(/[^\u0000-\u00ff–—…€×µ²³¹]/g, "?");
+  const origText = doc.text.bind(doc), origSplit = doc.splitTextToSize.bind(doc);
+  doc.text = (t, ...a) => origText(Array.isArray(t) ? t.map(safe) : safe(t), ...a);
+  doc.splitTextToSize = (t, ...a) => origSplit(safe(t), ...a);
   const W = 595, H = 842, M = 40;
   const teal = [11, 85, 99];
   let y = M + 10, page = 1;
@@ -29,7 +35,7 @@ export async function buildPdf(p, ms, family, connect, clinician, invs = [], get
   const today = G.todayIso();
   const tgt = G.mphTarget(p.sex, p.mph);
   const mphTxt = p.mph ? `${G.fmtNum(p.mph)} cm = ${G.fmtAssess({ p: tgt.pct })} at 20 y (target range ${G.fmtNum(p.mph - 8.5)}–${G.fmtNum(p.mph + 8.5)} cm)${p.mphManual ? ", entered manually" : ""}` : "-";
-  const info = [["Name", p.name || "-"], ["Sex", p.sex === "F" ? "Female" : "Male"], ["File number", p.fileNumber || "-"], ["Date of birth", G.fmtDate(p.dob)],
+  const info = [["Name", p.name || "-"], ["Sex", p.sex === "F" ? "Female" : "Male"], ["File number", p.fileNumber || "-"], ["Date of birth", G.fmtDob(p)],
     ["Current age", `${G.exactAge(p.dob, today).text} (on ${G.fmtDate(today)})`], ["Father's height", p.father ? p.father + " cm" : "-"],
     ["Mother's height", p.mother ? p.mother + " cm" : "-"], ["Mid-parental height", mphTxt]];
   doc.setFontSize(10);

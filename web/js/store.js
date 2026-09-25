@@ -234,7 +234,7 @@ export class Session {
     }
     return {
       format: "bashar-growth-chart-backup", formatVersion: 1, createdAt: Date.now(), appVersion: "web-1.1", account: this.email,
-      patients: [...this.patients.values()].map((p) => ({ id: p.id, name: p.name, sex: p.sex, fileNumber: p.fileNumber, dobEpochDay: E(p.dob), fatherHeightCm: p.father ?? null, motherHeightCm: p.mother ?? null, mphCm: p.mph ?? null, mphManual: !!p.mphManual, notes: p.notes || "", complaint: p.complaint || "", features: p.features || "", preferredReference: p.preferredReference || null, createdAt: p.createdAt, updatedAt: p.updatedAt, deleted: false })),
+      patients: [...this.patients.values()].map((p) => ({ id: p.id, name: p.name, sex: p.sex, fileNumber: p.fileNumber, dobEpochDay: E(p.dob), fatherHeightCm: p.father ?? null, motherHeightCm: p.mother ?? null, mphCm: p.mph ?? null, mphManual: !!p.mphManual, notes: p.notes || "", complaint: p.complaint || "", features: p.features || "", dobEstimated: !!p.dobEstimated, ageEntered: p.ageEntered || null, preferredReference: p.preferredReference || null, createdAt: p.createdAt, updatedAt: p.updatedAt, deleted: false })),
       measurements: [...this.measurements.values()].map((m) => ({ id: m.id, patientId: m.patientId, dateEpochDay: E(m.date), heightCm: m.height ?? null, weightKg: m.weight ?? null, notes: m.notes || "", createdAt: m.createdAt, updatedAt: m.updatedAt, deleted: false })),
       investigations: [...this.investigations.values()],
       files,
@@ -253,7 +253,7 @@ export class Session {
     for (const r of c.patients || []) {
       if (r.deleted) continue;
       if (!take("p", r)) { skipped++; continue; }
-      await this._put("p", { id: r.id, name: r.name, sex: r.sex, fileNumber: r.fileNumber, dob: iso(r.dobEpochDay), father: r.fatherHeightCm ?? null, mother: r.motherHeightCm ?? null, mph: r.mphCm ?? null, mphManual: !!r.mphManual, notes: r.notes || "", complaint: r.complaint || "", features: r.features || "", preferredReference: r.preferredReference || null, createdAt: r.createdAt || now, updatedAt: stamp("p", r) }, true);
+      await this._put("p", { id: r.id, name: r.name, sex: r.sex, fileNumber: r.fileNumber, dob: iso(r.dobEpochDay), father: r.fatherHeightCm ?? null, mother: r.motherHeightCm ?? null, mph: r.mphCm ?? null, mphManual: !!r.mphManual, notes: r.notes || "", complaint: r.complaint || "", features: r.features || "", dobEstimated: !!r.dobEstimated, ageEntered: r.ageEntered || null, preferredReference: r.preferredReference || null, createdAt: r.createdAt || now, updatedAt: stamp("p", r) }, true);
       np++;
     }
     for (const r of c.measurements || []) {
