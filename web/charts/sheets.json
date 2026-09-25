@@ -1,0 +1,296 @@
+{
+ "source": "CDC Clinical Growth Charts, Set 2 (color), NCHS/CDC. Published May 30, 2000 (modified 2000\u20132001). Pages reproduced unmodified from set2color.pdf; public domain.",
+ "calibration": "Axis mapping fitted to the printed grid lines (max residual 0.12 pt); printed percentile curves agree with CDC LMS tables within 0.53 pt (0.19 mm).",
+ "sheets": [
+  {
+   "id": "cdc_0_36_boys",
+   "sex": "M",
+   "file": "charts/cdc_0_36_boys.svg",
+   "page": [
+    612,
+    792
+   ],
+   "pdfPage": 1,
+   "title": "CDC Birth to 36 months: Boys \u2013 Length-for-age and Weight-for-age percentiles",
+   "ageMin": 0,
+   "ageMax": 36,
+   "ref": "cdc2000_infant",
+   "x": [
+    109.77399947617086,
+    10.644371731377342
+   ],
+   "height": [
+    732.3021495494958,
+    -5.992548434410084
+   ],
+   "weight": [
+    762.4580776438999,
+    -29.97689630845016
+   ],
+   "fields": {
+    "name": [
+     392,
+     45.8
+    ],
+    "record": [
+     488,
+     61.3
+    ],
+    "mother": [
+     285,
+     583.2
+    ],
+    "father": [
+     285,
+     595.7
+    ]
+   },
+   "table": {
+    "cols": [
+     "date",
+     "age",
+     "weight",
+     "height"
+    ],
+    "x": [
+     216,
+     258,
+     296.6,
+     342,
+     385.2
+    ],
+    "birthRow": [
+     612.0,
+     622.8
+    ],
+    "rows": [
+     622.8,
+     633.7,
+     644.2,
+     654.8,
+     665.6,
+     676.2,
+     687.1,
+     698.0,
+     708.5
+    ]
+   }
+  },
+  {
+   "id": "cdc_0_36_girls",
+   "sex": "F",
+   "file": "charts/cdc_0_36_girls.svg",
+   "page": [
+    612,
+    792
+   ],
+   "pdfPage": 2,
+   "title": "CDC Birth to 36 months: Girls \u2013 Length-for-age and Weight-for-age percentiles",
+   "ageMin": 0,
+   "ageMax": 36,
+   "ref": "cdc2000_infant",
+   "x": [
+    109.77199722122366,
+    10.644371787270343
+   ],
+   "height": [
+    732.3273979512126,
+    -5.9925476027496245
+   ],
+   "weight": [
+    762.4833310295561,
+    -29.976890294692122
+   ],
+   "fields": {
+    "name": [
+     392,
+     45.8
+    ],
+    "record": [
+     488,
+     61.3
+    ],
+    "mother": [
+     285,
+     583.2
+    ],
+    "father": [
+     285,
+     595.7
+    ]
+   },
+   "table": {
+    "cols": [
+     "date",
+     "age",
+     "weight",
+     "height"
+    ],
+    "x": [
+     216,
+     258,
+     296.6,
+     342,
+     385.2
+    ],
+    "birthRow": [
+     612.0,
+     622.8
+    ],
+    "rows": [
+     622.8,
+     633.7,
+     644.2,
+     654.8,
+     665.6,
+     676.2,
+     687.1,
+     698.0,
+     708.5
+    ]
+   }
+  },
+  {
+   "id": "cdc_2_20_boys",
+   "sex": "M",
+   "file": "charts/cdc_2_20_boys.svg",
+   "page": [
+    612,
+    792
+   ],
+   "pdfPage": 5,
+   "title": "CDC 2 to 20 years: Boys \u2013 Stature-for-age and Weight-for-age percentiles",
+   "ageMin": 24,
+   "ageMax": 240,
+   "ref": "cdc2000_child",
+   "x": [
+    66.59506560208494,
+    1.7888806772510912
+   ],
+   "height": [
+    886.1149684894336,
+    -4.037426103642193
+   ],
+   "weight": [
+    744.7341054558319,
+    -4.03653527302414
+   ],
+   "fields": {
+    "name": [
+     392,
+     45.8
+    ],
+    "record": [
+     488,
+     61.3
+    ],
+    "mother": [
+     122,
+     97.7
+    ],
+    "father": [
+     246,
+     97.7
+    ]
+   },
+   "table": {
+    "cols": [
+     "date",
+     "age",
+     "weight",
+     "height",
+     "bmi"
+    ],
+    "x": [
+     58.5,
+     108.8,
+     159.8,
+     210.4,
+     263.1,
+     314.0
+    ],
+    "rows": [
+     113.2,
+     124.1,
+     134.6,
+     145.1,
+     156.0,
+     166.5,
+     177.5,
+     188.4
+    ]
+   }
+  },
+  {
+   "id": "cdc_2_20_girls",
+   "sex": "F",
+   "file": "charts/cdc_2_20_girls.svg",
+   "page": [
+    612,
+    792
+   ],
+   "pdfPage": 6,
+   "title": "CDC 2 to 20 years: Girls \u2013 Stature-for-age and Weight-for-age percentiles",
+   "ageMin": 24,
+   "ageMax": 240,
+   "ref": "cdc2000_child",
+   "x": [
+    66.81446541234057,
+    1.7888792406048697
+   ],
+   "height": [
+    885.9739354684809,
+    -4.037427004459592
+   ],
+   "weight": [
+    744.5930622235651,
+    -4.036538329044727
+   ],
+   "fields": {
+    "name": [
+     392,
+     45.8
+    ],
+    "record": [
+     488,
+     61.3
+    ],
+    "mother": [
+     122,
+     97.7
+    ],
+    "father": [
+     246,
+     97.7
+    ]
+   },
+   "table": {
+    "cols": [
+     "date",
+     "age",
+     "weight",
+     "height",
+     "bmi"
+    ],
+    "x": [
+     58.7,
+     109.0,
+     160.0,
+     210.6,
+     263.3,
+     314.2
+    ],
+    "rows": [
+     113.2,
+     124.1,
+     134.6,
+     145.1,
+     156.0,
+     166.5,
+     177.5,
+     188.4
+    ]
+   }
+  }
+ ]
+}

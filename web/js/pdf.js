@@ -1,6 +1,7 @@
 // Printable patient report built with jsPDF (vendor/jspdf.umd.min.js, loaded on demand).
 import * as G from "./growth.js";
 import { drawChart, fullBounds, buildChart } from "./chart.js";
+import { loadSheets, sheetFor, sheetImage, sheetPoints, drawSheet, viewForAge } from "./sheet.js";
 
 function loadJsPdf() {
   if (window.jspdf) return Promise.resolve(window.jspdf);
@@ -17,7 +18,8 @@ export async function buildPdf(p, ms, family, connect, clinician) {
   const W = 595, H = 842, M = 40;
   const teal = [11, 85, 99];
   let y = M + 10, page = 1;
-  const footer = () => { doc.setFontSize(7.5); doc.setTextColor(90); doc.text(`Generated ${new Date().toLocaleString()} by ${clinician} · Pediatric Growth Chart · page ${page}`, M, doc.internal.pageSize.getHeight() - 20); doc.setTextColor(0); };
+  let onSheet = false; // original CDC pages are left exactly as printed (no footer)
+  const footer = () => { if (onSheet) return; doc.setFontSize(7.5); doc.setTextColor(90); doc.text(`Generated ${new Date().toLocaleString()} by ${clinician} · Pediatric Growth Chart · page ${page}`, M, doc.internal.pageSize.getHeight() - 20); doc.setTextColor(0); };
   const newPage = (orientation = "p") => { footer(); doc.addPage("a4", orientation); page++; y = M + 10; };
   const ensure = (need) => { if (y + need > H - 40) newPage(); };
   const h2 = (t) => { ensure(30); doc.setFont("helvetica", "bold"); doc.setFontSize(12.5); doc.setTextColor(...teal); doc.text(t, M, y); doc.setTextColor(0); y += 16; };
@@ -58,16 +60,24 @@ export async function buildPdf(p, ms, family, connect, clinician) {
   for (const l of doc.splitTextToSize(`Percentiles calculated with the LMS method using ${G.FAMILIES[family]}; references used: ${[...refsUsed].join(", ") || "-"}. Age is exact chronological age (days / 30.4375 months). For clinical decision support only.`, W - 2 * M)) { ensure(10); doc.text(l, M, y); y += 10; }
   doc.setTextColor(0);
 
-  // charts: one landscape page per chart of the family that contains measurements
-  const ids = family === "AUTO" ? ["who2006_0_2", "cdc2000_child"] : family === "WHO" ? ["who2006", "who2007"] : ["cdc2000_infant", "cdc2000_child"];
-  const latest = ms[ms.length - 1];
-  const defId = G.defaultRefFor(family, G.exactAge(p.dob, latest ? latest.date : today).months);
-  const cv = document.createElement("canvas"); const S = 2.2; cv.width = Math.round(802 * S); cv.height = Math.round(551 * S);
-  for (const key of ["height", "weight"]) {
-    const charts = ids.map((id) => [id, buildChart(p, ms, id, key, connect, null)]);
-    let draw = charts.filter(([, d]) => d.points.length); if (!draw.length) draw = charts.filter(([id]) => id === defId);
-    for (const [, d] of draw) {
-      footer(); doc.addPage("a4", "l"); page++;
+  // charts: every chart that holds this child's measurements (the chart for the current age if none)
+  const views = [...new Set(ms.map((m) => viewForAge(family, G.exactAge(p.dob, m.date).months)))];
+  if (!views.length) views.push(viewForAge(family, G.exactAge(p.dob, today).months));
+  await loadSheets();
+  for (const view of views) {
+    if (view.startsWith("sheet:")) {
+      // Original CDC Set 2 page (US Letter), unmodified, with the patient's data written on it.
+      const sheet = sheetFor(view.slice(6), p.sex), img = await sheetImage(sheet);
+      const cvs = document.createElement("canvas"), SC = 3.2; cvs.width = Math.round(612 * SC); cvs.height = Math.round(792 * SC);
+      drawSheet(cvs.getContext("2d"), cvs.width, cvs.height, sheet, img, { x0: 0, y0: 0, x1: 612, y1: 792 }, { p, ...sheetPoints(sheet, p, ms), connect, sel: null });
+      footer(); doc.addPage([612, 792], "p"); page++; onSheet = true;
+      doc.addImage(cvs.toDataURL("image/jpeg", 0.92), "JPEG", 0, 0, 612, 792);
+      continue;
+    }
+    const cv = document.createElement("canvas"); const S = 2.2; cv.width = Math.round(802 * S); cv.height = Math.round(551 * S);
+    for (const key of ["height", "weight"]) {
+      const d = buildChart(p, ms, view, key, connect, null);
+      footer(); doc.addPage("a4", "l"); page++; onSheet = false;
       drawChart(cv.getContext("2d"), cv.width, cv.height, d, fullBounds(d.m, d.sex, d.points.map((q) => q.v)), S);
       doc.addImage(cv.toDataURL("image/jpeg", 0.9), "JPEG", 20, 16, 802, 551);
       doc.setFontSize(6.5); doc.setTextColor(80);

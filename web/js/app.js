@@ -1,6 +1,7 @@
 import * as G from "./growth.js";
 import * as S from "./store.js";
 import { drawChart, fullBounds, zoomVp, clampVp, buildChart } from "./chart.js";
+import { loadSheets, sheetMeta, sheetFor, sheetImage, sheetPoints, drawSheet, px, py, viewForAge as sheetViewForAge } from "./sheet.js";
 
 const $app = document.getElementById("app");
 let session = null;
@@ -12,7 +13,7 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "
 const num = (s) => { const v = parseFloat(String(s ?? "").trim().replace(",", ".")); return Number.isFinite(v) ? v : null; };
 const go = (h) => { location.hash = h; };
 const settings = {
-  get family() { try { const f = localStorage.getItem("pgc.family"); return f && G.FAMILIES[f] ? f : "AUTO"; } catch { return "AUTO"; } },
+  get family() { try { const f = localStorage.getItem("pgc.family"); return f && G.FAMILIES[f] ? f : "CDC"; } catch { return "CDC"; } },
   set family(v) { try { localStorage.setItem("pgc.family", v); } catch {} },
   get connect() { try { return localStorage.getItem("pgc.connect") !== "0"; } catch { return true; } },
   set connect(v) { try { localStorage.setItem("pgc.connect", v ? "1" : "0"); } catch {} },
@@ -373,21 +374,30 @@ function viewMeasure(pid, mid) {
 
 // ------------------------------------------------------------ chart
 
-function viewChart(pid, key) {
+// Chart views: original CDC Set 2 sheets ("sheet:0_36", "sheet:2_20") or computed WHO charts (reference ids).
+const VIEW_TITLES = {
+  "sheet:0_36": "CDC birth–36 months (original)",
+  "sheet:2_20": "CDC 2–20 years (original)",
+  who2006_0_2: "WHO Birth–24 months", who2006: "WHO Birth–5 years", who2007: "WHO 5–19 years",
+};
+const viewForAge = (ageMonths) => sheetViewForAge(settings.family, ageMonths);
+
+async function viewChart(pid, key) {
   const p = session.patients.get(pid); if (!p) return go("#home");
+  await loadSheets();
   const ms = session.measurementsFor(pid);
   const latest = ms[ms.length - 1];
-  const autoRef = () => G.defaultRefFor(settings.family, G.exactAge(p.dob, latest ? latest.date : G.todayIso()).months);
-  let manual = null; // null = automatic chart choice for the child's age
-  let refId = autoRef();
-  let connect = settings.connect, sel = null, data, bounds, vp, geo;
+  const autoView = () => viewForAge(G.exactAge(p.dob, latest ? latest.date : G.todayIso()).months);
+  let manual = null, view = autoView();
+  let connect = settings.connect, sel = null, data, bounds, vp, geo, sheet, img, sgeo;
+  const isSheet = () => view.startsWith("sheet:");
 
   $app.innerHTML = bar(`${p.name} · growth chart`, true, `<a class="icon" href="#m/${pid}" aria-label="Add measurement">＋</a>`) + `
   <main class="chartpage">
     <div class="ctl">
-      <div class="seg2" role="tablist"><button data-k="height">Height-for-age</button><button data-k="weight">Weight-for-age</button></div>
+      <div class="seg2" role="tablist" id="tabs"><button data-k="height">Height-for-age</button><button data-k="weight">Weight-for-age</button></div>
       <div class="row wrap">
-        <select id="ref" aria-label="Growth chart"><option value="auto">Automatic by age (${esc(G.getRef(autoRef()).shortTitle)})</option>${G.allRefs().map((r) => `<option value="${r.id}">${esc(r.title)}</option>`).join("")}</select>
+        <select id="ref" aria-label="Growth chart"><option value="auto">Auto: ${esc(VIEW_TITLES[autoView()])}</option>${Object.entries(VIEW_TITLES).map(([k, t]) => `<option value="${k}">${esc(t)}</option>`).join("")}</select>
         <label class="switch"><input type="checkbox" id="line" ${connect ? "checked" : ""}> Line</label>
         <span class="grow"></span>
         <button class="round" id="zi" aria-label="Zoom in">+</button><button class="round" id="zo" aria-label="Zoom out">−</button><button class="round" id="zr" aria-label="Reset zoom">⟲</button>
@@ -395,25 +405,35 @@ function viewChart(pid, key) {
       <p class="warn" id="out" hidden></p>
     </div>
     <div class="cwrap"><canvas id="cv"></canvas></div>
-    <div id="pop" class="pop"><span class="hint">Pinch or scroll to zoom · drag to pan · double-tap to reset · tap a red × for details</span></div>
+    <div id="pop" class="pop"></div>
   </main>`;
   bindBack();
   const cv = document.getElementById("cv"), wrap = cv.parentElement;
   const dpr = () => window.devicePixelRatio || 1;
+  const hint = () => `<span class="hint">Pinch or scroll to zoom · drag to pan · double-tap to reset · tap a red × for details</span>`;
 
-  const rebuild = (resetVp) => {
-    data = buildChart(p, ms, refId, key, connect, sel);
-    bounds = fullBounds(data.m, p.sex, data.points.map((q) => q.v));
+  const rebuild = async (resetVp) => {
+    document.getElementById("tabs").hidden = isSheet();
+    document.getElementById("ref").value = manual || "auto";
+    let outside, coverTxt;
+    if (isSheet()) {
+      sheet = sheetFor(view.slice(6), p.sex); img = await sheetImage(sheet);
+      data = { p, ...sheetPoints(sheet, p, ms), connect, sel };
+      bounds = { x0: 0, y0: 0, x1: sheet.page[0], y1: sheet.page[1] };
+      outside = data.outside; coverTxt = sheet.ageMax <= 36 ? "birth–36 months" : "2–20 years";
+    } else {
+      data = buildChart(p, ms, view, key, connect, sel);
+      bounds = fullBounds(data.m, p.sex, data.points.map((q) => q.v));
+      outside = data.outside; coverTxt = `${G.fmtNum(data.m.ageMin / 12)}–${G.fmtNum(data.m.ageMax / 12)} y`;
+    }
     if (resetVp || !vp) vp = { ...bounds };
     $app.querySelectorAll(".seg2 button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.k === key));
-    document.getElementById("ref").value = manual || "auto";
     const out = document.getElementById("out");
-    out.hidden = !data.outside;
-    // Offer the chart that holds the hidden measurements (e.g. WHO 0-24 months for earlier visits).
-    const other = data.outside ? ms.map((x) => G.defaultRefFor(settings.family, G.exactAge(p.dob, x.date).months)).find((id) => id !== refId) : null;
-    out.innerHTML = `${data.outside} measurement(s) are on another chart (this one covers ${G.fmtNum(data.m.ageMin / 12)}–${G.fmtNum(data.m.ageMax / 12)} y).` +
-      (other ? ` <button class="link" id="other">Show ${esc(G.getRef(other).title)}</button>` : " Select another chart to see them.");
-    document.getElementById("other")?.addEventListener("click", () => { manual = other; refId = other; sel = null; showPop(); rebuild(true); });
+    out.hidden = !outside;
+    const other = outside ? ms.map((x) => viewForAge(G.exactAge(p.dob, x.date).months)).find((v) => v !== view) : null;
+    out.innerHTML = `${outside} measurement(s) are on another chart (this one covers ${coverTxt}).` +
+      (other ? ` <button class="link" id="other">Show ${esc(VIEW_TITLES[other])}</button>` : "");
+    document.getElementById("other")?.addEventListener("click", () => { manual = other; view = other; sel = null; showPop(); rebuild(true); });
     draw();
   };
   const draw = () => {
@@ -421,33 +441,49 @@ function viewChart(pid, key) {
     cv.width = Math.round(w * dpr()); cv.height = Math.round(h * dpr());
     cv.style.width = w + "px"; cv.style.height = h + "px";
     data.sel = sel;
-    geo = drawChart(cv.getContext("2d"), cv.width, cv.height, data, vp, dpr());
+    const ctx = cv.getContext("2d");
+    if (isSheet()) { sgeo = drawSheet(ctx, cv.width, cv.height, sheet, img, vp, data); geo = null; }
+    else { geo = drawChart(ctx, cv.width, cv.height, data, vp, dpr()); sgeo = null; }
   };
+  const allPts = () => isSheet() ? data.pts : data.points;
   const showPop = () => {
-    const q = data.points.find((x) => x.id === sel), pop = document.getElementById("pop");
-    if (!q) { pop.innerHTML = `<span class="hint">Pinch or scroll to zoom · drag to pan · double-tap to reset · tap a red × for details</span>`; return; }
-    const a = G.assess(data.m, p.sex, q.age, q.v);
+    const pop = document.getElementById("pop");
+    const q = data && allPts().find((x) => x.id === sel);
+    if (!q) { pop.innerHTML = hint(); return; }
+    const k = isSheet() ? q.key : key;
+    const refId = isSheet() ? sheet.ref : view;
+    const m = G.getRef(refId).measures[k];
+    const label = isSheet() ? (sheet.ageMax <= 36 ? (k === "height" ? "Length" : "Weight") : (k === "height" ? "Stature" : "Weight")) : m.label;
     pop.innerHTML = `<div><b>${q.latest ? "Latest measurement · " : ""}${G.fmtDate(q.date)}</b><br>Age ${q.ageText} (${(q.age / 12).toFixed(3)} y)<br>
-      <b>${data.m.label}: ${q.v} ${data.m.unit} · ${G.fmtAssess(a)}</b><br><small>${esc(data.ref.title)} · ${esc(data.ref.version)}</small>${q.notes ? `<br><small>${esc(q.notes)}</small>` : ""}</div>
+      <b>${label}: ${q.v} ${m.unit} · ${G.fmtAssess(G.assess(m, p.sex, q.age, q.v))}</b><br><small>${esc(isSheet() ? sheet.title : G.getRef(refId).title)}</small>${q.notes ? `<br><small>${esc(q.notes)}</small>` : ""}</div>
       <button class="icon" id="px" aria-label="Close">✕</button>`;
     document.getElementById("px").onclick = () => { sel = null; draw(); showPop(); };
   };
+  showPop();
 
   $app.querySelectorAll(".seg2 button").forEach((b) => b.onclick = () => { key = b.dataset.k; sel = null; showPop(); history.replaceState(null, "", `#chart/${pid}/${key}`); rebuild(true); });
-  document.getElementById("ref").onchange = (e) => { manual = e.target.value === "auto" ? null : e.target.value; refId = manual || autoRef(); sel = null; showPop(); rebuild(true); };
+  document.getElementById("ref").onchange = (e) => { manual = e.target.value === "auto" ? null : e.target.value; view = manual || autoView(); sel = null; showPop(); rebuild(true); };
   document.getElementById("line").onchange = (e) => { connect = e.target.checked; rebuild(false); };
-  // Zoom buttons focus on the latest measurement when it is in view, otherwise on the centre.
+
+  // viewport helpers: data units for computed charts, page points for original sheets
+  const toData = (X, Y) => {
+    if (sgeo) { const [x, y] = sgeo.toPage(X, Y); return { x, y }; }
+    return { x: vp.x0 + (X - geo.L) / geo.pw * (vp.x1 - vp.x0), y: vp.y0 + (geo.T + geo.ph - Y) / geo.ph * (vp.y1 - vp.y0) };
+  };
+  const pan = (dx, dy) => {
+    if (sgeo) { const k = 1 / sgeo.scale; vp = clampVp({ x0: vp.x0 - dx * k, x1: vp.x1 - dx * k, y0: vp.y0 - dy * k, y1: vp.y1 - dy * k }, bounds); }
+    else vp = clampVp({ x0: vp.x0 - dx / geo.pw * (vp.x1 - vp.x0), x1: vp.x1 - dx / geo.pw * (vp.x1 - vp.x0), y0: vp.y0 + dy / geo.ph * (vp.y1 - vp.y0), y1: vp.y1 + dy / geo.ph * (vp.y1 - vp.y0) }, bounds);
+  };
+  const screenOf = (q) => sgeo ? sgeo.toScreen(px(sheet, q.age), py(sheet, q.key, q.v)) : [geo.X(q.age), geo.Y(q.v)];
   const center = () => {
-    const q = data.points.find((x) => x.latest);
-    return q && q.age >= vp.x0 && q.age <= vp.x1 && q.v >= vp.y0 && q.v <= vp.y1 ? [q.age, q.v] : [(vp.x0 + vp.x1) / 2, (vp.y0 + vp.y1) / 2];
+    const q = allPts().filter((x) => x.latest).map((x) => (sgeo ? [px(sheet, x.age), py(sheet, x.key, x.v)] : [x.age, x.v]))[0];
+    return q && q[0] >= vp.x0 && q[0] <= vp.x1 && q[1] >= Math.min(vp.y0, vp.y1) && q[1] <= Math.max(vp.y0, vp.y1) ? q : [(vp.x0 + vp.x1) / 2, (vp.y0 + vp.y1) / 2];
   };
   document.getElementById("zi").onclick = () => { vp = zoomVp(vp, 1.6, ...center(), bounds); draw(); };
   document.getElementById("zo").onclick = () => { vp = zoomVp(vp, 1 / 1.6, ...center(), bounds); draw(); };
   document.getElementById("zr").onclick = () => { vp = { ...bounds }; draw(); };
 
-  // gestures
   const pos = (e) => { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * dpr(), y: (e.clientY - r.top) * dpr() }; };
-  const toData = (px, py) => ({ x: vp.x0 + (px - geo.L) / geo.pw * (vp.x1 - vp.x0), y: vp.y0 + (geo.T + geo.ph - py) / geo.ph * (vp.y1 - vp.y0) });
   const ptrs = new Map(); let moved = false, pinch = null, lastTap = 0;
   cv.onpointerdown = (e) => { cv.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, pos(e)); moved = false;
     if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch = Math.hypot(a.x - b.x, a.y - b.y); } };
@@ -456,7 +492,7 @@ function viewChart(pid, key) {
     if (ptrs.size === 2 && pinch) { const [a, b] = [...ptrs.values()]; const d = Math.hypot(a.x - b.x, a.y - b.y), c = toData((a.x + b.x) / 2, (a.y + b.y) / 2);
       vp = zoomVp(vp, d / pinch, c.x, c.y, bounds); pinch = d; moved = true; draw(); return; }
     const dx = q.x - prev.x, dy = q.y - prev.y; if (Math.abs(dx) + Math.abs(dy) > 2) moved = true;
-    vp = clampVp({ x0: vp.x0 - dx / geo.pw * (vp.x1 - vp.x0), x1: vp.x1 - dx / geo.pw * (vp.x1 - vp.x0), y0: vp.y0 + dy / geo.ph * (vp.y1 - vp.y0), y1: vp.y1 + dy / geo.ph * (vp.y1 - vp.y0) }, bounds); draw();
+    pan(dx, dy); draw();
   };
   cv.onpointerup = (e) => {
     if (!moved && ptrs.size === 1) {
@@ -464,7 +500,7 @@ function viewChart(pid, key) {
       if (now - lastTap < 300) { vp = { ...bounds }; draw(); lastTap = 0; }
       else {
         lastTap = now; const q = pos(e); let best = null, bd = 26 * dpr();
-        geo.pts.forEach((pt) => { const d = Math.hypot(geo.X(pt.age) - q.x, geo.Y(pt.v) - q.y); if (d < bd) { bd = d; best = pt.id; } });
+        allPts().forEach((pt) => { const [X, Y] = screenOf(pt); const d = Math.hypot(X - q.x, Y - q.y); if (d < bd) { bd = d; best = pt.id; } });
         sel = best; draw(); showPop();
       }
     }
@@ -537,6 +573,8 @@ function viewSettings() {
       <p>Signed in as <b>${esc(session.email)}</b>.</p>
       <p class="hint">Records are encrypted with a key protected by your password and stored in this browser only. Clearing the browser's site data or uninstalling the app deletes them, so make regular backups. To use the same records on another device, restore a backup there.</p>
       <p class="hint" id="pers"></p></section>
+    <section class="card stack"><h2>Original CDC growth charts</h2>
+      <p class="hint">${esc(sheetMeta()?.source || "")}</p><p class="hint">${esc(sheetMeta()?.calibration || "")}</p></section>
     <section class="card stack"><h2>Growth references (bundled, work offline)</h2>
       ${G.allRefs().map((r) => `<div><b>${esc(r.title)}</b><br><small>Version: ${esc(r.version)} · Percentile curves ${r.centiles.join(", ")}</small><br><small class="muted">Source: ${esc(r.source)}</small></div>`).join("<hr>")}
       <p class="hint">Curves are generated from the official LMS parameters. Each measurement is plotted at the exact age (days ÷ 30.4375 months) with no rounding.</p></section>
@@ -550,7 +588,7 @@ function viewSettings() {
 
 // ------------------------------------------------------------ start
 (async function start() {
-  try { await G.loadReferences(); }
+  try { await G.loadReferences(); await loadSheets(); }
   catch { $app.innerHTML = `<main class="page"><p class="err">Could not load growth reference data. Connect to the internet once and reload.</p></main>`; return; }
   try { session = await S.restoreSession(); } catch { session = null; }
   route();

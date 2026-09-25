@@ -1,8 +1,8 @@
 // Growth references, LMS maths and exact age. Mirrors core/ (Kotlin) of the Android app.
 export const REF_IDS = ["who2006_0_2", "cdc2000_child", "cdc2000_infant", "who2006", "who2007"];
 export const FAMILIES = {
-  AUTO: "Automatic: WHO birth–24 months, then CDC 2–20 years (CDC/AAP recommendation)",
-  CDC: "CDC 2000 (birth–36 months, then 2–20 years)",
+  CDC: "CDC 2000 original charts (Set 2): birth–36 months, then 2–20 years from age 2",
+  AUTO: "WHO birth–24 months, then CDC 2–20 years original chart (CDC/AAP recommendation)",
   WHO: "WHO (2006 standards 0–5 y, then 2007 reference 5–19 y)",
 };
 export const DAYS_PER_MONTH = 365.25 / 12;
