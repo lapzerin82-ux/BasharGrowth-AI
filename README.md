@@ -23,6 +23,28 @@ a PDF report.
 | Accounts | Email + password sign-in. Each account has its own encrypted database; passwords are never stored (PBKDF2 verifier). |
 | Multi-device | Optional Firebase sync (free plan): same account on several devices, works offline and syncs when online; records are end-to-end encrypted. |
 
+## Web version (Netlify) — install without an APK
+
+`web/` contains an installable web app (PWA) with the same charts, maths and
+backup format as the Android app. It needs no build step and runs fully offline
+after the first visit.
+
+**Publish on Netlify (one time):**
+1. <https://app.netlify.com/projects/pediatric-growth-chart> → **Project configuration →
+   Build & deploy → Link repository** → GitHub → `lapzerin82-ux/BasharGrowth-AI`.
+2. Branch to deploy: `claude/android-pediatric-growth-chart-uxhk2k` (or `main` after merging).
+   Netlify reads `netlify.toml` (publish directory `web`, no build command). Click **Deploy**.
+3. The app is then at <https://pediatric-growth-chart.netlify.app>. Every push redeploys it.
+
+**Install on a phone:**
+* Android (Chrome): open the site → **Install app** button on the home screen, or Chrome menu ⋮ → **Install app / Add to Home screen**.
+* iPhone (Safari): Share → **Add to Home Screen**.
+
+Notes for the web version: records are encrypted (AES-256, key protected by your password)
+and stored only in that browser on that device. Clearing the browser's site data deletes them,
+so back up regularly. Backups (`.bgcbackup`) are interchangeable between the web and Android apps.
+The web version has no cloud sync; move data between devices with Backup/Restore.
+
 ## Install the APK on a phone
 
 1. Get `PediatricGrowthChart.apk`:
@@ -108,6 +130,7 @@ core/   pure Kotlin: LMS references + JSON data, exact age, MPH, chart maths, ba
 app/    Android app: data (Room/SQLCipher), auth, sync (Firebase), chart renderer, PDF, Compose UI
 tools/  script that converts the official LMS tables into core/src/main/resources/growthref
 docs/   database structure, growth reference method, Firestore rules
+web/    installable web app (PWA) for Netlify: same charts, maths and backup format
 ```
 
 ---
