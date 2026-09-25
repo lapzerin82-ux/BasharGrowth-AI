@@ -133,7 +133,7 @@ export function drawChart(ctx, W, H, data, vp, u) {
   pts.forEach((p) => cross(ctx, X(p.age), Y(p.v), p.latest, u, p.id === data.sel));
   if (data.showPct) pts.forEach((p) => {
     const t = G.pctShort(G.assess(m, sex, p.age, p.v));
-    if (t) haloTxt(ctx, t, X(p.age) + 8 * u, Y(p.v) - 6 * u, font(9.5, true), p.latest ? "#8a0008" : "#b0000e", u);
+    if (t) haloTxt(ctx, t, X(p.age) + 9 * u, Y(p.v) - 7 * u, font(14, true), p.latest ? "#8a0008" : "#b0000e", u);
   });
   ctx.restore();
 

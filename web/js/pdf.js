@@ -29,14 +29,17 @@ export async function buildPdf(p, ms, family, connect, clinician, invs = [], get
   const today = G.todayIso();
   const tgt = G.mphTarget(p.sex, p.mph);
   const mphTxt = p.mph ? `${G.fmtNum(p.mph)} cm = ${G.fmtAssess({ p: tgt.pct })} at 20 y (target range ${G.fmtNum(p.mph - 8.5)}–${G.fmtNum(p.mph + 8.5)} cm)${p.mphManual ? ", entered manually" : ""}` : "-";
-  const info = [["Name", p.name], ["Sex", p.sex === "F" ? "Female" : "Male"], ["File number", p.fileNumber], ["Date of birth", G.fmtDate(p.dob)],
+  const info = [["Name", p.name || "-"], ["Sex", p.sex === "F" ? "Female" : "Male"], ["File number", p.fileNumber || "-"], ["Date of birth", G.fmtDate(p.dob)],
     ["Current age", `${G.exactAge(p.dob, today).text} (on ${G.fmtDate(today)})`], ["Father's height", p.father ? p.father + " cm" : "-"],
     ["Mother's height", p.mother ? p.mother + " cm" : "-"], ["Mid-parental height", mphTxt]];
   doc.setFontSize(10);
   for (const [k, v] of info) { doc.setFont("helvetica", "bold"); doc.text(k, M, y); doc.setFont("helvetica", "normal"); doc.text(String(v), M + 120, y); y += 14; }
-  y += 6; h2("Clinical notes");
-  doc.setFont("helvetica", "normal"); doc.setFontSize(10);
-  for (const line of doc.splitTextToSize(p.notes || "-", W - 2 * M)) { ensure(14); doc.text(line, M, y); y += 13; }
+  for (const [title, text] of [["Main complaint", p.complaint], ["Clinical features", p.features], ["Notes", p.notes]]) {
+    if (!text) continue;
+    y += 6; h2(title);
+    doc.setFont("helvetica", "normal"); doc.setFontSize(10);
+    for (const line of doc.splitTextToSize(text, W - 2 * M)) { ensure(14); doc.text(line, M, y); y += 13; }
+  }
   y += 8; h2("Growth measurements");
   const cols = [M, M + 68, M + 160, M + 222, M + 345, M + 400];
   const head = () => { doc.setFont("helvetica", "bold"); doc.setFontSize(9.5); ["Date", "Age", "Height (cm)", "Height percentile", "Weight (kg)", "Weight percentile"].forEach((t, i) => doc.text(t, cols[i], y)); y += 5; doc.setDrawColor(200); doc.line(M, y, W - M, y); y += 12; doc.setFont("helvetica", "normal"); };

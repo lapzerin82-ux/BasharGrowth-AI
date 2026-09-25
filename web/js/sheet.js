@@ -106,7 +106,7 @@ export function drawSheet(ctx, W, H, s, img, vp, data) {
     ctx.strokeStyle = "rgba(0,120,70,.95)"; ctx.lineWidth = 1.1; ctx.setLineDash([3, 1.6]); ctx.beginPath();
     mid.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke(); ctx.setLineDash([]);
     const [lx, ly] = mid[0];
-    halo(ctx, `MPH ${G.fmtNum(tgt.mph)} cm = ${G.pctShort({ p: tgt.pct })} at 20 y · target channel`, lx + 3, ly - 4, 5.6, "#006b44");
+    halo(ctx, `MPH ${G.fmtNum(tgt.mph)} cm = ${G.pctShort({ p: tgt.pct })} at 20 y · target channel`, lx + 3, ly - 5, 7, "#006b44");
   }
 
   // trajectory lines and red crosses
@@ -122,7 +122,7 @@ export function drawSheet(ctx, W, H, s, img, vp, data) {
     const ref = G.getRef(s.ref);
     pts.forEach((z) => {
       const t = G.pctShort(G.assess(ref.measures[z.key], p.sex, z.age, z.v));
-      if (t) halo(ctx, t, px(s, z.age) + 4.2, py(s, z.key, z.v) - 3.2, 5.4, z.latest ? "#8a0008" : "#b0000e", true);
+      if (t) halo(ctx, t, px(s, z.age) + 5, py(s, z.key, z.v) - 4, 8.5, z.latest ? "#8a0008" : "#b0000e", true);
     });
   }
   ctx.restore();

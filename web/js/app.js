@@ -120,8 +120,9 @@ const ICONS = {
 };
 const icon = (k) => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${ICONS[k]}"/></svg>`;
 
+const pname = (p) => p.name || (p.fileNumber ? `File ${p.fileNumber}` : "Unnamed patient");
 function patientRow(p) {
-  return `<a class="prow" href="#p/${p.id}"><span><b>${esc(p.name)}</b><small>File ${esc(p.fileNumber)} · ${p.sex === "F" ? "Female" : "Male"} · DOB ${G.fmtDate(p.dob)}</small></span><em>${G.exactAge(p.dob, G.todayIso()).short}</em></a>`;
+  return `<a class="prow" href="#p/${p.id}"><span><b>${esc(pname(p))}</b><small>File ${esc(p.fileNumber)} · ${p.sex === "F" ? "Female" : "Male"} · DOB ${G.fmtDate(p.dob)}</small></span><em>${G.exactAge(p.dob, G.todayIso()).short}</em></a>`;
 }
 
 function viewHome() {
@@ -175,6 +176,7 @@ function viewList(mode) {
 }
 
 // ------------------------------------------------------------ patient form
+const FEATURES = ["Short stature", "Tall stature", "Poor weight gain / failure to thrive", "Obesity", "Growth deceleration", "Early puberty", "Delayed puberty", "Dysmorphic features", "Disproportionate body segments", "Midline defects", "Chronic illness", "Developmental delay", "Headache / visual problems", "GI symptoms"];
 function viewPatientForm(id) {
   const p = id ? session.patients.get(id) : null;
   if (id && !p) return go("#home");
@@ -183,12 +185,12 @@ function viewPatientForm(id) {
   <main class="page">
   <form id="f" class="stack" novalidate>
     <section class="card stack"><h2>Patient</h2>
-      <label>Patient name<input id="name" required value="${esc(p?.name)}"><small class="e" data-for="name"></small></label>
+      <label>Patient name (optional)<input id="name" value="${esc(p?.name)}"><small class="e" data-for="name"></small></label>
       <fieldset class="seg" id="sex"><legend>Sex</legend>
         <label><input type="radio" name="sex" value="M" ${p?.sex === "M" ? "checked" : ""}><span>Male</span></label>
         <label><input type="radio" name="sex" value="F" ${p?.sex === "F" ? "checked" : ""}><span>Female</span></label>
       </fieldset><small class="e" data-for="sex"></small>
-      <label>File / medical record number<input id="file" required value="${esc(p?.fileNumber)}"><small class="e" data-for="file"></small></label>
+      <label>File / medical record number (optional)<input id="file" value="${esc(p?.fileNumber)}"><small class="e" data-for="file"></small></label>
       <div id="dup"></div>
       <label>Date of birth<input id="dob" type="date" required max="${G.todayIso()}" value="${esc(p?.dob)}"><small class="e" data-for="dob"></small></label>
       <p class="hint" id="agenow"></p>
@@ -208,7 +210,16 @@ function viewPatientForm(id) {
       <p class="hi" id="mphout"></p>
       <p class="hint">Boys (father + mother + 13) / 2 · Girls (father + mother − 13) / 2 · target range ± 8.5 cm.</p>
     </section>
-    <section class="card stack"><h2>Notes</h2><textarea id="notes" rows="3" aria-label="Clinical notes">${esc(p?.notes)}</textarea></section>
+    <section class="card stack"><h2>Main complaint <small class="muted">(optional)</small></h2>
+      <input id="complaint" list="complaints" placeholder="e.g. Short stature, poor weight gain…" value="${esc(p?.complaint)}" aria-label="Main complaint">
+      <datalist id="complaints">${FEATURES.slice(0, 7).map((f) => `<option value="${esc(f)}">`).join("")}</datalist>
+    </section>
+    <section class="card stack"><h2>Clinical features <small class="muted">(optional)</small></h2>
+      <div class="chips" id="chips">${FEATURES.map((f) => `<button type="button" class="chip" data-f="${esc(f)}">${esc(f)}</button>`).join("")}</div>
+      <textarea id="features" rows="4" placeholder="History, examination, pubertal stage (Tanner), body proportions, dysmorphism…" aria-label="Clinical features">${esc(p?.features)}</textarea>
+      <p class="hint">Tap a chip to add it to the text; edit freely.</p>
+    </section>
+    <section class="card stack"><h2>Notes <small class="muted">(optional)</small></h2><textarea id="notes" rows="3" aria-label="Notes">${esc(p?.notes)}</textarea></section>
     <p class="err" id="err" hidden>Please correct the highlighted fields.</p>
     <button class="primary">${isNew ? "Save patient" : "Save changes"}</button>
   </form></main>`;
@@ -231,16 +242,19 @@ function viewPatientForm(id) {
     const v = calcMph();
     $("mphout").textContent = v ? `MPH ${G.fmtNum(v)} cm · target range ${G.fmtNum(v - 8.5)}–${G.fmtNum(v + 8.5)} cm` : "";
     const dup = session.byFileNumber($("file").value);
-    $("dup").innerHTML = dup && dup.id !== id ? `<div class="note">File ${esc(dup.fileNumber)} already belongs to <b>${esc(dup.name)}</b> (DOB ${G.fmtDate(dup.dob)}). <a href="#p/${dup.id}">Open this patient</a></div>` : "";
+    $("dup").innerHTML = dup && dup.id !== id ? `<div class="note">File ${esc(dup.fileNumber)} already belongs to <b>${esc(pname(dup))}</b> (DOB ${G.fmtDate(dup.dob)}). <a href="#p/${dup.id}">Open this patient</a></div>` : "";
   };
   $app.querySelector("form").addEventListener("input", update); update();
+  $("chips").querySelectorAll(".chip").forEach((c) => c.onclick = () => {
+    const t = $("features"), f = c.dataset.f;
+    if (!t.value.toLowerCase().includes(f.toLowerCase())) t.value = t.value.trim() ? `${t.value.trim()}\n${f}` : f;
+    c.classList.add("on"); t.focus();
+  });
 
   $("f").onsubmit = async (e) => {
     e.preventDefault();
     const errs = {}, today = G.todayIso(), dob = $("dob").value;
-    if (!$("name").value.trim()) errs.name = "Required";
     if (!sexVal()) errs.sex = "Select sex";
-    if (!$("file").value.trim()) errs.file = "Required";
     if (!dob) errs.dob = "Required"; else if (dob > today) errs.dob = "In the future";
     for (const [k, lo, hi] of [["fa", 120, 230], ["mo", 110, 220]]) { const r = rangeErr($(k).value, lo, hi, "cm"); if (r) errs[k] = r; }
     if ($("man").checked) { const r = $("mph").value.trim() ? rangeErr($("mph").value, 130, 210, "cm") : "Enter MPH or switch off manual entry"; if (r) errs.mph = r; }
@@ -258,6 +272,7 @@ function viewPatientForm(id) {
     const pid = await session.savePatient({
       id: p?.id, name: $("name").value.trim(), sex: sexVal(), fileNumber: $("file").value.trim(), dob,
       father: num($("fa").value), mother: num($("mo").value), mph: calcMph(), mphManual: $("man").checked, notes: $("notes").value.trim(),
+      complaint: $("complaint").value.trim(), features: $("features").value.trim(),
     });
     if (isNew && hasM) await session.saveMeasurement({ patientId: pid, date: $("mdate").value, height: num($("h").value), weight: num($("w").value), notes: "" });
     toast("Saved");
@@ -275,15 +290,17 @@ function viewPatient(id) {
     const v = key === "height" ? m.height : m.weight; if (v == null) return "–";
     return `${v} ${key === "height" ? "cm" : "kg"}<small>${G.fmtAssess(assessFor(p, m, key))}</small>`;
   };
-  $app.innerHTML = bar(p.name, true, `<a class="icon" href="#edit/${id}" aria-label="Edit patient">✎</a><button class="icon" id="del" aria-label="Delete patient">🗑</button>`) + `
+  $app.innerHTML = bar(pname(p), true, `<a class="icon" href="#edit/${id}" aria-label="Edit patient">✎</a><button class="icon" id="del" aria-label="Delete patient">🗑</button>`) + `
   <main class="page">
     <section class="card"><h2>Patient information</h2>
       <dl class="info">
-        <dt>Name</dt><dd>${esc(p.name)}</dd><dt>Sex</dt><dd>${p.sex === "F" ? "Female" : "Male"}</dd>
+        <dt>Name</dt><dd>${esc(p.name || "–")}</dd><dt>Sex</dt><dd>${p.sex === "F" ? "Female" : "Male"}</dd>
         <dt>File number</dt><dd>${esc(p.fileNumber)}</dd><dt>Date of birth</dt><dd>${G.fmtDate(p.dob)}</dd>
         <dt>Current age</dt><dd>${G.exactAge(p.dob, G.todayIso()).text}</dd>
         ${p.father ? `<dt>Father's height</dt><dd>${p.father} cm</dd>` : ""}${p.mother ? `<dt>Mother's height</dt><dd>${p.mother} cm</dd>` : ""}
         <dt>Mid-parental height</dt><dd>${mphTxt}</dd>
+        ${p.complaint ? `<dt>Main complaint</dt><dd>${esc(p.complaint)}</dd>` : ""}
+        ${p.features ? `<dt>Clinical features</dt><dd class="pre">${esc(p.features)}</dd>` : ""}
         ${p.notes ? `<dt>Notes</dt><dd class="pre">${esc(p.notes)}</dd>` : ""}
       </dl>
     </section>
@@ -305,7 +322,7 @@ function viewPatient(id) {
   bindBack();
   $app.querySelectorAll("tr[data-m]").forEach((tr) => tr.onclick = () => go(`#m/${id}/${tr.dataset.m}`));
   bindInvestigationsSection();
-  document.getElementById("del").onclick = () => confirmBox(`Delete ${p.name}?`, `The patient, all ${ms.length} measurements and all investigations will be permanently deleted${sync?.enabled ? " on all synced devices" : " from this device"}. This cannot be undone.`, "Delete", async () => {
+  document.getElementById("del").onclick = () => confirmBox(`Delete ${pname(p)}?`, `The patient, all ${ms.length} measurements and all investigations will be permanently deleted${sync?.enabled ? " on all synced devices" : " from this device"}. This cannot be undone.`, "Delete", async () => {
     await session.deletePatient(id); toast("Patient deleted"); go("#home");
   }, true);
   document.getElementById("pdf").onclick = () => pdfDialog(p);
@@ -332,7 +349,7 @@ function viewMeasure(pid, mid) {
   const m = mid ? session.measurements.get(mid) : null;
   $app.innerHTML = bar(m ? "Edit Measurement" : "Add Measurement", true, m ? `<button class="icon" id="del" aria-label="Delete measurement">🗑</button>` : "") + `
   <main class="page"><form id="f" class="stack" novalidate>
-    <section class="card"><h2>${esc(p.name)}</h2><p class="muted">File ${esc(p.fileNumber)} · ${p.sex === "F" ? "Female" : "Male"} · DOB ${G.fmtDate(p.dob)}</p></section>
+    <section class="card"><h2>${esc(pname(p))}</h2><p class="muted">File ${esc(p.fileNumber)} · ${p.sex === "F" ? "Female" : "Male"} · DOB ${G.fmtDate(p.dob)}</p></section>
     <section class="card stack"><h2>Measurement</h2>
       <label>Measurement date<input id="d" type="date" min="${p.dob}" max="${G.todayIso()}" value="${m?.date || G.todayIso()}"><small class="e" data-for="d"></small></label>
       <p class="hi" id="age"></p>
@@ -396,7 +413,7 @@ async function viewChart(pid, key) {
   let connect = settings.connect, sel = null, data, bounds, vp, geo, sheet, img, sgeo;
   const isSheet = () => view.startsWith("sheet:");
 
-  $app.innerHTML = bar(`${p.name} · growth chart`, true, `<a class="icon" href="#m/${pid}" aria-label="Add measurement">＋</a>`) + `
+  $app.innerHTML = bar(`${pname(p)} · growth chart`, true, `<a class="icon" href="#m/${pid}" aria-label="Add measurement">＋</a>`) + `
   <main class="chartpage">
     <div class="ctl">
       <div class="seg2" role="tablist" id="tabs"><button data-k="height">Height-for-age</button><button data-k="weight">Weight-for-age</button></div>
@@ -673,7 +690,7 @@ function viewInvestigation(pid, iid) {
   const rows = x?.results?.length ? x.results.map((r) => ({ ...r })) : [{ test: "", value: "", unit: "", ref: "" }];
   $app.innerHTML = bar(x ? "Edit Investigation" : "Add Investigation", true, x ? `<button class="icon" id="del" aria-label="Delete investigation">🗑</button>` : "") + `
   <main class="page"><form id="f" class="stack" novalidate>
-    <section class="card"><h2>${esc(p.name)}</h2><p class="muted">File ${esc(p.fileNumber)} · DOB ${G.fmtDate(p.dob)}</p></section>
+    <section class="card"><h2>${esc(pname(p))}</h2><p class="muted">File ${esc(p.fileNumber)} · DOB ${G.fmtDate(p.dob)}</p></section>
     <section class="card stack">
       <div class="two">
         <label>Date<input id="d" type="date" min="${p.dob}" max="${G.todayIso()}" value="${x?.date || G.todayIso()}"></label>
