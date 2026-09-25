@@ -109,12 +109,32 @@ export function drawChart(ctx, W, H, data, vp, u) {
     }
   }
 
+  // genetic target channel from MPH (percentile at 20 y on CDC stature, traced back on this chart)
+  const tgt = data.showMph && m.key === "height" ? G.mphTarget(sex, data.mph) : null;
+  if (tgt) {
+    const a0 = Math.max(m.ageMin, vp.x0), a1 = Math.min(m.ageMax, vp.x1);
+    const n = Math.max(2, Math.round((X(a1) - X(a0)) / (3 * u)));
+    const curve = (z) => { const o = []; for (let k = 0; k <= n; k++) { const a = a0 + (a1 - a0) * k / n, v = zValue(m, sex, a, z); if (v != null) o.push([X(a), Y(v)]); } return o; };
+    const lo = curve(tgt.zlo), hi = curve(tgt.zhi), mid = curve(tgt.z);
+    if (mid.length > 1) {
+      ctx.fillStyle = "rgba(0,150,90,.16)"; ctx.beginPath();
+      hi.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); [...lo].reverse().forEach(([x, y]) => ctx.lineTo(x, y)); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = "rgba(0,120,70,.95)"; ctx.lineWidth = 1.6 * u; ctx.setLineDash([6 * u, 3 * u]); ctx.beginPath();
+      mid.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke(); ctx.setLineDash([]);
+      haloTxt(ctx, `MPH ${fmtNum(tgt.mph)} cm = ${G.pctShort({ p: tgt.pct })} at 20 y · target channel`, mid[0][0] + 4 * u, mid[0][1] - 6 * u, font(9, true), "#006b44", u);
+    }
+  }
+
   const pts = [...data.points].sort((a, b) => a.age - b.age);
   if (data.connect && pts.length > 1) {
     ctx.strokeStyle = "rgba(200,20,30,.8)"; ctx.lineWidth = 1.4 * u; ctx.beginPath();
     pts.forEach((p, i) => (i ? ctx.lineTo(X(p.age), Y(p.v)) : ctx.moveTo(X(p.age), Y(p.v)))); ctx.stroke();
   }
   pts.forEach((p) => cross(ctx, X(p.age), Y(p.v), p.latest, u, p.id === data.sel));
+  if (data.showPct) pts.forEach((p) => {
+    const t = G.pctShort(G.assess(m, sex, p.age, p.v));
+    if (t) haloTxt(ctx, t, X(p.age) + 8 * u, Y(p.v) - 6 * u, font(9.5, true), p.latest ? "#8a0008" : "#b0000e", u);
+  });
   ctx.restore();
 
   ctx.strokeStyle = "#505a64"; ctx.lineWidth = u; ctx.strokeRect(L, T, pw, ph);
@@ -140,6 +160,12 @@ function fitText(ctx, text, x, y, maxW) {
   let t = text;
   while (t.length > 1 && ctx.measureText(t + "…").width > maxW) t = t.slice(0, -1);
   ctx.fillText(t + "…", x, y);
+}
+
+function haloTxt(ctx, text, x, y, f, color, u) {
+  ctx.font = f; ctx.textAlign = "left"; ctx.lineJoin = "round";
+  ctx.strokeStyle = "rgba(255,255,255,.95)"; ctx.lineWidth = 3 * u; ctx.strokeText(text, x, y);
+  ctx.fillStyle = color; ctx.fillText(text, x, y);
 }
 
 function cross(ctx, x, y, latest, u, selected) {

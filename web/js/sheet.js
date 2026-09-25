@@ -37,6 +37,14 @@ export function sheetPoints(s, p, ms) {
   return { pts, rows: withAge, outside };
 }
 
+/** Text with a white outline so it stays readable over the chart grid. */
+function halo(ctx, text, x, y, size, color, bold) {
+  ctx.font = `${bold ? "700 " : "600 "}${size}px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`;
+  ctx.textAlign = "left"; ctx.lineJoin = "round";
+  ctx.strokeStyle = "rgba(255,255,255,.95)"; ctx.lineWidth = size * 0.45; ctx.strokeText(text, x, y);
+  ctx.fillStyle = color; ctx.fillText(text, x, y);
+}
+
 function cross(ctx, x, y, latest, k, selected) {
   const h = (latest ? 3.6 : 2.8) * k;
   const seg = (c, w) => { ctx.strokeStyle = c; ctx.lineWidth = w; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(x - h, y - h); ctx.lineTo(x + h, y + h); ctx.moveTo(x - h, y + h); ctx.lineTo(x + h, y - h); ctx.stroke(); };
@@ -87,6 +95,20 @@ export function drawSheet(ctx, W, H, s, img, vp, data) {
   if (birth) cell(birth, t.birthRow[0], t.birthRow[1], true);
   shown.forEach((r, i) => cell(r, t.rows[i], t.rows[i + 1]));
 
+  // genetic target channel (MPH percentile at 20 y traced back to the start of the sheet)
+  const tgt = data.showMph ? G.mphTarget(p.sex, p.mph) : null;
+  if (tgt) {
+    const hm = G.getRef(s.ref).measures.height;
+    const curve = (z) => { const o = []; for (let a = s.ageMin; a <= s.ageMax + 1e-9; a += 0.25) { const v = G.zValue(hm, p.sex, Math.min(a, s.ageMax), z); if (v != null) o.push([px(s, a), py(s, "height", v)]); } return o; };
+    const lo = curve(tgt.zlo), hi = curve(tgt.zhi), mid = curve(tgt.z);
+    ctx.fillStyle = "rgba(0,150,90,.16)"; ctx.beginPath();
+    hi.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); [...lo].reverse().forEach(([x, y]) => ctx.lineTo(x, y)); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = "rgba(0,120,70,.95)"; ctx.lineWidth = 1.1; ctx.setLineDash([3, 1.6]); ctx.beginPath();
+    mid.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.stroke(); ctx.setLineDash([]);
+    const [lx, ly] = mid[0];
+    halo(ctx, `MPH ${G.fmtNum(tgt.mph)} cm = ${G.pctShort({ p: tgt.pct })} at 20 y · target channel`, lx + 3, ly - 4, 5.6, "#006b44");
+  }
+
   // trajectory lines and red crosses
   const pts = data.pts;
   if (data.connect) for (const key of ["height", "weight"]) {
@@ -96,6 +118,13 @@ export function drawSheet(ctx, W, H, s, img, vp, data) {
     q.forEach((z, i) => (i ? ctx.lineTo(px(s, z.age), py(s, key, z.v)) : ctx.moveTo(px(s, z.age), py(s, key, z.v)))); ctx.stroke();
   }
   pts.forEach((z) => cross(ctx, px(s, z.age), py(s, z.key, z.v), z.latest, k, z.id === data.sel));
+  if (data.showPct) {
+    const ref = G.getRef(s.ref);
+    pts.forEach((z) => {
+      const t = G.pctShort(G.assess(ref.measures[z.key], p.sex, z.age, z.v));
+      if (t) halo(ctx, t, px(s, z.age) + 4.2, py(s, z.key, z.v) - 3.2, 5.4, z.latest ? "#8a0008" : "#b0000e", true);
+    });
+  }
   ctx.restore();
   return { toScreen: (x, y) => [x * scale + ox, y * scale + oy], toPage: (X, Y) => [(X - ox) / scale, (Y - oy) / scale], scale };
 }

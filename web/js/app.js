@@ -17,6 +17,10 @@ const settings = {
   set family(v) { try { localStorage.setItem("pgc.family", v); } catch {} },
   get connect() { try { return localStorage.getItem("pgc.connect") !== "0"; } catch { return true; } },
   set connect(v) { try { localStorage.setItem("pgc.connect", v ? "1" : "0"); } catch {} },
+  get showMph() { try { return localStorage.getItem("pgc.mph") !== "0"; } catch { return true; } },
+  set showMph(v) { try { localStorage.setItem("pgc.mph", v ? "1" : "0"); } catch {} },
+  get showPct() { try { return localStorage.getItem("pgc.pct") !== "0"; } catch { return true; } },
+  set showPct(v) { try { localStorage.setItem("pgc.pct", v ? "1" : "0"); } catch {} },
 };
 function toast(msg) {
   const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.append(t);
@@ -269,7 +273,8 @@ function viewPatientForm(id) {
 function viewPatient(id) {
   const p = session.patients.get(id); if (!p) return go("#home");
   const ms = session.measurementsFor(id);
-  const mphTxt = p.mph ? `${G.fmtNum(p.mph)} cm (target ${G.fmtNum(p.mph - 8.5)}–${G.fmtNum(p.mph + 8.5)} cm)${p.mphManual ? ", manual" : ""}` : "not recorded";
+  const tgt = G.mphTarget(p.sex, p.mph);
+  const mphTxt = p.mph ? `${G.fmtNum(p.mph)} cm = ${G.fmtAssess({ p: tgt.pct })} at 20 y (target ${G.fmtNum(p.mph - 8.5)}–${G.fmtNum(p.mph + 8.5)} cm)${p.mphManual ? ", manual" : ""}` : "not recorded";
   const cell = (m, key) => {
     const v = key === "height" ? m.height : m.weight; if (v == null) return "–";
     return `${v} ${key === "height" ? "cm" : "kg"}<small>${G.fmtAssess(assessFor(p, m, key))}</small>`;
@@ -399,6 +404,8 @@ async function viewChart(pid, key) {
       <div class="row wrap">
         <select id="ref" aria-label="Growth chart"><option value="auto">Auto: ${esc(VIEW_TITLES[autoView()])}</option>${Object.entries(VIEW_TITLES).map(([k, t]) => `<option value="${k}">${esc(t)}</option>`).join("")}</select>
         <label class="switch"><input type="checkbox" id="line" ${connect ? "checked" : ""}> Line</label>
+        <label class="switch"><input type="checkbox" id="smph" ${settings.showMph ? "checked" : ""} ${p.mph ? "" : "disabled"}> MPH</label>
+        <label class="switch"><input type="checkbox" id="spct" ${settings.showPct ? "checked" : ""}> Percentiles</label>
         <span class="grow"></span>
         <button class="round" id="zi" aria-label="Zoom in">+</button><button class="round" id="zo" aria-label="Zoom out">−</button><button class="round" id="zr" aria-label="Reset zoom">⟲</button>
       </div>
@@ -440,7 +447,7 @@ async function viewChart(pid, key) {
     const w = wrap.clientWidth, h = wrap.clientHeight;
     cv.width = Math.round(w * dpr()); cv.height = Math.round(h * dpr());
     cv.style.width = w + "px"; cv.style.height = h + "px";
-    data.sel = sel;
+    data.sel = sel; data.showMph = settings.showMph; data.showPct = settings.showPct;
     const ctx = cv.getContext("2d");
     if (isSheet()) { sgeo = drawSheet(ctx, cv.width, cv.height, sheet, img, vp, data); geo = null; }
     else { geo = drawChart(ctx, cv.width, cv.height, data, vp, dpr()); sgeo = null; }
@@ -464,6 +471,8 @@ async function viewChart(pid, key) {
   $app.querySelectorAll(".seg2 button").forEach((b) => b.onclick = () => { key = b.dataset.k; sel = null; showPop(); history.replaceState(null, "", `#chart/${pid}/${key}`); rebuild(true); });
   document.getElementById("ref").onchange = (e) => { manual = e.target.value === "auto" ? null : e.target.value; view = manual || autoView(); sel = null; showPop(); rebuild(true); };
   document.getElementById("line").onchange = (e) => { connect = e.target.checked; rebuild(false); };
+  document.getElementById("smph").onchange = (e) => { settings.showMph = e.target.checked; draw(); };
+  document.getElementById("spct").onchange = (e) => { settings.showPct = e.target.checked; draw(); };
 
   // viewport helpers: data units for computed charts, page points for original sheets
   const toData = (X, Y) => {

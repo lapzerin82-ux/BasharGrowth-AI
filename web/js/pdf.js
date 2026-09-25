@@ -27,7 +27,8 @@ export async function buildPdf(p, ms, family, connect, clinician) {
   doc.setFont("helvetica", "bold"); doc.setFontSize(18); doc.setTextColor(...teal); doc.text("Pediatric Growth Report", M, y); y += 26;
   h2("Patient information");
   const today = G.todayIso();
-  const mphTxt = p.mph ? `${G.fmtNum(p.mph)} cm (target range ${G.fmtNum(p.mph - 8.5)}–${G.fmtNum(p.mph + 8.5)} cm)${p.mphManual ? ", entered manually" : ""}` : "-";
+  const tgt = G.mphTarget(p.sex, p.mph);
+  const mphTxt = p.mph ? `${G.fmtNum(p.mph)} cm = ${G.fmtAssess({ p: tgt.pct })} at 20 y (target range ${G.fmtNum(p.mph - 8.5)}–${G.fmtNum(p.mph + 8.5)} cm)${p.mphManual ? ", entered manually" : ""}` : "-";
   const info = [["Name", p.name], ["Sex", p.sex === "F" ? "Female" : "Male"], ["File number", p.fileNumber], ["Date of birth", G.fmtDate(p.dob)],
     ["Current age", `${G.exactAge(p.dob, today).text} (on ${G.fmtDate(today)})`], ["Father's height", p.father ? p.father + " cm" : "-"],
     ["Mother's height", p.mother ? p.mother + " cm" : "-"], ["Mid-parental height", mphTxt]];
@@ -69,14 +70,14 @@ export async function buildPdf(p, ms, family, connect, clinician) {
       // Original CDC Set 2 page (US Letter), unmodified, with the patient's data written on it.
       const sheet = sheetFor(view.slice(6), p.sex), img = await sheetImage(sheet);
       const cvs = document.createElement("canvas"), SC = 3.2; cvs.width = Math.round(612 * SC); cvs.height = Math.round(792 * SC);
-      drawSheet(cvs.getContext("2d"), cvs.width, cvs.height, sheet, img, { x0: 0, y0: 0, x1: 612, y1: 792 }, { p, ...sheetPoints(sheet, p, ms), connect, sel: null });
+      drawSheet(cvs.getContext("2d"), cvs.width, cvs.height, sheet, img, { x0: 0, y0: 0, x1: 612, y1: 792 }, { p, ...sheetPoints(sheet, p, ms), connect, sel: null, showMph: true, showPct: true });
       footer(); doc.addPage([612, 792], "p"); page++; onSheet = true;
       doc.addImage(cvs.toDataURL("image/jpeg", 0.92), "JPEG", 0, 0, 612, 792);
       continue;
     }
     const cv = document.createElement("canvas"); const S = 2.2; cv.width = Math.round(802 * S); cv.height = Math.round(551 * S);
     for (const key of ["height", "weight"]) {
-      const d = buildChart(p, ms, view, key, connect, null);
+      const d = buildChart(p, ms, view, key, connect, null); d.showMph = true; d.showPct = true;
       footer(); doc.addPage("a4", "l"); page++; onSheet = false;
       drawChart(cv.getContext("2d"), cv.width, cv.height, d, fullBounds(d.m, d.sex, d.points.map((q) => q.v)), S);
       doc.addImage(cv.toDataURL("image/jpeg", 0.9), "JPEG", 20, 16, 802, 551);

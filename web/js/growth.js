@@ -131,3 +131,24 @@ export function mph(sex, father, mother) { return (father + mother + (sex === "M
 export const MPH_RANGE = 8.5;
 
 export function fmtNum(v, dp = 1) { const r = Math.round(v * 10 ** dp) / 10 ** dp; return String(r); }
+
+/**
+ * Genetic target channel from mid-parental height: the percentile of MPH (and of MPH ± 8.5 cm)
+ * on the CDC 2000 stature-for-age curve at 20 years. The same z-scores are traced back through
+ * childhood on whichever chart is displayed.
+ */
+export function mphTarget(sex, mphCm) {
+  if (!mphCm) return null;
+  const h = refs["cdc2000_child"]?.measures.height; if (!h) return null;
+  const p = lms(h, sex, 240); if (!p) return null;
+  const z = zOf(p, mphCm), zlo = zOf(p, mphCm - MPH_RANGE), zhi = zOf(p, mphCm + MPH_RANGE);
+  return { mph: mphCm, z, zlo, zhi, pct: cdf(z) * 100 };
+}
+
+/** Compact percentile for chart labels, e.g. "P36", "P0.4", "<P0.1". */
+export function pctShort(a) {
+  if (!a) return "";
+  const p = a.p;
+  if (p < 0.1) return "<P0.1"; if (p > 99.9) return ">P99.9";
+  return "P" + (p < 1 || p > 99 ? (Math.round(p * 10) / 10) : Math.min(99, Math.max(1, Math.round(p))));
+}
