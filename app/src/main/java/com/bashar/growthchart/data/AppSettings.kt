@@ -20,7 +20,7 @@ class AppSettings(context: Context) {
     val values: StateFlow<Values> = _values.asStateFlow()
 
     private fun read() = Values(
-        family = runCatching { GrowthReferences.Family.valueOf(prefs.getString("family", "CDC")!!) }.getOrDefault(GrowthReferences.Family.CDC),
+        family = runCatching { GrowthReferences.Family.valueOf(prefs.getString("family", "AUTO")!!) }.getOrDefault(GrowthReferences.Family.AUTO),
         connectLines = prefs.getBoolean("connectLines", true),
         secureScreen = prefs.getBoolean("secureScreen", false),
     )

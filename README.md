@@ -15,8 +15,8 @@ a PDF report.
 | Area | What the app does |
 |---|---|
 | Patients | Name, sex, file number, date of birth, father/mother height → MPH (or manual MPH), notes. Warns when a file number already exists and opens that patient instead. |
-| Measurements | Any number per patient: date, height/length, weight, note. Exact age (y m d, days, decimal years) shown live while typing, with centile and z-score. |
-| Charts | Height-for-age and weight-for-age, boys/girls, CDC 2000 birth–36 mo and 2–20 y (3rd–97th, Set 2 layout) or WHO 2006 (0–5 y) / WHO 2007 (5–19 y). All measurements shown as red ×, the latest circled, optional trajectory line, MPH and target range at 20 y. Pinch-zoom, pan, +/−, reset (or double-tap), tap a × for date/age/value/centile. |
+| Measurements | Any number per patient: date, height/length, weight, note. Exact age (y m d, days, decimal years) shown live while typing, with percentile. |
+| Charts | Height-for-age and weight-for-age, boys/girls. Default **automatic** switch: WHO 2006 birth–24 months (2nd–98th percentiles), then CDC 2000 2–20 years (3rd–97th), as recommended by CDC/AAP. CDC-only (birth–36 mo, 2–20 y) or WHO-only (0–5 y, 5–19 y) can be chosen in Settings. All measurements shown as red ×, the latest circled, optional trajectory line, MPH and target range at 20 y. Pinch-zoom, pan, +/−, reset (or double-tap), tap a × for date/age/value/percentile. |
 | Search | By name or file number; opening a patient shows demographics, notes, all measurements and charts. |
 | PDF | Patient information, notes, measurement table with centiles, and full-page charts for every chart that contains measurements. Save or share/print. |
 | Backup / Restore | One password-encrypted file (AES-256-GCM) with all patients; save, share (email, Drive, WhatsApp, Nearby Share…), and restore on any device (merge or replace). |

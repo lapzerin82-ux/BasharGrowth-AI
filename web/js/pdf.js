@@ -36,7 +36,7 @@ export async function buildPdf(p, ms, family, connect, clinician) {
   for (const line of doc.splitTextToSize(p.notes || "-", W - 2 * M)) { ensure(14); doc.text(line, M, y); y += 13; }
   y += 8; h2("Growth measurements");
   const cols = [M, M + 68, M + 160, M + 222, M + 345, M + 400];
-  const head = () => { doc.setFont("helvetica", "bold"); doc.setFontSize(9.5); ["Date", "Age", "Height (cm)", "Height centile", "Weight (kg)", "Weight centile"].forEach((t, i) => doc.text(t, cols[i], y)); y += 5; doc.setDrawColor(200); doc.line(M, y, W - M, y); y += 12; doc.setFont("helvetica", "normal"); };
+  const head = () => { doc.setFont("helvetica", "bold"); doc.setFontSize(9.5); ["Date", "Age", "Height (cm)", "Height percentile", "Weight (kg)", "Weight percentile"].forEach((t, i) => doc.text(t, cols[i], y)); y += 5; doc.setDrawColor(200); doc.line(M, y, W - M, y); y += 12; doc.setFont("helvetica", "normal"); };
   head();
   const refsUsed = new Set();
   for (const m of ms) {
@@ -55,11 +55,11 @@ export async function buildPdf(p, ms, family, connect, clinician) {
   }
   if (!ms.length) { doc.text("No measurements recorded.", M, y); y += 14; }
   y += 8; doc.setFontSize(8); doc.setTextColor(80);
-  for (const l of doc.splitTextToSize(`Centiles/z-scores calculated with the LMS method using ${G.FAMILIES[family]}; references used: ${[...refsUsed].join(", ") || "-"}. Age is exact chronological age (days / 30.4375 months). For clinical decision support only.`, W - 2 * M)) { ensure(10); doc.text(l, M, y); y += 10; }
+  for (const l of doc.splitTextToSize(`Percentiles calculated with the LMS method using ${G.FAMILIES[family]}; references used: ${[...refsUsed].join(", ") || "-"}. Age is exact chronological age (days / 30.4375 months). For clinical decision support only.`, W - 2 * M)) { ensure(10); doc.text(l, M, y); y += 10; }
   doc.setTextColor(0);
 
   // charts: one landscape page per chart of the family that contains measurements
-  const ids = family === "WHO" ? ["who2006", "who2007"] : ["cdc2000_infant", "cdc2000_child"];
+  const ids = family === "AUTO" ? ["who2006_0_2", "cdc2000_child"] : family === "WHO" ? ["who2006", "who2007"] : ["cdc2000_infant", "cdc2000_child"];
   const latest = ms[ms.length - 1];
   const defId = G.defaultRefFor(family, G.exactAge(p.dob, latest ? latest.date : today).months);
   const cv = document.createElement("canvas"); const S = 2.2; cv.width = Math.round(802 * S); cv.height = Math.round(551 * S);

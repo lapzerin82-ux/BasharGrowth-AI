@@ -4,6 +4,7 @@
 
 | Id | Chart | Ages | Measures | Centiles drawn | Source of LMS values |
 |---|---|---|---|---|---|
+| `who2006_0_2` | WHO Child Growth Standards, birth to 24 months (CDC/AAP-recommended chart for under-2s) | 0–24 mo | length-for-age, weight-for-age | 2, 5, 10, 25, 50, 75, 90, 95, 98 | WHO daily LMS tables (via `rcpchgrowth`) |
 | `cdc2000_infant` | CDC 2000, birth to 36 months | 0–36 mo | length-for-age, weight-for-age | 3, 10, 25, 50, 75, 90, 97 | CDC `lenageinf`/`wtageinf`, from CDC's own `cdcanthro` package (github.com/CDC-DNPAO/CDCAnthro) |
 | `cdc2000_child` | CDC 2000, 2 to 20 years | 2–20 y | stature-for-age, weight-for-age | 3, 10, 25, 50, 75, 90, 97 | CDC `statage`/`wtage` (via `rcpchgrowth`) |
 | `who2006` | WHO Child Growth Standards | 0–5 y | length/height-for-age, weight-for-age | 3, 15, 50, 85, 97 | WHO daily LMS tables (via `rcpchgrowth`) |
@@ -26,7 +27,7 @@ stature at 24.0 months L = 0.941523967, M = 86.45220101, S = 0.040321528.
 4. Centile curves: for each age, L, M, S are linearly interpolated between the
    tabulated ages, and the curve value is `M·(1 + L·S·z)^(1/L)` (or `M·e^(S·z)` when L = 0),
    with z the normal quantile of the centile (e.g. 97th → z = 1.8808).
-5. z-score of a measurement: `((X/M)^L − 1)/(L·S)`; percentile = Φ(z).
+5. Percentile of a measurement = Φ(z) with z = `((X/M)^L − 1)/(L·S)`; only the percentile is displayed.
    For WHO weight-for-age, WHO's restricted method beyond ±3 SD is applied.
 
 Example (from the specification): DOB 15/03/2018, measured 24/09/2026 → 3115 days
@@ -35,7 +36,11 @@ not at 8 or 8.5 years.
 
 ## Chart selection
 
-Default chart per age (can be changed on the chart screen, and the choice is saved per patient):
+Default chart per age (can be changed on the chart screen):
+
+* **Automatic (default)**: WHO 2006 below 24 months, CDC 2000 2–20 years from 24 months
+  (CDC/AAP recommendation, MMWR Recomm Rep 2010;59(RR-9)). Percentiles in tables and
+  reports use the chart that applies at the age of each measurement.
 
 * CDC family: birth–36-month charts below 24 months, 2–20-year charts from 24 months
   (length is measured recumbent < 24 months, stature standing ≥ 24 months).

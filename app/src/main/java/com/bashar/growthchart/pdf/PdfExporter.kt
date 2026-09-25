@@ -103,7 +103,7 @@ object PdfExporter {
         ensure(40f)
         c.drawText("Growth measurements", M, y, h2); y += 16f
         val cols = floatArrayOf(M, M + 70f, M + 160f, M + 220f, M + 340f, M + 395f)
-        val headers = listOf("Date", "Age", "Height (cm)", "Height centile", "Weight (kg)", "Weight centile")
+        val headers = listOf("Date", "Age", "Height (cm)", "Height percentile", "Weight (kg)", "Weight percentile")
         fun header() {
             headers.forEachIndexed { i, h -> c.drawText(h, cols[i], y, bold) }
             y += 5f; c.drawLine(M, y, A4_W - M, y, line); y += 12f
@@ -137,7 +137,7 @@ object PdfExporter {
         y += 8f
         ensure(30f)
         for (l in wrap(
-            "Centiles/z-scores calculated with the LMS method using ${family.label}; references used: ${refsUsed.joinToString(", ").ifEmpty { "-" }}. " +
+            "Percentiles calculated with the LMS method using ${family.label}; references used: ${refsUsed.joinToString(", ").ifEmpty { "-" }}. " +
                 "Age is exact chronological age (days / 30.4375 months). For clinical decision support only.",
             small, A4_W - 2 * M,
         )) { c.drawText(l, M, y, small); y += 10f }
@@ -146,8 +146,11 @@ object PdfExporter {
 
         // ---- charts: one landscape page per chart that contains measurements
         val renderer = GrowthChartRenderer(1f)
-        val chartIds = if (family == GrowthReferences.Family.CDC) listOf(GrowthReferences.CDC_INFANT, GrowthReferences.CDC_CHILD)
-        else listOf(GrowthReferences.WHO_2006, GrowthReferences.WHO_2007)
+        val chartIds = when (family) {
+            GrowthReferences.Family.AUTO -> listOf(GrowthReferences.WHO_0_2, GrowthReferences.CDC_CHILD)
+            GrowthReferences.Family.CDC -> listOf(GrowthReferences.CDC_INFANT, GrowthReferences.CDC_CHILD)
+            GrowthReferences.Family.WHO -> listOf(GrowthReferences.WHO_2006, GrowthReferences.WHO_2007)
+        }
         val defaultId = ChartBuilder.defaultReference(patient, measurements, family)
         for (measure in listOf(Measure.HEIGHT, Measure.WEIGHT)) {
             val charts = chartIds.mapNotNull { id -> ChartBuilder.build(patient, measurements, id, measure, connect)?.let { id to it } }

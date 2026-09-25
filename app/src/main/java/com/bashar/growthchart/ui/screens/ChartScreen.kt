@@ -33,7 +33,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -50,7 +49,6 @@ import com.bashar.growthchart.core.chart.ChartMath
 import com.bashar.growthchart.core.growth.GrowthReferences
 import com.bashar.growthchart.core.growth.Measure
 import com.bashar.growthchart.ui.components.AppTopBar
-import kotlinx.coroutines.launch
 
 @Composable
 fun ChartScreen(
@@ -64,7 +62,6 @@ fun ChartScreen(
     val patient by remember(patientId) { active.repo.observePatient(patientId) }.collectAsState(initial = null)
     val measurements by remember(patientId) { active.repo.observeMeasurements(patientId) }.collectAsState(initial = null)
     val settings by container.settings.values.collectAsState()
-    val scope = rememberCoroutineScope()
 
     var measure by rememberSaveable { mutableStateOf(initialMeasure) }
     var chosenRef by rememberSaveable { mutableStateOf<String?>(null) }
@@ -83,9 +80,9 @@ fun ChartScreen(
         },
     ) { pad ->
         if (p == null || ms == null) return@Scaffold
-        val refId = chosenRef
-            ?: p.preferredReference?.takeIf { it in GrowthReferences.ids }
-            ?: ChartBuilder.defaultReference(p, ms, settings.family)
+        // Automatic by default: the chart follows the child's age (e.g. WHO < 24 months, CDC from 24 months).
+        val autoRef = ChartBuilder.defaultReference(p, ms, settings.family)
+        val refId = chosenRef ?: autoRef
         val built = remember(p, ms, refId, measure, connect) { ChartBuilder.build(p, ms, refId, measure, connect) }
         if (built == null) return@Scaffold
         val bounds = remember(built) { ChartMath.fullBounds(built.data.measure, built.data.sex, built.data.points.map { it.value }) }
@@ -105,10 +102,14 @@ fun ChartScreen(
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     Box {
                         OutlinedButton(onClick = { menuOpen = true }) {
-                            Text(GrowthReferences.get(refId).shortTitle)
+                            Text(if (chosenRef == null) "Auto: ${GrowthReferences.get(refId).shortTitle}" else GrowthReferences.get(refId).shortTitle)
                             Icon(Icons.Default.ArrowDropDown, null)
                         }
                         DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
+                            DropdownMenuItem(
+                                text = { Text("Automatic by age (${GrowthReferences.get(autoRef).shortTitle})") },
+                                onClick = { menuOpen = false; selected = null; chosenRef = null },
+                            )
                             GrowthReferences.all().forEach { r ->
                                 DropdownMenuItem(
                                     text = { Text(r.title) },
@@ -116,7 +117,6 @@ fun ChartScreen(
                                         menuOpen = false
                                         selected = null
                                         chosenRef = r.id
-                                        scope.launch { active.repo.setPreferredReference(patientId, r.id) }
                                     },
                                 )
                             }

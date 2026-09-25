@@ -164,7 +164,7 @@ fun PatientDetailScreen(
                 if (measurements.isEmpty()) Text("No measurements yet.")
                 else {
                     Text(
-                        "Centiles: ${settings.family.label}. Tap a row to edit.",
+                        "Percentiles: ${settings.family.label}. Tap a row to edit.",
                         style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                     measurements.sortedByDescending { it.dateEpochDay }.forEach { m -> MeasurementRow(p, m, settings.family) { onEditMeasurement(m.id) } }

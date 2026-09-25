@@ -38,7 +38,7 @@ export function clampVp(v, b) {
 function title(ref, m, sex) {
   const who = sex === "F" ? "Girls" : "Boys";
   const age = (x) => x === 0 ? "birth" : x % 12 === 0 ? `${x / 12} years` : `${x} months`;
-  const range = m.ageMax <= 36 ? "birth to 36 months" : `${age(m.ageMin)} to ${age(m.ageMax)}`;
+  const range = m.ageMax <= 36 ? `birth to ${m.ageMax} months` : `${age(m.ageMin)} to ${age(m.ageMax)}`;
   return `${m.label}: ${who}, ${range}`;
 }
 
@@ -61,7 +61,7 @@ export function drawChart(ctx, W, H, data, vp, u) {
   let lx = L + 5 * u; const ly = 41 * u;
   cross(ctx, lx, ly - 3 * u, false, u); ctx.fillStyle = "#444"; ctx.fillText("measurement", lx + 9 * u, ly);
   lx += 94 * u; cross(ctx, lx, ly - 3 * u, true, u); ctx.fillStyle = "#444"; ctx.fillText("latest", lx + 13 * u, ly);
-  lx += 50 * u; fitText(ctx, "Centiles: " + ref.centiles.join(", "), lx, ly, W - lx - 6 * u);
+  lx += 50 * u; fitText(ctx, "Percentiles: " + ref.centiles.join(", "), lx, ly, W - lx - 6 * u);
 
   ctx.fillStyle = "#fffffc"; ctx.fillRect(L, T, pw, ph);
   const span = vp.x1 - vp.x0, years = m.ageMax > 36 && span > 18;

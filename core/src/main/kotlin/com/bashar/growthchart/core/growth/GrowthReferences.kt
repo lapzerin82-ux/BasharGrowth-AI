@@ -6,14 +6,16 @@ package com.bashar.growthchart.core.growth
  * from the official LMS tables.
  */
 object GrowthReferences {
+    const val WHO_0_2 = "who2006_0_2"
     const val CDC_INFANT = "cdc2000_infant"
     const val CDC_CHILD = "cdc2000_child"
     const val WHO_2006 = "who2006"
     const val WHO_2007 = "who2007"
 
-    val ids = listOf(CDC_INFANT, CDC_CHILD, WHO_2006, WHO_2007)
+    val ids = listOf(WHO_0_2, CDC_CHILD, CDC_INFANT, WHO_2006, WHO_2007)
 
     enum class Family(val label: String) {
+        AUTO("Automatic: WHO birth–24 months, then CDC 2–20 years (CDC/AAP recommendation)"),
         CDC("CDC 2000 (birth-36 months, then 2-20 years)"),
         WHO("WHO (2006 standards 0-5 years, then 2007 reference 5-19 years)"),
     }
@@ -31,10 +33,13 @@ object GrowthReferences {
 
     /**
      * The chart a clinician would normally use for a child of this age within the chosen family:
+     * AUTO: WHO 2006 (0-24 months, 2nd-98th percentiles) below 24 months, CDC 2000 2-20 years from 24 months,
+     * as recommended by CDC/AAP (MMWR Recomm Rep 2010;59(RR-9)).
      * CDC: birth-36 month charts below 24 months, 2-20 year charts from 24 months (CDC/AAP practice).
      * WHO: 2006 standards below 60 months, 2007 reference from 60 months.
      */
     fun defaultFor(family: Family, ageMonths: Double): String = when (family) {
+        Family.AUTO -> if (ageMonths < 24.0) WHO_0_2 else CDC_CHILD
         Family.CDC -> if (ageMonths < 24.0) CDC_INFANT else CDC_CHILD
         Family.WHO -> if (ageMonths < 60.0) WHO_2006 else WHO_2007
     }

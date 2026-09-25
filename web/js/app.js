@@ -12,7 +12,7 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "
 const num = (s) => { const v = parseFloat(String(s ?? "").trim().replace(",", ".")); return Number.isFinite(v) ? v : null; };
 const go = (h) => { location.hash = h; };
 const settings = {
-  get family() { try { return localStorage.getItem("pgc.family") || "CDC"; } catch { return "CDC"; } },
+  get family() { try { const f = localStorage.getItem("pgc.family"); return f && G.FAMILIES[f] ? f : "AUTO"; } catch { return "AUTO"; } },
   set family(v) { try { localStorage.setItem("pgc.family", v); } catch {} },
   get connect() { try { return localStorage.getItem("pgc.connect") !== "0"; } catch { return true; } },
   set connect(v) { try { localStorage.setItem("pgc.connect", v ? "1" : "0"); } catch {} },
@@ -292,7 +292,7 @@ function viewPatient(id) {
       <button class="ghost" id="pdf">Export PDF</button>
     </div>
     <section class="card"><h2>Measurements (${ms.length})</h2>
-      ${ms.length ? `<p class="hint">Centiles: ${G.FAMILIES[settings.family]}. Tap a row to edit.</p>
+      ${ms.length ? `<p class="hint">Percentiles: ${G.FAMILIES[settings.family]}. Tap a row to edit.</p>
       <div class="scrollx"><table class="mt"><thead><tr><th>Date</th><th>Age</th><th>Height</th><th>Weight</th></tr></thead><tbody>
       ${[...ms].reverse().map((m) => `<tr data-m="${m.id}"><td>${G.fmtDate(m.date)}</td><td>${G.exactAge(p.dob, m.date).text}</td><td>${cell(m, "height")}</td><td>${cell(m, "weight")}</td></tr>${m.notes ? `<tr class="nt" data-m="${m.id}"><td colspan="4">${esc(m.notes)}</td></tr>` : ""}`).join("")}
       </tbody></table></div>` : `<p class="muted">No measurements yet.</p>`}
@@ -377,8 +377,9 @@ function viewChart(pid, key) {
   const p = session.patients.get(pid); if (!p) return go("#home");
   const ms = session.measurementsFor(pid);
   const latest = ms[ms.length - 1];
-  let refId = p.preferredReference && G.REF_IDS.includes(p.preferredReference) ? p.preferredReference
-    : G.defaultRefFor(settings.family, G.exactAge(p.dob, latest ? latest.date : G.todayIso()).months);
+  const autoRef = () => G.defaultRefFor(settings.family, G.exactAge(p.dob, latest ? latest.date : G.todayIso()).months);
+  let manual = null; // null = automatic chart choice for the child's age
+  let refId = autoRef();
   let connect = settings.connect, sel = null, data, bounds, vp, geo;
 
   $app.innerHTML = bar(`${p.name} · growth chart`, true, `<a class="icon" href="#m/${pid}" aria-label="Add measurement">＋</a>`) + `
@@ -386,7 +387,7 @@ function viewChart(pid, key) {
     <div class="ctl">
       <div class="seg2" role="tablist"><button data-k="height">Height-for-age</button><button data-k="weight">Weight-for-age</button></div>
       <div class="row wrap">
-        <select id="ref" aria-label="Growth reference">${G.allRefs().map((r) => `<option value="${r.id}">${esc(r.title)}</option>`).join("")}</select>
+        <select id="ref" aria-label="Growth chart"><option value="auto">Automatic by age (${esc(G.getRef(autoRef()).shortTitle)})</option>${G.allRefs().map((r) => `<option value="${r.id}">${esc(r.title)}</option>`).join("")}</select>
         <label class="switch"><input type="checkbox" id="line" ${connect ? "checked" : ""}> Line</label>
         <span class="grow"></span>
         <button class="round" id="zi" aria-label="Zoom in">+</button><button class="round" id="zo" aria-label="Zoom out">−</button><button class="round" id="zr" aria-label="Reset zoom">⟲</button>
@@ -405,10 +406,14 @@ function viewChart(pid, key) {
     bounds = fullBounds(data.m, p.sex, data.points.map((q) => q.v));
     if (resetVp || !vp) vp = { ...bounds };
     $app.querySelectorAll(".seg2 button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.k === key));
-    document.getElementById("ref").value = refId;
+    document.getElementById("ref").value = manual || "auto";
     const out = document.getElementById("out");
     out.hidden = !data.outside;
-    out.textContent = `${data.outside} measurement(s) fall outside this chart's age range (${G.fmtNum(data.m.ageMin / 12)}–${G.fmtNum(data.m.ageMax / 12)} y). Select another chart to see them.`;
+    // Offer the chart that holds the hidden measurements (e.g. WHO 0-24 months for earlier visits).
+    const other = data.outside ? ms.map((x) => G.defaultRefFor(settings.family, G.exactAge(p.dob, x.date).months)).find((id) => id !== refId) : null;
+    out.innerHTML = `${data.outside} measurement(s) are on another chart (this one covers ${G.fmtNum(data.m.ageMin / 12)}–${G.fmtNum(data.m.ageMax / 12)} y).` +
+      (other ? ` <button class="link" id="other">Show ${esc(G.getRef(other).title)}</button>` : " Select another chart to see them.");
+    document.getElementById("other")?.addEventListener("click", () => { manual = other; refId = other; sel = null; showPop(); rebuild(true); });
     draw();
   };
   const draw = () => {
@@ -423,13 +428,13 @@ function viewChart(pid, key) {
     if (!q) { pop.innerHTML = `<span class="hint">Pinch or scroll to zoom · drag to pan · double-tap to reset · tap a red × for details</span>`; return; }
     const a = G.assess(data.m, p.sex, q.age, q.v);
     pop.innerHTML = `<div><b>${q.latest ? "Latest measurement · " : ""}${G.fmtDate(q.date)}</b><br>Age ${q.ageText} (${(q.age / 12).toFixed(3)} y)<br>
-      <b>${data.m.label}: ${q.v} ${data.m.unit} · ${G.fmtAssess(a)}</b><br><small>${esc(data.ref.shortTitle)} · ${esc(data.ref.version)}</small>${q.notes ? `<br><small>${esc(q.notes)}</small>` : ""}</div>
+      <b>${data.m.label}: ${q.v} ${data.m.unit} · ${G.fmtAssess(a)}</b><br><small>${esc(data.ref.title)} · ${esc(data.ref.version)}</small>${q.notes ? `<br><small>${esc(q.notes)}</small>` : ""}</div>
       <button class="icon" id="px" aria-label="Close">✕</button>`;
     document.getElementById("px").onclick = () => { sel = null; draw(); showPop(); };
   };
 
   $app.querySelectorAll(".seg2 button").forEach((b) => b.onclick = () => { key = b.dataset.k; sel = null; showPop(); history.replaceState(null, "", `#chart/${pid}/${key}`); rebuild(true); });
-  document.getElementById("ref").onchange = async (e) => { refId = e.target.value; sel = null; showPop(); await session.savePatient({ ...p, preferredReference: refId }); rebuild(true); };
+  document.getElementById("ref").onchange = (e) => { manual = e.target.value === "auto" ? null : e.target.value; refId = manual || autoRef(); sel = null; showPop(); rebuild(true); };
   document.getElementById("line").onchange = (e) => { connect = e.target.checked; rebuild(false); };
   // Zoom buttons focus on the latest measurement when it is in view, otherwise on the centre.
   const center = () => {
@@ -525,7 +530,7 @@ function viewSettings() {
   <main class="page stack">
     <section class="card stack"><h2>Default growth reference</h2>
       ${Object.entries(G.FAMILIES).map(([k, v]) => `<label class="radio"><input type="radio" name="fam" value="${k}" ${settings.family === k ? "checked" : ""}> ${v}</label>`).join("")}
-      <p class="hint">Chooses the chart from the child's age and is used for centiles. Any chart can still be picked on the chart screen.</p></section>
+      <p class="hint">Chooses the chart from the child's age and is used for the percentiles in tables and reports. Any chart can still be picked on the chart screen.</p></section>
     <section class="card stack"><h2>Display</h2>
       <label class="switch"><input type="checkbox" id="cl" ${settings.connect ? "checked" : ""}> Connect measurements with a line (trajectory)</label></section>
     <section class="card stack"><h2>Account & storage</h2>
@@ -533,7 +538,7 @@ function viewSettings() {
       <p class="hint">Records are encrypted with a key protected by your password and stored in this browser only. Clearing the browser's site data or uninstalling the app deletes them, so make regular backups. To use the same records on another device, restore a backup there.</p>
       <p class="hint" id="pers"></p></section>
     <section class="card stack"><h2>Growth references (bundled, work offline)</h2>
-      ${G.allRefs().map((r) => `<div><b>${esc(r.title)}</b><br><small>Version: ${esc(r.version)} · Centiles ${r.centiles.join(", ")}</small><br><small class="muted">Source: ${esc(r.source)}</small></div>`).join("<hr>")}
+      ${G.allRefs().map((r) => `<div><b>${esc(r.title)}</b><br><small>Version: ${esc(r.version)} · Percentile curves ${r.centiles.join(", ")}</small><br><small class="muted">Source: ${esc(r.source)}</small></div>`).join("<hr>")}
       <p class="hint">Curves are generated from the official LMS parameters. Each measurement is plotted at the exact age (days ÷ 30.4375 months) with no rounding.</p></section>
     <section class="card"><h2>About</h2><p>Pediatric Growth Chart (web app). Clinical decision support only; verify measurements and interpret results in clinical context.</p></section>
   </main>`;

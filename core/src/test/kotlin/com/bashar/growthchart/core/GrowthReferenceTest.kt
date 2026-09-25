@@ -26,7 +26,7 @@ class GrowthReferenceTest {
     @Test
     fun allReferencesLoad() {
         val refs = GrowthReferences.all()
-        assertEquals(4, refs.size)
+        assertEquals(5, refs.size)
         refs.forEach { r ->
             Measure.entries.forEach { m ->
                 val mr = r.measure(m)
@@ -116,6 +116,19 @@ class GrowthReferenceTest {
         val sd2 = p.valueAt(2.0)
         val x = sd3 + (sd3 - sd2) // exactly +4 SD under the WHO restricted method
         assertEquals(4.0, w.assess(Sex.MALE, 24.0, x)!!.z, 1e-9)
+    }
+
+    @Test
+    fun automaticWhoToCdcSwitchAt24Months() {
+        assertEquals(GrowthReferences.WHO_0_2, GrowthReferences.defaultFor(GrowthReferences.Family.AUTO, 0.0))
+        assertEquals(GrowthReferences.WHO_0_2, GrowthReferences.defaultFor(GrowthReferences.Family.AUTO, 23.99))
+        assertEquals(GrowthReferences.CDC_CHILD, GrowthReferences.defaultFor(GrowthReferences.Family.AUTO, 24.0))
+        val w = GrowthReferences.get(GrowthReferences.WHO_0_2)
+        assertEquals(listOf(2.0, 5.0, 10.0, 25.0, 50.0, 75.0, 90.0, 95.0, 98.0), w.centiles)
+        // same LMS as the full WHO 2006 table
+        val full = GrowthReferences.get(GrowthReferences.WHO_2006)
+        assertEquals(full.measure(Measure.HEIGHT)!!.lms(Sex.FEMALE, 13.37)!!.m, w.measure(Measure.HEIGHT)!!.lms(Sex.FEMALE, 13.37)!!.m, 1e-12)
+        assertNull(w.measure(Measure.WEIGHT)!!.lms(Sex.MALE, 25.0))
     }
 
     @Test

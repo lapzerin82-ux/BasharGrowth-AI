@@ -70,7 +70,7 @@ fun SettingsScreen(container: AppContainer, active: ActiveSession, onBack: () ->
                     }
                 }
                 Text(
-                    "Used to choose the chart automatically from the child's age and to calculate centiles. Any chart can still be selected on the chart screen.",
+                    "Used to choose the chart automatically from the child's age and to calculate percentiles. Any chart can still be selected on the chart screen.",
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
@@ -105,7 +105,7 @@ fun SettingsScreen(container: AppContainer, active: ActiveSession, onBack: () ->
                     if (i > 0) HorizontalDivider()
                     Text(r.title, fontWeight = FontWeight.SemiBold)
                     Text("Version: ${r.version}", style = MaterialTheme.typography.bodySmall)
-                    Text("Centiles: ${r.centiles.joinToString(", ") { it.toInt().toString() }}", style = MaterialTheme.typography.bodySmall)
+                    Text("Percentile curves: ${r.centiles.joinToString(", ") { it.toInt().toString() }}", style = MaterialTheme.typography.bodySmall)
                     Text("Source: ${r.source}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Text(

@@ -133,3 +133,4 @@ dialog p { margin: 0 0 14px; }
 .toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 80px); transform: translateX(-50%); background: #1f3237; color: #fff; padding: 10px 16px; border-radius: 10px; z-index: 50; font-size: 14px; max-width: calc(100vw - 32px); }
 .narrow { max-width: 420px; }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+.link { background: none; border: 0; padding: 0; font: inherit; color: var(--teal); text-decoration: underline; cursor: pointer; font-weight: 600; }

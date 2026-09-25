@@ -1,6 +1,7 @@
 // Growth references, LMS maths and exact age. Mirrors core/ (Kotlin) of the Android app.
-export const REF_IDS = ["cdc2000_infant", "cdc2000_child", "who2006", "who2007"];
+export const REF_IDS = ["who2006_0_2", "cdc2000_child", "cdc2000_infant", "who2006", "who2007"];
 export const FAMILIES = {
+  AUTO: "Automatic: WHO birth–24 months, then CDC 2–20 years (CDC/AAP recommendation)",
   CDC: "CDC 2000 (birth–36 months, then 2–20 years)",
   WHO: "WHO (2006 standards 0–5 y, then 2007 reference 5–19 y)",
 };
@@ -21,7 +22,9 @@ export async function loadReferences() {
 export const getRef = (id) => refs[id];
 export const allRefs = () => REF_IDS.map((id) => refs[id]);
 
+/** Chart used for a child of this age. AUTO switches from WHO to CDC at exactly 24 months. */
 export function defaultRefFor(family, ageMonths) {
+  if (family === "AUTO") return ageMonths < 24 ? "who2006_0_2" : "cdc2000_child";
   if (family === "WHO") return ageMonths < 60 ? "who2006" : "who2007";
   return ageMonths < 24 ? "cdc2000_infant" : "cdc2000_child";
 }
@@ -56,11 +59,19 @@ export function assess(m, sex, age, x) {
   return { z, p: cdf(z) * 100 };
 }
 
+/** Percentile only, e.g. "45th percentile"; extremes with one decimal ("0.4th", "99.6th"). */
 export function fmtAssess(a) {
   if (!a) return "–";
   const p = a.p;
-  const pt = p < 0.1 ? "<P0.1" : p > 99.9 ? ">P99.9" : (p < 1 || p > 99) ? "P" + p.toFixed(1) : "P" + Math.min(99, Math.max(1, Math.round(p)));
-  return `${pt} (z ${a.z >= 0 ? "+" : ""}${a.z.toFixed(2)})`;
+  if (p < 0.1) return "<0.1st percentile";
+  if (p > 99.9) return ">99.9th percentile";
+  const v = p < 1 || p > 99 ? Math.round(p * 10) / 10 : Math.min(99, Math.max(1, Math.round(p)));
+  return `${v}${ordinal(v)} percentile`;
+}
+function ordinal(v) {
+  if (!Number.isInteger(v)) return "th";
+  const t = v % 100; if (t >= 11 && t <= 13) return "th";
+  return ["th", "st", "nd", "rd"][v % 10] || "th";
 }
 
 // ---- normal distribution

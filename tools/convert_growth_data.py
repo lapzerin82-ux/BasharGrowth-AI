@@ -173,6 +173,34 @@ def main(rcpch_dir, cdcanthro_dir):
     }
     write(who2006)
 
+    # ---------------- WHO 2006, birth-24 months (CDC/AAP-recommended chart for under-2s) ----------------
+    # Same LMS as above, restricted to 0-24 months, drawn with the 2nd-98th percentile set that
+    # CDC uses on its WHO charts for US clinical use.
+    def upto24(rows):
+        return [r for r in rows if r[0] <= 731 / 30.4375 + 1e-9]
+
+    who02 = {
+        "id": "who2006_0_2",
+        "title": "WHO Growth Standards: Birth to 24 months",
+        "shortTitle": "WHO 0-2 y",
+        "organisation": "World Health Organization",
+        "source": who2006["source"] + " Use of WHO charts for children < 24 months as recommended by CDC/AAP "
+                  "(MMWR Recomm Rep 2010;59(RR-9)).",
+        "version": "WHO 2006 (CDC/AAP clinical charts for 0-24 months, 2nd-98th percentiles)",
+        "centiles": [2, 5, 10, 25, 50, 75, 90, 95, 98],
+        "family": "WHO",
+        "measures": {
+            "height": dict(who2006["measures"]["height"], label="Length-for-age", axisLabel="Length (cm)",
+                           method="Recumbent length", ageMax=24.0,
+                           male=upto24(who2006["measures"]["height"]["male"]),
+                           female=upto24(who2006["measures"]["height"]["female"])),
+            "weight": dict(who2006["measures"]["weight"], ageMax=24.0,
+                           male=upto24(who2006["measures"]["weight"]["male"]),
+                           female=upto24(who2006["measures"]["weight"]["female"])),
+        },
+    }
+    write(who02)
+
     # ---------------- WHO 2007 5-19 years ----------------
     w7 = json.load(open(os.path.join(rcpch_dir, "who", "who_2007_children.json")))["measurement"]
     who2007 = {

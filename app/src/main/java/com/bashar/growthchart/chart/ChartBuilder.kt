@@ -53,7 +53,7 @@ object ChartBuilder {
         return GrowthReferences.defaultFor(family, ageMonths)
     }
 
-    /** Centile/z-score of one measurement using the default chart of the family for that age. */
+    /** Percentile of one measurement using the default chart of the family for that age. */
     fun assess(patient: PatientEntity, m: MeasurementEntity, measure: Measure, family: GrowthReferences.Family): Pair<GrowthAssessment, String>? {
         val v = m.value(measure) ?: return null
         val age = patient.ageOn(m.date).months
@@ -63,14 +63,14 @@ object ChartBuilder {
         return a to ref.shortTitle
     }
 
+    /** Percentile only, e.g. "45th percentile"; extremes shown with one decimal. */
     fun formatAssessment(a: GrowthAssessment): String {
         val p = a.percentile
-        val pText = when {
-            p < 0.1 -> "<P0.1"
-            p > 99.9 -> ">P99.9"
-            p < 1 || p > 99 -> "P" + String.format("%.1f", p)
-            else -> "P" + kotlin.math.round(p).toInt().coerceIn(1, 99)
-        }
-        return "$pText (z ${String.format("%+.2f", a.z)})"
+        if (p < 0.1) return "<0.1st percentile"
+        if (p > 99.9) return ">99.9th percentile"
+        if (p < 1 || p > 99) return String.format("%.1fth percentile", p)
+        val v = kotlin.math.round(p).toInt().coerceIn(1, 99)
+        val suffix = if (v % 100 in 11..13) "th" else when (v % 10) { 1 -> "st"; 2 -> "nd"; 3 -> "rd"; else -> "th" }
+        return "$v$suffix percentile"
     }
 }

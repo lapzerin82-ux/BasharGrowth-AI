@@ -45,7 +45,7 @@ class ChartData(
     val title: String
         get() {
             val who = if (sex == Sex.MALE) "Boys" else "Girls"
-            val range = if (measure.ageMax <= 36.0) "birth to 36 months" else {
+            val range = if (measure.ageMax <= 36.0) "birth to ${measure.ageMax.toInt()} months" else {
                 val lo = formatAgeRange(measure.ageMin)
                 val hi = formatAgeRange(measure.ageMax)
                 "$lo to $hi"
@@ -283,7 +283,7 @@ class GrowthChartRenderer(private val unit: Float) {
         drawCross(canvas, x, y - dp(3f), true)
         canvas.drawText("latest", x + dp(13f), y, text)
         x += dp(46f)
-        canvas.drawText("Centiles: " + data.reference.centiles.joinToString(", ") { it.fmtCentile() }, x, y, text)
+        canvas.drawText("Percentiles: " + data.reference.centiles.joinToString(", ") { it.fmtCentile() }, x, y, text)
     }
 
     /** Nearest plotted point within [radiusDp] of a touch, or null. */
