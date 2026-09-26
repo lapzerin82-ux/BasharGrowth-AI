@@ -39,7 +39,8 @@ export function clampVp(v, b) {
 function title(ref, m, sex) {
   const who = sex === "F" ? "Girls" : "Boys";
   const age = (x) => x === 0 ? "birth" : x % 12 === 0 ? `${x / 12} years` : `${x} months`;
-  const range = m.ageMax <= 36 ? `birth to ${m.ageMax} months` : `${age(m.ageMin)} to ${age(m.ageMax)}`;
+  if (m.xKind === "length") return `${m.label}: ${who}, ${fmtNum(m.ageMin)}–${fmtNum(m.ageMax)} cm`;
+  const range = m.ageMax <= 36 ? `${m.ageMin ? m.ageMin + " months" : "birth"} to ${m.ageMax} months` : `${age(m.ageMin)} to ${age(m.ageMax)}`;
   return `${m.label}: ${who}, ${range}`;
 }
 
@@ -65,9 +66,9 @@ export function drawChart(ctx, W, H, data, vp, u) {
   lx += 50 * u; fitText(ctx, "Percentiles: " + ref.centiles.join(", "), lx, ly, W - lx - 6 * u);
 
   ctx.fillStyle = "#fffffc"; ctx.fillRect(L, T, pw, ph);
-  const span = vp.x1 - vp.x0, years = m.ageMax > 36 && span > 18;
-  const xMaj = years ? Math.max(12, Math.floor(niceStep(span / 12, 10)) * 12) : span <= 4 ? 0.5 : span <= 12 ? 1 : 3;
-  const xMin = years ? (xMaj <= 12 ? 3 : 12) : xMaj >= 3 ? 1 : xMaj / 2;
+  const span = vp.x1 - vp.x0, byLen = m.xKind === "length", years = !byLen && m.ageMax > 36 && span > 18;
+  const xMaj = byLen ? niceStep(span, 10) : years ? Math.max(12, Math.floor(niceStep(span / 12, 10)) * 12) : span <= 4 ? 0.5 : span <= 12 ? 1 : 3;
+  const xMin = byLen ? xMaj / 5 : years ? (xMaj <= 12 ? 3 : 12) : xMaj >= 3 ? 1 : xMaj / 2;
   const yMaj = niceStep(vp.y1 - vp.y0, 12);
   const yMin = yMaj >= 5 && (yMaj / 5) / (vp.y1 - vp.y0) * ph > 4 * u ? yMaj / 5 : yMaj / 2;
   const line = (x1, y1, x2, y2, c, w) => { ctx.strokeStyle = c; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); };
@@ -98,7 +99,7 @@ export function drawChart(ctx, W, H, data, vp, u) {
     if (xEnd > vp.x0) { const v = centileValue(m, sex, xEnd, c); if (v != null) labels.push([c, Y(v)]); }
   });
 
-  if (m.key === "height" && data.mph && m.ageMax >= 216) {
+  if (m.key === "height" && data.mph && m.ageMax >= 216 && !ref.condition) {
     const x = X(m.ageMax) - 10 * u;
     if (x >= L && x <= L + pw) {
       const g = "#00785a";
@@ -111,7 +112,7 @@ export function drawChart(ctx, W, H, data, vp, u) {
   }
 
   // genetic target channel from MPH (percentile at 20 y on CDC stature, traced back on this chart)
-  const tgt = data.showMph && m.key === "height" ? G.mphTarget(sex, data.mph) : null;
+  const tgt = data.showMph && m.key === "height" && !ref.condition ? G.mphTarget(sex, data.mph) : null;
   if (tgt) {
     const a0 = Math.max(m.ageMin, vp.x0), a1 = Math.min(m.ageMax, vp.x1);
     const n = Math.max(2, Math.round((X(a1) - X(a0)) / (3 * u)));
@@ -131,6 +132,13 @@ export function drawChart(ctx, W, H, data, vp, u) {
     ctx.strokeStyle = "rgba(200,20,30,.8)"; ctx.lineWidth = 1.4 * u; ctx.beginPath();
     pts.forEach((p, i) => (i ? ctx.lineTo(X(p.age), Y(p.v)) : ctx.moveTo(X(p.age), Y(p.v)))); ctx.stroke();
   }
+  // bone age: hollow blue circle at (bone age, height) linked to the chronological-age cross
+  for (const b of data.boneAge || []) {
+    ctx.strokeStyle = "#1f5fbf"; ctx.lineWidth = 1.3 * u; ctx.setLineDash([4 * u, 3 * u]);
+    ctx.beginPath(); ctx.moveTo(X(b.age), Y(b.v)); ctx.lineTo(X(b.ba), Y(b.v)); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = "#fff"; ctx.lineWidth = 2 * u; ctx.beginPath(); ctx.arc(X(b.ba), Y(b.v), 5.5 * u, 0, 7); ctx.fill(); ctx.stroke();
+    haloTxt(ctx, "BA", X(b.ba) - 7 * u, Y(b.v) + 18 * u, font(10, true), "#1f5fbf", u);
+  }
   pts.forEach((p) => cross(ctx, X(p.age), Y(p.v), p.latest, u, p.id === data.sel));
   if (data.showPct) {
     const items = pts.map((q) => ({ x: X(q.age), y: Y(q.v), text: G.pctShort(G.assess(m, sex, q.age, q.v)), color: q.latest ? "#8a0008" : "#b0000e" })).filter((it) => it.text);
@@ -147,10 +155,10 @@ export function drawChart(ctx, W, H, data, vp, u) {
   });
   ctx.fillStyle = "#282828"; ctx.font = font(10); ctx.textAlign = "center";
   ticks(vp.x0, vp.x1, xMaj).forEach((x) => ctx.fillText(years ? fmtNum(x / 12) : fmtNum(x), X(x), T + ph + 13 * u));
+  ctx.fillText(byLen ? m.xLabel : years ? "Age (years)" : data.corrected ? "Age (months; corrected for prematurity < 24 months)" : "Age (months)", L + pw / 2, T + ph + 29 * u);
   ctx.textAlign = "right";
   ticks(vp.y0, vp.y1, yMaj).forEach((y) => ctx.fillText(fmtNum(y), L - 4 * u, Y(y) + 3.5 * u));
   ctx.font = font(10.5, true); ctx.textAlign = "center";
-  ctx.fillText(years ? "Age (years)" : "Age (months)", L + pw / 2, T + ph + 29 * u);
   ctx.save(); ctx.translate(12 * u, T + ph / 2); ctx.rotate(-Math.PI / 2); ctx.fillText(m.axisLabel, 0, 4 * u); ctx.restore();
   ctx.restore();
   return { X, Y, L, T, pw, ph, pts };
@@ -177,16 +185,21 @@ function cross(ctx, x, y, latest, u, selected) {
   if (selected) { ctx.lineWidth = 1.6 * u; ctx.strokeStyle = "#0b5563"; ctx.beginPath(); ctx.arc(x, y, h + 8 * u, 0, 7); ctx.stroke(); }
 }
 
-/** Chart data for one patient, reference and measure (points outside the chart's age range are counted, not drawn). */
+/** Chart data for one patient, reference and measure (points outside the chart's range are counted, not drawn). */
 export function buildChart(p, ms, refId, key, connect, sel) {
   const ref = G.getRef(refId), m = ref.measures[key];
-  const withV = ms.filter((x) => (key === "height" ? x.height : x.weight) != null);
+  const withV = ms.filter((x) => G.mValue(x, key) != null);
   const latest = [...withV].sort((a, b) => a.date.localeCompare(b.date) || a.createdAt - b.createdAt).pop()?.id;
-  let outside = 0; const points = [];
+  let outside = 0, corrected = false; const points = [], boneAge = [];
   for (const x of withV) {
-    const a = G.exactAge(p.dob, x.date);
-    if (!G.covers(m, a.months)) { outside++; continue; }
-    points.push({ id: x.id, age: a.months, v: key === "height" ? x.height : x.weight, latest: x.id === latest, date: x.date, ageText: a.text, notes: x.notes });
+    const a = G.plotAge(p, x.date);
+    const xv = m.xKind === "length" ? x.height : a.months;
+    const okAge = m.xKind === "length" ? a.months >= (m.ageFrom ?? 0) && a.months <= (m.ageTo ?? 1e9) : a.days >= 0;
+    if (!okAge || !G.covers(m, xv)) { outside++; continue; }
+    if (a.corrected) corrected = true;
+    const v = G.mValue(x, key);
+    points.push({ id: x.id, age: xv, v, latest: x.id === latest, date: x.date, ageText: G.ageLabel(p, x.date), notes: x.notes, months: a.months });
+    if (key === "height" && x.boneAge != null && G.covers(m, x.boneAge * 12)) boneAge.push({ age: xv, ba: x.boneAge * 12, v });
   }
-  return { ref, m, sex: p.sex, points, connect, mph: p.mph, label: `${p.name} · File ${p.fileNumber}`, sel, outside };
+  return { ref, m, sex: p.sex, points, connect, mph: p.mph, label: `${p.name || ""} · File ${p.fileNumber || ""}`, sel, outside, boneAge, corrected };
 }

@@ -3,6 +3,7 @@ import * as S from "./store.js";
 import { drawChart, fullBounds, zoomVp, clampVp, buildChart } from "./chart.js";
 import { Sync, newSyncCode } from "./sync.js";
 import { INV_CATS, unitFor, FEATURE_GROUPS, COMPLAINTS } from "./catalog.js";
+import * as C from "./clinical.js";
 import { loadSheets, sheetMeta, sheetFor, sheetImage, sheetPoints, drawSheet, px, py, viewForAge as sheetViewForAge } from "./sheet.js";
 
 const $app = document.getElementById("app");
@@ -24,7 +25,14 @@ const settings = {
   set showMph(v) { try { localStorage.setItem("pgc.mph", v ? "1" : "0"); } catch {} },
   get showPct() { try { return localStorage.getItem("pgc.pct") !== "0"; } catch { return true; } },
   set showPct(v) { try { localStorage.setItem("pgc.pct", v ? "1" : "0"); } catch {} },
+  get alerts() { try { return localStorage.getItem("pgc.alerts") !== "0"; } catch { return true; } },
+  set alerts(v) { try { localStorage.setItem("pgc.alerts", v ? "1" : "0"); } catch {} },
+  get corr() { try { return localStorage.getItem("pgc.corr") !== "0"; } catch { return true; } },
+  set corr(v) { try { localStorage.setItem("pgc.corr", v ? "1" : "0"); } catch {} G.setCorrection(v); },
+  get clinician() { try { return JSON.parse(localStorage.getItem("pgc.clin") || "{}"); } catch { return {}; } },
+  set clinician(v) { try { localStorage.setItem("pgc.clin", JSON.stringify(v)); } catch {} },
 };
+G.setCorrection(settings.corr);
 function toast(msg) {
   const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.append(t);
   setTimeout(() => t.remove(), 3200);
@@ -37,12 +45,21 @@ function rangeErr(txt, lo, hi, unit) {
   if (!String(txt).trim()) return null; const v = num(txt);
   if (v == null) return "Not a number"; return v < lo || v > hi ? `Expected ${lo}–${hi} ${unit}` : null;
 }
+/** Percentile of a measure at a visit on the standard reference (age corrected for prematurity when that applies). */
 function assessFor(p, m, key) {
-  const v = key === "height" ? m.height : m.weight; if (v == null) return null;
-  const age = G.exactAge(p.dob, m.date).months; if (age < 0) return null;
-  const ref = G.getRef(G.defaultRefFor(settings.family, age));
-  return G.assess(ref.measures[key], p.sex, age, v);
+  const a = G.plotAge(p, m.date); if (a.days < 0) return null;
+  const id = G.refForKey(settings.family, key, a.months); if (!id) return null;
+  return G.assessKey(id, key, p.sex, a.months, m);
 }
+/** Percentile on the condition-specific chart (Down / Turner syndrome), if the patient has one. */
+function condAssess(p, m, key) {
+  if (!p.condition || !G.CONDITIONS[p.condition]) return null;
+  const a = G.plotAge(p, m.date); if (a.days < 0) return null;
+  const id = G.condRefFor(p.condition, key, a.months);
+  return id ? G.assessKey(id, key, p.sex, a.months, m) : null;
+}
+const COND_SHORT = { down: "DS", turner: "Turner" };
+const lvlIcon = { bad: "⚠", warn: "▲", info: "ℹ", ok: "✓" };
 async function saveOrShare(blob, name, share) {
   const file = new File([blob], name, { type: blob.type });
   if (share && navigator.canShare?.({ files: [file] })) {
@@ -69,6 +86,9 @@ async function route() {
     case "m": return viewMeasure(a, b || null);
     case "inv": return viewInvestigation(a, b || null);
     case "chart": return viewChart(a, b || "height");
+    case "dev": return viewMilestones(a);
+    case "vax": return viewVaccines(a);
+    case "letter": return viewLetter(a);
     case "backup": return viewBackup(a === "restore");
     case "settings": return viewSettings();
     default: return viewHome();
@@ -206,6 +226,20 @@ function viewPatientForm(id) {
       </div>
       <p class="hint" id="agenow"></p>
     </section>
+    <section class="card stack"><h2>Birth history &amp; condition <small class="muted">(optional)</small></h2>
+      <div class="three">
+        <label>Gestational age (weeks)<input id="gaw" inputmode="numeric" value="${esc(p?.gaWeeks ?? "")}"></label>
+        <label>+ days<input id="gad" inputmode="numeric" value="${esc(p?.gaDays ?? "")}"></label>
+        <label>Birth weight (kg)<input id="bw" inputmode="decimal" value="${esc(p?.birthWeight ?? "")}"></label>
+      </div>
+      <small class="e" data-for="ga"></small>
+      <p class="hint">Below 37 weeks, growth is plotted and assessed at the age corrected for prematurity (40 weeks − gestational age) until 24 months of chronological age. This can be switched off in Settings.</p>
+      <label>Condition with its own growth charts<select id="cond">
+        <option value="">None</option>${Object.entries(G.CONDITIONS).map(([k, t]) => `<option value="${k}" ${p?.condition === k ? "selected" : ""}>${esc(t)}</option>`).join("")}
+      </select><small class="e" data-for="cond"></small></label>
+      <label>Other diagnoses<input id="dx" value="${esc(p?.diagnoses)}" placeholder="e.g. Celiac disease, congenital heart disease…"></label>
+      <p class="hint">Down syndrome: Zemel 2015 (CDC/AAP) charts; Turner syndrome: height reference for girls. Standard-chart percentiles are still shown.</p>
+    </section>
     ${isNew ? `<section class="card stack"><h2>First measurement</h2>
       <label>Measurement date<input id="mdate" type="date" max="${G.todayIso()}" value="${G.todayIso()}"><small class="e" data-for="mdate"></small></label>
       <p class="hi" id="mage"></p>
@@ -283,6 +317,8 @@ function viewPatientForm(id) {
       else if (!a.on) errs.age = "Enter the date the age refers to";
     } else if (!dob) errs.dob = "Required"; else if (dob > today) errs.dob = "In the future";
     for (const [k, lo, hi] of [["fa", 120, 230], ["mo", 110, 220]]) { const r = rangeErr($(k).value, lo, hi, "cm"); if (r) errs[k] = r; }
+    { const r = rangeErr($("gaw").value, 22, 44, "weeks") || rangeErr($("gad").value, 0, 6, "days") || rangeErr($("bw").value, 0.3, 6.5, "kg"); if (r) errs.ga = r; }
+    if ($("cond").value === "turner" && sexVal() === "M") errs.cond = "Turner syndrome charts are for girls";
     if ($("man").checked) { const r = $("mph").value.trim() ? rangeErr($("mph").value, 130, 210, "cm") : "Enter MPH or switch off manual entry"; if (r) errs.mph = r; }
     let hasM = false;
     if (isNew) {
@@ -300,6 +336,8 @@ function viewPatientForm(id) {
       dobEstimated: $("dobunk").checked, ageEntered: $("dobunk").checked ? ageParts() : null,
       father: num($("fa").value), mother: num($("mo").value), mph: calcMph(), mphManual: $("man").checked, notes: $("notes").value.trim(),
       complaint: $("complaint").value.trim(), features: $("features").value.trim(),
+      gaWeeks: num($("gaw").value), gaDays: $("gaw").value.trim() ? num($("gad").value) || 0 : null, birthWeight: num($("bw").value),
+      condition: $("cond").value || null, diagnoses: $("dx").value.trim(),
     });
     if (isNew && hasM) await session.saveMeasurement({ patientId: pid, date: $("mdate").value, height: num($("h").value), weight: num($("w").value), notes: "" });
     toast("Saved");
@@ -308,48 +346,93 @@ function viewPatientForm(id) {
 }
 
 // ------------------------------------------------------------ patient record
+const SOAP = [["subj", "S"], ["obj", "O"], ["assess", "A"], ["plan", "P"]];
+
 function viewPatient(id) {
   const p = session.patients.get(id); if (!p) return go("#home");
-  const ms = session.measurementsFor(id);
+  const ms = session.measurementsFor(id), fam = settings.family;
   const tgt = G.mphTarget(p.sex, p.mph);
   const mphTxt = p.mph ? `${G.fmtNum(p.mph)} cm = ${G.fmtAssess({ p: tgt.pct })} at 20 y (target ${G.fmtNum(p.mph - 8.5)}–${G.fmtNum(p.mph + 8.5)} cm)${p.mphManual ? ", manual" : ""}` : "not recorded";
-  const cell = (m, key) => {
-    const v = key === "height" ? m.height : m.weight; if (v == null) return "–";
-    return esc(G.withPct(v, key === "height" ? "cm" : "kg", assessFor(p, m, key)));
+  const cell = (m, key, unit, dp) => {
+    const v = G.mValue(m, key); if (v == null) return "–";
+    const main = esc(G.withPct(dp != null ? G.fmtNum(v, dp) : v, unit, assessFor(p, m, key)));
+    const ca = condAssess(p, m, key);
+    return main + (ca ? `<small>${COND_SHORT[p.condition]} chart ${G.pctTxt(ca)}%</small>` : "");
   };
+  const hasHc = ms.some((m) => m.hc != null), hasBmi = ms.some((m) => m.height && m.weight);
+  const ncol = 4 + hasBmi + hasHc;
+  const nowA = G.plotAge(p, G.todayIso());
+  const alerts = settings.alerts ? C.growthAlerts(p, ms, fam) : [];
+  const lw = [...ms].reverse().find((m) => m.weight != null && m.height != null);
+  const ws = lw ? C.weightStatus(p, fam, { m: lw, a: G.plotAge(p, lw.date) }) : null;
+  const hv = C.heightVelocity(p, ms, fam);
+  const bas = ms.filter((m) => m.boneAge != null);
+  const dev = C.milestoneSummary(p), vax = p.vaccines || [], overdue = C.overdueVaccines(p);
+  const nextDue = vax.filter((v) => v.due && v.due >= G.todayIso()).sort((a, b) => a.due.localeCompare(b.due))[0];
   $app.innerHTML = bar(pname(p), true, `<a class="icon" href="#edit/${id}" aria-label="Edit patient">✎</a><button class="icon" id="del" aria-label="Delete patient">🗑</button>`) + `
   <main class="page">
+    ${alerts.length ? `<section class="card alerts"><h2>Growth &amp; clinical alerts (${alerts.length})</h2>
+      <ul>${alerts.map((a) => `<li class="${a.level}"><span aria-hidden="true">${lvlIcon[a.level]}</span> ${esc(a.text)}${a.date ? ` <small>${G.fmtDate(a.date)}</small>` : ""}</li>`).join("")}</ul>
+      <details><summary>Alert rules</summary><p class="hint">${esc(C.ALERT_NOTE)}</p></details></section>` : ""}
     <section class="card"><h2>Patient information</h2>
       <dl class="info">
         <dt>Name</dt><dd>${esc(p.name || "–")}</dd><dt>Sex</dt><dd>${p.sex === "F" ? "Female" : "Male"}</dd>
         <dt>File number</dt><dd>${esc(p.fileNumber)}</dd><dt>Date of birth</dt><dd>${esc(G.fmtDob(p))}</dd>
-        <dt>Current age</dt><dd>${G.exactAge(p.dob, G.todayIso()).text}</dd>
+        <dt>Current age</dt><dd>${G.exactAge(p.dob, G.todayIso()).text}${nowA.corrected ? `<br><small>Corrected for prematurity: ${nowA.text}</small>` : ""}</dd>
+        ${p.gaWeeks ? `<dt>Gestational age</dt><dd>${p.gaWeeks}+${p.gaDays || 0} weeks${p.gaWeeks < 37 ? " (preterm)" : ""}</dd>` : ""}
+        ${p.birthWeight ? `<dt>Birth weight</dt><dd>${p.birthWeight} kg${p.birthWeight < 1.5 ? " (VLBW)" : p.birthWeight < 2.5 ? " (LBW)" : ""}</dd>` : ""}
+        ${p.condition ? `<dt>Condition</dt><dd>${esc(G.CONDITIONS[p.condition] || p.condition)}</dd>` : ""}
+        ${p.diagnoses ? `<dt>Other diagnoses</dt><dd>${esc(p.diagnoses)}</dd>` : ""}
         ${p.father ? `<dt>Father's height</dt><dd>${p.father} cm</dd>` : ""}${p.mother ? `<dt>Mother's height</dt><dd>${p.mother} cm</dd>` : ""}
         <dt>Mid-parental height</dt><dd>${mphTxt}</dd>
+        ${ws ? `<dt>Weight status</dt><dd>${esc(ws.text)}<br><small class="muted">${G.fmtDate(lw.date)} · ${esc(ws.basis)}</small></dd>` : ""}
         ${p.complaint ? `<dt>Main complaint</dt><dd>${esc(p.complaint)}</dd>` : ""}
         ${p.features ? `<dt>Clinical features</dt><dd class="pre">${esc(p.features)}</dd>` : ""}
         ${p.notes ? `<dt>Notes</dt><dd class="pre">${esc(p.notes)}</dd>` : ""}
       </dl>
     </section>
     <div class="btnrow">
-      <a class="primary" href="#m/${id}">+ Add measurement</a>
-      <a class="tonal" href="#chart/${id}/height">Height chart</a>
-      <a class="tonal" href="#chart/${id}/weight">Weight chart</a>
+      <a class="primary" href="#m/${id}">+ Add visit / measurement</a>
+      <a class="tonal" href="#chart/${id}/height">Height</a>
+      <a class="tonal" href="#chart/${id}/weight">Weight</a>
+      <a class="tonal" href="#chart/${id}/bmi">BMI</a>
+      <a class="tonal" href="#chart/${id}/hc">Head circ.</a>
+      <a class="tonal" href="#chart/${id}/wfl">Wt-for-length</a>
       <a class="tonal" href="#inv/${id}">+ Investigation</a>
+      <a class="tonal" href="#dev/${id}">Development</a>
+      <a class="tonal" href="#vax/${id}">Vaccinations</a>
+      <a class="tonal" href="#letter/${id}">Letter</a>
       <button class="ghost" id="pdf">Export PDF</button>
     </div>
-    <section class="card"><h2>Measurements (${ms.length})</h2>
-      ${ms.length ? `<p class="hint">Percentiles: ${G.FAMILIES[settings.family]}. Tap a row to edit.</p>
-      <div class="scrollx"><table class="mt"><thead><tr><th>Date</th><th>Age</th><th>Height (percentile)</th><th>Weight (percentile)</th></tr></thead><tbody>
-      ${[...ms].reverse().map((m) => `<tr data-m="${m.id}"><td>${G.fmtDate(m.date)}</td><td>${G.exactAge(p.dob, m.date).text}</td><td>${cell(m, "height")}</td><td>${cell(m, "weight")}</td></tr>${m.notes ? `<tr class="nt" data-m="${m.id}"><td colspan="4">${esc(m.notes)}</td></tr>` : ""}`).join("")}
+    <section class="card"><h2>Visits &amp; measurements (${ms.length})</h2>
+      ${ms.length ? `<p class="hint">Percentiles in brackets: ${G.FAMILIES[fam]}${ms.some((m) => G.plotAge(p, m.date).corrected) ? "; ages marked “corrected” are used for preterm plotting" : ""}. Tap a row to edit.</p>
+      <div class="scrollx"><table class="mt"><thead><tr><th>Date</th><th>Age</th><th>Height</th><th>Weight</th>${hasBmi ? "<th>BMI</th>" : ""}${hasHc ? "<th>Head circ.</th>" : ""}</tr></thead><tbody>
+      ${[...ms].reverse().map((m) => {
+        const det = C.visitDetails(p, m), soap = SOAP.filter(([k]) => m[k]).map(([k, l]) => `<b>${l}:</b> ${esc(m[k])}`);
+        const extra = [...det.map(esc), ...soap, m.notes ? esc(m.notes) : ""].filter(Boolean);
+        return `<tr data-m="${m.id}"><td>${G.fmtDate(m.date)}</td><td>${esc(G.ageLabel(p, m.date))}</td><td>${cell(m, "height", "cm")}</td><td>${cell(m, "weight", "kg")}</td>${hasBmi ? `<td>${cell(m, "bmi", "kg/m²", 1)}</td>` : ""}${hasHc ? `<td>${cell(m, "hc", "cm")}</td>` : ""}</tr>${extra.length ? `<tr class="nt" data-m="${m.id}"><td colspan="${ncol}">${extra.join("<br>")}</td></tr>` : ""}`;
+      }).join("")}
       </tbody></table></div>` : `<p class="muted">No measurements yet.</p>`}
     </section>
+    ${hv.length ? `<section class="card"><h2>Height velocity</h2>
+      <div class="scrollx"><table class="mt"><thead><tr><th>Interval</th><th>Velocity</th><th>Same-percentile velocity</th><th></th></tr></thead><tbody>
+      ${[...hv].reverse().map((r) => `<tr><td>${G.fmtDate(r.from)} → ${G.fmtDate(r.to)}<small>${G.fmtNum(r.dt, 2)} y</small></td><td><b>${G.fmtNum(r.hv)} cm/y</b></td><td>${r.expected != null ? G.fmtNum(r.expected) + " cm/y" : "–"}</td><td>${r.low ? `<span class="flag">Low (&lt; ${r.thr})</span>` : ""}</td></tr>`).join("")}
+      </tbody></table></div><p class="hint">${esc(C.HV_NOTE)}</p></section>` : ""}
+    ${bas.length ? `<section class="card"><h2>Bone age</h2>
+      <div class="scrollx"><table class="mt"><thead><tr><th>Date</th><th>Chronological</th><th>Bone age</th><th>BA − CA</th><th>Projected adult height</th></tr></thead><tbody>
+      ${[...bas].reverse().map((m) => { const ca = G.exactAge(p.dob, m.date).yearsDec, d = m.boneAge - ca, pr = C.projectedAdultHeight(p, m);
+        return `<tr><td>${G.fmtDate(m.date)}</td><td>${G.fmtNum(ca)} y</td><td>${m.boneAge} y${m.boneAgeMethod ? `<small>${esc(m.boneAgeMethod)}</small>` : ""}</td><td class="${Math.abs(d) >= 2 ? "flag" : ""}">${d >= 0 ? "+" : ""}${G.fmtNum(d)} y</td><td>${pr ? `≈ ${G.fmtNum(pr.cm)} cm${p.mph ? `<small>MPH target ${G.fmtNum(p.mph - 8.5)}–${G.fmtNum(p.mph + 8.5)} cm</small>` : ""}` : "–"}</td></tr>`; }).join("")}
+      </tbody></table></div><p class="hint">${esc(C.PAH_NOTE)} On the height chart the bone age is shown as a blue circle (BA) linked to the red ×.</p></section>` : ""}
+    <section class="card"><div class="row"><h2 class="grow">Development</h2><a class="tonal small" href="#dev/${id}">Milestones</a></div>
+      <p class="hint">${dev.yes || dev.missed || dev.lost ? `${dev.yes} achieved · ${dev.missed} not yet at expected age · ${dev.lost} lost` : "No milestones recorded."}${p.devNotes ? `<br>${esc(p.devNotes)}` : ""}</p></section>
+    <section class="card"><div class="row"><h2 class="grow">Vaccinations (${vax.length})</h2><a class="tonal small" href="#vax/${id}">Open</a></div>
+      <p class="hint">${overdue.length ? `<span class="flag">Overdue: ${overdue.map((v) => esc(`${v.name} ${v.dose || ""}`.trim())).join(", ")}</span><br>` : ""}${nextDue ? `Next due: ${esc(nextDue.name)} on ${G.fmtDate(nextDue.due)}` : vax.length ? "No upcoming due date recorded." : "No vaccinations recorded."}</p></section>
     ${investigationsSection(p)}
   </main>`;
   bindBack();
   $app.querySelectorAll("tr[data-m]").forEach((tr) => tr.onclick = () => go(`#m/${id}/${tr.dataset.m}`));
   bindInvestigationsSection();
-  document.getElementById("del").onclick = () => confirmBox(`Delete ${pname(p)}?`, `The patient, all ${ms.length} measurements and all investigations will be permanently deleted${sync?.enabled ? " on all synced devices" : " from this device"}. This cannot be undone.`, "Delete", async () => {
+  document.getElementById("del").onclick = () => confirmBox(`Delete ${pname(p)}?`, `The patient, all ${ms.length} visits and all investigations will be permanently deleted${sync?.enabled ? " on all synced devices" : " from this device"}. This cannot be undone.`, "Delete", async () => {
     await session.deletePatient(id); toast("Patient deleted"); go("#home");
   }, true);
   document.getElementById("pdf").onclick = () => pdfDialog(p);
@@ -370,82 +453,164 @@ function pdfDialog(p) {
   });
 }
 
-// ------------------------------------------------------------ measurement form
+// ------------------------------------------------------------ visit / measurement form
+// Number fields of a visit: [id, record field, min, max, unit]. Every field is optional; at least one must be filled.
+const VISIT_NUM = [["h", "height", 30, 230, "cm"], ["w", "weight", 0.3, 250, "kg"], ["hc", "hc", 20, 70, "cm"],
+  ["bps", "bpSys", 50, 250, "mmHg"], ["bpd", "bpDia", 20, 160, "mmHg"], ["ba", "boneAge", 0, 20, "years"],
+  ["tv", "testisVol", 1, 30, "mL"], ["ls", "lowerSeg", 10, 120, "cm"], ["span", "armSpan", 30, 240, "cm"]];
+const VISIT_TXT = [["subj", "subj"], ["obj", "obj"], ["assess", "assess"], ["plan", "plan"], ["n", "notes"]];
+
 function viewMeasure(pid, mid) {
   const p = session.patients.get(pid); if (!p) return go("#home");
   const m = mid ? session.measurements.get(mid) : null;
-  $app.innerHTML = bar(m ? "Edit Measurement" : "Add Measurement", true, m ? `<button class="icon" id="del" aria-label="Delete measurement">🗑</button>` : "") + `
+  const v = (k) => esc(m?.[k] ?? "");
+  const open = (...ks) => ks.some((k) => m?.[k] != null && m?.[k] !== "") ? " open" : "";
+  const sel = (id, val, label) => `<label>${label}<select id="${id}"><option value="">–</option>${[1, 2, 3, 4, 5].map((i) => `<option ${String(val) === String(i) ? "selected" : ""}>${i}</option>`).join("")}</select></label>`;
+  $app.innerHTML = bar(m ? "Edit Visit" : "Add Visit / Measurement", true, m ? `<button class="icon" id="del" aria-label="Delete visit">🗑</button>` : "") + `
   <main class="page"><form id="f" class="stack" novalidate>
     <section class="card"><h2>${esc(pname(p))}</h2><p class="muted">File ${esc(p.fileNumber)} · ${p.sex === "F" ? "Female" : "Male"} · DOB ${esc(G.fmtDob(p, false))}</p></section>
-    <section class="card stack"><h2>Measurement</h2>
-      <label>Measurement date<input id="d" type="date" min="${p.dob}" max="${G.todayIso()}" value="${m?.date || G.todayIso()}"><small class="e" data-for="d"></small></label>
+    <section class="card stack"><h2>Measurements</h2>
+      <label>Visit date<input id="d" type="date" min="${p.dob}" max="${G.todayIso()}" value="${m?.date || G.todayIso()}"><small class="e" data-for="d"></small></label>
       <p class="hi" id="age"></p>
-      <div class="two"><label>Height / length (cm)<input id="h" inputmode="decimal" value="${m?.height ?? ""}"><small class="e" data-for="h"></small></label>
-      <label>Weight (kg)<input id="w" inputmode="decimal" value="${m?.weight ?? ""}"><small class="e" data-for="w"></small></label></div>
-      <small class="e" data-for="hw"></small>
-      <label>Notes (optional)<input id="n" value="${esc(m?.notes)}"></label>
+      <div class="two"><label>Height / length (cm)<input id="h" inputmode="decimal" value="${v("height")}"><small class="e" data-for="h"></small></label>
+      <label>Weight (kg)<input id="w" inputmode="decimal" value="${v("weight")}"><small class="e" data-for="w"></small></label></div>
+      <label>Head circumference (cm) <small class="muted">optional</small><input id="hc" inputmode="decimal" value="${v("hc")}"><small class="e" data-for="hc"></small></label>
+      <small class="e" data-for="any"></small>
       <div id="prev" class="hint"></div>
     </section>
-    <button class="primary" value="save">Save measurement</button>
+    <details class="card opt"${open("bpSys", "bpDia")}><summary>Blood pressure <small class="muted">(optional)</small></summary><div class="stack">
+      <div class="two"><label>Systolic (mmHg)<input id="bps" inputmode="numeric" value="${v("bpSys")}"><small class="e" data-for="bps"></small></label>
+      <label>Diastolic (mmHg)<input id="bpd" inputmode="numeric" value="${v("bpDia")}"><small class="e" data-for="bpd"></small></label></div>
+      <p class="hi" id="bpout"></p><p class="hint">${esc(C.BP_NOTE)}</p></div></details>
+    <details class="card opt"${open("tanB", "tanPH", "testisVol", "menarche")}><summary>Puberty – Tanner stage <small class="muted">(optional)</small></summary><div class="stack">
+      <div class="two">${sel("tanB", m?.tanB, p.sex === "F" ? "Breast (B)" : "Genitalia (G)")}${sel("tanPH", m?.tanPH, "Pubic hair (PH)")}</div>
+      ${p.sex === "M" ? `<label>Testicular volume (mL, orchidometer)<input id="tv" inputmode="decimal" value="${v("testisVol")}"><small class="e" data-for="tv"></small></label>`
+        : `<label class="switch"><input type="checkbox" id="men" ${m?.menarche ? "checked" : ""}> Menarche has occurred</label>`}
+      <p class="hi" id="pubout"></p></div></details>
+    <details class="card opt"${open("boneAge")}><summary>Bone age <small class="muted">(optional)</small></summary><div class="stack">
+      <div class="two"><label>Bone age (years)<input id="ba" inputmode="decimal" value="${v("boneAge")}"><small class="e" data-for="ba"></small></label>
+      <label>Method<select id="bam">${["", "Greulich–Pyle", "TW3", "BoneXpert", "Other"].map((o) => `<option ${m?.boneAgeMethod === o ? "selected" : ""}>${o}</option>`).join("")}</select></label></div>
+      <p class="hi" id="baout"></p><p class="hint">${esc(C.PAH_NOTE)}</p></div></details>
+    <details class="card opt"${open("lowerSeg", "armSpan")}><summary>Body proportions <small class="muted">(optional)</small></summary><div class="stack">
+      <div class="two"><label>Lower segment (cm, symphysis pubis to floor)<input id="ls" inputmode="decimal" value="${v("lowerSeg")}"><small class="e" data-for="ls"></small></label>
+      <label>Arm span (cm)<input id="span" inputmode="decimal" value="${v("armSpan")}"><small class="e" data-for="span"></small></label></div>
+      <p class="hi" id="propout"></p>
+      <p class="hint">Upper segment = height − lower segment. Typical US/LS ratio ≈ 1.7 at birth, ≈ 1.3 at 3 years and ≈ 1.0 from about 7–10 years (slightly below 1 in adults). Arm span is close to height in childhood.</p></div></details>
+    <details class="card opt"${open("subj", "obj", "assess", "plan", "notes")}><summary>Visit notes (SOAP) <small class="muted">(optional)</small></summary><div class="stack">
+      <label>Subjective – history / complaint at this visit<textarea id="subj" rows="2">${v("subj")}</textarea></label>
+      <label>Objective – examination findings<textarea id="obj" rows="2">${v("obj")}</textarea></label>
+      <label>Assessment<textarea id="assess" rows="2">${v("assess")}</textarea></label>
+      <label>Plan<textarea id="plan" rows="2">${v("plan")}</textarea></label>
+      <label>Other notes<input id="n" value="${v("notes")}"></label></div></details>
+    <button class="primary" value="save">Save visit</button>
     <button class="ghost" type="button" id="savechart">Save and view chart</button>
   </form></main>`;
   bindBack();
   const $ = (i) => document.getElementById(i);
+  const val = (i) => $(i) ? num($(i).value) : null;
+  const rec = () => ({ height: val("h"), weight: val("w"), hc: val("hc") });
   const update = () => {
     const d = $("d").value;
     if (!d || d < p.dob) { $("age").textContent = ""; $("prev").textContent = ""; return; }
-    const a = G.exactAge(p.dob, d);
-    $("age").textContent = `Exact age: ${a.text} · ${a.days} days · ${a.yearsDec.toFixed(3)} years`;
-    const ref = G.getRef(G.defaultRefFor(settings.family, a.months));
-    $("prev").innerHTML = [["height", num($("h").value)], ["weight", num($("w").value)]].filter(([, v]) => v)
-      .map(([k, v]) => `${ref.measures[k].label}: ${G.fmtAssess(G.assess(ref.measures[k], p.sex, a.months, v))} · ${ref.shortTitle}`).join("<br>");
+    const a = G.exactAge(p.dob, d), pa = G.plotAge(p, d);
+    $("age").textContent = `Exact age: ${a.text} · ${a.days} days · ${a.yearsDec.toFixed(3)} years${pa.corrected ? ` · corrected ${pa.days < 0 ? "before term" : pa.text}` : ""}`;
+    const r = rec(), lines = [];
+    for (const key of ["height", "weight", "bmi", "hc", "wfl"]) {
+      if (G.mValue(r, key) == null) continue;
+      const id = pa.days >= 0 ? G.refForKey(settings.family, key, pa.months) : null;
+      const as = id && G.assessKey(id, key, p.sex, pa.months, r);
+      const ci = p.condition && pa.days >= 0 ? G.condRefFor(p.condition, key, pa.months) : null, ca = ci && G.assessKey(ci, key, p.sex, pa.months, r);
+      if (!as && !ca) continue;
+      const ref = G.getRef(id || ci);
+      const vtxt = key === "bmi" ? ` ${G.fmtNum(G.mValue(r, "bmi"))} kg/m²` : "";
+      lines.push(`${esc(ref.measures[key].label)}${vtxt}: ${as ? `${G.fmtAssess(as)}${as.ext ? ` (${G.fmtNum(as.pctOfP95, 0)}% of P95)` : ""} · ${esc(ref.shortTitle)}` : ""}${ca ? `${as ? " · " : ""}${G.fmtAssess(ca)} on ${esc(G.getRef(ci).shortTitle)}` : ""}`);
+    }
+    if (r.height && r.weight && pa.days >= 0) { const w = C.weightStatus(p, settings.family, { m: r, a: pa }); if (w) lines.push(`<b>${esc(w.text)}</b>`); }
+    $("prev").innerHTML = lines.join("<br>");
+    const bp = C.classifyBp(p.sex, a.yearsDec, val("bps"), val("bpd")); $("bpout").textContent = bp ? bp.text : "";
+    const tn = { tanB: $("tanB").value, testisVol: val("tv") }, pf = C.pubertyFlag(p, a.yearsDec, tn);
+    $("pubout").textContent = pf ? pf.text : "";
+    const ba = val("ba");
+    if (ba != null) { const pr = C.projectedAdultHeight(p, { boneAge: ba, height: r.height }); $("baout").textContent = `BA − CA = ${ba - a.yearsDec >= 0 ? "+" : ""}${G.fmtNum(ba - a.yearsDec)} years${pr ? ` · approximate adult height ≈ ${G.fmtNum(pr.cm)} cm` : ""}${pr && p.mph ? ` (MPH ${G.fmtNum(p.mph)} cm)` : ""}`; }
+    else $("baout").textContent = "";
+    const ls = val("ls"), sp = val("span"), pr = [];
+    if (ls && r.height) pr.push(`Upper segment ${G.fmtNum(r.height - ls)} cm · US/LS ratio ${G.fmtNum((r.height - ls) / ls, 2)}`);
+    if (sp && r.height) pr.push(`Arm span − height ${sp - r.height >= 0 ? "+" : ""}${G.fmtNum(sp - r.height)} cm`);
+    $("propout").textContent = pr.join(" · ");
   };
-  $("f").addEventListener("input", update); update();
+  $("f").addEventListener("input", update); $("f").addEventListener("change", update); update();
   const save = async (thenChart) => {
     const errs = {}, d = $("d").value;
     if (!d) errs.d = "Required"; else if (d < p.dob) errs.d = "Before date of birth"; else if (d > G.todayIso()) errs.d = "In the future";
-    const rh = rangeErr($("h").value, 30, 230, "cm"), rw = rangeErr($("w").value, 0.3, 250, "kg");
-    if (rh) errs.h = rh; if (rw) errs.w = rw;
-    if (!$("h").value.trim() && !$("w").value.trim()) errs.hw = "Enter height and/or weight";
+    for (const [id, , lo, hi, unit] of VISIT_NUM) if ($(id)) { const r = rangeErr($(id).value, lo, hi, unit); if (r) errs[id] = r; }
+    const rec2 = { patientId: pid, date: d };
+    for (const [id, k] of VISIT_NUM) rec2[k] = val(id);
+    for (const [id, k] of VISIT_TXT) rec2[k] = $(id).value.trim();
+    rec2.tanB = $("tanB").value ? +$("tanB").value : null; rec2.tanPH = $("tanPH").value ? +$("tanPH").value : null;
+    rec2.menarche = $("men") ? $("men").checked : false; rec2.boneAgeMethod = rec2.boneAge != null ? $("bam").value : "";
+    const any = VISIT_NUM.some(([, k]) => rec2[k] != null) || VISIT_TXT.some(([, k]) => rec2[k]) || rec2.tanB || rec2.tanPH || rec2.menarche;
+    if (!any) errs.any = "Enter at least one measurement or note";
     $app.querySelectorAll(".e").forEach((el) => { el.textContent = errs[el.dataset.for] || ""; });
-    if (Object.keys(errs).length) return;
-    await session.saveMeasurement({ id: m?.id, patientId: pid, date: d, height: num($("h").value), weight: num($("w").value), notes: $("n").value.trim() });
-    toast("Measurement saved");
-    if (thenChart) location.replace(`#chart/${pid}/height`); else history.back();
+    if (Object.keys(errs).length) { $app.querySelector(".e:not(:empty)")?.closest("details")?.setAttribute("open", ""); return; }
+    await session.saveMeasurement({ id: m?.id, ...rec2 });
+    toast("Visit saved");
+    if (thenChart) location.replace(`#chart/${pid}/${rec2.height != null ? "height" : rec2.weight != null ? "weight" : rec2.hc != null ? "hc" : "height"}`); else history.back();
   };
   $("f").onsubmit = (e) => { e.preventDefault(); save(false); };
   $("savechart").onclick = () => save(true);
-  $("del")?.addEventListener("click", () => confirmBox("Delete this measurement?", `${G.fmtDate(m.date)}: this cannot be undone.`, "Delete", async () => {
+  $("del")?.addEventListener("click", () => confirmBox("Delete this visit?", `${G.fmtDate(m.date)}: this cannot be undone.`, "Delete", async () => {
     await session.deleteMeasurement(m.id); toast("Deleted"); history.back();
   }, true));
 }
 
 // ------------------------------------------------------------ chart
 
-// Chart views: original CDC Set 2 sheets ("sheet:0_36", "sheet:2_20") or computed WHO charts (reference ids).
+// Chart views: original CDC Set 2 sheets ("sheet:0_36", "sheet:2_20", height and weight together)
+// or computed charts (reference ids; one measure at a time).
 const VIEW_TITLES = {
   "sheet:0_36": "CDC birth–36 months (original)",
   "sheet:2_20": "CDC 2–20 years (original)",
   who2006_0_2: "WHO Birth–24 months", who2006: "WHO Birth–5 years", who2007: "WHO 5–19 years",
+  cdc2000_bmi: "CDC BMI 2–20 years (+ extended BMI)", who2006_bmi: "WHO BMI birth–5 years", who2007_bmi: "WHO BMI 5–19 years",
+  cdc2000_hc: "CDC head circumference 0–36 months", who2006_hc: "WHO head circumference 0–5 years",
+  cdc2000_wfl: "CDC weight-for-length", who2006_wfl: "WHO weight-for-length 0–2 years", who2006_wfh: "WHO weight-for-height 2–5 years",
+  ds_infant: "Down syndrome 0–36 months", ds_child: "Down syndrome 2–20 years", turner: "Turner syndrome height 1–20 years",
 };
 const viewForAge = (ageMonths) => sheetViewForAge(settings.family, ageMonths);
+/** Views that can show this measure for this patient. */
+function viewsFor(p, key) {
+  return Object.keys(VIEW_TITLES).filter((v) => {
+    if (v.startsWith("sheet:")) return key === "height" || key === "weight";
+    const r = G.getRef(v), m = r?.measures[key]; if (!m) return false;
+    if (r.condition) return r.condition === p.condition && m[p.sex === "F" ? "female" : "male"].length > 0;
+    return true;
+  });
+}
+/** Chart chosen automatically: condition chart if one covers the age, else the family's chart for this measure and age. */
+function autoViewFor(p, ms, key) {
+  const withV = ms.filter((x) => G.mValue(x, key) != null);
+  const last = withV[withV.length - 1] || ms[ms.length - 1];
+  const age = Math.max(0, G.plotAge(p, last ? last.date : G.todayIso()).months);
+  if (p.condition) { const c = G.condRefFor(p.condition, key, age); if (c) return c; }
+  if (key === "height" || key === "weight") return viewForAge(age);
+  return G.refForKey(settings.family, key, age) || viewsFor(p, key).find((v) => !G.getRef(v).condition) || "cdc2000_bmi";
+}
 
 async function viewChart(pid, key) {
   const p = session.patients.get(pid); if (!p) return go("#home");
+  if (!G.MEASURES[key]) key = "height";
   await loadSheets();
   const ms = session.measurementsFor(pid);
-  const latest = ms[ms.length - 1];
-  const autoView = () => viewForAge(G.exactAge(p.dob, latest ? latest.date : G.todayIso()).months);
-  let manual = null, view = autoView();
+  let manual = null, view = autoViewFor(p, ms, key);
   let connect = settings.connect, sel = null, data, bounds, vp, geo, sheet, img, sgeo;
   const isSheet = () => view.startsWith("sheet:");
 
   $app.innerHTML = bar(`${pname(p)} · growth chart`, true, `<a class="icon" href="#m/${pid}" aria-label="Add measurement">＋</a>`) + `
   <main class="chartpage">
     <div class="ctl">
-      <div class="seg2" role="tablist" id="tabs"><button data-k="height">Height-for-age</button><button data-k="weight">Weight-for-age</button></div>
+      <div class="tabs5" role="tablist" id="tabs">${Object.entries(G.MEASURES).map(([k, t]) => `<button data-k="${k}">${esc(t)}</button>`).join("")}</div>
       <div class="row wrap">
-        <select id="ref" aria-label="Growth chart"><option value="auto">Auto: ${esc(VIEW_TITLES[autoView()])}</option>${Object.entries(VIEW_TITLES).map(([k, t]) => `<option value="${k}">${esc(t)}</option>`).join("")}</select>
+        <select id="ref" aria-label="Growth chart"></select>
         <label class="switch"><input type="checkbox" id="line" ${connect ? "checked" : ""}> Line</label>
         <label class="switch"><input type="checkbox" id="smph" ${settings.showMph ? "checked" : ""} ${p.mph ? "" : "disabled"}> MPH</label>
         <label class="switch"><input type="checkbox" id="spct" ${settings.showPct ? "checked" : ""}> Percentiles</label>
@@ -461,10 +626,14 @@ async function viewChart(pid, key) {
   const cv = document.getElementById("cv"), wrap = cv.parentElement;
   const dpr = () => window.devicePixelRatio || 1;
   const hint = () => `<span class="hint">Pinch or scroll to zoom · drag to pan · double-tap to reset · tap a red × for details</span>`;
+  const fillSelect = () => {
+    const auto = autoViewFor(p, ms, key);
+    document.getElementById("ref").innerHTML = `<option value="auto">Auto: ${esc(VIEW_TITLES[auto])}</option>` + viewsFor(p, key).map((k) => `<option value="${k}">${esc(VIEW_TITLES[k])}</option>`).join("");
+    document.getElementById("ref").value = manual || "auto";
+  };
 
   const rebuild = async (resetVp) => {
-    document.getElementById("tabs").hidden = isSheet();
-    document.getElementById("ref").value = manual || "auto";
+    fillSelect();
     let outside, coverTxt;
     if (isSheet()) {
       sheet = sheetFor(view.slice(6), p.sex); img = await sheetImage(sheet);
@@ -474,15 +643,20 @@ async function viewChart(pid, key) {
     } else {
       data = buildChart(p, ms, view, key, connect, sel);
       bounds = fullBounds(data.m, p.sex, data.points.map((q) => q.v));
-      outside = data.outside; coverTxt = `${G.fmtNum(data.m.ageMin / 12)}–${G.fmtNum(data.m.ageMax / 12)} y`;
+      outside = data.outside;
+      coverTxt = data.m.xKind === "length" ? `${G.fmtNum(data.m.ageMin)}–${G.fmtNum(data.m.ageMax)} cm, ages ${G.fmtNum(data.m.ageFrom)}–${G.fmtNum(data.m.ageTo)} months` : `${G.fmtNum(data.m.ageMin / 12)}–${G.fmtNum(data.m.ageMax / 12)} y`;
     }
     if (resetVp || !vp) vp = { ...bounds };
-    $app.querySelectorAll(".seg2 button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.k === key));
+    $app.querySelectorAll("#tabs button").forEach((b) => b.setAttribute("aria-pressed", b.dataset.k === key));
     const out = document.getElementById("out");
-    out.hidden = !outside;
-    const other = outside ? ms.map((x) => viewForAge(G.exactAge(p.dob, x.date).months)).find((v) => v !== view) : null;
-    out.innerHTML = `${outside} measurement(s) are on another chart (this one covers ${coverTxt}).` +
-      (other ? ` <button class="link" id="other">Show ${esc(VIEW_TITLES[other])}</button>` : "");
+    const none = !ms.some((x) => G.mValue(x, key) != null);
+    out.hidden = !outside && !none;
+    const other = outside ? [...new Set(ms.filter((x) => G.mValue(x, key) != null).map((x) => {
+      const age = G.plotAge(p, x.date).months;
+      return (p.condition && G.condRefFor(p.condition, key, age)) || (key === "height" || key === "weight" ? viewForAge(age) : G.refForKey(settings.family, key, age));
+    }))].find((v) => v && v !== view) : null;
+    out.innerHTML = none ? `No ${esc(G.MEASURES[key].toLowerCase())} data recorded yet${key === "wfl" || key === "bmi" ? " (needs height and weight at the same visit)" : ""}.`
+      : `${outside} measurement(s) are not on this chart (it covers ${coverTxt}).` + (other ? ` <button class="link" id="other">Show ${esc(VIEW_TITLES[other])}</button>` : "");
     document.getElementById("other")?.addEventListener("click", () => { manual = other; view = other; sel = null; showPop(); rebuild(true); });
     draw();
   };
@@ -504,15 +678,21 @@ async function viewChart(pid, key) {
     const refId = isSheet() ? sheet.ref : view;
     const m = G.getRef(refId).measures[k];
     const label = isSheet() ? (sheet.ageMax <= 36 ? (k === "height" ? "Length" : "Weight") : (k === "height" ? "Stature" : "Weight")) : m.label;
-    pop.innerHTML = `<div><b>${q.latest ? "Latest measurement · " : ""}${G.fmtDate(q.date)}</b><br>Age ${q.ageText} (${(q.age / 12).toFixed(3)} y)<br>
-      <b>${label}: ${q.v} ${m.unit} · ${G.fmtAssess(G.assess(m, p.sex, q.age, q.v))}</b><br><small>${esc(isSheet() ? sheet.title : G.getRef(refId).title)}</small>${q.notes ? `<br><small>${esc(q.notes)}</small>` : ""}</div>
+    const a = G.assess(m, p.sex, q.age, q.v);
+    const where = m.xKind === "length" ? `Length/height ${q.age} cm · age ${q.ageText}` : `Age ${q.ageText} (${(q.age / 12).toFixed(3)} y)`;
+    pop.innerHTML = `<div><b>${q.latest ? "Latest measurement · " : ""}${G.fmtDate(q.date)}</b><br>${esc(where)}<br>
+      <b>${esc(label)}: ${k === "bmi" ? G.fmtNum(q.v) : q.v} ${m.unit} · ${G.fmtAssess(a)}${a?.ext ? ` (${G.fmtNum(a.pctOfP95, 0)}% of P95)` : ""}</b><br><small>${esc(isSheet() ? sheet.title : G.getRef(refId).title)}</small>${q.notes ? `<br><small>${esc(q.notes)}</small>` : ""}</div>
       <button class="icon" id="px" aria-label="Close">✕</button>`;
     document.getElementById("px").onclick = () => { sel = null; draw(); showPop(); };
   };
   showPop();
 
-  $app.querySelectorAll(".seg2 button").forEach((b) => b.onclick = () => { key = b.dataset.k; sel = null; showPop(); history.replaceState(null, "", `#chart/${pid}/${key}`); rebuild(true); });
-  document.getElementById("ref").onchange = (e) => { manual = e.target.value === "auto" ? null : e.target.value; view = manual || autoView(); sel = null; showPop(); rebuild(true); };
+  $app.querySelectorAll("#tabs button").forEach((b) => b.onclick = () => {
+    key = b.dataset.k; sel = null; showPop(); history.replaceState(null, "", `#chart/${pid}/${key}`);
+    if (!manual || !viewsFor(p, key).includes(manual)) { manual = null; view = autoViewFor(p, ms, key); }
+    rebuild(true);
+  });
+  document.getElementById("ref").onchange = (e) => { manual = e.target.value === "auto" ? null : e.target.value; view = manual || autoViewFor(p, ms, key); sel = null; showPop(); rebuild(true); };
   document.getElementById("line").onchange = (e) => { connect = e.target.checked; rebuild(false); };
   document.getElementById("smph").onchange = (e) => { settings.showMph = e.target.checked; draw(); };
   document.getElementById("spct").onchange = (e) => { settings.showPct = e.target.checked; draw(); };
@@ -621,6 +801,10 @@ function viewSettings() {
       <p class="hint">Chooses the chart from the child's age and is used for the percentiles in tables and reports. Any chart can still be picked on the chart screen.</p></section>
     <section class="card stack"><h2>Display</h2>
       <label class="switch"><input type="checkbox" id="cl" ${settings.connect ? "checked" : ""}> Connect measurements with a line (trajectory)</label></section>
+    <section class="card stack"><h2>Clinical tools</h2>
+      <label class="switch"><input type="checkbox" id="sal" ${settings.alerts ? "checked" : ""}> Show growth &amp; clinical alerts on the patient record</label>
+      <label class="switch"><input type="checkbox" id="scor" ${settings.corr ? "checked" : ""}> Correct age for prematurity (&lt; 37 weeks) until 24 months</label>
+      <p class="hint">${esc(C.ALERT_NOTE)}</p></section>
     <section class="card stack" id="synccard"><h2>Sync between phone and computer</h2><div id="syncbody"></div></section>
     <section class="card stack"><h2>Storage on this device</h2>
       <p class="hint">Records are encrypted (AES-256) with a key kept by this browser and stored on this device only. Clearing the browser's site data or uninstalling the app deletes them, so make regular backups. To use the same records on another device, restore a backup there.</p>
@@ -635,6 +819,8 @@ function viewSettings() {
   bindBack();
   $app.querySelectorAll('input[name="fam"]').forEach((r) => r.onchange = () => { settings.family = r.value; toast("Saved"); });
   document.getElementById("cl").onchange = (e) => { settings.connect = e.target.checked; };
+  document.getElementById("sal").onchange = (e) => { settings.alerts = e.target.checked; };
+  document.getElementById("scor").onchange = (e) => { settings.corr = e.target.checked; };
   renderSyncCard();
   navigator.storage?.persisted?.().then((ok) => { document.getElementById("pers").textContent = ok ? "Storage is marked persistent: the browser will not clear it automatically." : "Tip: install the app to the home screen so the browser keeps its storage."; });
 }
@@ -663,11 +849,12 @@ function viewPhoto(fid) {
 
 function investigationsSection(p) {
   const list = session.investigationsFor(p.id);
+  const trends = C.labTrends(list);
   const byCat = {};
   for (const x of list) (byCat[x.category] ||= []).push(x);
   const entry = (x) => `<div class="inv" data-inv="${x.id}">
       <div class="invhead"><b>${G.fmtDate(x.date)}</b><span class="muted">${esc(G.exactAge(p.dob, x.date).short)}</span></div>
-      ${(x.results || []).filter((r) => r.test || r.value).map((r) => `<div class="invrow"><span>${esc(r.test)}</span><b>${esc(r.value)} ${esc(r.unit || "")}</b>${r.ref ? `<small class="muted">ref ${esc(r.ref)}</small>` : ""}</div>`).join("")}
+      ${(x.results || []).filter((r) => r.test || r.value).map((r) => { const f = C.labFlag(r); return `<div class="invrow"><span>${esc(r.test)}</span><b class="${f ? "flag" : ""}">${esc(r.value)} ${esc(r.unit || "")}${f ? ` ${f === "H" ? "↑ H" : "↓ L"}` : ""}</b>${r.ref ? `<small class="muted">ref ${esc(r.ref)}</small>` : ""}</div>`; }).join("")}
       ${x.notes ? `<p class="hint pre">${esc(x.notes)}</p>` : ""}
       ${(x.photos || []).length ? `<div class="thumbs">${x.photos.map((f) => `<img data-fid="${f.id}" alt="Investigation photo" class="thumb">`).join("")}</div>` : ""}
     </div>`;
@@ -675,6 +862,9 @@ function investigationsSection(p) {
     ${list.length ? Object.keys(INV_CATS).filter((c) => byCat[c]).concat(Object.keys(byCat).filter((c) => !INV_CATS[c]))
       .map((c) => `<h3 class="invcat">${esc(c)}</h3>${byCat[c].map(entry).join("")}`).join("")
       : `<p class="muted">No investigations yet. Add results as numbers, or take a photo of the report.</p>`}
+    ${trends.length ? `<h3 class="invcat">Trends (tests with 2 or more numeric results)</h3><div class="trends">${trends.map((t) => { const l = t.pts[t.pts.length - 1];
+      return `<div class="trend"><div><b>${esc(t.test)}</b><small class="muted"> ${esc(t.unit)}</small></div>${C.sparkline(t)}<small>${t.pts.map((q) => `<span class="${q.flag ? "flag" : ""}">${G.fmtDate(q.date).slice(0, 5)}: ${esc(q.raw)}${q.flag ? (q.flag === "H" ? "↑" : "↓") : ""}</span>`).join(" · ")}</small>${l.ref ? `<small class="muted">ref ${esc(l.ref)} (green band)</small>` : ""}</div>`; }).join("")}</div>
+      <p class="hint">Results are flagged ↑/↓ when outside the reference range typed with them (e.g. “3.5-5.1”, “&lt;5”).</p>` : ""}
   </section>`;
 }
 function bindInvestigationsSection() {
@@ -797,6 +987,167 @@ function viewInvestigation(pid, iid) {
   $("del")?.addEventListener("click", () => confirmBox("Delete this investigation?", "Its results and photos will be deleted" + (sync?.enabled ? " on all synced devices." : "."), "Delete", async () => {
     saved = true; await session.deleteInvestigation(x.id); toast("Deleted"); history.back();
   }, true));
+}
+
+// ------------------------------------------------------------ developmental milestones
+function viewMilestones(pid) {
+  const p = session.patients.get(pid); if (!p) return go("#home");
+  const st = { ...(p.milestones || {}) };
+  const age = Math.max(0, G.plotAge(p, G.todayIso()).months);
+  const bands = Object.keys(C.MILESTONES).map(Number);
+  const current = bands.filter((b) => b <= age + 0.01).pop();
+  const next = bands.find((b) => b > age + 0.01);
+  $app.innerHTML = bar(`${pname(p)} · development`, true) + `
+  <main class="page">
+    <section class="card"><p>Age ${esc(G.ageLabel(p, G.todayIso()))}. Mark each milestone as achieved, not yet, or lost. Only milestones for the child's age and younger count as “not yet at expected age”.</p>
+      <p class="hint">${esc(C.MILESTONE_SOURCE)}</p>
+      <p class="hint">Red flag at any age: loss of skills the child once had.</p></section>
+    ${bands.map((b) => { const list = C.MILESTONES[b], due = b <= age + 0.01;
+      return `<details class="card opt"${b === current || b === next ? " open" : ""}><summary>${esc(C.ageBandLabel(b))}${b === current ? " · current" : b === next ? " · next" : ""} <small class="muted">${list.filter((_, i) => st[C.msId(b, i)]?.s === "yes").length}/${list.length}</small></summary>
+        ${Object.entries(C.DOMAINS).map(([d, dn]) => { const items = list.map((t, i) => [t, i]).filter(([t]) => t[0] === d); if (!items.length) return "";
+          return `<h3 class="invcat">${esc(dn)}</h3>${items.map(([t, i]) => { const idd = C.msId(b, i), s = st[idd]?.s || "";
+            return `<div class="ms ${s === "no" && due ? "late" : ""} ${s}"><span>${esc(t.slice(2))}</span><div class="msb" data-id="${idd}">${[["yes", "✓ Yes"], ["no", "Not yet"], ["lost", "Lost"]].map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${s === v}">${l}</button>`).join("")}</div></div>`; }).join("")}`; }).join("")}
+      </details>`; }).join("")}
+    <section class="card stack"><h2>Developmental notes / screening results</h2>
+      <textarea id="dn" rows="3" placeholder="e.g. ASQ-3 at 18 m: communication below cut-off; M-CHAT-R/F low risk…">${esc(p.devNotes)}</textarea>
+      <button class="primary" id="savedn">Save notes</button></section>
+  </main>`;
+  bindBack();
+  const persist = async () => { await session.savePatient({ ...session.patients.get(pid), milestones: st, devNotes: document.getElementById("dn").value.trim() }); };
+  $app.querySelectorAll(".msb").forEach((g) => g.querySelectorAll("button").forEach((btn) => btn.onclick = async () => {
+    const id = g.dataset.id, v = btn.dataset.v;
+    if (st[id]?.s === v) delete st[id]; else st[id] = { s: v, date: G.todayIso() };
+    g.querySelectorAll("button").forEach((x) => x.setAttribute("aria-pressed", st[id]?.s === x.dataset.v));
+    const row = g.closest(".ms"); row.className = `ms ${st[id]?.s || ""} ${st[id]?.s === "no" && +id.split(":")[0] <= age + 0.01 ? "late" : ""}`;
+    await persist();
+  }));
+  document.getElementById("savedn").onclick = async () => { await persist(); toast("Saved"); };
+}
+
+// ------------------------------------------------------------ vaccinations
+function viewVaccines(pid, editIdx = null) {
+  const p = session.patients.get(pid); if (!p) return go("#home");
+  const list = [...(p.vaccines || [])].sort((a, b) => (b.date || b.due || "").localeCompare(a.date || a.due || ""));
+  const e = editIdx != null ? list[editIdx] : null;
+  const overdue = new Set(C.overdueVaccines(p));
+  $app.innerHTML = bar(`${pname(p)} · vaccinations`, true) + `
+  <main class="page">
+    <section class="card stack"><h2>${e ? "Edit dose" : "Add a dose"}</h2>
+      <div class="two"><label>Vaccine<input id="vn" list="vlist" value="${esc(e?.name)}" placeholder="e.g. MMR"></label>
+      <label>Dose<input id="vd" value="${esc(e?.dose)}" placeholder="e.g. 1, 2, booster"></label></div>
+      <datalist id="vlist">${C.VACCINES.map((v) => `<option value="${esc(v)}">`).join("")}</datalist>
+      <div class="two"><label>Date given<input id="vg" type="date" max="${G.todayIso()}" value="${esc(e?.date)}"></label>
+      <label>Next dose due<input id="vu" type="date" value="${esc(e?.due)}"></label></div>
+      <label>Batch / notes<input id="vo" value="${esc(e?.notes)}"></label>
+      <small class="e" id="ve"></small>
+      <div class="row wrap"><button class="primary" id="vsave">${e ? "Save changes" : "Add dose"}</button>${e ? `<button class="ghost" id="vcancel">Cancel</button><button class="danger" id="vdel">Delete</button>` : ""}</div>
+      <p class="hint">Record doses according to your national schedule. A dose is flagged overdue when its next-due date has passed and no later dose of the same vaccine is recorded.</p>
+    </section>
+    <section class="card"><h2>Record (${list.length})</h2>
+      ${list.length ? `<div class="scrollx"><table class="mt"><thead><tr><th>Vaccine</th><th>Dose</th><th>Given</th><th>Next due</th></tr></thead><tbody>
+      ${list.map((v, i) => `<tr data-i="${i}"><td>${esc(v.name)}${v.notes ? `<small>${esc(v.notes)}</small>` : ""}</td><td>${esc(v.dose)}</td><td>${v.date ? G.fmtDate(v.date) : "–"}</td><td class="${overdue.has(v) ? "flag" : ""}">${v.due ? G.fmtDate(v.due) + (overdue.has(v) ? " · overdue" : "") : "–"}</td></tr>`).join("")}
+      </tbody></table></div>` : `<p class="muted">No vaccinations recorded.</p>`}
+    </section>
+  </main>`;
+  bindBack();
+  const $ = (i) => document.getElementById(i);
+  const saveAll = async (arr) => { await session.savePatient({ ...session.patients.get(pid), vaccines: arr }); viewVaccines(pid); };
+  $("vsave").onclick = async () => {
+    const rec = { name: $("vn").value.trim(), dose: $("vd").value.trim(), date: $("vg").value, due: $("vu").value, notes: $("vo").value.trim() };
+    $("ve").textContent = !rec.name ? "Enter the vaccine name." : !rec.date && !rec.due ? "Enter the date given and/or the next due date." : rec.date && rec.date < p.dob ? "Date is before the date of birth." : "";
+    if ($("ve").textContent) return;
+    const arr = list.filter((v) => v !== e); arr.push(rec); await saveAll(arr); toast("Saved");
+  };
+  $("vcancel")?.addEventListener("click", () => viewVaccines(pid));
+  $("vdel")?.addEventListener("click", () => confirmBox("Delete this dose?", `${e.name} ${e.dose || ""}`, "Delete", () => saveAll(list.filter((v) => v !== e)), true));
+  $app.querySelectorAll("tr[data-i]").forEach((tr) => tr.onclick = () => { viewVaccines(pid, +tr.dataset.i); window.scrollTo(0, 0); });
+}
+
+// ------------------------------------------------------------ letters
+function letterDraft(p, type, reason, to) {
+  const ms = session.measurementsFor(p.id), fam = settings.family, L = [];
+  const last = (f) => [...ms].reverse().find(f);
+  const sexT = p.sex === "F" ? "girl" : "boy";
+  const age = G.exactAge(p.dob, G.todayIso());
+  L.push(`Dear ${to || "Colleague"},`, "");
+  L.push(`Re: ${p.name || "(name not recorded)"}, ${p.sex === "F" ? "female" : "male"}, date of birth ${G.fmtDob(p, false)}, age ${age.text}${p.fileNumber ? `, file ${p.fileNumber}` : ""}`, "");
+  L.push(type === "referral" ? `I would be grateful if you could review this ${age.y} year old ${sexT}${reason ? ` regarding ${reason}` : ""}.` : `Thank you for your interest in this ${age.y} year old ${sexT}. Summary of the clinic review${reason ? ` (${reason})` : ""}:`, "");
+  if (p.complaint) L.push(`Main complaint: ${p.complaint}`);
+  if (p.gaWeeks || p.birthWeight) L.push(`Birth history: ${p.gaWeeks ? `${p.gaWeeks}+${p.gaDays || 0} weeks' gestation` : ""}${p.gaWeeks && p.birthWeight ? ", " : ""}${p.birthWeight ? `birth weight ${p.birthWeight} kg` : ""}.`);
+  if (p.condition || p.diagnoses) L.push(`Background: ${[G.CONDITIONS[p.condition], p.diagnoses].filter(Boolean).join("; ")}.`);
+  if (p.features) L.push(`Clinical features: ${p.features.replace(/\n+/g, "; ")}.`);
+  const lm = last((m) => m.height != null || m.weight != null);
+  if (lm) {
+    const parts = [["height", "Height", "cm"], ["weight", "Weight", "kg"], ["bmi", "BMI", "kg/m²"], ["hc", "Head circumference", "cm"]]
+      .filter(([k]) => G.mValue(lm, k) != null).map(([k, n, u]) => `${n} ${G.withPct(k === "bmi" ? G.fmtNum(G.mValue(lm, k)) : G.mValue(lm, k), u, assessFor(p, lm, k))}`);
+    L.push("", `Growth (${G.fmtDate(lm.date)}, age ${G.ageLabel(p, lm.date)}): ${parts.join(", ")}. Percentiles: ${G.FAMILIES[fam]}.`);
+    const ws = lm.height && lm.weight ? C.weightStatus(p, fam, { m: lm, a: G.plotAge(p, lm.date) }) : null;
+    if (ws) L.push(`Weight status: ${ws.text}.`);
+  }
+  if (p.mph) { const t = G.mphTarget(p.sex, p.mph); L.push(`Mid-parental height ${G.fmtNum(p.mph)} cm (${G.fmtAssess({ p: t.pct })} at 20 years; target range ${G.fmtNum(p.mph - 8.5)}–${G.fmtNum(p.mph + 8.5)} cm).`); }
+  const hv = C.heightVelocity(p, ms, fam).pop();
+  if (hv) L.push(`Height velocity ${G.fmtNum(hv.hv)} cm/year (${G.fmtDate(hv.from)}–${G.fmtDate(hv.to)})${hv.expected != null ? `; ${G.fmtNum(hv.expected)} cm/year would maintain the same percentile` : ""}.`);
+  const ba = last((m) => m.boneAge != null);
+  if (ba) { const pr = C.projectedAdultHeight(p, ba); L.push(`Bone age ${ba.boneAge} years at chronological age ${G.fmtNum(G.exactAge(p.dob, ba.date).yearsDec)} years (${G.fmtDate(ba.date)})${pr ? `; approximate adult height projection ${G.fmtNum(pr.cm)} cm` : ""}.`); }
+  const tn = last((m) => m.tanB || m.tanPH || m.testisVol);
+  if (tn) L.push(`Puberty (${G.fmtDate(tn.date)}): Tanner ${C.tannerText(p, tn)}.`);
+  const bp = last((m) => m.bpSys || m.bpDia);
+  if (bp) { const c = C.classifyBp(p.sex, G.exactAge(p.dob, bp.date).yearsDec, bp.bpSys, bp.bpDia); L.push(`Blood pressure ${bp.bpSys ?? "–"}/${bp.bpDia ?? "–"} mmHg (${G.fmtDate(bp.date)})${c ? `: ${c.text}` : ""}.`); }
+  const al = C.growthAlerts(p, ms, fam);
+  if (al.length) { L.push("", "Points of concern:"); al.forEach((a) => L.push(`- ${a.text}`)); }
+  const invs = session.investigationsFor(p.id);
+  const abn = [], recent = [];
+  for (const x of invs) for (const r of x.results || []) { const f = C.labFlag(r); const t = `${r.test} ${r.value} ${r.unit || ""}`.trim() + (r.ref ? ` (ref ${r.ref})` : "") + ` – ${G.fmtDate(x.date)}`; if (f) abn.push(t + (f === "H" ? " HIGH" : " LOW")); else if (recent.length < 8) recent.push(t); }
+  if (abn.length || recent.length) { L.push("", "Investigations:"); abn.forEach((t) => L.push(`- ${t}`)); recent.forEach((t) => L.push(`- ${t}`)); }
+  const lv = last((m) => m.assess || m.plan || m.obj);
+  if (lv?.obj) L.push("", `Examination (${G.fmtDate(lv.date)}): ${lv.obj}`);
+  if (lv?.assess) L.push("", `Assessment: ${lv.assess}`);
+  if (lv?.plan) L.push("", `Plan: ${lv.plan}`);
+  const od = C.overdueVaccines(p);
+  if (od.length) L.push("", `Vaccinations overdue: ${od.map((v) => `${v.name} ${v.dose || ""}`.trim()).join(", ")}.`);
+  L.push("", type === "referral" ? "Thank you for seeing this child. Please do not hesitate to contact me for further information." : "Please do not hesitate to contact me if you need further information.");
+  const c = settings.clinician;
+  L.push("", "Yours sincerely,", "", c.name || "", c.title || "", c.clinic || "", c.contact || "");
+  return L.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+
+function viewLetter(pid) {
+  const p = session.patients.get(pid); if (!p) return go("#home");
+  const c = settings.clinician;
+  $app.innerHTML = bar(`${pname(p)} · letter`, true) + `
+  <main class="page"><div class="stack">
+    <section class="card stack">
+      <div class="two"><label>Letter type<select id="lt"><option value="referral">Referral letter</option><option value="summary">Clinic summary</option></select></label>
+      <label>Date<input id="ld" type="date" value="${G.todayIso()}"></label></div>
+      <label>To (name / department)<input id="lto" placeholder="e.g. Dr … , Paediatric Endocrinology"></label>
+      <label>Reason / subject<input id="lr" placeholder="e.g. short stature with low height velocity"></label>
+      <details class="opt"><summary>Your details (saved on this device)</summary><div class="stack">
+        <div class="two"><label>Name<input id="cn" value="${esc(c.name)}"></label><label>Title / position<input id="ct" value="${esc(c.title)}"></label></div>
+        <div class="two"><label>Clinic / hospital<input id="cc" value="${esc(c.clinic)}"></label><label>Contact<input id="cx" value="${esc(c.contact)}"></label></div>
+      </div></details>
+      <button class="tonal" id="lbuild">Create draft from the record</button>
+    </section>
+    <section class="card stack"><h2>Letter (edit freely)</h2>
+      <textarea id="lbody" rows="22"></textarea>
+      <div class="row wrap"><button class="primary" id="lpdf">Download PDF</button><button class="tonal" id="lshare">Share / print</button><button class="ghost" id="lcopy">Copy text</button></div>
+      <p class="hint">The draft is built from the recorded data; review and edit before sending.</p>
+    </section></div>
+  </main>`;
+  bindBack();
+  const $ = (i) => document.getElementById(i);
+  const saveClin = () => { settings.clinician = { name: $("cn").value.trim(), title: $("ct").value.trim(), clinic: $("cc").value.trim(), contact: $("cx").value.trim() }; };
+  const build = () => { saveClin(); $("lbody").value = letterDraft(p, $("lt").value, $("lr").value.trim(), $("lto").value.trim()); };
+  $("lbuild").onclick = build; build();
+  const make = async (share) => {
+    saveClin();
+    const { buildLetter } = await import("./pdf.js");
+    const title = $("lt").value === "referral" ? "Referral letter" : "Clinic summary";
+    const blob = await buildLetter({ title, date: $("ld").value, body: $("lbody").value, clinician: settings.clinician });
+    await saveOrShare(blob, `${title.replace(/ /g, "")}_${(p.fileNumber || p.name || "patient").replace(/[^A-Za-z0-9._-]+/g, "_")}_${$("ld").value}.pdf`, share);
+  };
+  $("lpdf").onclick = () => make(false);
+  $("lshare").onclick = () => make(true);
+  $("lcopy").onclick = () => navigator.clipboard?.writeText($("lbody").value).then(() => toast("Copied")).catch(() => toast("Select the text and copy it"));
 }
 
 // ------------------------------------------------------------ sync

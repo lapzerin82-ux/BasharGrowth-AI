@@ -1,5 +1,10 @@
 // Growth references, LMS maths and exact age. Mirrors core/ (Kotlin) of the Android app.
-export const REF_IDS = ["who2006_0_2", "cdc2000_child", "cdc2000_infant", "who2006", "who2007"];
+export const REF_IDS = ["who2006_0_2", "cdc2000_child", "cdc2000_infant", "who2006", "who2007",
+  "cdc2000_hc", "cdc2000_wfl", "cdc2000_bmi", "who2006_hc", "who2006_bmi", "who2006_wfl", "who2006_wfh", "who2007_bmi",
+  "ds_infant", "ds_child", "turner"];
+/** Measures: key -> short label. "wfl" = weight-for-length/height (x axis is length, not age). */
+export const MEASURES = { height: "Height", weight: "Weight", bmi: "BMI", hc: "Head circ.", wfl: "Weight-for-length" };
+export const CONDITIONS = { down: "Down syndrome (trisomy 21)", turner: "Turner syndrome" };
 export const FAMILIES = {
   CDC: "CDC 2000 original charts (Set 2): birth–36 months, then 2–20 years from age 2",
   AUTO: "WHO birth–24 months, then CDC 2–20 years original chart (CDC/AAP recommendation)",
@@ -14,13 +19,88 @@ export async function loadReferences() {
     for (const k of Object.keys(r.measures)) {
       const m = r.measures[k];
       m.key = k;
-      m.whoTails = r.family === "WHO" && k === "weight";
+      m.whoTails = r.family === "WHO" && (k === "weight" || k === "bmi" || k === "wfl"); // WHO restricted tails for weight-based indicators
+      m.xKind = m.xKind || "age";
     }
     refs[id] = r;
   }));
 }
 export const getRef = (id) => refs[id];
 export const allRefs = () => REF_IDS.map((id) => refs[id]);
+
+/**
+ * Reference used for a measure at this age (null when none applies). height/weight follow defaultRefFor;
+ * head circumference, BMI and weight-for-length follow the same CDC / CDC-AAP (WHO < 24 mo) / WHO choice.
+ */
+export function refForKey(family, key, age) {
+  if (key === "height" || key === "weight") return defaultRefFor(family, age);
+  if (key === "hc") {
+    if (family === "WHO") return age <= 60 ? "who2006_hc" : null;
+    if (family === "AUTO" && age < 24) return "who2006_hc";
+    return age <= 36 ? "cdc2000_hc" : null;
+  }
+  if (key === "bmi") {
+    if (family === "WHO") return age < 60 ? "who2006_bmi" : age <= 228 ? "who2007_bmi" : null;
+    if (age < 24) return family === "AUTO" ? "who2006_bmi" : null;
+    return age <= 240 ? "cdc2000_bmi" : null;
+  }
+  if (key === "wfl") {
+    if (family === "CDC") return age <= 36 ? "cdc2000_wfl" : null;
+    if (age < 24) return "who2006_wfl";
+    return family === "WHO" && age <= 60 ? "who2006_wfh" : null;
+  }
+  return null;
+}
+/** Condition-specific reference (Down syndrome, Turner syndrome) for a measure at this age, if one exists. */
+export function condRefFor(cond, key, age) {
+  let id = null;
+  if (cond === "down") id = age < 36 ? "ds_infant" : "ds_child";
+  if (cond === "turner") id = "turner";
+  const r = id && refs[id];
+  return r && r.measures[key] && covers(r.measures[key], age) ? id : null;
+}
+
+/** Value of a measure in a measurement record ("wfl" is the weight; its x is the length). */
+export function mValue(x, key) {
+  if (key === "bmi") return x.height && x.weight ? x.weight / (x.height / 100) ** 2 : null;
+  if (key === "wfl") return x.height && x.weight ? x.weight : null;
+  return x[key] ?? null;
+}
+/** Percentile assessment of one measure of one visit (x = plotting age, or length for weight-for-length). */
+export function assessKey(refId, key, sex, ageMonths, rec) {
+  const r = refs[refId]; const m = r?.measures[key]; if (!m) return null;
+  const v = mValue(rec, key); if (v == null) return null;
+  if (m.xKind === "length") {
+    if (ageMonths < (m.ageFrom ?? 0) || ageMonths > (m.ageTo ?? 1e9)) return null;
+    return assess(m, sex, rec.height, v);
+  }
+  return assess(m, sex, ageMonths, v);
+}
+
+// ---- corrected age for prematurity
+let useCorrection = true;
+export function setCorrection(on) { useCorrection = !!on; }
+export function correctionOn() { return useCorrection; }
+/** Days to subtract for prematurity (40 weeks − gestational age) while chronological age < 24 months; 0 otherwise. */
+export function correctionDays(p, dateIso) {
+  if (!useCorrection || !p.gaWeeks || p.gaWeeks >= 37) return 0;
+  const ga = p.gaWeeks * 7 + (p.gaDays || 0);
+  const chrono = epochDay(dateIso) - epochDay(p.dob);
+  return chrono < 731 ? Math.max(0, 280 - ga) : 0;
+}
+/** Age used for plotting and percentiles (corrected for prematurity when that applies). */
+export function plotAge(p, dateIso) {
+  const a = exactAge(p.dob, dateIso), c = correctionDays(p, dateIso);
+  if (!c) return { ...a, corrected: false, chrono: a };
+  const shifted = new Date((epochDay(p.dob) + c) * 86400000).toISOString().slice(0, 10);
+  const ca = exactAge(shifted, dateIso);
+  return { ...ca, corrected: true, chrono: a, corrDays: c };
+}
+/** "3 m 2 d (corrected 1 m 5 d)" */
+export function ageLabel(p, dateIso) {
+  const a = plotAge(p, dateIso);
+  return a.corrected ? `${a.chrono.text} (corrected ${a.days < 0 ? "before term" : a.text})` : a.text;
+}
 
 /** Chart used for a child of this age. AUTO switches from WHO to CDC at exactly 24 months. */
 export function defaultRefFor(family, ageMonths) {
@@ -34,13 +114,14 @@ export function covers(m, age) { return age >= m.ageMin - 1e-9 && age <= m.ageMa
 export function lms(m, sex, age) {
   if (!covers(m, age)) return null;
   const t = m[sex === "F" ? "female" : "male"];
+  if (!t || !t.length) return null;
   if (age < t[0][0] - 1e-9 || age > t[t.length - 1][0] + 1e-9) return null;
   let lo = 0, hi = t.length - 1;
   if (age <= t[0][0]) return t[0].slice(1);
   if (age >= t[hi][0]) return t[hi].slice(1);
   while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (t[mid][0] <= age) lo = mid; else hi = mid; }
   const f = (age - t[lo][0]) / (t[hi][0] - t[lo][0]);
-  return [1, 2, 3].map((i) => t[lo][i] + (t[hi][i] - t[lo][i]) * f);
+  return t[lo].slice(1).map((v, i) => v + (t[hi][i + 1] - v) * f); // [L, M, S] (+ sigma for CDC BMI)
 }
 export function valueAt([L, M, S], z) { return Math.abs(L) < 1e-9 ? M * Math.exp(S * z) : M * Math.pow(1 + L * S * z, 1 / L); }
 export function zOf([L, M, S], x) { return Math.abs(L) < 1e-9 ? Math.log(x / M) / S : (Math.pow(x / M, L) - 1) / (L * S); }
@@ -55,6 +136,11 @@ export function assess(m, sex, age, x) {
   if (m.whoTails && Math.abs(z) > 3) {
     if (z > 3) { const s3 = valueAt(p, 3), s2 = valueAt(p, 2); z = 3 + (x - s3) / (s3 - s2); }
     else { const s3 = valueAt(p, -3), s2 = valueAt(p, -2); z = -3 + (x - s3) / (s2 - s3); }
+  }
+  // CDC 2022 extended BMI-for-age: above the 95th percentile, percentile = 90 + 10 * Phi((BMI - P95) / sigma)
+  if (m.extBmi && p.length > 3 && z >= invNorm(0.95)) {
+    const p95 = valueAt(p, invNorm(0.95)), pc = 90 + 10 * cdf((x - p95) / p[3]);
+    return { z, p: pc, ext: true, pctOfP95: x / p95 * 100 };
   }
   return { z, p: cdf(z) * 100 };
 }
@@ -130,6 +216,12 @@ export function exactAge(dobIso, dateIso) {
 export function mph(sex, father, mother) { return (father + mother + (sex === "M" ? 13 : -13)) / 2; }
 export const MPH_RANGE = 8.5;
 
+/** Percentile as text inside brackets, e.g. "25", "0.4", ">99.9". */
+export function pctTxt(a) {
+  if (!a) return "";
+  const p = a.p;
+  return p < 0.1 ? "<0.1" : p > 99.9 ? ">99.9" : p < 1 || p > 99 ? String(Math.round(p * 10) / 10) : String(Math.min(99, Math.max(1, Math.round(p))));
+}
 export function fmtNum(v, dp = 1) { const r = Math.round(v * 10 ** dp) / 10 ** dp; return String(r); }
 
 /**
@@ -156,10 +248,7 @@ export function pctShort(a) {
 /** Value with percentile in brackets, e.g. "120 cm (25%)", "23 kg (2%)", "95 cm (0.4%)". */
 export function withPct(value, unit, a) {
   const v = `${value} ${unit}`;
-  if (!a) return v;
-  const p = a.p;
-  const t = p < 0.1 ? "<0.1" : p > 99.9 ? ">99.9" : p < 1 || p > 99 ? String(Math.round(p * 10) / 10) : String(Math.min(99, Math.max(1, Math.round(p))));
-  return `${v} (${t}%)`;
+  return a ? `${v} (${pctTxt(a)}%)` : v;
 }
 
 /** Date of birth estimated from an age (years, months, days) on a given date — calendar subtraction. */

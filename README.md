@@ -58,6 +58,50 @@ The web version has no cloud sync; move data between devices with Backup/Restore
   Sync requires the site to be deployed **from GitHub** (Netlify builds `netlify/functions`);
   a zip/drag-and-drop deploy has no functions, so the app then works per device only.
 
+### Clinical tools (web version, all optional)
+
+* **Visits:** height, weight, head circumference, BP, Tanner stage (B/G, PH, testicular volume, menarche),
+  bone age, lower segment / arm span (US/LS ratio) and SOAP notes. Every field is optional.
+* **Extra charts and percentiles:**
+  * BMI-for-age (CDC 2000 with the CDC 2022 extended BMI above P95, obesity classes 1–3 as % of P95; WHO 2006/2007);
+  * head circumference (CDC 0–36 mo, WHO 0–5 y);
+  * weight-for-length/height (CDC; WHO 0–2 y and 2–5 y).
+* **Condition-specific charts:** Down syndrome (Zemel 2015, CDC/AAP) and Turner syndrome (Lyon 1985, girls).
+  The standard-chart percentiles stay visible.
+* **Prematurity:** gestational age and birth weight. Below 37 weeks, plotting and percentiles use corrected age until
+  24 months of chronological age (can be switched off in Settings).
+* **Growth & clinical alerts:**
+  * below −2 SD / 3rd percentile;
+  * below the MPH target range;
+  * crossing ≥ 2 major percentile lines;
+  * weight loss;
+  * BMI and weight-for-length categories;
+  * low height velocity;
+  * early/delayed puberty;
+  * AAP 2017 BP categories;
+  * bone age ± 2 y;
+  * lost/missed milestones;
+  * overdue vaccines.
+
+  The rules are listed in the app, and alerts can be switched off.
+* **Height velocity table** (cm/year) with the velocity needed to stay on the same percentile.
+* **Bone age:** marker on the height chart, and an approximate adult-height projection (percentile for bone age,
+  not Bayley–Pinneau).
+* **Lab results:**
+  * results outside the typed reference range are flagged H/L;
+  * tests with repeated results show trend graphs.
+* **Development:** CDC “Learn the Signs. Act Early.” 2022 milestone checklists (2 months–5 years).
+* **Vaccination record** with overdue flags.
+* **Letter generator:** referral letter or clinic summary, drafted from the record, editable, exported as PDF.
+* **PDF report:** includes all of the above plus the extra chart pages.
+
+References are built by `tools/build_web_extras.py` from CDCAnthro, rcpchgrowth and the WHO tables (pygrowup).
+Not included, because no verified offline data is available:
+* Fenton/INTERGROWTH preterm charts;
+* achondroplasia and Noonan charts;
+* full AAP BP percentile tables by height;
+* Bayley–Pinneau tables.
+
 ## Install the APK on a phone
 
 1. Get `PediatricGrowthChart.apk`:

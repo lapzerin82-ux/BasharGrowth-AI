@@ -23,7 +23,8 @@ export const py = (s, key, v) => s[key][0] + s[key][1] * v;
 
 /** Measurements that belong on this sheet, with their exact ages. */
 export function sheetPoints(s, p, ms) {
-  const withAge = ms.map((m) => ({ m, a: G.exactAge(p.dob, m.date) })).filter(({ a }) => a.months >= s.ageMin - 1e-9 && a.months <= s.ageMax + 1e-9);
+  // plotted at the age corrected for prematurity when that applies (G.plotAge); a.chrono = chronological age
+  const withAge = ms.map((m) => ({ m, a: G.plotAge(p, m.date) })).filter(({ a }) => a.days >= 0 && a.months >= s.ageMin - 1e-9 && a.months <= s.ageMax + 1e-9);
   const latest = {};
   for (const key of ["height", "weight"]) {
     const w = withAge.filter(({ m }) => m[key] != null).sort((x, y) => x.m.date.localeCompare(y.m.date) || x.m.createdAt - y.m.createdAt);
@@ -32,10 +33,12 @@ export function sheetPoints(s, p, ms) {
   const pts = [];
   for (const { m, a } of withAge) for (const key of ["height", "weight"]) {
     if (m[key] == null) continue;
-    pts.push({ id: m.id + ":" + key, mid: m.id, key, age: a.months, ageText: a.text, v: m[key], date: m.date, notes: m.notes, latest: m.id === latest[key] });
+    pts.push({ id: m.id + ":" + key, mid: m.id, key, age: a.months, ageText: G.ageLabel(p, m.date), v: m[key], date: m.date, notes: m.notes, latest: m.id === latest[key] });
   }
-  const outside = ms.length - withAge.length;
-  return { pts, rows: withAge, outside };
+  const boneAge = withAge.filter(({ m }) => m.boneAge != null && m.height != null && m.boneAge * 12 >= s.ageMin && m.boneAge * 12 <= s.ageMax)
+    .map(({ m, a }) => ({ age: a.months, ba: m.boneAge * 12, v: m.height }));
+  const outside = ms.filter((m) => m.height != null || m.weight != null).length - withAge.filter(({ m }) => m.height != null || m.weight != null).length;
+  return { pts, rows: withAge.filter(({ m }) => m.height != null || m.weight != null), outside, boneAge };
 }
 
 /** Text with a white outline so it stays readable over the chart grid. */
@@ -87,7 +90,7 @@ export function drawSheet(ctx, W, H, s, img, vp, data) {
   const nRows = t.rows.length - 1, shown = rest.slice(-nRows);
   const cell = (r, top, bottom, isBirth) => {
     const vals = {
-      date: G.fmtDate(r.m.date), age: isBirth ? "" : r.a.short, // the birth row already reads "Birth"
+      date: G.fmtDate(r.m.date), age: isBirth ? "" : r.a.chrono.short, // the birth row already reads "Birth"
       weight: r.m.weight != null ? `${r.m.weight} kg` : "", height: r.m.height != null ? `${r.m.height} cm` : "",
       bmi: r.m.weight != null && r.m.height ? (r.m.weight / (r.m.height / 100) ** 2).toFixed(1) : "",
     };
@@ -117,6 +120,12 @@ export function drawSheet(ctx, W, H, s, img, vp, data) {
     if (q.length < 2) continue;
     ctx.strokeStyle = "rgba(200,16,28,.8)"; ctx.lineWidth = 0.8; ctx.beginPath();
     q.forEach((z, i) => (i ? ctx.lineTo(px(s, z.age), py(s, key, z.v)) : ctx.moveTo(px(s, z.age), py(s, key, z.v)))); ctx.stroke();
+  }
+  for (const b of data.boneAge || []) { // bone age: hollow blue circle at (bone age, height), dashed link to the cross
+    const y = py(s, "height", b.v);
+    ctx.strokeStyle = "#1f5fbf"; ctx.lineWidth = 0.8; ctx.setLineDash([2, 1.5]); ctx.beginPath(); ctx.moveTo(px(s, b.age), y); ctx.lineTo(px(s, b.ba), y); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = "#fff"; ctx.lineWidth = 1.1; ctx.beginPath(); ctx.arc(px(s, b.ba), y, 3, 0, 7); ctx.fill(); ctx.stroke();
+    halo(ctx, "BA", px(s, b.ba) - 4, y + 10, 6.5, "#1f5fbf", true);
   }
   pts.forEach((z) => cross(ctx, px(s, z.age), py(s, z.key, z.v), z.latest, k, z.id === data.sel));
   if (data.showPct) {

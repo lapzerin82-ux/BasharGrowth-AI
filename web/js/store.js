@@ -172,8 +172,8 @@ export class Session {
   patientList(q = "") {
     q = q.trim().toLowerCase();
     let list = [...this.patients.values()];
-    if (q) list = list.filter((p) => p.name.toLowerCase().includes(q) || (p.fileNumber || "").toLowerCase().includes(q));
-    return list.sort((a, b) => ((b.fileNumber || "").toLowerCase() === q) - ((a.fileNumber || "").toLowerCase() === q) || a.name.localeCompare(b.name));
+    if (q) list = list.filter((p) => (p.name || "").toLowerCase().includes(q) || (p.fileNumber || "").toLowerCase().includes(q));
+    return list.sort((a, b) => ((b.fileNumber || "").toLowerCase() === q) - ((a.fileNumber || "").toLowerCase() === q) || (a.name || "").localeCompare(b.name || ""));
   }
   recent(n = 5) { return [...this.patients.values()].sort((a, b) => b.updatedAt - a.updatedAt).slice(0, n); }
   byFileNumber(f) { f = f.trim().toLowerCase(); return f ? [...this.patients.values()].find((p) => (p.fileNumber || "").toLowerCase() === f) : null; }
@@ -226,16 +226,21 @@ export class Session {
 
   // ---- backup (format shared with the Android app; field names match its PatientRecord/MeasurementRecord;
   //      investigations and photos are extra fields the Android version ignores)
+  // New optional fields (gestational age, condition, vaccines, milestones; head circumference, BP, Tanner,
+  // bone age, body proportions, visit notes…) travel in "ext" so older readers simply ignore them.
   async exportContents() {
+    const ext = (r, known) => Object.fromEntries(Object.entries(r).filter(([k]) => !known.includes(k)));
+    const KP = ["id", "name", "sex", "fileNumber", "dob", "father", "mother", "mph", "mphManual", "notes", "complaint", "features", "dobEstimated", "ageEntered", "preferredReference", "createdAt", "updatedAt"];
+    const KM = ["id", "patientId", "date", "height", "weight", "notes", "createdAt", "updatedAt"];
     const E = (iso) => Math.round(Date.parse(iso + "T00:00:00Z") / 86400000);
     const files = {};
     for (const x of this.investigations.values()) for (const f of x.photos || []) {
       const b = await this.getFile(f.id); if (b) files[f.id] = b64(b);
     }
     return {
-      format: "bashar-growth-chart-backup", formatVersion: 1, createdAt: Date.now(), appVersion: "web-1.1", account: this.email,
-      patients: [...this.patients.values()].map((p) => ({ id: p.id, name: p.name, sex: p.sex, fileNumber: p.fileNumber, dobEpochDay: E(p.dob), fatherHeightCm: p.father ?? null, motherHeightCm: p.mother ?? null, mphCm: p.mph ?? null, mphManual: !!p.mphManual, notes: p.notes || "", complaint: p.complaint || "", features: p.features || "", dobEstimated: !!p.dobEstimated, ageEntered: p.ageEntered || null, preferredReference: p.preferredReference || null, createdAt: p.createdAt, updatedAt: p.updatedAt, deleted: false })),
-      measurements: [...this.measurements.values()].map((m) => ({ id: m.id, patientId: m.patientId, dateEpochDay: E(m.date), heightCm: m.height ?? null, weightKg: m.weight ?? null, notes: m.notes || "", createdAt: m.createdAt, updatedAt: m.updatedAt, deleted: false })),
+      format: "bashar-growth-chart-backup", formatVersion: 1, createdAt: Date.now(), appVersion: "web-1.2", account: this.email,
+      patients: [...this.patients.values()].map((p) => ({ id: p.id, name: p.name, sex: p.sex, fileNumber: p.fileNumber, dobEpochDay: E(p.dob), fatherHeightCm: p.father ?? null, motherHeightCm: p.mother ?? null, mphCm: p.mph ?? null, mphManual: !!p.mphManual, notes: p.notes || "", complaint: p.complaint || "", features: p.features || "", dobEstimated: !!p.dobEstimated, ageEntered: p.ageEntered || null, preferredReference: p.preferredReference || null, createdAt: p.createdAt, updatedAt: p.updatedAt, deleted: false, ext: ext(p, KP) })),
+      measurements: [...this.measurements.values()].map((m) => ({ id: m.id, patientId: m.patientId, dateEpochDay: E(m.date), heightCm: m.height ?? null, weightKg: m.weight ?? null, notes: m.notes || "", createdAt: m.createdAt, updatedAt: m.updatedAt, deleted: false, ext: ext(m, KM) })),
       investigations: [...this.investigations.values()],
       files,
     };
@@ -253,13 +258,13 @@ export class Session {
     for (const r of c.patients || []) {
       if (r.deleted) continue;
       if (!take("p", r)) { skipped++; continue; }
-      await this._put("p", { id: r.id, name: r.name, sex: r.sex, fileNumber: r.fileNumber, dob: iso(r.dobEpochDay), father: r.fatherHeightCm ?? null, mother: r.motherHeightCm ?? null, mph: r.mphCm ?? null, mphManual: !!r.mphManual, notes: r.notes || "", complaint: r.complaint || "", features: r.features || "", dobEstimated: !!r.dobEstimated, ageEntered: r.ageEntered || null, preferredReference: r.preferredReference || null, createdAt: r.createdAt || now, updatedAt: stamp("p", r) }, true);
+      await this._put("p", { ...(r.ext || {}), id: r.id, name: r.name, sex: r.sex, fileNumber: r.fileNumber, dob: iso(r.dobEpochDay), father: r.fatherHeightCm ?? null, mother: r.motherHeightCm ?? null, mph: r.mphCm ?? null, mphManual: !!r.mphManual, notes: r.notes || "", complaint: r.complaint || "", features: r.features || "", dobEstimated: !!r.dobEstimated, ageEntered: r.ageEntered || null, preferredReference: r.preferredReference || null, createdAt: r.createdAt || now, updatedAt: stamp("p", r) }, true);
       np++;
     }
     for (const r of c.measurements || []) {
       if (r.deleted) continue;
       if (!take("m", r)) { skipped++; continue; }
-      await this._put("m", { id: r.id, patientId: r.patientId, date: iso(r.dateEpochDay), height: r.heightCm ?? null, weight: r.weightKg ?? null, notes: r.notes || "", createdAt: r.createdAt || now, updatedAt: stamp("m", r) }, true);
+      await this._put("m", { ...(r.ext || {}), id: r.id, patientId: r.patientId, date: iso(r.dateEpochDay), height: r.heightCm ?? null, weight: r.weightKg ?? null, notes: r.notes || "", createdAt: r.createdAt || now, updatedAt: stamp("m", r) }, true);
       nm++;
     }
     for (const r of c.investigations || []) {
