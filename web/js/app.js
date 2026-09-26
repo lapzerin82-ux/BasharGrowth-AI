@@ -139,11 +139,22 @@ const ICONS = {
   gear: "M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7 7 0 0 0-1.7-1L15 3.3h-4l-.4 2.6a7 7 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.5 7.5 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1c.5.4 1.1.7 1.7 1l.4 2.6h4l.4-2.6c.6-.3 1.2-.6 1.7-1l2.5 1 2-3.5-2.1-1.6zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z",
   out: "M10.1 15.6 11.5 17l5-5-5-5-1.4 1.4 2.6 2.6H3v2h9.7l-2.6 2.6zM19 3H5a2 2 0 0 0-2 2v4h2V5h14v14H5v-4H3v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z",
 };
+// Cartoon for the home banner: sun, clouds, a growth ruler and three children of increasing height.
+const HERO_ART = `<svg class="art" viewBox="0 0 150 130" aria-hidden="true">
+  <circle cx="126" cy="22" r="13" fill="#ffc83d"/><g stroke="#ffc83d" stroke-width="3" stroke-linecap="round"><path d="M126 2v5M126 37v5M106 22h5M141 22h5M112 8l3 3M137 33l3 3M140 8l-3 3M115 33l-3 3"/></g>
+  <g fill="#fff"><ellipse cx="34" cy="20" rx="16" ry="8"/><ellipse cx="46" cy="16" rx="11" ry="8"/><ellipse cx="88" cy="36" rx="12" ry="6"/><ellipse cx="97" cy="33" rx="8" ry="6"/></g>
+  <rect x="8" y="30" width="16" height="96" rx="4" fill="#ff8a65"/><g stroke="#fff" stroke-width="2"><path d="M8 44h8M8 58h11M8 72h8M8 86h11M8 100h8M8 114h11"/></g>
+  <path d="M0 122c30-10 60-10 150 0v8H0z" fill="#8fdcb0"/>
+  <g><rect x="36" y="96" width="18" height="24" rx="8" fill="#4cc3f7"/><circle cx="45" cy="88" r="10" fill="#ffd7b5"/><path d="M35 86c2-9 18-9 20 0-6-3-14-3-20 0z" fill="#6b3f1d"/><circle cx="41.5" cy="88" r="1.3" fill="#2b2350"/><circle cx="48.5" cy="88" r="1.3" fill="#2b2350"/><path d="M41.5 92q3.5 3 7 0" stroke="#2b2350" stroke-width="1.3" fill="none" stroke-linecap="round"/></g>
+  <g><rect x="62" y="80" width="20" height="40" rx="9" fill="#ff7eb3"/><circle cx="72" cy="70" r="11" fill="#f2c29b"/><path d="M60 70c0-12 24-12 24 0-3-5-9-6-12-6s-9 1-12 6z" fill="#2e2a3a"/><circle cx="61" cy="73" r="3.5" fill="#2e2a3a"/><circle cx="83" cy="73" r="3.5" fill="#2e2a3a"/><circle cx="68" cy="70" r="1.4" fill="#2b2350"/><circle cx="76" cy="70" r="1.4" fill="#2b2350"/><path d="M68 75q4 3.5 8 0" stroke="#2b2350" stroke-width="1.4" fill="none" stroke-linecap="round"/></g>
+  <g><rect x="92" y="64" width="22" height="56" rx="10" fill="#9d7bf0"/><circle cx="103" cy="53" r="12" fill="#c98d62"/><path d="M91 52c1-13 23-13 24 0-4-4-20-4-24 0z" fill="#1f1a2a"/><circle cx="99" cy="53" r="1.5" fill="#2b2350"/><circle cx="107" cy="53" r="1.5" fill="#2b2350"/><path d="M98.5 58q4.5 4 9 0" stroke="#2b2350" stroke-width="1.5" fill="none" stroke-linecap="round"/></g>
+  <path d="M126 58l3 6 6.5 1-4.7 4.6 1.1 6.4-5.9-3.1-5.9 3.1 1.1-6.4-4.7-4.6 6.5-1z" fill="#ffc83d"/>
+</svg>`;
 const icon = (k) => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${ICONS[k]}"/></svg>`;
 
 const pname = (p) => p.name || (p.fileNumber ? `File ${p.fileNumber}` : "Unnamed patient");
 function patientRow(p) {
-  return `<a class="prow" href="#p/${p.id}"><span><b>${esc(pname(p))}</b><small>File ${esc(p.fileNumber)} · ${p.sex === "F" ? "Female" : "Male"} · DOB ${esc(G.fmtDob(p, false))}</small></span><em>${G.exactAge(p.dob, G.todayIso()).short}</em></a>`;
+  return `<a class="prow" href="#p/${p.id}"><span class="av ${p.sex === "F" ? "f" : ""}" aria-hidden="true">${p.sex === "F" ? "👧" : "👦"}</span><span><b>${esc(pname(p))}</b><small>File ${esc(p.fileNumber)} · ${p.sex === "F" ? "Female" : "Male"} · DOB ${esc(G.fmtDob(p, false))}</small></span><em>${G.exactAge(p.dob, G.todayIso()).short}</em></a>`;
 }
 
 function viewHome() {
@@ -156,7 +167,11 @@ function viewHome() {
   const recent = session.recent(6);
   $app.innerHTML = bar("Pediatric Growth Chart", false) + `
   <main class="page">
-    <div class="who"><b>${n} patient${n === 1 ? "" : "s"}</b><small id="syncline">${syncText()}</small></div>
+    <section class="hero">
+      <div><h2>Watch them grow!</h2><p>Growth charts, visits and milestones for every child</p>
+        <span class="count">${n} patient${n === 1 ? "" : "s"}</span><small class="sync" id="syncline">${syncText()}</small></div>
+      ${HERO_ART}
+    </section>
     ${installEvt ? `<button class="install" id="inst">Install app on this device</button>` : ""}
     <nav class="tiles">
       ${tiles.map(([t, i, h]) => `<a class="tile" href="${h}">${icon(i)}<span>${t}</span></a>`).join("")}
