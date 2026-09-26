@@ -88,6 +88,7 @@ async function route() {
     case "chart": return viewChart(a, b || "height");
     case "dev": return viewMilestones(a);
     case "vax": return viewVaccines(a);
+    case "rx": return viewTreatment(a);
     case "letter": return viewLetter(a);
     case "backup": return viewBackup(a === "restore");
     case "settings": return viewSettings();
@@ -388,6 +389,7 @@ function viewPatient(id) {
   const hv = C.heightVelocity(p, ms, fam);
   const bas = ms.filter((m) => m.boneAge != null);
   const dev = C.milestoneSummary(p), vax = p.vaccines || [], overdue = C.overdueVaccines(p);
+  const rx = p.treatments || [], rxAct = rx.filter((t) => C.treatmentActive(t));
   const nextDue = vax.filter((v) => v.due && v.due >= G.todayIso()).sort((a, b) => a.due.localeCompare(b.due))[0];
   $app.innerHTML = bar(pname(p), true, `<a class="icon" href="#edit/${id}" aria-label="Edit patient">✎</a><button class="icon" id="del" aria-label="Delete patient">🗑</button>`) + `
   <main class="page">
@@ -420,6 +422,7 @@ function viewPatient(id) {
       <a class="tonal" href="#chart/${id}/wfl">Wt-for-length</a>
       <a class="tonal" href="#inv/${id}">+ Investigation</a>
       <a class="tonal" href="#dev/${id}">Development</a>
+      <a class="tonal" href="#rx/${id}">Treatment</a>
       <a class="tonal" href="#vax/${id}">Vaccinations</a>
       <a class="tonal" href="#letter/${id}">Letter</a>
       <button class="ghost" id="pdf">Export PDF</button>
@@ -443,6 +446,8 @@ function viewPatient(id) {
       ${[...bas].reverse().map((m) => { const ca = G.exactAge(p.dob, m.date).yearsDec, d = m.boneAge - ca, pr = C.projectedAdultHeight(p, m);
         return `<tr><td>${G.fmtDate(m.date)}</td><td>${G.fmtNum(ca)} y</td><td>${m.boneAge} y${m.boneAgeMethod ? `<small>${esc(m.boneAgeMethod)}</small>` : ""}</td><td class="${Math.abs(d) >= 2 ? "flag" : ""}">${d >= 0 ? "+" : ""}${G.fmtNum(d)} y</td><td>${pr ? `≈ ${G.fmtNum(pr.cm)} cm${p.mph ? `<small>MPH target ${G.fmtNum(p.mph - 8.5)}–${G.fmtNum(p.mph + 8.5)} cm</small>` : ""}` : "–"}</td></tr>`; }).join("")}
       </tbody></table></div><p class="hint">${esc(C.PAH_NOTE)} On the height chart the bone age is shown as a blue circle (BA) linked to the red ×.</p></section>` : ""}
+    <section class="card"><div class="row"><h2 class="grow">Treatment (${rxAct.length} active)</h2><a class="tonal small" href="#rx/${id}">${rx.length ? "Open" : "+ Add"}</a></div>
+      ${rxAct.length ? `<ul class="rxl">${rxAct.map((t) => `<li><b>${esc(t.name)}</b> ${esc([t.dose != null && t.dose !== "" ? `${t.dose} ${t.unit || ""}` : "", t.route, t.freq].filter(Boolean).join(" · "))}${t.start ? ` <small class="muted">since ${G.fmtDate(t.start)}</small>` : ""}${t.indication ? `<br><small>${esc(t.indication)}</small>` : ""}</li>`).join("")}</ul>` : `<p class="hint">${rx.length ? `No active treatment (${rx.length} previous).` : "No treatments recorded."}</p>`}</section>
     <section class="card"><div class="row"><h2 class="grow">Development</h2><a class="tonal small" href="#dev/${id}">Milestones</a></div>
       <p class="hint">${dev.yes || dev.missed || dev.lost ? `${dev.yes} achieved · ${dev.missed} not yet at expected age · ${dev.lost} lost` : "No milestones recorded."}${p.devNotes ? `<br>${esc(p.devNotes)}` : ""}</p></section>
     <section class="card"><div class="row"><h2 class="grow">Vaccinations (${vax.length})</h2><a class="tonal small" href="#vax/${id}">Open</a></div>
@@ -689,11 +694,11 @@ async function viewChart(pid, key) {
     if (isSheet()) { sgeo = drawSheet(ctx, cv.width, cv.height, sheet, img, vp, data); geo = null; }
     else { geo = drawChart(ctx, cv.width, cv.height, data, vp, dpr()); sgeo = null; }
   };
-  const allPts = () => isSheet() ? data.pts : data.points;
+  const allPts = () => (data && (isSheet() ? data.pts : data.points)) || [];
   const showPop = () => {
     const pop = document.getElementById("pop");
-    const q = data && allPts().find((x) => x.id === sel);
-    if (!q) { pop.innerHTML = hint(); return; }
+    const q = sel != null && allPts().find((x) => x.id === sel);
+    if (!q || (isSheet() ? !sheet : !G.getRef(view)?.measures[key])) { pop.innerHTML = hint(); return; }
     const k = isSheet() ? q.key : key;
     const refId = isSheet() ? sheet.ref : view;
     const m = G.getRef(refId).measures[k];
@@ -1083,6 +1088,84 @@ function viewVaccines(pid, editIdx = null) {
   $app.querySelectorAll("tr[data-i]").forEach((tr) => tr.onclick = () => { viewVaccines(pid, +tr.dataset.i); window.scrollTo(0, 0); });
 }
 
+// ------------------------------------------------------------ treatment
+function viewTreatment(pid, editIdx = null) {
+  const p = session.patients.get(pid); if (!p) return go("#home");
+  const list = [...(p.treatments || [])].sort((a, b) => (C.treatmentActive(b) - C.treatmentActive(a)) || (b.start || "").localeCompare(a.start || ""));
+  const t = editIdx != null ? list[editIdx] : null;
+  const ms = session.measurementsFor(pid);
+  const lw = [...ms].reverse().find((m) => m.weight != null), lh = [...ms].reverse().find((m) => m.height != null);
+  const opt = (arr, v) => ["", ...arr].map((o) => `<option ${o === (v || "") ? "selected" : ""}>${esc(o)}</option>`).join("");
+  $app.innerHTML = bar(`${pname(p)} · treatment`, true) + `
+  <main class="page">
+    <section class="card stack"><h2>${t ? "Edit treatment" : "Add treatment"}</h2>
+      <div class="two"><label>Type<select id="tt">${opt(C.TREATMENT_TYPES, t?.type || "Medication")}</select></label>
+      <label>Drug / treatment<input id="tn" list="dlist" value="${esc(t?.name)}" placeholder="e.g. Somatropin (growth hormone)"></label></div>
+      <datalist id="dlist">${C.DRUGS.map((d) => `<option value="${esc(d)}">`).join("")}</datalist>
+      <label>Indication<input id="ti" value="${esc(t?.indication)}" placeholder="e.g. GH deficiency, hypothyroidism, iron-deficiency anaemia"></label>
+      <div class="three"><label>Dose<input id="td" inputmode="decimal" value="${esc(t?.dose ?? "")}"></label>
+        <label>Unit<select id="tu">${opt(C.DOSE_UNITS, t?.unit || "mg")}</select></label>
+        <label>Route<select id="tr">${opt(C.ROUTES, t?.route)}</select></label></div>
+      <label>Frequency<input id="tf" list="flist" value="${esc(t?.freq)}" placeholder="e.g. Once daily"></label>
+      <datalist id="flist">${C.FREQS.map((d) => `<option value="${esc(d)}">`).join("")}</datalist>
+      <details class="opt"><summary>Weight-based dose helper <small class="muted">(optional)</small></summary><div class="stack">
+        <div class="three"><label>Amount<input id="hk" inputmode="decimal" placeholder="e.g. 0.035"></label>
+          <label>Per<select id="hb"><option value="kg">kg</option><option value="m2">m² (BSA)</option></select></label>
+          <label>Maximum (optional)<input id="hm" inputmode="decimal"></label></div>
+        <div class="two"><label>Weight (kg)<input id="hw" inputmode="decimal" value="${lw ? lw.weight : ""}"></label>
+          <label>Height (cm, for BSA)<input id="hh" inputmode="decimal" value="${lh ? lh.height : ""}"></label></div>
+        <p class="hi" id="hout"></p>
+        <button type="button" class="tonal" id="huse" disabled>Use this dose</button>
+        <p class="hint">${lw ? `Latest weight ${lw.weight} kg on ${G.fmtDate(lw.date)}. ` : ""}The helper only multiplies the amount you enter (in the selected unit) by weight or body surface area (Mosteller); it does not suggest doses. Check every dose against your formulary (e.g. BNF for Children, Lexicomp).</p>
+      </div></details>
+      <div class="two"><label>Start date<input id="ts" type="date" value="${esc(t?.start || (t ? "" : G.todayIso()))}"></label>
+      <label>Stop date<input id="tx" type="date" value="${esc(t?.stop)}"></label></div>
+      <label>Response / side effects / notes<textarea id="to" rows="2">${esc(t?.notes)}</textarea></label>
+      <label class="switch"><input type="checkbox" id="tc" ${t ? (t.onChart ? "checked" : "") : "checked"}> Mark the start on the growth charts</label>
+      <small class="e" id="te"></small>
+      <div class="row wrap"><button class="primary" id="tsave">${t ? "Save changes" : "Add treatment"}</button>${t ? `<button class="ghost" id="tcancel">Cancel</button><button class="danger" id="tdel">Delete</button>` : ""}</div>
+    </section>
+    <section class="card"><h2>Treatments (${list.length})</h2>
+      ${list.length ? `<div class="scrollx"><table class="mt"><thead><tr><th>Treatment</th><th>Dose</th><th>Dates</th><th>Status</th></tr></thead><tbody>
+      ${list.map((x, i) => { const act = C.treatmentActive(x);
+        return `<tr data-i="${i}"><td><b>${esc(x.name)}</b>${x.indication ? `<small>${esc(x.indication)}</small>` : ""}${x.type && x.type !== "Medication" ? `<small class="muted">${esc(x.type)}</small>` : ""}</td>
+        <td>${esc([x.dose != null && x.dose !== "" ? `${x.dose} ${x.unit || ""}` : "", x.route, x.freq].filter(Boolean).join(" · ")) || "–"}${x.perKg ? `<small class="muted">${esc(x.perKg)}</small>` : ""}</td>
+        <td>${x.start ? G.fmtDate(x.start) : "–"} → ${x.stop ? G.fmtDate(x.stop) : "ongoing"}${x.start ? `<small class="muted">age ${esc(G.exactAge(p.dob, x.start).short)}</small>` : ""}</td>
+        <td><span class="pill ${act ? "on" : ""}">${act ? "Active" : x.start > G.todayIso() ? "Planned" : "Stopped"}</span></td></tr>${x.notes ? `<tr class="nt" data-i="${i}"><td colspan="4">${esc(x.notes)}</td></tr>` : ""}`; }).join("")}
+      </tbody></table></div>` : `<p class="muted">No treatments recorded.</p>`}
+    </section>
+  </main>`;
+  bindBack();
+  const $ = (i) => document.getElementById(i);
+  let helperNote = t?.perKg || "";
+  const calc = () => {
+    const k = num($("hk").value), w = num($("hw").value), h = num($("hh").value), mx = num($("hm").value), unit = $("tu").value || "units";
+    let r = null, basis = "";
+    if ($("hb").value === "m2") { const s = C.bsa(h, w); if (s && k > 0) { r = C.weightDose(k, s, mx); basis = `${k} ${unit}/m² × ${G.fmtNum(s, 2)} m²`; } }
+    else { r = C.weightDose(k, w, mx); basis = `${k} ${unit}/kg × ${w} kg`; }
+    $("huse").disabled = !r;
+    if (!r) { $("hout").textContent = ""; return; }
+    const d = Math.round(r.dose * 1000) / 1000;
+    $("hout").textContent = `${basis} = ${G.fmtNum(r.raw, 3)} ${unit}${r.capped ? ` → capped at maximum ${mx} ${unit}` : ""}`;
+    $("huse").dataset.dose = d; helperNote = `${basis}${r.capped ? ` (capped at ${mx})` : ""}`;
+  };
+  ["hk", "hb", "hw", "hh", "hm", "tu"].forEach((i) => $(i).addEventListener("input", calc));
+  $("hb").onchange = calc;
+  $("huse").onclick = () => { $("td").value = $("huse").dataset.dose; $("td").dataset.helper = "1"; toast("Dose filled in"); };
+  const saveAll = async (arr) => { await session.savePatient({ ...session.patients.get(pid), treatments: arr }); viewTreatment(pid); };
+  $("tsave").onclick = async () => {
+    const rec = { type: $("tt").value, name: $("tn").value.trim(), indication: $("ti").value.trim(), dose: num($("td").value), unit: $("tu").value, route: $("tr").value,
+      freq: $("tf").value.trim(), start: $("ts").value, stop: $("tx").value, notes: $("to").value.trim(), onChart: $("tc").checked,
+      perKg: $("td").dataset.helper ? helperNote : t?.perKg || "" };
+    $("te").textContent = !rec.name ? "Enter the drug or treatment." : rec.start && rec.start < p.dob ? "Start date is before the date of birth." : rec.stop && rec.start && rec.stop < rec.start ? "Stop date is before the start date." : "";
+    if ($("te").textContent) return;
+    const arr = list.filter((x) => x !== t); arr.push(rec); await saveAll(arr); toast("Saved");
+  };
+  $("tcancel")?.addEventListener("click", () => viewTreatment(pid));
+  $("tdel")?.addEventListener("click", () => confirmBox("Delete this treatment?", t.name, "Delete", () => saveAll(list.filter((x) => x !== t)), true));
+  $app.querySelectorAll("tr[data-i]").forEach((tr) => tr.onclick = () => { viewTreatment(pid, +tr.dataset.i); window.scrollTo(0, 0); });
+}
+
 // ------------------------------------------------------------ letters
 function letterDraft(p, type, reason, to) {
   const ms = session.measurementsFor(p.id), fam = settings.family, L = [];
@@ -1123,6 +1206,9 @@ function letterDraft(p, type, reason, to) {
   if (lv?.obj) L.push("", `Examination (${G.fmtDate(lv.date)}): ${lv.obj}`);
   if (lv?.assess) L.push("", `Assessment: ${lv.assess}`);
   if (lv?.plan) L.push("", `Plan: ${lv.plan}`);
+  const rxs = p.treatments || [], rxa = rxs.filter((t) => C.treatmentActive(t)), rxp = rxs.filter((t) => !C.treatmentActive(t) && t.stop);
+  if (rxa.length) { L.push("", "Current treatment:"); rxa.forEach((t) => L.push(`- ${C.treatmentText(t)}${t.indication ? ` for ${t.indication}` : ""}${t.start ? ` (since ${G.fmtDate(t.start)})` : ""}`)); }
+  if (rxp.length) { L.push("", "Previous treatment:"); rxp.forEach((t) => L.push(`- ${C.treatmentText(t)}${t.start ? ` (${G.fmtDate(t.start)} – ${G.fmtDate(t.stop)})` : ` (stopped ${G.fmtDate(t.stop)})`}${t.notes ? `: ${t.notes}` : ""}`)); }
   const od = C.overdueVaccines(p);
   if (od.length) L.push("", `Vaccinations overdue: ${od.map((v) => `${v.name} ${v.dose || ""}`.trim()).join(", ")}.`);
   L.push("", type === "referral" ? "Thank you for seeing this child. Please do not hesitate to contact me for further information." : "Please do not hesitate to contact me if you need further information.");

@@ -130,6 +130,11 @@ export async function buildPdf(p, ms, family, connect, clinician, invs = [], get
     if (p.devNotes) para("Notes: " + p.devNotes, 8.5);
     para(C.MILESTONE_SOURCE, 7.5, 90);
   }
+  simpleTable("Treatment", ["Treatment", "Dose / route / frequency", "Indication", "Start", "Stop", "Status"],
+    [...(p.treatments || [])].sort((a, b) => (a.start || "").localeCompare(b.start || "")).map((t) => [t.name, [t.dose != null && t.dose !== "" ? `${t.dose} ${t.unit || ""}` : "", t.route, t.freq].filter(Boolean).join(", ") || "-", t.indication || "", t.start ? G.fmtDate(t.start) : "-", t.stop ? G.fmtDate(t.stop) : "ongoing", C.treatmentActive(t) ? "Active" : t.start > G.todayIso() ? "Planned" : "Stopped"]),
+    [120, 130, 105, 55, 55, 50]);
+  const rxNotes = (p.treatments || []).filter((t) => t.notes || t.perKg);
+  if (rxNotes.length) for (const t of rxNotes) para(`${t.name}: ${[t.perKg ? `dose calculation ${t.perKg}` : "", t.notes].filter(Boolean).join(" · ")}`, 8, 70);
   const od = new Set(C.overdueVaccines(p));
   simpleTable("Vaccinations", ["Vaccine", "Dose", "Given", "Next due", "Notes"],
     [...(p.vaccines || [])].sort((a, b) => (a.date || a.due || "").localeCompare(b.date || b.due || "")).map((v) => [v.name, v.dose || "", v.date ? G.fmtDate(v.date) : "-", v.due ? G.fmtDate(v.due) + (od.has(v) ? " OVERDUE" : "") : "-", v.notes || ""]),

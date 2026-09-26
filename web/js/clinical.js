@@ -313,3 +313,25 @@ export function visitDetails(p, m) {
   return out;
 }
 export const SOAP = [["subj", "S"], ["obj", "O"], ["assess", "A"], ["plan", "P"]];
+
+// ------------------------------------------------------------------ treatment
+// Names only (no doses are suggested by the app): the clinician enters every dose.
+export const TREATMENT_TYPES = ["Medication", "Hormone therapy", "Nutrition / supplement", "Procedure / surgery", "Therapy (physio, speech, OT)", "Diet / lifestyle", "Other"];
+export const DRUGS = ["Somatropin (growth hormone)", "Levothyroxine", "Hydrocortisone", "Fludrocortisone", "Leuprorelin (GnRH analogue)", "Triptorelin (GnRH analogue)", "Testosterone", "Estradiol", "Oxandrolone", "Desmopressin", "Insulin", "Metformin", "Cholecalciferol (vitamin D)", "Calcium", "Ferrous sulfate (iron)", "Folic acid", "Zinc", "Multivitamin", "Oral nutritional supplement", "Paracetamol", "Ibuprofen", "Amoxicillin", "Co-amoxiclav", "Azithromycin", "Cefuroxime", "Salbutamol", "Budesonide inhaler", "Fluticasone inhaler", "Montelukast", "Cetirizine", "Omeprazole", "Lactulose", "Polyethylene glycol", "Levetiracetam", "Sodium valproate", "Methylphenidate", "Prednisolone"];
+export const DOSE_UNITS = ["mg", "mcg", "g", "IU", "units", "mL", "drops", "puffs", "sachets", "tablets", "mg/m²"];
+export const ROUTES = ["Oral", "Subcutaneous", "Intramuscular", "Intravenous", "Inhaled", "Nasal", "Topical", "Rectal", "Other"];
+export const FREQS = ["Once daily", "Twice daily", "Three times daily", "Four times daily", "Every 6 hours", "Every 8 hours", "At night", "Once weekly", "6 days a week", "7 days a week", "Every 4 weeks", "Every 12 weeks", "Every 3 months", "As needed", "Single dose"];
+/** Active = started (or no start date) and not yet stopped. */
+export function treatmentActive(t, today = G.todayIso()) { return (!t.start || t.start <= today) && (!t.stop || t.stop >= today); }
+/** "Somatropin 1.2 mg Subcutaneous 7 days a week" */
+export function treatmentText(t) {
+  return [t.name, t.dose != null && t.dose !== "" ? `${t.dose} ${t.unit || ""}`.trim() : "", t.route, t.freq].filter(Boolean).join(" · ");
+}
+/** Weight-based dose: amount per kg × weight, optionally capped. */
+export function weightDose(perKg, weightKg, max) {
+  if (!(perKg > 0) || !(weightKg > 0)) return null;
+  const raw = perKg * weightKg, capped = max > 0 && raw > max;
+  return { raw, dose: capped ? max : raw, capped };
+}
+/** Body surface area (Mosteller) from height (cm) and weight (kg). */
+export function bsa(heightCm, weightKg) { return heightCm > 0 && weightKg > 0 ? Math.sqrt(heightCm * weightKg / 3600) : null; }

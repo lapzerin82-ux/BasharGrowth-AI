@@ -38,7 +38,9 @@ export function sheetPoints(s, p, ms) {
   const boneAge = withAge.filter(({ m }) => m.boneAge != null && m.height != null && m.boneAge * 12 >= s.ageMin && m.boneAge * 12 <= s.ageMax)
     .map(({ m, a }) => ({ age: a.months, ba: m.boneAge * 12, v: m.height }));
   const outside = ms.filter((m) => m.height != null || m.weight != null).length - withAge.filter(({ m }) => m.height != null || m.weight != null).length;
-  return { pts, rows: withAge.filter(({ m }) => m.height != null || m.weight != null), outside, boneAge };
+  const events = (p.treatments || []).filter((x) => x.onChart && x.start && x.start >= p.dob)
+    .map((x) => ({ age: Math.max(0, G.plotAge(p, x.start).months), label: `${x.name.replace(/\s*\(.*\)$/, "")} start` })).filter((e) => e.age >= s.ageMin && e.age <= s.ageMax);
+  return { pts, rows: withAge.filter(({ m }) => m.height != null || m.weight != null), outside, boneAge, events };
 }
 
 /** Text with a white outline so it stays readable over the chart grid. */
@@ -120,6 +122,15 @@ export function drawSheet(ctx, W, H, s, img, vp, data) {
     if (q.length < 2) continue;
     ctx.strokeStyle = "rgba(200,16,28,.8)"; ctx.lineWidth = 0.8; ctx.beginPath();
     q.forEach((z, i) => (i ? ctx.lineTo(px(s, z.age), py(s, key, z.v)) : ctx.moveTo(px(s, z.age), py(s, key, z.v)))); ctx.stroke();
+  }
+  // treatment starts: dashed green line across the stature curves (P3 − 6 cm to P97 + 6 cm at that age)
+  const hm = G.getRef(s.ref).measures.height;
+  for (const e of data.events || []) {
+    const a = Math.min(Math.max(e.age, hm.ageMin), hm.ageMax), lo = G.centileValue(hm, p.sex, a, 3), hi = G.centileValue(hm, p.sex, a, 97);
+    if (lo == null) continue;
+    const x = px(s, e.age), y0 = py(s, "height", hi + 6), y1 = py(s, "height", lo - 6);
+    ctx.strokeStyle = "rgba(0,125,80,.9)"; ctx.lineWidth = 0.9; ctx.setLineDash([3, 2]); ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x, y1); ctx.stroke(); ctx.setLineDash([]);
+    ctx.save(); ctx.translate(x + 2, y0); ctx.rotate(Math.PI / 2); halo(ctx, "▶ " + e.label, 0, 0, 6.5, "#006b44", true); ctx.restore();
   }
   for (const b of data.boneAge || []) { // bone age: hollow blue circle at (bone age, height), dashed link to the cross
     const y = py(s, "height", b.v);

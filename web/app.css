@@ -274,3 +274,10 @@ details.opt[open] > summary { margin-bottom: 12px; }
 .credit a { font-size: 12.5px; font-weight: 700; overflow-wrap: anywhere; }
 .card .credit { justify-self: start; background: var(--teal-soft); }
 @media (prefers-color-scheme: dark) { .credit { background: rgba(34, 28, 61, .6); border-color: var(--line); } .credit img { border-color: rgba(255, 255, 255, .25); } }
+/* treatment */
+.pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 800; background: var(--tonal); color: var(--muted); }
+.pill.on { background: #d4f5e6; color: #0d5a3d; }
+@media (prefers-color-scheme: dark) { .pill.on { background: #173d2e; color: #b7f0d4; } }
+.rxl { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 8px; }
+.rxl li { padding: 9px 12px; border-radius: 16px; background: color-mix(in srgb, var(--mint) 12%, var(--card)); border: 2px solid color-mix(in srgb, var(--mint) 30%, transparent); font-size: 14.5px; }
+.rxl li::before { content: "💊 "; }

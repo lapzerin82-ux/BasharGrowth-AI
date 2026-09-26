@@ -132,6 +132,15 @@ export function drawChart(ctx, W, H, data, vp, u) {
     ctx.strokeStyle = "rgba(200,20,30,.8)"; ctx.lineWidth = 1.4 * u; ctx.beginPath();
     pts.forEach((p, i) => (i ? ctx.lineTo(X(p.age), Y(p.v)) : ctx.moveTo(X(p.age), Y(p.v)))); ctx.stroke();
   }
+  // treatment starts: dashed green vertical line with a label (and a short tick where it stopped)
+  (data.events || []).forEach((e, i) => {
+    const x = X(e.age); if (x < L || x > L + pw) return;
+    ctx.strokeStyle = "rgba(0,125,80,.85)"; ctx.lineWidth = 1.5 * u; ctx.setLineDash([6 * u, 4 * u]);
+    ctx.beginPath(); ctx.moveTo(x, T); ctx.lineTo(x, T + ph); ctx.stroke(); ctx.setLineDash([]);
+    if (e.stop != null && X(e.stop) > x) { const xs = Math.min(X(e.stop), L + pw), yb = T + ph - 8 * u - i * 14 * u; ctx.lineWidth = 3 * u; ctx.strokeStyle = "rgba(0,125,80,.55)"; ctx.beginPath(); ctx.moveTo(x, yb); ctx.lineTo(xs, yb); ctx.stroke(); }
+    ctx.save(); ctx.translate(x + 4 * u, T + 8 * u + (i % 3) * 4 * u); ctx.rotate(Math.PI / 2);
+    haloTxt(ctx, "▶ " + e.label, 0, 0, font(10, true), "#006b44", u); ctx.restore();
+  });
   // bone age: hollow blue circle at (bone age, height) linked to the chronological-age cross
   for (const b of data.boneAge || []) {
     ctx.strokeStyle = "#1f5fbf"; ctx.lineWidth = 1.3 * u; ctx.setLineDash([4 * u, 3 * u]);
@@ -201,5 +210,12 @@ export function buildChart(p, ms, refId, key, connect, sel) {
     points.push({ id: x.id, age: xv, v, latest: x.id === latest, date: x.date, ageText: G.ageLabel(p, x.date), notes: x.notes, months: a.months });
     if (key === "height" && x.boneAge != null && G.covers(m, x.boneAge * 12)) boneAge.push({ age: xv, ba: x.boneAge * 12, v });
   }
-  return { ref, m, sex: p.sex, points, connect, mph: p.mph, label: `${p.name || ""} · File ${p.fileNumber || ""}`, sel, outside, boneAge, corrected };
+  const events = m.xKind === "length" ? [] : treatmentEvents(p).filter((e) => G.covers(m, e.age));
+  return { ref, m, sex: p.sex, points, connect, mph: p.mph, label: `${p.name || ""} · File ${p.fileNumber || ""}`, sel, outside, boneAge, corrected, events };
+}
+
+/** Treatment starts to mark on age-based charts: [{age (plotting months), label}]. */
+export function treatmentEvents(p) {
+  return (p.treatments || []).filter((t) => t.onChart && t.start && t.start >= p.dob)
+    .map((t) => ({ age: Math.max(0, G.plotAge(p, t.start).months), label: `${t.name.replace(/\s*\(.*\)$/, "")} start`, stop: t.stop ? Math.max(0, G.plotAge(p, t.stop).months) : null }));
 }
