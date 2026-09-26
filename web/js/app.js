@@ -2,7 +2,7 @@ import * as G from "./growth.js";
 import * as S from "./store.js";
 import { drawChart, fullBounds, zoomVp, clampVp, buildChart } from "./chart.js";
 import { Sync, newSyncCode } from "./sync.js";
-import { INV_CATS, unitFor, FEATURE_GROUPS, COMPLAINTS } from "./catalog.js";
+import { INV_CATS, unitFor, FEATURE_GROUPS, COMPLAINTS, TREATMENT_CATS, ALL_TREATMENTS } from "./catalog.js";
 import * as C from "./clinical.js";
 import { loadSheets, sheetMeta, sheetFor, sheetImage, sheetPoints, drawSheet, px, py, viewForAge as sheetViewForAge } from "./sheet.js";
 
@@ -1099,10 +1099,12 @@ function viewTreatment(pid, editIdx = null) {
   $app.innerHTML = bar(`${pname(p)} · treatment`, true) + `
   <main class="page">
     <section class="card stack"><h2>${t ? "Edit treatment" : "Add treatment"}</h2>
-      <div class="two"><label>Type<select id="tt">${opt(C.TREATMENT_TYPES, t?.type || "Medication")}</select></label>
-      <label>Drug / treatment<input id="tn" list="dlist" value="${esc(t?.name)}" placeholder="e.g. Somatropin (growth hormone)"></label></div>
-      <datalist id="dlist">${C.DRUGS.map((d) => `<option value="${esc(d)}">`).join("")}</datalist>
-      <label>Indication<input id="ti" value="${esc(t?.indication)}" placeholder="e.g. GH deficiency, hypothyroidism, iron-deficiency anaemia"></label>
+      <div class="two"><label>Therapeutic area<select id="ta"><option value="">All areas</option>${Object.keys(TREATMENT_CATS).map((c) => `<option ${c === t?.area ? "selected" : ""}>${esc(c)}</option>`).join("")}</select></label>
+      <label>Type<select id="tt">${opt(C.TREATMENT_TYPES, t?.type || "Medication")}</select></label></div>
+      <label>Drug / treatment<input id="tn" list="dlist" value="${esc(t?.name)}" placeholder="Start typing, e.g. amoxicillin, salbutamol, levetiracetam…" autocomplete="off"></label>
+      <datalist id="dlist"></datalist>
+      <p class="hint" id="tacount"></p>
+      <label>Indication<input id="ti" value="${esc(t?.indication)}" placeholder="e.g. pneumonia, asthma, epilepsy, iron-deficiency anaemia, GH deficiency"></label>
       <div class="three"><label>Dose<input id="td" inputmode="decimal" value="${esc(t?.dose ?? "")}"></label>
         <label>Unit<select id="tu">${opt(C.DOSE_UNITS, t?.unit || "mg")}</select></label>
         <label>Route<select id="tr">${opt(C.ROUTES, t?.route)}</select></label></div>
@@ -1121,14 +1123,14 @@ function viewTreatment(pid, editIdx = null) {
       <div class="two"><label>Start date<input id="ts" type="date" value="${esc(t?.start || (t ? "" : G.todayIso()))}"></label>
       <label>Stop date<input id="tx" type="date" value="${esc(t?.stop)}"></label></div>
       <label>Response / side effects / notes<textarea id="to" rows="2">${esc(t?.notes)}</textarea></label>
-      <label class="switch"><input type="checkbox" id="tc" ${t ? (t.onChart ? "checked" : "") : "checked"}> Mark the start on the growth charts</label>
+      <label class="switch"><input type="checkbox" id="tc" ${t?.onChart ? "checked" : ""}> Mark the start on the growth charts <small class="muted">(useful for growth-relevant treatment)</small></label>
       <small class="e" id="te"></small>
       <div class="row wrap"><button class="primary" id="tsave">${t ? "Save changes" : "Add treatment"}</button>${t ? `<button class="ghost" id="tcancel">Cancel</button><button class="danger" id="tdel">Delete</button>` : ""}</div>
     </section>
     <section class="card"><h2>Treatments (${list.length})</h2>
       ${list.length ? `<div class="scrollx"><table class="mt"><thead><tr><th>Treatment</th><th>Dose</th><th>Dates</th><th>Status</th></tr></thead><tbody>
       ${list.map((x, i) => { const act = C.treatmentActive(x);
-        return `<tr data-i="${i}"><td><b>${esc(x.name)}</b>${x.indication ? `<small>${esc(x.indication)}</small>` : ""}${x.type && x.type !== "Medication" ? `<small class="muted">${esc(x.type)}</small>` : ""}</td>
+        return `<tr data-i="${i}"><td><b>${esc(x.name)}</b>${x.indication ? `<small>${esc(x.indication)}</small>` : ""}${x.area || (x.type && x.type !== "Medication") ? `<small class="muted">${esc([x.area, x.type !== "Medication" ? x.type : ""].filter(Boolean).join(" · "))}</small>` : ""}</td>
         <td>${esc([x.dose != null && x.dose !== "" ? `${x.dose} ${x.unit || ""}` : "", x.route, x.freq].filter(Boolean).join(" · ")) || "–"}${x.perKg ? `<small class="muted">${esc(x.perKg)}</small>` : ""}</td>
         <td>${x.start ? G.fmtDate(x.start) : "–"} → ${x.stop ? G.fmtDate(x.stop) : "ongoing"}${x.start ? `<small class="muted">age ${esc(G.exactAge(p.dob, x.start).short)}</small>` : ""}</td>
         <td><span class="pill ${act ? "on" : ""}">${act ? "Active" : x.start > G.todayIso() ? "Planned" : "Stopped"}</span></td></tr>${x.notes ? `<tr class="nt" data-i="${i}"><td colspan="4">${esc(x.notes)}</td></tr>` : ""}`; }).join("")}
@@ -1138,6 +1140,19 @@ function viewTreatment(pid, editIdx = null) {
   bindBack();
   const $ = (i) => document.getElementById(i);
   let helperNote = t?.perKg || "";
+  const fillDrugs = () => {
+    const a = $("ta").value, names = a ? TREATMENT_CATS[a] : ALL_TREATMENTS;
+    $("dlist").innerHTML = names.map((d) => `<option value="${esc(d)}">`).join("");
+    $("tacount").textContent = `${names.length} suggestions${a ? ` in ${a}` : " across all areas"} · any name can be typed. Names only: the app does not suggest doses.`;
+  };
+  const GROWTH_AREAS = /^(Endocrinology|Nutrition|Gastroenterology|Nephrology)/;
+  const autoChart = () => { if (!t && !$("tc").dataset.touched) $("tc").checked = GROWTH_AREAS.test($("ta").value) || /growth hormone|somatr|prednisolone|mecasermin|oxandrolone|GnRH|leuprorelin|triptorelin|methylphenidate|lisdexamfetamine/i.test($("tn").value); };
+  $("tc").addEventListener("change", () => { $("tc").dataset.touched = "1"; });
+  $("tn").addEventListener("change", () => setTimeout(autoChart));
+  $("ta").onchange = () => { fillDrugs(); autoChart(); if (/^Non-drug/.test($("ta").value)) $("tt").value = "Therapy (physio, speech, OT)"; };
+  fillDrugs();
+  // picking a name from the full list sets its area automatically
+  $("tn").addEventListener("change", () => { if (!$("ta").value) { const hit = Object.entries(TREATMENT_CATS).find(([, l]) => l.includes($("tn").value.trim())); if (hit) { $("ta").value = hit[0]; fillDrugs(); } } });
   const calc = () => {
     const k = num($("hk").value), w = num($("hw").value), h = num($("hh").value), mx = num($("hm").value), unit = $("tu").value || "units";
     let r = null, basis = "";
@@ -1154,7 +1169,7 @@ function viewTreatment(pid, editIdx = null) {
   $("huse").onclick = () => { $("td").value = $("huse").dataset.dose; $("td").dataset.helper = "1"; toast("Dose filled in"); };
   const saveAll = async (arr) => { await session.savePatient({ ...session.patients.get(pid), treatments: arr }); viewTreatment(pid); };
   $("tsave").onclick = async () => {
-    const rec = { type: $("tt").value, name: $("tn").value.trim(), indication: $("ti").value.trim(), dose: num($("td").value), unit: $("tu").value, route: $("tr").value,
+    const rec = { area: $("ta").value, type: $("tt").value, name: $("tn").value.trim(), indication: $("ti").value.trim(), dose: num($("td").value), unit: $("tu").value, route: $("tr").value,
       freq: $("tf").value.trim(), start: $("ts").value, stop: $("tx").value, notes: $("to").value.trim(), onChart: $("tc").checked,
       perKg: $("td").dataset.helper ? helperNote : t?.perKg || "" };
     $("te").textContent = !rec.name ? "Enter the drug or treatment." : rec.start && rec.start < p.dob ? "Start date is before the date of birth." : rec.stop && rec.start && rec.stop < rec.start ? "Stop date is before the start date." : "";

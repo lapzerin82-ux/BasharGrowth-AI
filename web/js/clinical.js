@@ -315,9 +315,8 @@ export function visitDetails(p, m) {
 export const SOAP = [["subj", "S"], ["obj", "O"], ["assess", "A"], ["plan", "P"]];
 
 // ------------------------------------------------------------------ treatment
-// Names only (no doses are suggested by the app): the clinician enters every dose.
+// Treatment names by therapeutic area live in catalog.js (names only; the clinician enters every dose).
 export const TREATMENT_TYPES = ["Medication", "Hormone therapy", "Nutrition / supplement", "Procedure / surgery", "Therapy (physio, speech, OT)", "Diet / lifestyle", "Other"];
-export const DRUGS = ["Somatropin (growth hormone)", "Levothyroxine", "Hydrocortisone", "Fludrocortisone", "Leuprorelin (GnRH analogue)", "Triptorelin (GnRH analogue)", "Testosterone", "Estradiol", "Oxandrolone", "Desmopressin", "Insulin", "Metformin", "Cholecalciferol (vitamin D)", "Calcium", "Ferrous sulfate (iron)", "Folic acid", "Zinc", "Multivitamin", "Oral nutritional supplement", "Paracetamol", "Ibuprofen", "Amoxicillin", "Co-amoxiclav", "Azithromycin", "Cefuroxime", "Salbutamol", "Budesonide inhaler", "Fluticasone inhaler", "Montelukast", "Cetirizine", "Omeprazole", "Lactulose", "Polyethylene glycol", "Levetiracetam", "Sodium valproate", "Methylphenidate", "Prednisolone"];
 export const DOSE_UNITS = ["mg", "mcg", "g", "IU", "units", "mL", "drops", "puffs", "sachets", "tablets", "mg/m²"];
 export const ROUTES = ["Oral", "Subcutaneous", "Intramuscular", "Intravenous", "Inhaled", "Nasal", "Topical", "Rectal", "Other"];
 export const FREQS = ["Once daily", "Twice daily", "Three times daily", "Four times daily", "Every 6 hours", "Every 8 hours", "At night", "Once weekly", "6 days a week", "7 days a week", "Every 4 weeks", "Every 12 weeks", "Every 3 months", "As needed", "Single dose"];
