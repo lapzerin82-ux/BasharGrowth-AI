@@ -150,6 +150,10 @@ const HERO_ART = `<svg class="art" viewBox="0 0 150 130" aria-hidden="true">
   <g><rect x="92" y="64" width="22" height="56" rx="10" fill="#9d7bf0"/><circle cx="103" cy="53" r="12" fill="#c98d62"/><path d="M91 52c1-13 23-13 24 0-4-4-20-4-24 0z" fill="#1f1a2a"/><circle cx="99" cy="53" r="1.5" fill="#2b2350"/><circle cx="107" cy="53" r="1.5" fill="#2b2350"/><path d="M98.5 58q4.5 4 9 0" stroke="#2b2350" stroke-width="1.5" fill="none" stroke-linecap="round"/></g>
   <path d="M126 58l3 6 6.5 1-4.7 4.6 1.1 6.4-5.9-3.1-5.9 3.1 1.1-6.4-4.7-4.6 6.5-1z" fill="#ffc83d"/>
 </svg>`;
+// Developer credit (home screen and Settings → About)
+const CREDIT = `<footer class="credit"><img src="img/developer.png" alt="Dr. Bashar Ibrahim" width="56" height="56">
+  <div><small>Developed &amp; designed by</small><b>Dr. Bashar Ibrahim</b><span>Pediatrician</span>
+  <a href="mailto:bashar.mohammed@uoz.edu.krd">bashar.mohammed@uoz.edu.krd</a></div></footer>`;
 const icon = (k) => `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${ICONS[k]}"/></svg>`;
 
 const pname = (p) => p.name || (p.fileNumber ? `File ${p.fileNumber}` : "Unnamed patient");
@@ -178,6 +182,7 @@ function viewHome() {
 
     </nav>
     ${recent.length ? `<h2>Recently updated</h2><div class="plist">${recent.map(patientRow).join("")}</div>` : ""}
+    ${CREDIT}
   </main>`;
   document.getElementById("inst")?.addEventListener("click", async () => { installEvt.prompt(); await installEvt.userChoice; installEvt = null; route(); });
 }
@@ -829,7 +834,7 @@ function viewSettings() {
     <section class="card stack"><h2>Growth references (bundled, work offline)</h2>
       ${G.allRefs().map((r) => `<div><b>${esc(r.title)}</b><br><small>Version: ${esc(r.version)} · Percentile curves ${r.centiles.join(", ")}</small><br><small class="muted">Source: ${esc(r.source)}</small></div>`).join("<hr>")}
       <p class="hint">Curves are generated from the official LMS parameters. Each measurement is plotted at the exact age (days ÷ 30.4375 months) with no rounding.</p></section>
-    <section class="card"><h2>About</h2><p>Pediatric Growth Chart (web app). Clinical decision support only; verify measurements and interpret results in clinical context.</p></section>
+    <section class="card stack"><h2>About</h2><p>Pediatric Growth Chart (web app). Clinical decision support only; verify measurements and interpret results in clinical context.</p>${CREDIT}</section>
   </main>`;
   bindBack();
   $app.querySelectorAll('input[name="fam"]').forEach((r) => r.onchange = () => { settings.family = r.value; toast("Saved"); });

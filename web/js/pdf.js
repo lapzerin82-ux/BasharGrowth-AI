@@ -26,7 +26,7 @@ export async function buildPdf(p, ms, family, connect, clinician, invs = [], get
   const teal = [11, 85, 99];
   let y = M + 10, page = 1;
   let onSheet = false; // original CDC pages are left exactly as printed (no footer)
-  const footer = () => { if (onSheet) return; doc.setFontSize(7.5); doc.setTextColor(90); doc.text(`Generated ${new Date().toLocaleString()} by ${clinician} · Pediatric Growth Chart · page ${page}`, M, doc.internal.pageSize.getHeight() - 20); doc.setTextColor(0); };
+  const footer = () => { if (onSheet) return; doc.setFontSize(7.5); doc.setTextColor(90); doc.text(`Generated ${new Date().toLocaleString()} by ${clinician} · Pediatric Growth Chart (developed by Dr. Bashar Ibrahim, Pediatrician) · page ${page}`, M, doc.internal.pageSize.getHeight() - 20); doc.setTextColor(0); };
   const newPage = (orientation = "p") => { footer(); doc.addPage("a4", orientation); page++; y = M + 10; };
   const ensure = (need) => { if (y + need > H - 40) newPage(); };
   const h2 = (t) => { ensure(30); doc.setFont("helvetica", "bold"); doc.setFontSize(12.5); doc.setTextColor(...teal); doc.text(t, M, y); doc.setTextColor(0); y += 16; };
