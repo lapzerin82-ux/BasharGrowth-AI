@@ -1,0 +1,762 @@
+<title>جدول أعمالي الشهري</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Readex+Pro:wght@500;600;700&display=swap">
+<style>
+:root{
+  --bg:#F3F5F4; --surface:#FFFFFF; --surface-2:#E9EEEC; --line:#D5DDDA;
+  --ink:#16302C; --ink-2:#4E625E; --ink-3:#7D8F8B;
+  --accent:#0E6E62; --accent-ink:#FFFFFF; --accent-soft:#D8ECE8;
+  --danger:#B8392F; --danger-soft:#F7E1DE; --warn:#9A6A12;
+  --t-lecture:#2F63C8; --t-lecture-bg:#E2EAFA;
+  --t-consult:#0E7F6F; --t-consult-bg:#DCF0EC;
+  --t-oncall:#C0442F; --t-oncall-bg:#F8E2DD;
+  --t-night:#5A48B0; --t-night-bg:#E6E2F7;
+  --t-other:#8C6A1C; --t-other-bg:#F3EAD4;
+  --shadow:0 10px 30px rgba(22,48,44,.16);
+  --f-display:"Readex Pro","IBM Plex Sans Arabic",Tahoma,sans-serif;
+  --f-body:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0F1716; --surface:#172220; --surface-2:#1F2D2A; --line:#2C3D39;
+    --ink:#E4EEEB; --ink-2:#A9BBB7; --ink-3:#768A86;
+    --accent:#3FB5A3; --accent-ink:#06201C; --accent-soft:#18403A;
+    --danger:#F0796B; --danger-soft:#3E1F1B; --warn:#E0B45A;
+    --t-lecture:#86A9F0; --t-lecture-bg:#1D2B47;
+    --t-consult:#5CCDB9; --t-consult-bg:#143530;
+    --t-oncall:#F08A74; --t-oncall-bg:#42211B;
+    --t-night:#AE9EF5; --t-night-bg:#2A2448;
+    --t-other:#E0BE6A; --t-other-bg:#3A301A;
+    --shadow:0 10px 30px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0F1716; --surface:#172220; --surface-2:#1F2D2A; --line:#2C3D39;
+  --ink:#E4EEEB; --ink-2:#A9BBB7; --ink-3:#768A86;
+  --accent:#3FB5A3; --accent-ink:#06201C; --accent-soft:#18403A;
+  --danger:#F0796B; --danger-soft:#3E1F1B; --warn:#E0B45A;
+  --t-lecture:#86A9F0; --t-lecture-bg:#1D2B47;
+  --t-consult:#5CCDB9; --t-consult-bg:#143530;
+  --t-oncall:#F08A74; --t-oncall-bg:#42211B;
+  --t-night:#AE9EF5; --t-night-bg:#2A2448;
+  --t-other:#E0BE6A; --t-other-bg:#3A301A;
+  --shadow:0 10px 30px rgba(0,0,0,.5);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{direction:rtl}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--f-body);-webkit-text-size-adjust:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[hidden]{display:none!important}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:16px;padding-block:18px 60px;display:flex;flex-direction:column;gap:16px}
+
+/* header */
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px}
+.brand h1{margin:0;font:700 22px/1.2 var(--f-display);letter-spacing:-.2px}
+.brand p{margin:2px 0 0;color:var(--ink-3);font-size:13px}
+.nav{display:flex;align-items:center;gap:6px}
+.month-label{font:600 19px/1 var(--f-display);min-width:150px;text-align:center;font-variant-numeric:tabular-nums}
+.icon-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;font-size:18px;line-height:1}
+.icon-btn:hover{background:var(--surface-2)}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 14px;font-weight:500;white-space:nowrap}
+.btn:hover{background:var(--surface-2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.danger{color:var(--danger);border-color:var(--danger)}
+.btn.danger:hover{background:var(--danger-soft)}
+.btn.ghost{border-color:transparent;background:transparent}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+
+/* summary strip */
+.summary{display:flex;flex-wrap:wrap;gap:8px}
+.stat{display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-size:13px}
+.stat b{font:600 15px/1 var(--f-display);font-variant-numeric:tabular-nums}
+.stat .dot{width:9px;height:9px;border-radius:50%}
+.stat.off{border-color:var(--warn)}
+.stat .hint{color:var(--warn);font-size:12px}
+
+.alert{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;border-radius:12px;background:var(--danger-soft);color:var(--danger);font-size:14px}
+.alert ul{margin:4px 0 0;padding-inline-start:18px}
+.alert button{color:inherit;text-decoration:underline;background:none;border:0;padding:0}
+
+.movebar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-radius:12px;background:var(--accent);color:var(--accent-ink);font-weight:500;box-shadow:var(--shadow)}
+.movebar .btn{background:transparent;color:inherit;border-color:currentColor}
+
+/* calendar */
+.cal{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.dow,.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.dow div{padding:8px 4px;text-align:center;font-size:12px;font-weight:600;color:var(--ink-2);background:var(--surface-2);letter-spacing:.2px}
+.dow div.wk{color:var(--ink-3)}
+.day{position:relative;min-height:108px;padding:6px 5px 6px;border-top:1px solid var(--line);border-inline-start:1px solid var(--line);display:flex;flex-direction:column;gap:3px;background:var(--surface);text-align:start;border-inline-end:0;border-bottom:0;cursor:pointer}
+.grid .day:nth-child(7n+1){border-inline-start:0}
+.day:hover{background:var(--surface-2)}
+.day.out{background:var(--bg)}
+.day.out .num{color:var(--ink-3)}
+.day.weekend .num{color:var(--ink-3)}
+.day .num{font:600 13px/1 var(--f-display);font-variant-numeric:tabular-nums;display:flex;align-items:center;justify-content:space-between;gap:4px;padding:2px 2px 4px}
+.day.today .num span{background:var(--accent);color:var(--accent-ink);border-radius:999px;min-width:24px;height:24px;display:inline-grid;place-items:center;padding:0 5px}
+.day.selected{box-shadow:inset 0 0 0 2px var(--accent)}
+.day.conflict .num::after{content:"تعارض";font:600 10px/1 var(--f-body);color:var(--danger);background:var(--danger-soft);padding:3px 5px;border-radius:5px}
+.day.drop{background:var(--accent-soft)}
+body.moving .day{cursor:copy}
+body.moving .day:hover{background:var(--accent-soft)}
+.chip{display:block;width:100%;border:0;border-radius:6px;padding:3px 6px;font-size:11.5px;line-height:1.3;text-align:start;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;border-inline-start:3px solid currentColor}
+.chip .tm{font-variant-numeric:tabular-nums;opacity:.85;margin-inline-end:3px}
+.chip.bad{outline:1.5px dashed var(--danger);outline-offset:-1.5px}
+.more{font-size:11px;color:var(--ink-3);padding-inline-start:4px}
+.t-lecture{color:var(--t-lecture);background:var(--t-lecture-bg)}
+.t-consult{color:var(--t-consult);background:var(--t-consult-bg)}
+.t-oncall{color:var(--t-oncall);background:var(--t-oncall-bg)}
+.t-night{color:var(--t-night);background:var(--t-night-bg)}
+.t-other{color:var(--t-other);background:var(--t-other-bg)}
+
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+/* panels / sheet */
+.overlay{position:fixed;inset:0;background:rgba(10,24,22,.45);z-index:20;display:flex;align-items:flex-end;justify-content:center;padding:0}
+@media (min-width:700px){.overlay{align-items:center;padding:24px}}
+.sheet{background:var(--surface);color:var(--ink);width:100%;max-width:520px;max-height:92vh;overflow:auto;border-radius:18px 18px 0 0;box-shadow:var(--shadow);padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px}
+@media (min-width:700px){.sheet{border-radius:18px}}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sheet-head h2{margin:0;font:600 18px/1.3 var(--f-display);text-wrap:balance}
+.sheet-head .sub{color:var(--ink-3);font-size:13px}
+.quick{display:flex;flex-wrap:wrap;gap:6px}
+.quick button{border:1px solid transparent;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:500}
+.quick button:hover{filter:brightness(.96)}
+.label-sm{font-size:12px;font-weight:600;color:var(--ink-3);letter-spacing:.3px}
+.evlist{display:flex;flex-direction:column;gap:8px}
+.ev{display:grid;grid-template-columns:4px 1fr auto;gap:10px;align-items:center;padding:10px 12px 10px 8px;border:1px solid var(--line);border-radius:12px}
+.ev .bar{align-self:stretch;border-radius:4px;background:currentColor}
+.ev .t{font-weight:600}
+.ev .m{font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.ev .m .cf{color:var(--danger);font-weight:600}
+.ev .ops{display:flex;gap:4px}
+.ev .ops button{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:5px 9px;font-size:12.5px}
+.ev .ops button:hover{background:var(--surface-2)}
+.ev .ops button.del{color:var(--danger)}
+.empty{color:var(--ink-3);font-size:14px;padding:6px 0}
+
+form.f{display:flex;flex-direction:column;gap:12px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field label{font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:9px 10px;min-height:42px}
+.field textarea{min-height:70px;resize:vertical}
+.types{display:flex;flex-wrap:wrap;gap:6px}
+.types label{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:500;cursor:pointer;border:1.5px solid transparent}
+.types input{position:absolute;opacity:0;pointer-events:none}
+.types label:has(input:checked){border-color:currentColor}
+.types label:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:2px}
+.days{display:flex;flex-wrap:wrap;gap:6px}
+.days label{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:8px;padding:5px 9px;font-size:13px;cursor:pointer}
+.days label:has(input:checked){background:var(--accent-soft);border-color:var(--accent)}
+.warnbox{padding:10px 12px;border-radius:10px;background:var(--danger-soft);color:var(--danger);font-size:13.5px}
+.note{font-size:12.5px;color:var(--ink-3)}
+.foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px}
+.scope{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border:1px dashed var(--line);border-radius:10px;font-size:13.5px}
+.scope label{display:flex;gap:8px;align-items:center}
+
+.toast{position:fixed;inset-inline:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;margin:0 auto;max-width:440px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:12px;box-shadow:var(--shadow);font-size:14px}
+.toast button{background:none;border:0;color:var(--accent-soft);font-weight:600;text-decoration:underline}
+
+.upcoming{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.upcoming h3{margin:0;font:600 16px/1.3 var(--f-display)}
+.up-list{display:flex;flex-direction:column;gap:6px}
+.up{display:flex;gap:10px;align-items:baseline;font-size:14px}
+.up .d{min-width:110px;color:var(--ink-2);font-variant-numeric:tabular-nums;font-size:13px}
+.up .p{width:8px;height:8px;border-radius:50%;flex:none;align-self:center}
+.status{font-size:12px;color:var(--ink-3)}
+textarea.io{width:100%;min-height:140px;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--bg);direction:ltr;font:12px/1.4 ui-monospace,Menlo,Consolas,monospace}
+
+@media (max-width:640px){
+  .day{min-height:78px;padding:4px 2px}
+  .chip{font-size:10px;padding:2px 3px;border-inline-start-width:2px;border-radius:4px}
+  .chip .tm{display:none}
+  .day.conflict .num::after{content:"!";padding:2px 5px}
+  .month-label{min-width:120px;font-size:17px}
+  .brand h1{font-size:19px}
+  .row{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:no-preference){
+  .sheet{animation:up .18s ease-out}
+  @keyframes up{from{transform:translateY(14px)}to{transform:none}}
+}
+</style>
+
+<div class="wrap" id="app">
+  <header class="top">
+    <div class="brand">
+      <h1>جدول أعمالي</h1>
+      <p>المحاضرات، الاستشارية، الخفارات والاستشاريات الليلية في شهر واحد</p>
+    </div>
+    <div class="nav">
+      <button class="icon-btn" id="prev" aria-label="الشهر السابق">›</button>
+      <div class="month-label" id="monthLabel"></div>
+      <button class="icon-btn" id="next" aria-label="الشهر التالي">‹</button>
+      <button class="btn ghost" id="todayBtn">اليوم</button>
+    </div>
+    <div class="actions">
+      <button class="btn primary" id="addBtn">+ موعد جديد</button>
+      <button class="btn" id="setupBtn">المواعيد الأسبوعية</button>
+      <button class="btn" id="backupBtn">نسخة احتياطية</button>
+    </div>
+  </header>
+
+  <div class="movebar" id="movebar" hidden>
+    <span id="moveText">اختر اليوم الجديد للموعد</span>
+    <button class="btn" id="cancelMove">إلغاء</button>
+  </div>
+
+  <div class="summary" id="summary"></div>
+  <div class="alert" id="conflicts" hidden></div>
+
+  <section class="cal" aria-label="تقويم الشهر">
+    <div class="dow" id="dow"></div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <div class="legend" id="legend"></div>
+
+  <section class="upcoming">
+    <h3>القادم خلال 7 أيام</h3>
+    <div class="up-list" id="upcoming"></div>
+    <div class="status" id="status"></div>
+  </section>
+</div>
+
+<div class="overlay" id="overlay" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" hidden><span id="toastText"></span><button id="toastUndo">تراجع</button></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- constants ---------- */
+const TYPES = {
+  lecture:{name:"محاضرة", short:"محاضرة", start:"09:00", end:"11:00"},
+  consult:{name:"استشارية", short:"استشارية", start:"09:00", end:"14:00"},
+  oncall:{name:"خفارة", short:"خفارة", start:"08:00", end:"08:00", target:[2,2]},
+  night:{name:"استشارية ليلية", short:"ليلية", start:"20:00", end:"08:00", target:[2,3]},
+  other:{name:"موعد آخر", short:"موعد", start:"10:00", end:"11:00"}
+};
+const MONTHS = ["كانون الثاني","شباط","آذار","نيسان","أيار","حزيران","تموز","آب","أيلول","تشرين الأول","تشرين الثاني","كانون الأول"];
+// JS getDay(): 0=Sun … 6=Sat. Week starts on Saturday.
+const DOW_ORDER = [6,0,1,2,3,4,5];
+const DOW_NAMES = {0:"الأحد",1:"الاثنين",2:"الثلاثاء",3:"الأربعاء",4:"الخميس",5:"الجمعة",6:"السبت"};
+const WEEKEND = new Set([5]);
+const LS_KEY = "myschedule.events.v1";
+const LS_VIEW = "myschedule.view.v1";
+
+/* ---------- date helpers ---------- */
+const pad = n => String(n).padStart(2,"0");
+const keyOf = (y,m,d) => `${y}-${pad(m)}-${pad(d)}`;
+const parseKey = k => { const [y,m,d] = k.split("-").map(Number); return {y,m,d}; };
+const dayNum = k => { const {y,m,d} = parseKey(k); return Math.round(Date.UTC(y,m-1,d)/86400000); };
+const keyFromNum = n => { const dt = new Date(n*86400000); return keyOf(dt.getUTCFullYear(), dt.getUTCMonth()+1, dt.getUTCDate()); };
+const dowOf = k => new Date(dayNum(k)*86400000).getUTCDay();
+const todayKey = () => { const t = new Date(); return keyOf(t.getFullYear(), t.getMonth()+1, t.getDate()); };
+const toMin = t => { const [h,m] = (t||"00:00").split(":").map(Number); return h*60+m; };
+const fmtDay = k => { const {y,m,d} = parseKey(k); return `${DOW_NAMES[dowOf(k)]} ${d} ${MONTHS[m-1]}`; };
+const fmtShort = k => { const {m,d} = parseKey(k); return `${DOW_NAMES[dowOf(k)]} ${d}/${m}`; };
+function span(ev){
+  const s = dayNum(ev.date)*1440 + toMin(ev.start);
+  let e = dayNum(ev.date)*1440 + toMin(ev.end);
+  if (e <= s) e += 1440; // runs past midnight
+  return [s,e];
+}
+const overnight = ev => toMin(ev.end) <= toMin(ev.start);
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+/* ---------- state ---------- */
+const now = new Date();
+let view = {y:now.getFullYear(), m:now.getMonth()+1};
+try { const v = JSON.parse(localStorage.getItem(LS_VIEW)||"null"); if (v && v.y && v.m) view = v; } catch(e){}
+let events = new Map();
+let selected = null;
+let moving = null;
+let undoFn = null, toastTimer = null;
+
+/* ---------- storage: shared db when available, otherwise this browser ---------- */
+const store = {
+  mode:"local", db:null,
+  loadLocal(){
+    try { const a = JSON.parse(localStorage.getItem(LS_KEY)||"[]"); events = new Map(a.map(e => [e.id,e])); } catch(e){ events = new Map(); }
+  },
+  saveLocal(){
+    try { localStorage.setItem(LS_KEY, JSON.stringify([...events.values()])); } catch(e){}
+  },
+  async init(){
+    this.loadLocal();
+    render();
+    if (!window.claude || typeof window.claude.use !== "function"){ setStatus(); return; }
+    let db = null;
+    try { db = await window.claude.use("db"); } catch(e){ db = null; }
+    if (!db){ setStatus(); return; }
+    this.db = db; this.mode = "db";
+    let first = true;
+    db.collection("events").onSnapshot(snap => {
+      const m = new Map();
+      snap.docs.forEach(d => { const v = d.data(); if (v) m.set(d.id, Object.assign({}, v, {id:d.id})); });
+      // first sync: carry over anything that only lived in this browser
+      if (first && !snap.metadata.fromCache){
+        first = false;
+        const localOnly = [...events.values()].filter(e => !m.has(e.id));
+        if (m.size === 0 && localOnly.length) localOnly.forEach(e => { m.set(e.id,e); this.put(e); });
+      }
+      events = m; this.saveLocal(); render(); setStatus();
+    }, err => { setStatus("تعذّر المزامنة؛ التعديلات محفوظة في هذا الجهاز"); this.mode = "local"; this.db = null; });
+    setStatus();
+  },
+  put(ev){
+    events.set(ev.id, ev); this.saveLocal();
+    if (this.db){ const {id, ...body} = ev; this.db.doc("events/"+id).set(body).catch(() => setStatus("لم يُحفظ آخر تعديل على الخادم؛ حاول مجدداً")); }
+  },
+  remove(id){
+    events.delete(id); this.saveLocal();
+    if (this.db) this.db.doc("events/"+id).delete().catch(() => setStatus("لم يُحذف الموعد من الخادم؛ حاول مجدداً"));
+  }
+};
+function setStatus(msg){
+  const el = document.getElementById("status");
+  el.textContent = msg || (store.mode === "db" ? "محفوظ ومتزامن مع حسابك." : "محفوظ في هذا المتصفح. خذ نسخة احتياطية بين حين وآخر.");
+}
+
+/* ---------- conflicts ---------- */
+function findConflicts(list){
+  const arr = [...list].map(e => ({e, s:span(e)})).sort((a,b) => a.s[0]-b.s[0]);
+  const pairs = [];
+  for (let i=0;i<arr.length;i++){
+    for (let j=i+1;j<arr.length && arr[j].s[0] < arr[i].s[1];j++){
+      pairs.push([arr[i].e, arr[j].e]);
+    }
+  }
+  return pairs;
+}
+function conflictsFor(ev, excludeIds){
+  const [s,e] = span(ev);
+  return [...events.values()].filter(o => o.id !== ev.id && !(excludeIds && excludeIds.has(o.id)) && (() => { const [a,b] = span(o); return a < e && s < b; })());
+}
+
+/* ---------- rendering ---------- */
+const $ = id => document.getElementById(id);
+function eventsOn(k){
+  return [...events.values()].filter(e => e.date === k).sort((a,b) => toMin(a.start)-toMin(b.start));
+}
+function label(ev){ return ev.title && ev.title.trim() ? ev.title.trim() : TYPES[ev.type].name; }
+
+function render(){
+  try { localStorage.setItem(LS_VIEW, JSON.stringify(view)); } catch(e){}
+  $("monthLabel").textContent = `${MONTHS[view.m-1]} ${view.y}`;
+  $("dow").innerHTML = DOW_ORDER.map(d => `<div class="${WEEKEND.has(d)?"wk":""}">${DOW_NAMES[d]}</div>`).join("");
+
+  const first = keyOf(view.y, view.m, 1);
+  const lead = DOW_ORDER.indexOf(dowOf(first));
+  const daysIn = new Date(Date.UTC(view.y, view.m, 0)).getUTCDate();
+  const startN = dayNum(first) - lead;
+  const cells = Math.ceil((lead + daysIn)/7)*7;
+  const tk = todayKey();
+
+  const monthKeys = [];
+  for (let d=1; d<=daysIn; d++) monthKeys.push(keyOf(view.y, view.m, d));
+  const monthEvents = [...events.values()].filter(e => e.date.startsWith(`${view.y}-${pad(view.m)}`));
+  // include neighbours so overnight shifts crossing the month edge are compared too
+  const nearby = [...events.values()].filter(e => { const n = dayNum(e.date); return n >= startN-1 && n <= startN+cells; });
+  const pairs = findConflicts(nearby);
+  const bad = new Set(); pairs.forEach(([a,b]) => { bad.add(a.id); bad.add(b.id); });
+
+  const maxChips = window.matchMedia("(max-width:640px)").matches ? 2 : 3;
+  let html = "";
+  for (let i=0;i<cells;i++){
+    const k = keyFromNum(startN+i);
+    const {m,d} = parseKey(k);
+    const list = eventsOn(k);
+    const cls = ["day"];
+    if (m !== view.m) cls.push("out");
+    if (k === tk) cls.push("today");
+    if (k === selected) cls.push("selected");
+    if (WEEKEND.has(dowOf(k))) cls.push("weekend");
+    if (list.some(e => bad.has(e.id))) cls.push("conflict");
+    const chips = list.slice(0, maxChips).map(e =>
+      `<span class="chip t-${e.type}${bad.has(e.id)?" bad":""}" draggable="true" data-id="${e.id}" title="${esc(label(e))} ${e.start}–${e.end}${e.place?" · "+esc(e.place):""}"><span class="tm">${e.start}</span>${esc(label(e))}</span>`
+    ).join("");
+    const more = list.length > maxChips ? `<span class="more">+${list.length-maxChips} أخرى</span>` : "";
+    html += `<div class="${cls.join(" ")}" role="button" tabindex="0" data-key="${k}" aria-label="${fmtDay(k)}، ${list.length} مواعيد"><div class="num"><span>${d}</span></div>${chips}${more}</div>`;
+  }
+  $("grid").innerHTML = html;
+
+  // summary
+  if (!events.size){
+    $("summary").innerHTML = `<span class="stat">التقويم فارغ. ابدأ بـ<button class="btn primary" data-setup style="padding:4px 10px">إضافة المحاضرات والاستشارية الأسبوعية</button>ثم اضغط على أي يوم لإضافة خفارة أو استشارية ليلية.</span>`;
+  } else {
+  const counts = {}; Object.keys(TYPES).forEach(t => counts[t] = 0);
+  monthEvents.forEach(e => counts[e.type]++);
+  $("summary").innerHTML = Object.entries(TYPES).filter(([t]) => t !== "other" || counts.other).map(([t,info]) => {
+    let hint = "", off = false;
+    if (info.target){
+      const [lo,hi] = info.target;
+      if (counts[t] < lo){ off = true; hint = `<span class="hint">ينقص ${lo-counts[t]}</span>`; }
+      else if (counts[t] > hi){ off = true; hint = `<span class="hint">أكثر من المعتاد</span>`; }
+    }
+    return `<span class="stat${off?" off":""}"><span class="dot" style="background:var(--t-${t})"></span>${info.name}<b>${counts[t]}</b>${hint}</span>`;
+  }).join("");
+  }
+
+  // conflicts banner (this month only)
+  const monthPairs = pairs.filter(([a,b]) => monthKeys.includes(a.date) || monthKeys.includes(b.date));
+  const box = $("conflicts");
+  if (monthPairs.length){
+    box.hidden = false;
+    box.innerHTML = `<div><strong>يوجد ${monthPairs.length === 1 ? "تعارض واحد" : monthPairs.length + " تعارضات"} هذا الشهر</strong><ul>${
+      monthPairs.map(([a,b]) => `<li>${fmtShort(a.date)}: ${esc(label(a))} (${a.start}–${a.end}) مع ${esc(label(b))} (${b.start}–${b.end}) <button data-open="${a.date}">عرض</button></li>`).join("")
+    }</ul></div>`;
+  } else box.hidden = true;
+
+  $("legend").innerHTML = Object.entries(TYPES).map(([t,i]) => `<span><i style="background:var(--t-${t})"></i>${i.name}</span>`).join("") +
+    `<span>اسحب الموعد إلى يوم آخر لنقله، أو اضغط على اليوم لإضافة موعد وتعديله.</span>`;
+
+  // upcoming
+  const tn = dayNum(tk);
+  const up = [...events.values()].filter(e => { const n = dayNum(e.date); return n >= tn && n < tn+7; })
+    .sort((a,b) => span(a)[0]-span(b)[0]);
+  $("upcoming").innerHTML = up.length ? up.map(e =>
+    `<div class="up"><span class="p" style="background:var(--t-${e.type})"></span><span class="d">${e.date===tk?"اليوم":fmtShort(e.date)} · ${e.start}</span><span>${esc(label(e))}${e.place?` <span class="note">— ${esc(e.place)}</span>`:""}</span></div>`
+  ).join("") : `<div class="empty">لا مواعيد خلال الأيام السبعة القادمة.</div>`;
+
+  if (!$("overlay").hidden && sheetMode === "day" && selected) renderDay(selected);
+}
+
+/* ---------- sheet ---------- */
+let sheetMode = null;
+function openSheet(html, mode){
+  sheetMode = mode;
+  $("sheet").innerHTML = html;
+  $("overlay").hidden = false;
+  const f = $("sheet").querySelector("[autofocus]") || $("sheet").querySelector("button,input");
+  if (f) setTimeout(() => f.focus(), 30);
+}
+function closeSheet(){ $("overlay").hidden = true; sheetMode = null; $("sheet").innerHTML = ""; }
+
+function renderDay(k){
+  selected = k;
+  const list = eventsOn(k);
+  const quick = Object.entries(TYPES).map(([t,i]) =>
+    `<button type="button" class="t-${t}" data-quick="${t}">+ ${i.name} <span class="note" style="color:inherit">${i.start}${t==="oncall"||t==="night"?"–"+i.end:""}</span></button>`).join("");
+  const items = list.length ? list.map(e => {
+    const cf = conflictsFor(e);
+    return `<div class="ev t-${e.type}" style="background:transparent">
+      <span class="bar"></span>
+      <div style="color:var(--ink);min-width:0">
+        <div class="t">${esc(label(e))}</div>
+        <div class="m">${e.start}–${e.end}${overnight(e)?" (لليوم التالي)":""}${e.place?" · "+esc(e.place):""}${e.seriesId?" · أسبوعي":""}${cf.length?` · <span class="cf">يتعارض مع ${esc(label(cf[0]))}</span>`:""}</div>
+        ${e.notes?`<div class="m">${esc(e.notes)}</div>`:""}
+      </div>
+      <div class="ops">
+        <button type="button" data-edit="${e.id}">تعديل</button>
+        <button type="button" data-move="${e.id}">نقل</button>
+        <button type="button" class="del" data-del="${e.id}">حذف</button>
+      </div>
+    </div>`;
+  }).join("") : `<div class="empty">لا مواعيد في هذا اليوم.</div>`;
+  const html = `
+    <div class="sheet-head"><div><h2>${fmtDay(k)}</h2><div class="sub">${parseKey(k).y}</div></div><button class="icon-btn" data-close aria-label="إغلاق">×</button></div>
+    <div class="label-sm">إضافة سريعة بضغطة</div>
+    <div class="quick">${quick}</div>
+    <div class="label-sm">مواعيد اليوم</div>
+    <div class="evlist">${items}</div>
+    <div class="foot"><button class="btn primary" data-new="${k}">+ موعد بتفاصيل</button><button class="btn" data-close>إغلاق</button></div>`;
+  if (sheetMode === "day"){ $("sheet").innerHTML = html; } else openSheet(html, "day");
+}
+
+function formSheet(ev, isNew){
+  const e = Object.assign({type:"other", date: selected || todayKey(), start:TYPES.other.start, end:TYPES.other.end, title:"", place:"", notes:""}, ev||{});
+  const until = keyFromNum(dayNum(e.date) + 7*16);
+  const types = Object.entries(TYPES).map(([t,i]) =>
+    `<label class="t-${t}"><input type="radio" name="type" value="${t}" ${e.type===t?"checked":""}>${i.name}</label>`).join("");
+  const html = `
+    <div class="sheet-head"><h2>${isNew?"موعد جديد":"تعديل الموعد"}</h2><button class="icon-btn" data-close aria-label="إغلاق">×</button></div>
+    <form class="f" id="evForm" novalidate>
+      <div class="field"><label>النوع</label><div class="types">${types}</div></div>
+      <div class="field"><label for="f-title">العنوان (اختياري)</label><input id="f-title" name="title" value="${esc(e.title)}" placeholder="مثال: محاضرة المرحلة الخامسة — الحمّى عند الرضّع"></div>
+      <div class="field"><label for="f-date">التاريخ</label><input id="f-date" type="date" name="date" value="${e.date}" required></div>
+      <div class="row">
+        <div class="field"><label for="f-start">من</label><input id="f-start" type="time" name="start" value="${e.start}" required></div>
+        <div class="field"><label for="f-end">إلى</label><input id="f-end" type="time" name="end" value="${e.end}" required></div>
+      </div>
+      <div class="note" id="f-overnight"></div>
+      <div class="field"><label for="f-place">المكان</label><input id="f-place" name="place" value="${esc(e.place)}" placeholder="مثال: قاعة 3 / ردهة الأطفال / الطوارئ"></div>
+      <div class="field"><label for="f-notes">ملاحظات</label><textarea id="f-notes" name="notes">${esc(e.notes)}</textarea></div>
+      ${isNew ? `
+      <div class="row">
+        <div class="field"><label for="f-repeat">التكرار</label><select id="f-repeat" name="repeat"><option value="0">مرة واحدة</option><option value="7">كل أسبوع</option><option value="14">كل أسبوعين</option></select></div>
+        <div class="field" id="untilWrap" hidden><label for="f-until">حتى تاريخ</label><input id="f-until" type="date" name="until" value="${until}"></div>
+      </div>` : (e.seriesId ? `
+      <div class="scope"><strong>هذا موعد متكرر</strong>
+        <label><input type="radio" name="scope" value="one" checked> عدّل هذا الموعد فقط</label>
+        <label><input type="radio" name="scope" value="future"> عدّل هذا وكل المواعيد التالية في السلسلة (الوقت، المكان، العنوان)</label>
+      </div>` : "")}
+      <div class="warnbox" id="f-warn" hidden></div>
+      <div class="foot">
+        <button type="submit" class="btn primary" id="f-save">${isNew?"أضف الموعد":"احفظ التعديل"}</button>
+        ${!isNew?`<button type="button" class="btn danger" data-del="${e.id}">حذف</button>`:""}
+        <button type="button" class="btn" data-back="${e.date}">رجوع</button>
+      </div>
+    </form>`;
+  openSheet(html, "form");
+  const form = $("evForm");
+  let lastType = e.type, forced = false;
+  const upd = () => {
+    const s = form.start.value, en = form.end.value;
+    $("f-overnight").textContent = s && en && toMin(en) <= toMin(s) ? "ينتهي في اليوم التالي" + (toMin(en)===toMin(s) ? " (24 ساعة)" : "") : "";
+    $("f-warn").hidden = true; forced = false; $("f-save").textContent = isNew?"أضف الموعد":"احفظ التعديل";
+  };
+  form.addEventListener("change", ev2 => {
+    if (ev2.target.name === "type"){
+      const t = form.type.value;
+      // update default times only if the user hadn't customised them
+      if (form.start.value === TYPES[lastType].start && form.end.value === TYPES[lastType].end){
+        form.start.value = TYPES[t].start; form.end.value = TYPES[t].end;
+      }
+      lastType = t;
+    }
+    if (ev2.target.name === "repeat") $("untilWrap").hidden = form.repeat.value === "0";
+    upd();
+  });
+  form.addEventListener("input", upd);
+  upd();
+  form.addEventListener("submit", ev2 => {
+    ev2.preventDefault();
+    const data = {
+      type: form.type.value, title: form.title.value.trim(), date: form.date.value,
+      start: form.start.value, end: form.end.value, place: form.place.value.trim(), notes: form.notes.value.trim()
+    };
+    if (!data.date || !data.start || !data.end){ showWarn("أكمل التاريخ ووقت البداية والنهاية."); return; }
+    let batch = [];
+    if (isNew){
+      const step = Number(form.repeat.value);
+      if (step){
+        const endN = dayNum(form.until.value || data.date);
+        if (endN < dayNum(data.date)){ showWarn("تاريخ نهاية التكرار قبل تاريخ البداية."); return; }
+        const sid = uid();
+        for (let n = dayNum(data.date); n <= endN && batch.length < 120; n += step) batch.push(Object.assign({}, data, {id:uid(), date:keyFromNum(n), seriesId:sid}));
+      } else batch.push(Object.assign({}, data, {id:uid()}));
+    } else {
+      const scope = form.scope ? form.scope.value : "one";
+      if (scope === "future" && e.seriesId){
+        const fromN = dayNum(e.date), shift = dayNum(data.date) - fromN;
+        [...events.values()].filter(o => o.seriesId === e.seriesId && dayNum(o.date) >= fromN).forEach(o => {
+          batch.push(Object.assign({}, o, {type:data.type, title:data.title, start:data.start, end:data.end, place:data.place, notes:data.notes, date:keyFromNum(dayNum(o.date)+shift)}));
+        });
+      } else batch.push(Object.assign({}, e, data));
+    }
+    const ids = new Set(batch.map(b => b.id));
+    const clashes = [];
+    batch.forEach(b => conflictsFor(b, ids).forEach(c => clashes.push([b,c])));
+    if (clashes.length && !forced){
+      const lines = clashes.slice(0,4).map(([b,c]) => `${fmtShort(b.date)}: مع ${esc(label(c))} (${c.start}–${c.end})`).join("<br>");
+      showWarn(`<strong>تعارض في الوقت</strong><br>${lines}${clashes.length>4?`<br>و${clashes.length-4} غيرها`:""}<br>اضغط الزر مرة أخرى للحفظ رغم التعارض، أو غيّر الوقت.`);
+      forced = true; $("f-save").textContent = "احفظ رغم التعارض";
+      return;
+    }
+    const before = batch.map(b => events.get(b.id) || null);
+    batch.forEach(b => store.put(b));
+    const target = batch[0].date; const {y,m} = parseKey(target); view = {y,m};
+    selected = target; closeSheet(); render(); renderDay(target);
+    toast(isNew ? (batch.length>1 ? `أُضيف ${batch.length} موعداً` : "أُضيف الموعد") : "حُفظ التعديل", () => {
+      batch.forEach((b,i) => before[i] ? store.put(before[i]) : store.remove(b.id)); render();
+    });
+  });
+  function showWarn(h){ const w = $("f-warn"); w.innerHTML = h; w.hidden = false; }
+}
+
+function deleteSheet(id){
+  const e = events.get(id); if (!e) return;
+  if (!e.seriesId){ doDelete([e]); return; }
+  const future = [...events.values()].filter(o => o.seriesId === e.seriesId && dayNum(o.date) >= dayNum(e.date));
+  const all = [...events.values()].filter(o => o.seriesId === e.seriesId);
+  openSheet(`
+    <div class="sheet-head"><h2>حذف موعد متكرر</h2><button class="icon-btn" data-close aria-label="إغلاق">×</button></div>
+    <div>${esc(label(e))} — ${fmtDay(e.date)} ${e.start}</div>
+    <div class="evlist">
+      <button class="btn danger" data-delscope="one">احذف هذا الموعد فقط</button>
+      <button class="btn danger" data-delscope="future">احذف هذا وما بعده (${future.length})</button>
+      <button class="btn danger" data-delscope="all">احذف السلسلة كاملة (${all.length})</button>
+      <button class="btn" data-back="${e.date}">رجوع</button>
+    </div>`, "del");
+  $("sheet").onclick = ev => {
+    const s = ev.target.closest("[data-delscope]"); if (!s) return;
+    $("sheet").onclick = null;
+    doDelete(s.dataset.delscope === "one" ? [e] : s.dataset.delscope === "future" ? future : all);
+  };
+}
+function doDelete(list){
+  list.forEach(e => store.remove(e.id));
+  const k = list[0].date;
+  render(); renderDay(selected || k);
+  toast(list.length > 1 ? `حُذف ${list.length} مواعيد` : "حُذف الموعد", () => { list.forEach(e => store.put(e)); render(); });
+}
+
+function moveTo(id, k){
+  const e = events.get(id); if (!e || e.date === k) return;
+  const before = Object.assign({}, e);
+  const after = Object.assign({}, e, {date:k});
+  store.put(after);
+  render();
+  const cf = conflictsFor(after);
+  toast(`نُقل إلى ${fmtShort(k)}${cf.length ? " — انتبه: يتعارض مع " + label(cf[0]) : ""}`, () => { store.put(before); render(); });
+}
+function startMove(id){
+  moving = id; closeSheet();
+  const e = events.get(id);
+  $("moveText").textContent = `اختر اليوم الجديد لـ «${label(e)}» (${fmtShort(e.date)})`;
+  $("movebar").hidden = false; document.body.classList.add("moving");
+}
+function endMove(){ moving = null; $("movebar").hidden = true; document.body.classList.remove("moving"); }
+
+/* ---------- weekly setup ---------- */
+function setupSheet(){
+  const start = todayKey();
+  const until = keyFromNum(dayNum(start) + 7*16);
+  const dayBoxes = [6,0,1,2,3,4].map(d => `<label><input type="checkbox" name="ld" value="${d}">${DOW_NAMES[d]}</label>`).join("");
+  openSheet(`
+    <div class="sheet-head"><h2>المواعيد الأسبوعية الثابتة</h2><button class="icon-btn" data-close aria-label="إغلاق">×</button></div>
+    <p class="note" style="margin:0">تُضاف كسلسلة أسبوعية، ويمكنك بعدها نقل أو حذف أي موعد منفرد. الخفارات والاستشاريات الليلية تُضاف من التقويم بالضغط على اليوم.</p>
+    <form class="f" id="setupForm">
+      <div class="field"><label>أيام المحاضرات مع الطلاب</label><div class="days">${dayBoxes}</div></div>
+      <div class="row">
+        <div class="field"><label for="s-ls">المحاضرة من</label><input id="s-ls" type="time" name="ls" value="${TYPES.lecture.start}"></div>
+        <div class="field"><label for="s-le">إلى</label><input id="s-le" type="time" name="le" value="${TYPES.lecture.end}"></div>
+      </div>
+      <div class="field"><label for="s-lp">مكان المحاضرة</label><input id="s-lp" name="lp" placeholder="مثال: كلية الطب — القاعة 2"></div>
+      <div class="days"><label><input type="checkbox" name="wc" checked> استشارية كل أربعاء</label></div>
+      <div class="row">
+        <div class="field"><label for="s-cs">الاستشارية من</label><input id="s-cs" type="time" name="cs" value="${TYPES.consult.start}"></div>
+        <div class="field"><label for="s-ce">إلى</label><input id="s-ce" type="time" name="ce" value="${TYPES.consult.end}"></div>
+      </div>
+      <div class="field"><label for="s-cp">مكان الاستشارية</label><input id="s-cp" name="cp" placeholder="مثال: العيادة الاستشارية"></div>
+      <div class="row">
+        <div class="field"><label for="s-from">ابتداءً من</label><input id="s-from" type="date" name="from" value="${start}"></div>
+        <div class="field"><label for="s-until">حتى</label><input id="s-until" type="date" name="until" value="${until}"></div>
+      </div>
+      <div class="warnbox" id="s-warn" hidden></div>
+      <div class="foot"><button class="btn primary" type="submit">أضف إلى التقويم</button><button class="btn" type="button" data-close>إلغاء</button></div>
+    </form>`, "setup");
+  $("setupForm").addEventListener("submit", ev => {
+    ev.preventDefault();
+    const f = ev.target;
+    const lds = [...f.querySelectorAll("input[name=ld]:checked")].map(i => Number(i.value));
+    const a = dayNum(f.from.value || start), b = dayNum(f.until.value || until);
+    if (b < a){ $("s-warn").textContent = "تاريخ النهاية قبل تاريخ البداية."; $("s-warn").hidden = false; return; }
+    if (!lds.length && !f.wc.checked){ $("s-warn").textContent = "اختر يوم محاضرة واحداً على الأقل أو فعّل الاستشارية."; $("s-warn").hidden = false; return; }
+    const added = [];
+    const series = {};
+    for (let n=a; n<=b; n++){
+      const k = keyFromNum(n), d = dowOf(k);
+      if (lds.includes(d)){
+        series["l"+d] = series["l"+d] || uid();
+        added.push({id:uid(), type:"lecture", title:"", date:k, start:f.ls.value, end:f.le.value, place:f.lp.value.trim(), notes:"", seriesId:series["l"+d]});
+      }
+      if (f.wc.checked && d === 3){
+        series.c = series.c || uid();
+        added.push({id:uid(), type:"consult", title:"", date:k, start:f.cs.value, end:f.ce.value, place:f.cp.value.trim(), notes:"", seriesId:series.c});
+      }
+    }
+    added.forEach(e => store.put(e));
+    closeSheet(); render();
+    toast(`أُضيف ${added.length} موعداً أسبوعياً`, () => { added.forEach(e => store.remove(e.id)); render(); });
+  });
+}
+
+/* ---------- backup ---------- */
+function backupSheet(){
+  const json = JSON.stringify([...events.values()], null, 1);
+  openSheet(`
+    <div class="sheet-head"><h2>نسخة احتياطية</h2><button class="icon-btn" data-close aria-label="إغلاق">×</button></div>
+    <p class="note" style="margin:0">انسخ النص واحفظه في ملاحظاتك أو أرسله لنفسك. للاستعادة الصق النص ثم اضغط «استعادة».</p>
+    <textarea class="io" id="io">${esc(json)}</textarea>
+    <div class="warnbox" id="io-warn" hidden></div>
+    <div class="foot">
+      <button class="btn primary" id="ioCopy" type="button">نسخ</button>
+      <button class="btn" id="ioLoad" type="button">استعادة من النص</button>
+      <button class="btn" type="button" data-close>إغلاق</button>
+    </div>`, "backup");
+  $("ioCopy").onclick = () => {
+    const ta = $("io");
+    const done = () => { $("ioCopy").textContent = "نُسخ ✓"; };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(ta.value).then(done, () => { ta.select(); });
+    else ta.select();
+  };
+  $("ioLoad").onclick = () => {
+    let arr;
+    try { arr = JSON.parse($("io").value); if (!Array.isArray(arr)) throw 0; } catch(e){ $("io-warn").textContent = "النص غير صالح. الصق نص النسخة الاحتياطية كما هو."; $("io-warn").hidden = false; return; }
+    const valid = arr.filter(e => e && e.id && TYPES[e.type] && /^\d{4}-\d{2}-\d{2}$/.test(e.date) && /^\d{2}:\d{2}$/.test(e.start) && /^\d{2}:\d{2}$/.test(e.end));
+    valid.forEach(e => store.put({id:String(e.id), type:e.type, title:String(e.title||""), date:e.date, start:e.start, end:e.end, place:String(e.place||""), notes:String(e.notes||""), ...(e.seriesId?{seriesId:String(e.seriesId)}:{})}));
+    closeSheet(); render(); toast(`استُعيد ${valid.length} موعداً`);
+  };
+}
+
+/* ---------- toast ---------- */
+function toast(msg, undo){
+  $("toastText").textContent = msg; undoFn = undo || null;
+  $("toastUndo").hidden = !undo; $("toast").hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { $("toast").hidden = true; undoFn = null; }, 6000);
+}
+$("toastUndo").onclick = () => { if (undoFn) undoFn(); undoFn = null; $("toast").hidden = true; if (sheetMode === "day" && selected) renderDay(selected); };
+
+/* ---------- events ---------- */
+$("prev").onclick = () => { view = view.m === 1 ? {y:view.y-1, m:12} : {y:view.y, m:view.m-1}; render(); };
+$("next").onclick = () => { view = view.m === 12 ? {y:view.y+1, m:1} : {y:view.y, m:view.m+1}; render(); };
+$("todayBtn").onclick = () => { const t = new Date(); view = {y:t.getFullYear(), m:t.getMonth()+1}; render(); };
+$("addBtn").onclick = () => formSheet({}, true);
+$("setupBtn").onclick = setupSheet;
+$("backupBtn").onclick = backupSheet;
+$("cancelMove").onclick = endMove;
+$("summary").addEventListener("click", e => { if (e.target.closest("[data-setup]")) setupSheet(); });
+$("conflicts").addEventListener("click", e => { const b = e.target.closest("[data-open]"); if (b) renderDay(b.dataset.open); });
+
+function openDay(k){
+  if (moving){ const id = moving; endMove(); moveTo(id, k); return; }
+  const {y,m} = parseKey(k);
+  if (m !== view.m || y !== view.y){ view = {y,m}; }
+  selected = k; render(); renderDay(k);
+}
+const grid = $("grid");
+grid.addEventListener("click", e => { const d = e.target.closest(".day"); if (d) openDay(d.dataset.key); });
+grid.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("day")){ e.preventDefault(); openDay(e.target.dataset.key); } });
+grid.addEventListener("dragstart", e => { const c = e.target.closest(".chip"); if (!c) return; e.dataTransfer.setData("text/plain", c.dataset.id); e.dataTransfer.effectAllowed = "move"; });
+grid.addEventListener("dragover", e => { const d = e.target.closest(".day"); if (!d) return; e.preventDefault(); grid.querySelectorAll(".drop").forEach(x => x !== d && x.classList.remove("drop")); d.classList.add("drop"); });
+grid.addEventListener("dragleave", e => { const d = e.target.closest(".day"); if (d && !d.contains(e.relatedTarget)) d.classList.remove("drop"); });
+grid.addEventListener("drop", e => { const d = e.target.closest(".day"); if (!d) return; e.preventDefault(); d.classList.remove("drop"); const id = e.dataTransfer.getData("text/plain"); if (id) moveTo(id, d.dataset.key); });
+
+$("overlay").addEventListener("click", e => { if (e.target === $("overlay")) closeSheet(); });
+$("sheet").addEventListener("click", e => {
+  const t = e.target.closest("button"); if (!t) return;
+  if (t.hasAttribute("data-close")) return closeSheet();
+  if (t.dataset.back){ closeSheet(); return renderDay(t.dataset.back); }
+  if (t.dataset.quick){
+    const ty = t.dataset.quick, info = TYPES[ty];
+    const ev = {id:uid(), type:ty, title:"", date:selected, start:info.start, end:info.end, place:"", notes:""};
+    store.put(ev); render(); renderDay(selected);
+    const cf = conflictsFor(ev);
+    toast(`أُضيفت ${info.name}${cf.length ? " — تتعارض مع " + label(cf[0]) : ""}`, () => { store.remove(ev.id); render(); if (sheetMode==="day") renderDay(selected); });
+    return;
+  }
+  if (t.dataset.new) return formSheet({date:t.dataset.new}, true);
+  if (t.dataset.edit) return formSheet(events.get(t.dataset.edit), false);
+  if (t.dataset.move) return startMove(t.dataset.move);
+  if (t.dataset.del) return deleteSheet(t.dataset.del);
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape"){ if (moving) endMove(); else if (!$("overlay").hidden) closeSheet(); } });
+window.matchMedia("(max-width:640px)").addEventListener("change", render);
+
+store.init();
+})();
+</script>
