@@ -281,3 +281,15 @@ details.opt[open] > summary { margin-bottom: 12px; }
 .rxl { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 8px; }
 .rxl li { padding: 9px 12px; border-radius: 16px; background: color-mix(in srgb, var(--mint) 12%, var(--card)); border: 2px solid color-mix(in srgb, var(--mint) 30%, transparent); font-size: 14.5px; }
 .rxl li::before { content: "💊 "; }
+/* prescription rows */
+.rxrow { border: 2px solid var(--line); border-radius: 18px; padding: 10px; display: grid; gap: 8px; background: color-mix(in srgb, var(--mint) 6%, var(--card)); }
+.rxhead { display: flex; gap: 8px; align-items: center; }
+.rxhead b { flex: none; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--mint); color: #fff; font-weight: 900; }
+.rxhead input { flex: 1; font-weight: 700; }
+.rxhead .rm { color: var(--err); }
+.rxgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px 8px; }
+.rxgrid label { font-size: 12.5px; gap: 3px; }
+.rxgrid input, .rxgrid select { min-height: 42px; padding: 7px 9px; font-size: 15px; }
+.rxgrid .wide { grid-column: span 1; }
+@media (max-width: 560px) { .rxgrid { grid-template-columns: 1fr 1fr 1fr; } .rxgrid .wide { grid-column: 1 / -1; } }
+.rxcalc:empty { display: none; }

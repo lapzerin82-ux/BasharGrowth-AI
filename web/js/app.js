@@ -1089,9 +1089,124 @@ function viewVaccines(pid, editIdx = null) {
 }
 
 // ------------------------------------------------------------ treatment
-function viewTreatment(pid, editIdx = null) {
+// Treatment screen: a new entry is a prescription with any number of medications sharing the indication and
+// start date; every medication is stored as its own treatment (rxId links those prescribed together), so each
+// can later be edited or stopped separately.
+function viewTreatment(pid, editIdx = null) { return editIdx != null ? viewTreatmentEdit(pid, editIdx) : viewPrescribe(pid); }
+const sortTreatments = (p) => [...(p.treatments || [])].sort((a, b) => (C.treatmentActive(b) - C.treatmentActive(a)) || (b.start || "").localeCompare(a.start || "") || String(a.rxId || "").localeCompare(String(b.rxId || "")));
+const areaOf = (name) => Object.entries(TREATMENT_CATS).find(([, l]) => l.includes(String(name).trim()))?.[0] || "";
+
+function treatmentListHtml(p, list) {
+  return `<section class="card"><h2>Treatments (${list.length})</h2>
+    ${list.length ? `<div class="scrollx"><table class="mt"><thead><tr><th>Treatment</th><th>Dose</th><th>Dates</th><th>Status</th></tr></thead><tbody>
+    ${list.map((x, i) => { const act = C.treatmentActive(x);
+      const mates = x.rxId ? list.filter((y) => y !== x && y.rxId === x.rxId).map((y) => y.name) : [];
+      return `<tr data-i="${i}"><td><b>${esc(x.name)}</b>${x.indication ? `<small>${esc(x.indication)}</small>` : ""}${x.area || (x.type && x.type !== "Medication") ? `<small class="muted">${esc([x.area, x.type !== "Medication" ? x.type : ""].filter(Boolean).join(" · "))}</small>` : ""}${mates.length ? `<small class="muted">℞ with ${esc(mates.join(", "))}</small>` : ""}</td>
+      <td>${esc([x.dose != null && x.dose !== "" ? `${x.dose} ${x.unit || ""}` : "", x.route, x.freq].filter(Boolean).join(" · ")) || "–"}${x.perKg ? `<small class="muted">${esc(x.perKg)}</small>` : ""}</td>
+      <td>${x.start ? G.fmtDate(x.start) : "–"} → ${x.stop ? G.fmtDate(x.stop) : "ongoing"}${x.start ? `<small class="muted">age ${esc(G.exactAge(p.dob, x.start).short)}</small>` : ""}</td>
+      <td><span class="pill ${act ? "on" : ""}">${act ? "Active" : x.start > G.todayIso() ? "Planned" : "Stopped"}</span></td></tr>${x.notes ? `<tr class="nt" data-i="${i}"><td colspan="4">${esc(x.notes)}</td></tr>` : ""}`; }).join("")}
+    </tbody></table></div><p class="hint">Tap a treatment to edit it, change its dose or record a stop date.</p>` : `<p class="muted">No treatments recorded.</p>`}
+  </section>`;
+}
+
+function viewPrescribe(pid) {
   const p = session.patients.get(pid); if (!p) return go("#home");
-  const list = [...(p.treatments || [])].sort((a, b) => (C.treatmentActive(b) - C.treatmentActive(a)) || (b.start || "").localeCompare(a.start || ""));
+  const list = sortTreatments(p);
+  const ms = session.measurementsFor(pid);
+  const lw = [...ms].reverse().find((m) => m.weight != null);
+  const blank = () => ({ name: "", dose: "", unit: "mg", perKg: "", max: "", route: "", freq: "", days: "" });
+  const rows = [blank()];
+  const opt = (arr, v) => ["", ...arr].map((o) => `<option ${o === (v || "") ? "selected" : ""}>${esc(o)}</option>`).join("");
+  $app.innerHTML = bar(`${pname(p)} · treatment`, true) + `
+  <main class="page">
+    <section class="card stack"><h2>New prescription</h2>
+      <label>Diagnosis / indication<input id="pi" placeholder="e.g. community-acquired pneumonia, acute asthma, epilepsy"></label>
+      <div class="two"><label>Start date<input id="ps" type="date" value="${G.todayIso()}"></label>
+      <label>Weight for mg/kg (kg)<input id="pw" inputmode="decimal" value="${lw ? lw.weight : ""}"></label></div>
+      ${lw ? `<p class="hint">Latest weight ${lw.weight} kg on ${G.fmtDate(lw.date)}.</p>` : ""}
+      <label>Therapeutic area (filters the suggestions)<select id="pa"><option value="">All areas</option>${Object.keys(TREATMENT_CATS).map((c) => `<option>${esc(c)}</option>`).join("")}</select></label>
+      <datalist id="dlist"></datalist><datalist id="flist">${C.FREQS.map((d) => `<option value="${esc(d)}">`).join("")}</datalist>
+      <h3 class="invcat">Medications</h3>
+      <div id="rxrows" class="stack"></div>
+      <button type="button" class="ghost" id="addrx">+ Add another medication</button>
+      <label>Notes (instructions, response, side effects)<textarea id="pn" rows="2"></textarea></label>
+      <label class="switch"><input type="checkbox" id="pc"> Mark the start on the growth charts <small class="muted">(growth-relevant treatment)</small></label>
+      <small class="e" id="pe"></small>
+      <button class="primary" id="psave">Save prescription</button>
+      <p class="hint">Duration (days) sets the stop date automatically; leave it empty for ongoing treatment. mg/kg × weight fills the dose (capped at the maximum if one is entered). The app suggests names only, never doses — check each dose against your formulary.</p>
+    </section>
+    ${treatmentListHtml(p, list)}
+  </main>`;
+  bindBack();
+  const $ = (i) => document.getElementById(i);
+  const fillDrugs = () => { const a = $("pa").value; $("dlist").innerHTML = (a ? TREATMENT_CATS[a] : ALL_TREATMENTS).map((d) => `<option value="${esc(d)}">`).join(""); };
+  $("pa").onchange = fillDrugs; fillDrugs();
+  const GROWTH = /^(Endocrinology|Nutrition|Gastroenterology|Nephrology)/, GROWTH_DRUG = /growth hormone|somatr|prednisolone|mecasermin|oxandrolone|GnRH|leuprorelin|triptorelin|methylphenidate|lisdexamfetamine|levothyroxine/i;
+  const autoChart = () => { if (!$("pc").dataset.touched) $("pc").checked = rows.some((r) => GROWTH.test(areaOf(r.name) || $("pa").value) || GROWTH_DRUG.test(r.name)); };
+  $("pc").addEventListener("change", () => { $("pc").dataset.touched = "1"; });
+  const calcRow = (i, el) => {
+    const r = rows[i], k = num(r.perKg), w = num($("pw").value), mx = num(r.max), out = el.querySelector(".rxcalc");
+    const res = C.weightDose(k, w, mx);
+    if (!res) { out.textContent = ""; return; }
+    const d = Math.round(res.dose * 1000) / 1000;
+    r.dose = String(d); el.querySelector('[data-f="dose"]').value = d;
+    r.note = `${k} ${r.unit || ""}/kg × ${w} kg${res.capped ? ` (capped at ${mx})` : ""}`;
+    out.textContent = `= ${G.fmtNum(res.raw, 3)} ${r.unit || ""}${res.capped ? ` → capped at ${mx}` : ""}`;
+  };
+  const render = () => {
+    $("rxrows").innerHTML = rows.map((r, i) => `<div class="rxrow" data-i="${i}">
+      <div class="rxhead"><b>${i + 1}</b><input data-f="name" list="dlist" placeholder="Medication, e.g. amoxicillin" value="${esc(r.name)}" aria-label="Medication ${i + 1}" autocomplete="off">
+        ${rows.length > 1 ? `<button type="button" class="icon rm" aria-label="Remove medication ${i + 1}">✕</button>` : ""}</div>
+      <div class="rxgrid">
+        <label>Dose<input data-f="dose" inputmode="decimal" value="${esc(r.dose)}"></label>
+        <label>Unit<select data-f="unit">${opt(C.DOSE_UNITS, r.unit)}</select></label>
+        <label>Route<select data-f="route">${opt(C.ROUTES, r.route)}</select></label>
+        <label class="wide">Frequency<input data-f="freq" list="flist" value="${esc(r.freq)}" placeholder="e.g. Twice daily"></label>
+        <label>Duration (days)<input data-f="days" inputmode="numeric" value="${esc(r.days)}" placeholder="ongoing"></label>
+        <label>Per kg<input data-f="perKg" inputmode="decimal" value="${esc(r.perKg)}" placeholder="optional"></label>
+        <label>Max dose<input data-f="max" inputmode="decimal" value="${esc(r.max)}" placeholder="optional"></label>
+      </div><small class="hi rxcalc"></small></div>`).join("");
+    $("rxrows").querySelectorAll(".rxrow").forEach((el) => {
+      const i = +el.dataset.i;
+      el.querySelectorAll("[data-f]").forEach((inp) => {
+        const upd = () => {
+          rows[i][inp.dataset.f] = inp.value;
+          if (inp.dataset.f === "dose") rows[i].note = "";
+          if (["perKg", "max", "unit"].includes(inp.dataset.f)) calcRow(i, el);
+          if (inp.dataset.f === "name") autoChart();
+        };
+        inp.addEventListener("input", upd); inp.addEventListener("change", upd);
+      });
+      el.querySelector(".rm")?.addEventListener("click", () => { rows.splice(i, 1); render(); autoChart(); });
+      if (rows[i].perKg) calcRow(i, el);
+    });
+  };
+  render();
+  $("pw").addEventListener("input", () => $("rxrows").querySelectorAll(".rxrow").forEach((el) => calcRow(+el.dataset.i, el)));
+  $("addrx").onclick = () => { rows.push(blank()); render(); const last = $("rxrows").lastElementChild; last.querySelector('[data-f="name"]').focus(); last.scrollIntoView({ block: "center" }); };
+  $("psave").onclick = async () => {
+    const start = $("ps").value, used = rows.filter((r) => r.name.trim());
+    const bad = used.find((r) => r.days !== "" && !(parseInt(r.days) > 0));
+    $("pe").textContent = !used.length ? "Enter at least one medication." : start && start < p.dob ? "Start date is before the date of birth." : bad ? `Duration for ${bad.name} must be a whole number of days.` : "";
+    if ($("pe").textContent) return;
+    const rxId = crypto.randomUUID?.() || String(Date.now());
+    const addDays = (iso, n) => new Date((G.epochDay(iso) + n) * 86400000).toISOString().slice(0, 10);
+    const recs = used.map((r) => ({
+      rxId, area: areaOf(r.name) || $("pa").value, type: /^Non-drug/.test(areaOf(r.name)) ? "Therapy (physio, speech, OT)" : "Medication",
+      name: r.name.trim(), indication: $("pi").value.trim(), dose: num(r.dose), unit: r.unit, route: r.route, freq: r.freq.trim(),
+      start, stop: start && parseInt(r.days) > 0 ? addDays(start, parseInt(r.days) - 1) : "", days: parseInt(r.days) || null,
+      notes: $("pn").value.trim(), onChart: $("pc").checked, perKg: r.note || "",
+    }));
+    const cur = session.patients.get(pid);
+    await session.savePatient({ ...cur, treatments: [...(cur.treatments || []), ...recs] });
+    toast(`Saved ${recs.length} medication${recs.length > 1 ? "s" : ""}`); viewPrescribe(pid);
+  };
+  $app.querySelectorAll("tr[data-i]").forEach((tr) => tr.onclick = () => { viewTreatment(pid, +tr.dataset.i); window.scrollTo(0, 0); });
+}
+
+function viewTreatmentEdit(pid, editIdx) {
+  const p = session.patients.get(pid); if (!p) return go("#home");
+  const list = sortTreatments(p);
   const t = editIdx != null ? list[editIdx] : null;
   const ms = session.measurementsFor(pid);
   const lw = [...ms].reverse().find((m) => m.weight != null), lh = [...ms].reverse().find((m) => m.height != null);
@@ -1125,17 +1240,9 @@ function viewTreatment(pid, editIdx = null) {
       <label>Response / side effects / notes<textarea id="to" rows="2">${esc(t?.notes)}</textarea></label>
       <label class="switch"><input type="checkbox" id="tc" ${t?.onChart ? "checked" : ""}> Mark the start on the growth charts <small class="muted">(useful for growth-relevant treatment)</small></label>
       <small class="e" id="te"></small>
-      <div class="row wrap"><button class="primary" id="tsave">${t ? "Save changes" : "Add treatment"}</button>${t ? `<button class="ghost" id="tcancel">Cancel</button><button class="danger" id="tdel">Delete</button>` : ""}</div>
+      <div class="row wrap"><button class="primary" id="tsave">${t ? "Save changes" : "Add treatment"}</button>${t ? `<button class="ghost" id="tcancel">Back to new prescription</button><button class="danger" id="tdel">Delete</button>` : ""}</div>
     </section>
-    <section class="card"><h2>Treatments (${list.length})</h2>
-      ${list.length ? `<div class="scrollx"><table class="mt"><thead><tr><th>Treatment</th><th>Dose</th><th>Dates</th><th>Status</th></tr></thead><tbody>
-      ${list.map((x, i) => { const act = C.treatmentActive(x);
-        return `<tr data-i="${i}"><td><b>${esc(x.name)}</b>${x.indication ? `<small>${esc(x.indication)}</small>` : ""}${x.area || (x.type && x.type !== "Medication") ? `<small class="muted">${esc([x.area, x.type !== "Medication" ? x.type : ""].filter(Boolean).join(" · "))}</small>` : ""}</td>
-        <td>${esc([x.dose != null && x.dose !== "" ? `${x.dose} ${x.unit || ""}` : "", x.route, x.freq].filter(Boolean).join(" · ")) || "–"}${x.perKg ? `<small class="muted">${esc(x.perKg)}</small>` : ""}</td>
-        <td>${x.start ? G.fmtDate(x.start) : "–"} → ${x.stop ? G.fmtDate(x.stop) : "ongoing"}${x.start ? `<small class="muted">age ${esc(G.exactAge(p.dob, x.start).short)}</small>` : ""}</td>
-        <td><span class="pill ${act ? "on" : ""}">${act ? "Active" : x.start > G.todayIso() ? "Planned" : "Stopped"}</span></td></tr>${x.notes ? `<tr class="nt" data-i="${i}"><td colspan="4">${esc(x.notes)}</td></tr>` : ""}`; }).join("")}
-      </tbody></table></div>` : `<p class="muted">No treatments recorded.</p>`}
-    </section>
+    ${treatmentListHtml(p, list)}
   </main>`;
   bindBack();
   const $ = (i) => document.getElementById(i);
@@ -1174,7 +1281,7 @@ function viewTreatment(pid, editIdx = null) {
       perKg: $("td").dataset.helper ? helperNote : t?.perKg || "" };
     $("te").textContent = !rec.name ? "Enter the drug or treatment." : rec.start && rec.start < p.dob ? "Start date is before the date of birth." : rec.stop && rec.start && rec.stop < rec.start ? "Stop date is before the start date." : "";
     if ($("te").textContent) return;
-    const arr = list.filter((x) => x !== t); arr.push(rec); await saveAll(arr); toast("Saved");
+    const arr = list.filter((x) => x !== t); arr.push({ ...t, ...rec }); await saveAll(arr); toast("Saved");
   };
   $("tcancel")?.addEventListener("click", () => viewTreatment(pid));
   $("tdel")?.addEventListener("click", () => confirmBox("Delete this treatment?", t.name, "Delete", () => saveAll(list.filter((x) => x !== t)), true));
