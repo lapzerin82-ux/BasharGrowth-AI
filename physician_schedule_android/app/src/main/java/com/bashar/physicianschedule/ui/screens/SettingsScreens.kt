@@ -25,7 +25,7 @@ import androidx.compose.material.icons.filled.Backup
 import androidx.compose.material.icons.filled.CalendarViewWeek
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.DeleteSweep
-import androidx.compose.material.icons.filled.EventRepeat
+import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material.icons.filled.FileDownload
 import androidx.compose.material.icons.filled.FileUpload
 import androidx.compose.material.icons.filled.Language
@@ -136,7 +136,7 @@ fun SettingsScreen(nav: NavController) {
             }
 
             SectionHeader(stringResource(R.string.settings_data))
-            SettingRow(Icons.Filled.EventRepeat, stringResource(R.string.recurring_events), null) { nav.navigate(Routes.SERIES) }
+            SettingRow(Icons.Filled.Repeat, stringResource(R.string.recurring_events), null) { nav.navigate(Routes.SERIES) }
             SettingRow(Icons.Filled.Backup, stringResource(R.string.backup_export), stringResource(R.string.backup_export_desc)) { nav.navigate(Routes.BACKUP) }
             if (hasDemo) {
                 SettingRow(Icons.Filled.DeleteSweep, stringResource(R.string.remove_demo), null) { vm.removeDemo() }

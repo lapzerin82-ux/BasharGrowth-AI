@@ -21,7 +21,6 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.EventAvailable
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.SearchOff
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -340,7 +339,7 @@ fun SearchScreen(nav: NavController) {
             val items = result?.items
             if (items != null) {
                 item { Text(stringResource(R.string.results_count, items.size), style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 8.dp)) }
-                if (items.isEmpty()) item { EmptyState(Icons.Filled.SearchOff, stringResource(R.string.no_results)) }
+                if (items.isEmpty()) item { EmptyState(Icons.Filled.Search, stringResource(R.string.no_results)) }
                 items(items, key = { it.key }) { o ->
                     EventCard(o, categories.firstOrNull { it.id == o.categoryId }, settings.use24Hour, onClick = { nav.navigate(Routes.details(o.key)) }, showDate = true)
                 }

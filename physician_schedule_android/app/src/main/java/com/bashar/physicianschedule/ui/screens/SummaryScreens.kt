@@ -17,7 +17,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.EventRepeat
+import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
@@ -197,7 +197,7 @@ fun SeriesScreen(nav: NavController) {
     ) { padding ->
         LazyColumn(Modifier.padding(padding).fillMaxSize(), contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             val items = list
-            if (items != null && items.isEmpty()) item { EmptyState(Icons.Filled.EventRepeat, stringResource(R.string.no_recurring)) }
+            if (items != null && items.isEmpty()) item { EmptyState(Icons.Filled.Repeat, stringResource(R.string.no_recurring)) }
             items(items.orEmpty(), key = { it.recurrence.id }) { info ->
                 val cat = categories[info.master.categoryId]
                 Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {

@@ -22,10 +22,9 @@ import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.EventRepeat
+import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Today
 import androidx.compose.material.icons.filled.Warning
@@ -243,7 +242,7 @@ fun EventDetailsScreen(nav: NavController, key: String) {
                 }
                 if (o.isRecurring) {
                     OutlinedButton(onClick = { nav.navigate(Routes.SERIES) }, Modifier.height(48.dp)) {
-                        Icon(Icons.Filled.EventRepeat, null, Modifier.size(18.dp)); Text(stringResource(R.string.manage_series), Modifier.padding(start = 6.dp))
+                        Icon(Icons.Filled.Repeat, null, Modifier.size(18.dp)); Text(stringResource(R.string.manage_series), Modifier.padding(start = 6.dp))
                     }
                 }
             }
