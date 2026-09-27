@@ -293,3 +293,6 @@ details.opt[open] > summary { margin-bottom: 12px; }
 .rxgrid .wide { grid-column: span 1; }
 @media (max-width: 560px) { .rxgrid { grid-template-columns: 1fr 1fr 1fr; } .rxgrid .wide { grid-column: 1 / -1; } }
 .rxcalc:empty { display: none; }
+.installed { margin: 0; justify-self: start; background: #d4f5e6; color: #0d5a3d; font-weight: 800; font-size: 14px; padding: 8px 14px; border-radius: 999px; }
+@media (prefers-color-scheme: dark) { .installed { background: #173d2e; color: #b7f0d4; } }
+.howto p { margin: 0; font-size: 14.5px; }

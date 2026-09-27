@@ -10,6 +10,8 @@ const $app = document.getElementById("app");
 let session = null;
 let sync = null;
 let installEvt = null;
+const isStandalone = () => window.matchMedia?.("(display-mode: standalone)").matches || window.navigator.standalone === true;
+window.addEventListener("appinstalled", () => { installEvt = null; if (location.hash === "#home" || !location.hash) route(); });
 window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); installEvt = e; if (location.hash === "#home" || !location.hash) route(); });
 
 // ------------------------------------------------------------ helpers
@@ -177,7 +179,13 @@ function viewHome() {
         <span class="count">${n} patient${n === 1 ? "" : "s"}</span><small class="sync" id="syncline">${syncText()}</small></div>
       ${HERO_ART}
     </section>
-    ${installEvt ? `<button class="install" id="inst">Install app on this device</button>` : ""}
+    ${installEvt ? `<button class="install" id="inst">Install app on this device</button>`
+      : isStandalone() ? `<p class="installed">✓ Installed app — opens from your home screen and works offline</p>`
+      : `<details class="card opt howto"><summary>How to install this app</summary><div class="stack">
+          <p><b>Android (Chrome):</b> tap <b>⋮</b> (top right) → <b>Install app</b> or <b>Add to Home screen</b> → Install.</p>
+          <p><b>iPhone / iPad (Safari):</b> tap <b>Share</b> <span aria-hidden="true">⬆</span> → <b>Add to Home Screen</b> → Add.</p>
+          <p><b>Computer (Chrome / Edge):</b> click the install icon <span aria-hidden="true">⊕</span> at the right of the address bar, or menu → <b>Install Pediatric Growth Chart</b>.</p>
+          <p class="hint">If it is already installed, open it from the home screen instead. Records are kept per web address, so always use the same link.</p></div></details>`}
     <nav class="tiles">
       ${tiles.map(([t, i, h]) => `<a class="tile" href="${h}">${icon(i)}<span>${t}</span></a>`).join("")}
 
