@@ -90,11 +90,13 @@ button{cursor:pointer}
 
 /* calendar */
 .cal{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
-.dow,.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
-.dow div{padding:8px 4px;text-align:center;font-size:12px;font-weight:600;color:var(--ink-2);background:var(--surface-2);letter-spacing:.2px}
-.dow div.wk{color:var(--ink-3)}
-.day{position:relative;min-height:108px;padding:6px 5px 6px;border-top:1px solid var(--line);border-inline-start:1px solid var(--line);display:flex;flex-direction:column;gap:3px;background:var(--surface);text-align:start;border-inline-end:0;border-bottom:0;cursor:pointer}
-.grid .day:nth-child(7n+1){border-inline-start:0}
+/* Weekdays run down the start side as rows; each column is one week of the month.
+   Cells are emitted week by week, and grid-auto-flow:column fills each 7-row column in turn. */
+.grid{display:grid;grid-template-rows:repeat(7,auto);grid-auto-flow:column;grid-template-columns:64px;grid-auto-columns:minmax(0,1fr)}
+.grid > :nth-child(7n+1){border-top:0}
+.wdl{display:flex;align-items:center;justify-content:center;padding:4px 2px;font-size:12px;font-weight:600;color:var(--ink-2);background:var(--surface-2);border-top:1px solid var(--line);text-align:center;line-height:1.2}
+.wdl.wk{color:var(--ink-3)}
+.day{position:relative;min-height:92px;padding:6px 5px 6px;border-top:1px solid var(--line);border-inline-start:1px solid var(--line);display:flex;flex-direction:column;gap:3px;background:var(--surface);text-align:start;border-inline-end:0;border-bottom:0;cursor:pointer}
 .day:hover{background:var(--surface-2)}
 .day.out{background:var(--bg)}
 .day.out .num{color:var(--ink-3)}
@@ -198,7 +200,9 @@ form.f{display:flex;flex-direction:column;gap:12px}
 textarea.io{width:100%;min-height:140px;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--bg);direction:ltr;font:12px/1.4 ui-monospace,Menlo,Consolas,monospace}
 
 @media (max-width:640px){
-  .day{min-height:78px;padding:4px 2px}
+  .day{min-height:70px;padding:4px 2px}
+  .grid{grid-template-columns:46px}
+  .wdl{font-size:11px}
   .chip{font-size:10px;padding:2px 3px;border-inline-start-width:2px;border-radius:4px}
   .chip .tm{display:none}
   .day.conflict .num::after{content:"!";padding:2px 5px}
@@ -247,7 +251,6 @@ textarea.io{width:100%;min-height:140px;border:1px solid var(--line);border-radi
   <section class="mlist" id="mlist" aria-label="كل أيام الشهر" hidden></section>
 
   <section class="cal" id="calGrid" aria-label="تقويم الشهر">
-    <div class="dow" id="dow"></div>
     <div class="grid" id="grid"></div>
   </section>
 
@@ -388,7 +391,6 @@ function label(ev){ return ev.title && ev.title.trim() ? ev.title.trim() : TYPES
 function render(){
   try { localStorage.setItem(LS_VIEW, JSON.stringify(view)); } catch(e){}
   $("monthLabel").textContent = `${MONTHS[view.m-1]} ${view.y}`;
-  $("dow").innerHTML = DOW_ORDER.map(d => `<div class="${WEEKEND.has(d)?"wk":""}">${DOW_NAMES[d]}</div>`).join("");
 
   const first = keyOf(view.y, view.m, 1);
   const lead = DOW_ORDER.indexOf(dowOf(first));
@@ -423,7 +425,8 @@ function render(){
     const more = list.length > maxChips ? `<span class="more">+${list.length-maxChips} أخرى</span>` : "";
     html += `<div class="${cls.join(" ")}" role="button" tabindex="0" data-key="${k}" aria-label="${fmtDay(k)}، ${list.length} مواعيد"><div class="num"><span>${d}</span></div>${chips}${more}</div>`;
   }
-  $("grid").innerHTML = html;
+  const labels = DOW_ORDER.map(d => `<div class="wdl${WEEKEND.has(d)?" wk":""}">${DOW_NAMES[d]}</div>`).join("");
+  $("grid").innerHTML = labels + html;
 
   // Whole month as a list: every day, including empty ones.
   const listMode = viewMode === "list";
