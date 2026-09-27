@@ -188,7 +188,7 @@ class ScheduleRepository(private val db: AppDatabase) {
             EventDraft(titles.lecture, DefaultCategories.TEACHING, monday, t("09:00"), t("10:30"), location = titles.university, reminderMinutes = 30),
             RecurrenceRule(Frequency.WEEKLY, 1, setOf(DayOfWeek.MONDAY), endDate = monday.plusWeeks(8)),
         ) + ScheduleOps.create(
-            EventDraft(titles.consultation, DefaultCategories.CONSULTATION, wednesday, t("12:00"), t("15:00"), location = titles.hospital, reminderMinutes = 30),
+            EventDraft(titles.consultation, DefaultCategories.CONSULTATION, wednesday, t("11:00"), t("13:00"), location = titles.hospital, reminderMinutes = 30),
             RecurrenceRule(Frequency.WEEKLY, 1, setOf(DayOfWeek.WEDNESDAY), endDate = wednesday.plusWeeks(8)),
         ) + ScheduleOps.create(
             EventDraft(titles.night, DefaultCategories.NIGHT, today.plusDays(3), t("20:00"), t("23:00"), location = titles.hospital, reminderMinutes = 60),

@@ -285,7 +285,7 @@ textarea.io{width:100%;min-height:140px;border:1px solid var(--line);border-radi
 /* ---------- constants ---------- */
 const TYPES = {
   lecture:{name:"محاضرة", short:"محاضرة", start:"09:00", end:"11:00"},
-  consult:{name:"استشارية", short:"استشارية", start:"09:00", end:"14:00"},
+  consult:{name:"استشارية", short:"استشارية", start:"11:00", end:"13:00"}, // fixed every Wednesday
   oncall:{name:"خفارة", short:"خفارة", start:"08:00", end:"08:00", target:[2,2]},
   night:{name:"استشارية ليلية", short:"ليلية", start:"20:00", end:"08:00", target:[2,3]},
   other:{name:"موعد آخر", short:"موعد", start:"10:00", end:"11:00"}
@@ -343,6 +343,7 @@ const store = {
   },
   async init(){
     this.loadLocal();
+    migrateConsultTime();
     render();
     if (!window.claude || typeof window.claude.use !== "function"){ setStatus(); return; }
     let db = null;
@@ -359,7 +360,9 @@ const store = {
         const localOnly = [...events.values()].filter(e => !m.has(e.id));
         if (m.size === 0 && localOnly.length) localOnly.forEach(e => { m.set(e.id,e); this.put(e); });
       }
-      events = m; this.saveLocal(); render(); setStatus();
+      events = m; this.saveLocal();
+      if (!snap.metadata.fromCache) migrateConsultTime();
+      render(); setStatus();
     }, err => { setStatus("تعذّر المزامنة؛ التعديلات محفوظة في هذا الجهاز"); this.mode = "local"; this.db = null; });
     setStatus();
   },
@@ -372,6 +375,19 @@ const store = {
     if (this.db) this.db.doc("events/"+id).delete().catch(() => setStatus("لم يُحذف الموعد من الخادم؛ حاول مجدداً"));
   }
 };
+/*
+ * The Wednesday consultation is fixed at 11:00–13:00. Consultations saved earlier with the
+ * old default (09:00–14:00) are corrected once; anything the user timed differently is left alone.
+ */
+function migrateConsultTime(){
+  const FLAG = "myschedule.mig.consult1113";
+  try { if (localStorage.getItem(FLAG)) return; } catch(e){}
+  const old = [...events.values()].filter(e => e.type === "consult" && e.start === "09:00" && e.end === "14:00");
+  if (!old.length) return;
+  try { localStorage.setItem(FLAG, "1"); } catch(e){} // once only, so "undo" is respected
+  old.forEach(e => store.put(Object.assign({}, e, {start:"11:00", end:"13:00"})));
+  setTimeout(() => toast(`عُدّل وقت ${old.length} استشارية إلى 11:00–13:00`, () => { old.forEach(e => store.put(e)); render(); }), 300);
+}
 function setStatus(msg){
   const el = document.getElementById("status");
   el.textContent = msg || (store.mode === "db" ? "محفوظ ومتزامن مع حسابك." : "محفوظ في هذا المتصفح. خذ نسخة احتياطية بين حين وآخر.");
