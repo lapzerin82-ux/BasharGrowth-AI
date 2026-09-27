@@ -35,18 +35,57 @@ pwa_head = """<meta charset="utf-8">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="جدولي">
-<link rel="manifest" href="manifest.webmanifest">
+<link rel="manifest" href="manifest.webmanifest" crossorigin="use-credentials">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 """
 
+# The manifest link uses crossorigin="use-credentials": unclaimed Netlify Drop sites sit behind
+# an access cookie, and a manifest fetched without it fails, making the app "not installable".
 sw_register = """
+<div class="installbar" id="installBar" hidden>
+  <span id="installText">ثبّت «جدولي» على هاتفك ليفتح كتطبيق ويعمل بدون إنترنت.</span>
+  <span class="installbtns">
+    <button type="button" class="btn primary" id="installBtn">تثبيت التطبيق</button>
+    <button type="button" class="btn" id="installClose" aria-label="إغلاق">لاحقاً</button>
+  </span>
+</div>
+<style>
+.installbar{position:fixed;inset-inline:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:25;margin:0 auto;max-width:520px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-radius:14px;background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow);font-size:14px}
+.installbtns{display:flex;gap:8px}
+</style>
 <script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", function () {
-    navigator.serviceWorker.register("sw.js").catch(function () {});
+(function () {
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () {}); });
+  }
+  var standalone = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+  if (standalone) return;
+  var bar = document.getElementById("installBar"), btn = document.getElementById("installBtn");
+  var dismissed = false;
+  try { dismissed = localStorage.getItem("myschedule.installDismissed") === "1"; } catch (e) {}
+  var deferred = null;
+  window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault(); deferred = e;
+    if (!dismissed) bar.hidden = false;
   });
-}
+  btn.addEventListener("click", function () {
+    if (!deferred) return;
+    deferred.prompt();
+    deferred.userChoice.finally(function () { deferred = null; bar.hidden = true; });
+  });
+  document.getElementById("installClose").addEventListener("click", function () {
+    bar.hidden = true;
+    try { localStorage.setItem("myschedule.installDismissed", "1"); } catch (e) {}
+  });
+  window.addEventListener("appinstalled", function () { bar.hidden = true; });
+  // iPhone Safari has no install prompt: explain the manual step once.
+  var ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  if (ios && !dismissed) {
+    document.getElementById("installText").textContent = "للتثبيت: اضغط زر المشاركة ثم «إضافة إلى الشاشة الرئيسية».";
+    btn.hidden = true; bar.hidden = false;
+  }
+})();
 </script>
 """
 
@@ -67,14 +106,17 @@ manifest = {
     "description": "المحاضرات والاستشارية والخفارات والاستشاريات الليلية في تقويم شهري واحد",
     "lang": "ar",
     "dir": "rtl",
+    "id": "./",
     "start_url": "./",
     "scope": "./",
     "display": "standalone",
     "background_color": "#F3F5F4",
     "theme_color": "#0E6E62",
     "icons": [
-        {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
-        {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"},
+        {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+        {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+        {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable"},
+        {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"},
         {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml"},
     ],
 }
