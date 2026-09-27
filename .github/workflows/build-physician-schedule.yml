@@ -1,0 +1,48 @@
+name: Physician Schedule (Android)
+
+on:
+  push:
+    paths:
+      - 'physician_schedule_android/**'
+      - '.github/workflows/build-physician-schedule.yml'
+  pull_request:
+    paths:
+      - 'physician_schedule_android/**'
+      - '.github/workflows/build-physician-schedule.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: physician_schedule_android
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Core unit tests (recurrence, conflicts, series edits, backup)
+        run: ./gradlew --no-daemon :core:test
+
+      - name: Build APKs
+        run: ./gradlew --no-daemon :app:assembleDebug :app:assembleRelease
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: physician-schedule-apk
+          path: physician_schedule_android/app/build/outputs/apk/**/*.apk
+          retention-days: 30
+
+      - name: Upload test report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-test-report
+          path: physician_schedule_android/core/build/reports/tests/

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Calendar page with a medical cross, drawn inside the 66dp adaptive-icon safe zone. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <path android:fillColor="#FFFFFF"
+        android:pathData="M36,34h36a4,4 0,0 1,4 4v34a4,4 0,0 1,-4 4h-36a4,4 0,0 1,-4 -4v-34a4,4 0,0 1,4 -4z" />
+    <path android:fillColor="#0B5A50" android:pathData="M32,38a4,4 0,0 1,4 -4h36a4,4 0,0 1,4 4v7h-44z" />
+    <path android:fillColor="#FFFFFF" android:pathData="M42,29h4v10h-4z M62,29h4v10h-4z" />
+    <path android:fillColor="#C0442F" android:pathData="M51,50h6v7h7v6h-7v7h-6v-7h-7v-6h7z" />
+</vector>
