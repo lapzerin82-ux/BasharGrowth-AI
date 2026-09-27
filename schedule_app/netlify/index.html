@@ -127,6 +127,27 @@ body.moving .day:hover{background:var(--accent-soft)}
 .t-night{color:var(--t-night);background:var(--t-night-bg)}
 .t-other{color:var(--t-other);background:var(--t-other-bg)}
 
+.viewswitch{display:flex;gap:4px;padding:4px;background:var(--surface-2);border-radius:12px;align-self:flex-start;max-width:100%}
+.viewswitch button{border:0;background:transparent;border-radius:9px;padding:8px 14px;font-weight:500;color:var(--ink-2)}
+.viewswitch button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(22,48,44,.15)}
+.mlist{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.mrow{display:grid;grid-template-columns:62px 1fr;gap:10px;align-items:start;padding:9px 12px;border-top:1px solid var(--line);cursor:pointer;width:100%;text-align:start;background:transparent;border-inline:0;border-bottom:0}
+.mrow:first-child{border-top:0}
+.mrow:hover{background:var(--surface-2)}
+.mrow.weekend{background:var(--bg)}
+.mrow.today{box-shadow:inset 3px 0 0 var(--accent)}
+.mrow .dd{display:flex;flex-direction:column;align-items:center;line-height:1.15}
+.mrow .dd b{font:600 20px/1.1 var(--f-display);font-variant-numeric:tabular-nums}
+.mrow .dd span{font-size:11.5px;color:var(--ink-3)}
+.mrow.today .dd b{color:var(--accent)}
+.mrow .evs{display:flex;flex-direction:column;gap:4px;min-width:0;padding-top:2px}
+.mrow .none{color:var(--ink-3);font-size:13px;padding-top:4px}
+.mev{display:flex;gap:8px;align-items:baseline;border-radius:7px;padding:4px 8px;font-size:13.5px;border-inline-start:3px solid currentColor;min-width:0}
+.mev .tm{font-variant-numeric:tabular-nums;font-size:12.5px;white-space:nowrap}
+.mev .tt{color:var(--ink);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mev .pl{color:var(--ink-2);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mev.bad{outline:1.5px dashed var(--danger);outline-offset:-1.5px}
+.mrow .cf{color:var(--danger);font-size:12px;font-weight:600}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--ink-2)}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
@@ -230,7 +251,14 @@ textarea.io{width:100%;min-height:140px;border:1px solid var(--line);border-radi
   <div class="summary" id="summary"></div>
   <div class="alert" id="conflicts" hidden></div>
 
-  <section class="cal" aria-label="تقويم الشهر">
+  <div class="viewswitch" role="tablist" aria-label="طريقة العرض">
+    <button type="button" role="tab" id="modeGrid" data-mode="grid">الشهر كشبكة</button>
+    <button type="button" role="tab" id="modeList" data-mode="list">كل أيام الشهر كقائمة</button>
+  </div>
+
+  <section class="mlist" id="mlist" aria-label="كل أيام الشهر" hidden></section>
+
+  <section class="cal" id="calGrid" aria-label="تقويم الشهر">
     <div class="dow" id="dow"></div>
     <div class="grid" id="grid"></div>
   </section>
@@ -284,6 +312,8 @@ function span(ev){
   if (e <= s) e += 1440; // runs past midnight
   return [s,e];
 }
+// Time ranges stay left-to-right inside Arabic text (otherwise "09:00–14:00" shows as "14:00–09:00").
+const rng = ev => `<bdi dir="ltr">${ev.start}–${ev.end}</bdi>`;
 const overnight = ev => toMin(ev.end) <= toMin(ev.start);
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,8);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -292,6 +322,8 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt
 const now = new Date();
 let view = {y:now.getFullYear(), m:now.getMonth()+1};
 try { const v = JSON.parse(localStorage.getItem(LS_VIEW)||"null"); if (v && v.y && v.m) view = v; } catch(e){}
+let viewMode = "grid";
+try { const m = localStorage.getItem("myschedule.mode.v1"); if (m === "list" || m === "grid") viewMode = m; } catch(e){}
 let events = new Map();
 let selected = null;
 let moving = null;
@@ -405,6 +437,25 @@ function render(){
   }
   $("grid").innerHTML = html;
 
+  // Whole month as a list: every day, including empty ones.
+  const listMode = viewMode === "list";
+  $("mlist").hidden = !listMode; $("calGrid").hidden = listMode;
+  $("modeGrid").setAttribute("aria-selected", String(!listMode));
+  $("modeList").setAttribute("aria-selected", String(listMode));
+  if (listMode){
+    $("mlist").innerHTML = monthKeys.map(k => {
+      const list = eventsOn(k);
+      const cls = ["mrow"];
+      if (k === tk) cls.push("today");
+      if (WEEKEND.has(dowOf(k))) cls.push("weekend");
+      const hasBad = list.some(e => bad.has(e.id));
+      const evs = list.length ? list.map(e =>
+        `<div class="mev t-${e.type}${bad.has(e.id)?" bad":""}"><span class="tm">${rng(e)}</span><span class="tt">${esc(label(e))}</span>${e.place?`<span class="pl">${esc(e.place)}</span>`:""}</div>`
+      ).join("") + (hasBad ? `<span class="cf">تعارض في هذا اليوم</span>` : "") : `<span class="none">—</span>`;
+      return `<button type="button" class="${cls.join(" ")}" data-key="${k}" aria-label="${fmtDay(k)}، ${list.length} مواعيد"><span class="dd"><b>${parseKey(k).d}</b><span>${DOW_NAMES[dowOf(k)]}</span></span><span class="evs">${evs}</span></button>`;
+    }).join("");
+  }
+
   // summary
   if (!events.size){
     $("summary").innerHTML = `<span class="stat">التقويم فارغ. ابدأ بـ<button class="btn primary" data-setup style="padding:4px 10px">إضافة المحاضرات والاستشارية الأسبوعية</button>ثم اضغط على أي يوم لإضافة خفارة أو استشارية ليلية.</span>`;
@@ -428,7 +479,7 @@ function render(){
   if (monthPairs.length){
     box.hidden = false;
     box.innerHTML = `<div><strong>يوجد ${monthPairs.length === 1 ? "تعارض واحد" : monthPairs.length + " تعارضات"} هذا الشهر</strong><ul>${
-      monthPairs.map(([a,b]) => `<li>${fmtShort(a.date)}: ${esc(label(a))} (${a.start}–${a.end}) مع ${esc(label(b))} (${b.start}–${b.end}) <button data-open="${a.date}">عرض</button></li>`).join("")
+      monthPairs.map(([a,b]) => `<li>${fmtShort(a.date)}: ${esc(label(a))} (${rng(a)}) مع ${esc(label(b))} (${rng(b)}) <button data-open="${a.date}">عرض</button></li>`).join("")
     }</ul></div>`;
   } else box.hidden = true;
 
@@ -468,7 +519,7 @@ function renderDay(k){
       <span class="bar"></span>
       <div style="color:var(--ink);min-width:0">
         <div class="t">${esc(label(e))}</div>
-        <div class="m">${e.start}–${e.end}${overnight(e)?" (لليوم التالي)":""}${e.place?" · "+esc(e.place):""}${e.seriesId?" · أسبوعي":""}${cf.length?` · <span class="cf">يتعارض مع ${esc(label(cf[0]))}</span>`:""}</div>
+        <div class="m">${rng(e)}${overnight(e)?" (لليوم التالي)":""}${e.place?" · "+esc(e.place):""}${e.seriesId?" · أسبوعي":""}${cf.length?` · <span class="cf">يتعارض مع ${esc(label(cf[0]))}</span>`:""}</div>
         ${e.notes?`<div class="m">${esc(e.notes)}</div>`:""}
       </div>
       <div class="ops">
@@ -573,7 +624,7 @@ function formSheet(ev, isNew){
     const clashes = [];
     batch.forEach(b => conflictsFor(b, ids).forEach(c => clashes.push([b,c])));
     if (clashes.length && !forced){
-      const lines = clashes.slice(0,4).map(([b,c]) => `${fmtShort(b.date)}: مع ${esc(label(c))} (${c.start}–${c.end})`).join("<br>");
+      const lines = clashes.slice(0,4).map(([b,c]) => `${fmtShort(b.date)}: مع ${esc(label(c))} (${rng(c)})`).join("<br>");
       showWarn(`<strong>تعارض في الوقت</strong><br>${lines}${clashes.length>4?`<br>و${clashes.length-4} غيرها`:""}<br>اضغط الزر مرة أخرى للحفظ رغم التعارض، أو غيّر الوقت.`);
       forced = true; $("f-save").textContent = "احفظ رغم التعارض";
       return;
@@ -635,8 +686,9 @@ function endMove(){ moving = null; $("movebar").hidden = true; document.body.cla
 
 /* ---------- weekly setup ---------- */
 function setupSheet(){
-  const start = todayKey();
-  const until = keyFromNum(dayNum(start) + 7*16);
+  // Start at the 1st of the month on screen so the whole month fills, not just the days after today.
+  const start = keyOf(view.y, view.m, 1);
+  const until = keyFromNum(dayNum(start) + 7*17);
   const dayBoxes = [6,0,1,2,3,4].map(d => `<label><input type="checkbox" name="ld" value="${d}">${DOW_NAMES[d]}</label>`).join("");
   openSheet(`
     <div class="sheet-head"><h2>المواعيد الأسبوعية الثابتة</h2><button class="icon-btn" data-close aria-label="إغلاق">×</button></div>
@@ -670,13 +722,15 @@ function setupSheet(){
     if (!lds.length && !f.wc.checked){ $("s-warn").textContent = "اختر يوم محاضرة واحداً على الأقل أو فعّل الاستشارية."; $("s-warn").hidden = false; return; }
     const added = [];
     const series = {};
+    // Running the setup again (e.g. to fill earlier weeks) must not duplicate existing entries.
+    const exists = (type, k, start) => [...events.values()].some(x => x.type === type && x.date === k && x.start === start);
     for (let n=a; n<=b; n++){
       const k = keyFromNum(n), d = dowOf(k);
-      if (lds.includes(d)){
+      if (lds.includes(d) && !exists("lecture", k, f.ls.value)){
         series["l"+d] = series["l"+d] || uid();
         added.push({id:uid(), type:"lecture", title:"", date:k, start:f.ls.value, end:f.le.value, place:f.lp.value.trim(), notes:"", seriesId:series["l"+d]});
       }
-      if (f.wc.checked && d === 3){
+      if (f.wc.checked && d === 3 && !exists("consult", k, f.cs.value)){
         series.c = series.c || uid();
         added.push({id:uid(), type:"consult", title:"", date:k, start:f.cs.value, end:f.ce.value, place:f.cp.value.trim(), notes:"", seriesId:series.c});
       }
@@ -764,6 +818,13 @@ function openDay(k){
 }
 const grid = $("grid");
 grid.addEventListener("click", e => { const d = e.target.closest(".day"); if (d) openDay(d.dataset.key); });
+$("mlist").addEventListener("click", e => { const r = e.target.closest(".mrow"); if (r) openDay(r.dataset.key); });
+document.querySelector(".viewswitch").addEventListener("click", e => {
+  const b = e.target.closest("[data-mode]"); if (!b) return;
+  viewMode = b.dataset.mode;
+  try { localStorage.setItem("myschedule.mode.v1", viewMode); } catch(err){}
+  render();
+});
 grid.addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("day")){ e.preventDefault(); openDay(e.target.dataset.key); } });
 grid.addEventListener("dragstart", e => { const c = e.target.closest(".chip"); if (!c) return; e.dataTransfer.setData("text/plain", c.dataset.id); e.dataTransfer.effectAllowed = "move"; });
 grid.addEventListener("dragover", e => { const d = e.target.closest(".day"); if (!d) return; e.preventDefault(); grid.querySelectorAll(".drop").forEach(x => x !== d && x.classList.remove("drop")); d.classList.add("drop"); });

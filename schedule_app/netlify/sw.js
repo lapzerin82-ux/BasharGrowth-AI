@@ -1,6 +1,6 @@
 // Offline support: the app shell is cached on first visit; the page is refreshed
 // from the network when online, so a new upload reaches installed copies.
-const CACHE = "schedule-b294f8b223";
+const CACHE = "schedule-e3d8b2360e";
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icon.svg", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
