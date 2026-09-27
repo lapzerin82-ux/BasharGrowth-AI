@@ -17,3 +17,11 @@
 ## التشغيل
 افتح `index.html` في أي متصفح. تُحفظ البيانات في المتصفح نفسه (localStorage)،
 لذا خذ نسخة احتياطية من زر «نسخة احتياطية» عند تغيير الجهاز.
+
+## النشر على Netlify
+```
+python3 schedule_app/build_netlify.py
+```
+ينتج `schedule_app/physician-schedule-netlify.zip` (والمجلد `schedule_app/netlify/`).
+افتح https://app.netlify.com/drop واسحب الملف المضغوط أو المجلد إليه.
+الموقع قابل للتثبيت على الهاتف (Add to Home screen) ويعمل بدون إنترنت.
