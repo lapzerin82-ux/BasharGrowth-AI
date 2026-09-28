@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'input_form.dart';
 import 'result_summary.dart';
+import 'growth_assessment.dart';
 import 'growth_calculations.dart';
 import 'growth_standards.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final refs = await GrowthReferences.load();
+  runApp(MyApp(refs: refs));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final GrowthReferences refs;
+
+  const MyApp({Key? key, required this.refs}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +30,15 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: const GrowthMonitorHome(),
+      home: GrowthMonitorHome(refs: refs),
     );
   }
 }
 
 class GrowthMonitorHome extends StatefulWidget {
-  const GrowthMonitorHome({Key? key}) : super(key: key);
+  final GrowthReferences refs;
+
+  const GrowthMonitorHome({Key? key, required this.refs}) : super(key: key);
 
   @override
   State<GrowthMonitorHome> createState() => _GrowthMonitorHomeState();
@@ -43,40 +50,22 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
   Map<String, dynamic>? boneAgeResult;
 
   void _handleCalculate(PatientData data) {
-    final ageMonths = calculateAgeMonths(data.dob!, data.measurementDate);
-    final newResults = <GrowthResultData>[];
+    final ageDays = calculateAgeDays(data.dob!, data.measurementDate);
+    final ageMonths = ageDays / 30.4375;
+    final newResults = assessGrowth(
+      refs: widget.refs,
+      sex: data.sex,
+      ageDays: ageDays,
+      weightKg: data.weight,
+      heightCm: data.height,
+    );
 
-    // 1. Weight for Age
-    final wfaData = getRelevantDataset(data.sex, 'weight', ageMonths);
-    final wfaDataset = wfaData['dataset'] as List<LMSDataPoint>;
-    
-    if (wfaDataset.isNotEmpty) {
-      final lms = getLMSForAge(wfaDataset, ageMonths);
-      if (lms != null && data.weight != null) {
-        final z = calculateZScore(data.weight!, lms);
-        final p = calculatePercentile(z);
-        newResults.add(GrowthResultData(
-          measure: 'Weight-for-Age',
-          value: data.weight!,
-          zScore: z,
-          percentile: p,
-          classification: interpretWeightForAge(z),
-          standard: wfaData['standardName'] as String,
-        ));
-      }
-    }
-
-    // 2. BMI (if >= 2y)
-    if (ageMonths >= 24 && data.height != null && data.weight != null && data.height! > 0) {
-      final bmi = calculateBMI(data.weight!, data.height!);
-      newResults.add(GrowthResultData(
-        measure: 'BMI',
-        value: bmi,
-        zScore: null,
-        percentile: null,
-        classification: 'Data Required',
-        standard: 'CDC BMI',
-      ));
+    if (newResults.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No reference available: age must be 0-20 years and measurements within the WHO/CDC table ranges'),
+        ),
+      );
     }
 
     setState(() {
@@ -151,7 +140,7 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Precision growth assessment using WHO (0-5y) & CDC (2-20y) standards',
+                                  'Precision growth assessment using WHO (0-5y) & CDC (5-20y) standards',
                                   style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
                                 ),
                               ],

@@ -20,10 +20,34 @@ class GrowthResult {
   });
 }
 
+class GrowthResultData {
+  final String measure;
+  final double value;
+  final double? zScore;
+  final double? percentile;
+  final String classification;
+  final String standard;
+
+  GrowthResultData({
+    required this.measure,
+    required this.value,
+    this.zScore,
+    this.percentile,
+    required this.classification,
+    required this.standard,
+  });
+}
+
+/// Whole days between two calendar dates, ignoring time of day and DST shifts.
+int calculateAgeDays(DateTime dob, DateTime measurementDate) {
+  final start = DateTime.utc(dob.year, dob.month, dob.day);
+  final end = DateTime.utc(measurementDate.year, measurementDate.month, measurementDate.day);
+  return end.difference(start).inDays;
+}
+
 /// Calculates accurate age in decimal months
 double calculateAgeMonths(DateTime dob, DateTime measurementDate) {
-  final difference = measurementDate.difference(dob);
-  return difference.inDays / 30.4375; // Average days per month
+  return calculateAgeDays(dob, measurementDate) / 30.4375; // Average days per month
 }
 
 /// Calculates Z-score using LMS method
@@ -33,6 +57,31 @@ double calculateZScore(double value, LMSParameters lms) {
   } else {
     return (pow(value / lms.m, lms.l) - 1) / (lms.l * lms.s);
   }
+}
+
+/// Measurement value at a given Z-score (inverse LMS).
+double valueAtZScore(double z, LMSParameters lms) {
+  if (lms.l == 0) return lms.m * exp(lms.s * z);
+  return lms.m * pow(1 + lms.l * lms.s * z, 1 / lms.l);
+}
+
+/// WHO restricted Z-score for weight-based indicators (weight-for-age,
+/// weight-for-length/height, BMI-for-age). Beyond +/-3 SD the LMS curve is
+/// replaced by a linear extension using the distance between the 2 and 3 SD
+/// curves (WHO Child Growth Standards, 2006, ch. 7).
+double calculateWhoAdjustedZScore(double value, LMSParameters lms) {
+  final z = calculateZScore(value, lms);
+  if (z > 3) {
+    final sd3 = valueAtZScore(3, lms);
+    final sd23 = sd3 - valueAtZScore(2, lms);
+    return 3 + (value - sd3) / sd23;
+  }
+  if (z < -3) {
+    final sd3 = valueAtZScore(-3, lms);
+    final sd23 = valueAtZScore(-2, lms) - sd3;
+    return -3 + (value - sd3) / sd23;
+  }
+  return z;
 }
 
 /// Approximation of standard normal CDF to calculate percentile
@@ -98,20 +147,26 @@ String interpretWeightForAge(double z) {
   return 'Normal';
 }
 
-/// Interprets Length/Height-for-Age Z-score
-String interpretLengthHeightForAge(double z) {
-  if (z < -3) return 'Severe Stunting';
-  if (z < -2) return 'Stunted';
+/// Interprets Length/Height-for-Age Z-score. WHO (< 5y) uses stunting
+/// terminology; for CDC ages below -2 SD is reported as short stature.
+String interpretLengthHeightForAge(double z, {bool isWHO = true}) {
+  if (isWHO) {
+    if (z < -3) return 'Severe Stunting';
+    if (z < -2) return 'Stunted';
+  } else if (z < -2) {
+    return 'Short Stature';
+  }
   if (z > 2) return 'Tall Stature';
   return 'Normal';
 }
 
-/// Interprets Weight-for-Length Z-score (WHO < 5y)
+/// Interprets Weight-for-Length/Height or BMI-for-Age Z-score (WHO < 5y)
 String interpretWeightForLength(double z) {
   if (z < -3) return 'Severe Wasting';
   if (z < -2) return 'Wasting';
-  if (z > 3) return 'Severe Overweight';
+  if (z > 3) return 'Obese';
   if (z > 2) return 'Overweight';
+  if (z > 1) return 'Possible Risk of Overweight';
   return 'Normal';
 }
 

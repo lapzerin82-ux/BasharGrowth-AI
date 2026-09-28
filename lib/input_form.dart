@@ -202,7 +202,11 @@ class _InputFormState extends State<InputForm> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate() && _data.dob != null) {
+                    if (_data.dob != null && _data.measurementDate.isBefore(_data.dob!)) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Measurement date cannot be before date of birth')),
+                      );
+                    } else if (_formKey.currentState!.validate() && _data.dob != null) {
                       _formKey.currentState!.save();
                       widget.onCalculate(_data);
                     } else {

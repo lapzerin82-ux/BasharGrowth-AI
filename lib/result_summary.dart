@@ -1,22 +1,6 @@
 import 'package:flutter/material.dart';
 
-class GrowthResultData {
-  final String measure;
-  final double value;
-  final double? zScore;
-  final double? percentile;
-  final String classification;
-  final String standard;
-
-  GrowthResultData({
-    required this.measure,
-    required this.value,
-    this.zScore,
-    this.percentile,
-    required this.classification,
-    required this.standard,
-  });
-}
+import 'growth_calculations.dart';
 
 class ResultSummary extends StatelessWidget {
   final List<GrowthResultData> results;
