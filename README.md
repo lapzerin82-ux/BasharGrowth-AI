@@ -95,6 +95,8 @@ The web version has no cloud sync; move data between devices with Backup/Restore
 * **Letter generator:** referral letter or clinic summary, drafted from the record, editable, exported as PDF.
 * **PDF report:** includes all of the above plus the extra chart pages.
 
+* **Original CDC Set 2 pages for BMI-for-age (2–20 y) and weight-for-stature (2–5 y)**, boys and girls, used unmodified with calibrated plotting (all eight Set 2 pages now used; printed curves agree with the LMS tables within 0.53 pt).
+
 References are built by `tools/build_web_extras.py` from CDCAnthro, rcpchgrowth and the WHO tables (pygrowup).
 Not included, because no verified offline data is available:
 * Fenton/INTERGROWTH preterm charts;

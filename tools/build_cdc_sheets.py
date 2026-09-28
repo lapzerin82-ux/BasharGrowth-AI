@@ -3,7 +3,8 @@
 Builds web/charts/ from the original CDC Clinical Growth Charts, Set 2 (color) PDF
 (docs/cdc-set2color.pdf, public domain, NCHS/CDC 2000-2001):
 
-  * exports pages 1, 2, 5, 6 (birth-36 months and 2-20 years, boys and girls) unmodified as SVG;
+  * exports pages 1, 2, 5, 6 (birth-36 months and 2-20 years, boys and girls) and 7-10 (BMI-for-age 2-20 years
+    and weight-for-stature, boys and girls) unmodified as SVG;
   * calibrates each axis (age, length/stature, weight) by fitting the printed tick labels and
     snapping them to the printed grid lines (least squares);
   * verifies the calibration: every printed percentile curve is mapped back to (age, value) and
@@ -19,6 +20,7 @@ ROOT = os.path.join(os.path.dirname(__file__), "..")
 PDF = os.path.join(ROOT, "docs", "cdc-set2color.pdf")
 OUT = os.path.join(ROOT, "web", "charts")
 REFS = os.path.join(ROOT, "core", "src", "main", "resources", "growthref")
+WEBREFS = os.path.join(ROOT, "web", "data")  # web-only references (BMI, weight-for-stature), see build_web_extras.py
 
 
 def spans(p):
@@ -40,6 +42,10 @@ def grid_lines(p):
                 a, b = it[1], it[2]
                 if abs(a.y - b.y) < 0.05 and abs(a.x - b.x) > 3: H.append((a.y, min(a.x, b.x), max(a.x, b.x)))
                 if abs(a.x - b.x) < 0.05 and abs(a.y - b.y) > 3: V.append((a.x, min(a.y, b.y), max(a.y, b.y)))
+            elif it[0] == "c":  # the weight-for-stature pages draw grid lines as straight Bezier segments
+                a, c1, c2, b = it[1:5]
+                if max(abs(a.y - b.y), abs(c1.y - a.y), abs(c2.y - a.y)) < 0.05 and abs(a.x - b.x) > 3: H.append((a.y, min(a.x, b.x), max(a.x, b.x)))
+                if max(abs(a.x - b.x), abs(c1.x - a.x), abs(c2.x - a.x)) < 0.05 and abs(a.y - b.y) > 3: V.append((a.x, min(a.y, b.y), max(a.y, b.y)))
             elif it[0] == "re":
                 r = it[1]
                 if r.height < 1.2 and r.width > 3: H.append(((r.y0 + r.y1) / 2, r.x0, r.x1))
@@ -56,6 +62,18 @@ def labels(sp, xr, yr, axis, conv=float):
             try: v = conv(t)
             except ValueError: continue
             res.append((v, cx if axis == "x" else cy))
+    return res
+
+
+def labels10(sp, xr, yr, axis):
+    """Stature tick labels on the weight-for-stature pages are 10 pt."""
+    res = []
+    for t, b, s in sp:
+        if abs(s - 10.0) > 0.2: continue
+        cx, cy = (b[0] + b[2]) / 2, (b[1] + b[3]) / 2
+        if xr[0] <= cx <= xr[1] and yr[0] <= cy <= yr[1]:
+            try: res.append((float(t), cx if axis == "x" else cy))
+            except ValueError: pass
     return res
 
 
@@ -116,6 +134,41 @@ def main():
                                                 "rows": [113.2, 124.1, 134.6, 145.1, 156.0, 166.5, 177.5, 188.4]},
         })
         worst = max(worst, verify(p, sheets[-1]))
+    # ---- BMI-for-age (pages 7, 8) and weight-for-stature (pages 9, 10)
+    for pi, sid, sex in [(6, "cdc_bmi_boys", "M"), (7, "cdc_bmi_girls", "F"), (8, "cdc_wfs_boys", "M"), (9, "cdc_wfs_girls", "F")]:
+        p = doc[pi]; sp = spans(p); H, V = grid_lines(p)
+        bmi = pi in (6, 7)
+        if bmi:
+            xl = labels(sp, (80, 560), (690, 715), "x"); per = 12.0
+            yl = labels(sp, (60, 90), (250, 660), "y") + labels(sp, (545, 575), (100, 660), "y"); key = "bmi"
+        else:
+            xl = [q for q in labels10(sp, (100, 530), (670, 692), "x")]; per = 1.0
+            yl = labels(sp, (75, 100), (260, 650), "y") + labels(sp, (520, 545), (100, 650), "y"); key = "wfl"
+        cx, rx = calibrate(xl, V, 100); cy, ry = calibrate(yl, H, 40)
+        print(f"{sid}: axis fit max residual x={rx:.3f} {key}={ry:.3f} pt")
+        open(os.path.join(OUT, sid + ".svg"), "w").write(p.get_svg_image(text_as_path=True))
+        name_line = min((l for l in H if l[0] < 62 and l[2] - l[1] > 100), key=lambda l: l[0])
+        rec_line = min((l for l in H if name_line[0] + 5 < l[0] < 80 and 60 < l[2] - l[1] < 100), key=lambda l: l[0])
+        cols = sorted({round(x, 1) for x, y0, y1 in V if 75 < y0 < 120 and y1 < 270 and y1 - y0 > 20})
+        left = min(l[1] for l in H if 75 < l[0] < 100 and l[2] - l[1] > 150)
+        date_bottom = next(b[3] for t, b, sz in sp if t == "Date" and b[1] < 120)
+        cand = [(y, x1) for y, x0, x1 in H if date_bottom - 0.5 < y < 260 and abs(x0 - left) < 3 and x1 - x0 > 150]
+        from collections import Counter
+        edge = Counter(round(x1) for _, x1 in cand).most_common(1)[0][0]  # the table's own right edge
+        rowy = sorted({round(y, 1) for y, x1 in cand if abs(x1 - edge) < 1.5})
+        names = ["date", "age", "weight", "height", "bmi"] if bmi else ["date", "age", "weight", "height"]
+        sheets.append({
+            "id": sid, "sex": sex, "file": f"charts/{sid}.svg", "page": [612, 792], "pdfPage": pi + 1,
+            "title": ("CDC 2 to 20 years: " if bmi else "CDC ") + ("Girls" if sex == "F" else "Boys") +
+                     (" – Body mass index-for-age percentiles" if bmi else " – Weight-for-stature percentiles"),
+            "keys": [key], "ageMin": 24, "ageMax": 240 if bmi else 60,
+            **({} if bmi else {"xKind": "length", "xMin": 77, "xMax": 121.5}),
+            "ref": "cdc2000_bmi" if bmi else "cdc2000_wfs",
+            "x": [cx[0], cx[1] / per], key: cy,
+            "fields": {"name": [name_line[1] + 3, name_line[0] - 1.8], "record": [rec_line[1] + 3, rec_line[0] - 1.8]},
+            "table": {"cols": names, "x": [round(left, 1)] + cols[:len(names)], "rows": rowy[:14]},
+        })
+        worst = max(worst, verify(p, sheets[-1]))
     meta = {"source": "CDC Clinical Growth Charts, Set 2 (color), NCHS/CDC. Published May 30, 2000 (modified 2000–2001). "
                       "Pages reproduced unmodified from set2color.pdf; public domain.",
             "calibration": f"Axis mapping fitted to the printed grid lines (max residual 0.12 pt); printed percentile curves "
@@ -127,9 +180,10 @@ def main():
 
 def verify(p, s):
     """Distance between every printed percentile curve and the LMS curve at the same age (95th percentile, pt)."""
-    ref = json.load(open(os.path.join(REFS, s["ref"] + ".json")))
+    rp = os.path.join(REFS, s["ref"] + ".json")
+    ref = json.load(open(rp if os.path.exists(rp) else os.path.join(WEBREFS, s["ref"] + ".json")))
     sex = "female" if s["sex"] == "F" else "male"
-    Z = {3: -1.880793608, 10: -1.281551566, 25: -0.674489750, 50: 0.0, 75: 0.674489750, 90: 1.281551566, 97: 1.880793608}
+    Z = {3: -1.880793608, 5: -1.644853627, 10: -1.281551566, 25: -0.674489750, 50: 0.0, 75: 0.674489750, 85: 1.036433389, 90: 1.281551566, 95: 1.644853627, 97: 1.880793608}
 
     def lms(tab, a):
         ages = [r[0] for r in tab]
@@ -157,7 +211,7 @@ def verify(p, s):
         for pts in subs:
             if len(pts) < 20: continue
             best = None
-            for key in ("height", "weight"):
+            for key in s.get("keys", ["height", "weight"]):
                 rows = []
                 for q in pts:
                     a = (q.x - s["x"][0]) / s["x"][1]; v = (q.y - s[key][0]) / s[key][1]; l = lms(ref["measures"][key][sex], a)

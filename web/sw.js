@@ -1,12 +1,12 @@
 // Offline support: every file the app needs is cached on first visit.
-const CACHE = "pgc-v17";
+const CACHE = "pgc-v18";
 const FILES = [
   "./", "index.html", "app.css", "manifest.webmanifest",
   "js/app.js", "js/growth.js", "js/store.js", "js/chart.js", "js/pdf.js", "js/sheet.js", "js/sync.js", "js/catalog.js", "js/labels.js", "js/clinical.js",
-  "charts/sheets.json", "charts/cdc_0_36_boys.svg", "charts/cdc_0_36_girls.svg", "charts/cdc_2_20_boys.svg", "charts/cdc_2_20_girls.svg",
+  "charts/sheets.json", "charts/cdc_0_36_boys.svg", "charts/cdc_0_36_girls.svg", "charts/cdc_2_20_boys.svg", "charts/cdc_2_20_girls.svg", "charts/cdc_bmi_boys.svg", "charts/cdc_bmi_girls.svg", "charts/cdc_wfs_boys.svg", "charts/cdc_wfs_girls.svg",
   "vendor/jspdf.umd.min.js", "fonts/nunito-latin-wght-normal.woff2", "fonts/nunito-latin-ext-wght-normal.woff2",
   "data/who2006_0_2.json", "data/cdc2000_infant.json", "data/cdc2000_child.json", "data/who2006.json", "data/who2007.json",
-  "data/cdc2000_hc.json", "data/cdc2000_wfl.json", "data/cdc2000_bmi.json", "data/who2006_hc.json", "data/who2006_bmi.json",
+  "data/cdc2000_hc.json", "data/cdc2000_wfl.json", "data/cdc2000_wfs.json", "data/cdc2000_bmi.json", "data/who2006_hc.json", "data/who2006_bmi.json",
   "data/who2006_wfl.json", "data/who2006_wfh.json", "data/who2007_bmi.json", "data/ds_infant.json", "data/ds_child.json", "data/turner.json",
   "img/developer.png", "icons/icon-192.png", "icons/icon-512.png", "icons/icon-maskable-512.png",
 ];

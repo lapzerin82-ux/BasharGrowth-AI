@@ -4,7 +4,7 @@ import { drawChart, fullBounds, zoomVp, clampVp, buildChart } from "./chart.js";
 import { Sync, newSyncCode } from "./sync.js";
 import { INV_CATS, unitFor, FEATURE_GROUPS, COMPLAINTS, TREATMENT_CATS, ALL_TREATMENTS } from "./catalog.js";
 import * as C from "./clinical.js";
-import { loadSheets, sheetMeta, sheetFor, sheetImage, sheetPoints, drawSheet, px, py, viewForAge as sheetViewForAge } from "./sheet.js";
+import { loadSheets, sheetMeta, sheetFor, sheetImage, sheetPoints, drawSheet, px, py, viewForAge as sheetViewForAge, SHEET_OF_REF } from "./sheet.js";
 
 const $app = document.getElementById("app");
 let session = null;
@@ -603,16 +603,20 @@ function viewMeasure(pid, mid) {
 const VIEW_TITLES = {
   "sheet:0_36": "CDC birth–36 months (original)",
   "sheet:2_20": "CDC 2–20 years (original)",
+  "sheet:bmi": "CDC BMI-for-age 2–20 years (original)",
+  "sheet:wfs": "CDC weight-for-stature 2–5 years (original)",
   who2006_0_2: "WHO Birth–24 months", who2006: "WHO Birth–5 years", who2007: "WHO 5–19 years",
   cdc2000_bmi: "CDC BMI 2–20 years (+ extended BMI)", who2006_bmi: "WHO BMI birth–5 years", who2007_bmi: "WHO BMI 5–19 years",
   cdc2000_hc: "CDC head circumference 0–36 months", who2006_hc: "WHO head circumference 0–5 years",
-  cdc2000_wfl: "CDC weight-for-length", who2006_wfl: "WHO weight-for-length 0–2 years", who2006_wfh: "WHO weight-for-height 2–5 years",
+  cdc2000_wfl: "CDC weight-for-length 0–36 months", cdc2000_wfs: "CDC weight-for-stature 2–5 years (computed)", who2006_wfl: "WHO weight-for-length 0–2 years", who2006_wfh: "WHO weight-for-height 2–5 years",
   ds_infant: "Down syndrome 0–36 months", ds_child: "Down syndrome 2–20 years", turner: "Turner syndrome height 1–20 years",
 };
 const viewForAge = (ageMonths) => sheetViewForAge(settings.family, ageMonths);
 /** Views that can show this measure for this patient. */
 function viewsFor(p, key) {
   return Object.keys(VIEW_TITLES).filter((v) => {
+    if (v === "sheet:bmi") return key === "bmi" && !!sheetFor("bmi", p.sex);
+    if (v === "sheet:wfs") return key === "wfl" && !!sheetFor("wfs", p.sex);
     if (v.startsWith("sheet:")) return key === "height" || key === "weight";
     const r = G.getRef(v), m = r?.measures[key]; if (!m) return false;
     if (r.condition) return r.condition === p.condition && m[p.sex === "F" ? "female" : "male"].length > 0;
@@ -625,8 +629,14 @@ function autoViewFor(p, ms, key) {
   const last = withV[withV.length - 1] || ms[ms.length - 1];
   const age = Math.max(0, G.plotAge(p, last ? last.date : G.todayIso()).months);
   if (p.condition) { const c = G.condRefFor(p.condition, key, age); if (c) return c; }
+  return viewForKey(p, key, age) || viewsFor(p, key).find((v) => !v.startsWith("sheet:") && !G.getRef(v).condition) || "cdc2000_bmi";
+}
+/** Standard chart for a measure at an age; the original CDC page is preferred where one exists. */
+function viewForKey(p, key, age) {
   if (key === "height" || key === "weight") return viewForAge(age);
-  return G.refForKey(settings.family, key, age) || viewsFor(p, key).find((v) => !G.getRef(v).condition) || "cdc2000_bmi";
+  const id = G.refForKey(settings.family, key, age);
+  const kind = id && SHEET_OF_REF[id];
+  return kind && sheetFor(kind, p.sex) ? `sheet:${kind}` : id;
 }
 
 async function viewChart(pid, key) {
@@ -672,7 +682,8 @@ async function viewChart(pid, key) {
       sheet = sheetFor(view.slice(6), p.sex); img = await sheetImage(sheet);
       data = { p, ...sheetPoints(sheet, p, ms), connect, sel };
       bounds = { x0: 0, y0: 0, x1: sheet.page[0], y1: sheet.page[1] };
-      outside = data.outside; coverTxt = sheet.ageMax <= 36 ? "birth–36 months" : "2–20 years";
+      outside = data.outside;
+      coverTxt = sheet.xKind === "length" ? `stature ${sheet.xMin}–${sheet.xMax} cm, ages 2–5 years` : sheet.ageMax <= 36 ? "birth–36 months" : "2–20 years";
     } else {
       data = buildChart(p, ms, view, key, connect, sel);
       bounds = fullBounds(data.m, p.sex, data.points.map((q) => q.v));
@@ -686,7 +697,7 @@ async function viewChart(pid, key) {
     out.hidden = !outside && !none;
     const other = outside ? [...new Set(ms.filter((x) => G.mValue(x, key) != null).map((x) => {
       const age = G.plotAge(p, x.date).months;
-      return (p.condition && G.condRefFor(p.condition, key, age)) || (key === "height" || key === "weight" ? viewForAge(age) : G.refForKey(settings.family, key, age));
+      return (p.condition && G.condRefFor(p.condition, key, age)) || viewForKey(p, key, age);
     }))].find((v) => v && v !== view) : null;
     out.innerHTML = none ? `No ${esc(G.MEASURES[key].toLowerCase())} data recorded yet${key === "wfl" || key === "bmi" ? " (needs height and weight at the same visit)" : ""}.`
       : `${outside} measurement(s) are not on this chart (it covers ${coverTxt}).` + (other ? ` <button class="link" id="other">Show ${esc(VIEW_TITLES[other])}</button>` : "");
@@ -710,7 +721,7 @@ async function viewChart(pid, key) {
     const k = isSheet() ? q.key : key;
     const refId = isSheet() ? sheet.ref : view;
     const m = G.getRef(refId).measures[k];
-    const label = isSheet() ? (sheet.ageMax <= 36 ? (k === "height" ? "Length" : "Weight") : (k === "height" ? "Stature" : "Weight")) : m.label;
+    const label = isSheet() && !sheet.keys ? (sheet.ageMax <= 36 ? (k === "height" ? "Length" : "Weight") : (k === "height" ? "Stature" : "Weight")) : m.label;
     const a = G.assess(m, p.sex, q.age, q.v);
     const where = m.xKind === "length" ? `Length/height ${q.age} cm · age ${q.ageText}` : `Age ${q.ageText} (${(q.age / 12).toFixed(3)} y)`;
     pop.innerHTML = `<div><b>${q.latest ? "Latest measurement · " : ""}${G.fmtDate(q.date)}</b><br>${esc(where)}<br>

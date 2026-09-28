@@ -1,6 +1,6 @@
 // Growth references, LMS maths and exact age. Mirrors core/ (Kotlin) of the Android app.
 export const REF_IDS = ["who2006_0_2", "cdc2000_child", "cdc2000_infant", "who2006", "who2007",
-  "cdc2000_hc", "cdc2000_wfl", "cdc2000_bmi", "who2006_hc", "who2006_bmi", "who2006_wfl", "who2006_wfh", "who2007_bmi",
+  "cdc2000_hc", "cdc2000_wfl", "cdc2000_wfs", "cdc2000_bmi", "who2006_hc", "who2006_bmi", "who2006_wfl", "who2006_wfh", "who2007_bmi",
   "ds_infant", "ds_child", "turner"];
 /** Measures: key -> short label. "wfl" = weight-for-length/height (x axis is length, not age). */
 export const MEASURES = { height: "Height", weight: "Weight", bmi: "BMI", hc: "Head circ.", wfl: "Weight-for-length" };
@@ -45,9 +45,10 @@ export function refForKey(family, key, age) {
     return age <= 240 ? "cdc2000_bmi" : null;
   }
   if (key === "wfl") {
-    if (family === "CDC") return age <= 36 ? "cdc2000_wfl" : null;
-    if (age < 24) return "who2006_wfl";
-    return family === "WHO" && age <= 60 ? "who2006_wfh" : null;
+    // under 2 y: weight-for-length (recumbent); 2–5 y: weight-for-stature (standing), CDC Set 2 style
+    if (age < 24) return family === "CDC" ? "cdc2000_wfl" : "who2006_wfl";
+    if (age > 60) return null;
+    return family === "WHO" ? "who2006_wfh" : "cdc2000_wfs";
   }
   return null;
 }

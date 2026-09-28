@@ -82,6 +82,22 @@ def main(rcpch, cdcanthro, pyg):
                measures={"wfl": measure("Weight-for-length", "Weight (kg)", "kg", "Weight and recumbent length", 45.0, 103.5, cdc_wfl(1), cdc_wfl(2),
                                         xKind="length", xLabel="Length (cm)", ageFrom=0.0, ageTo=36.0)}))
 
+    height = d[d["denom"] == "height"]
+
+    def cdc_wfs(sex):
+        a = height[height["SEX"] == sex].sort_values("_HT1")
+        rows = [[float(r["_HT1"]), float(r["_LWHT1"]), float(r["_MWHT1"]), float(r["_SWHT1"])] for _, r in a.iterrows()]
+        last = a.iloc[-1]
+        rows.append([float(last["_HT2"]), float(last["_LWHT2"]), float(last["_MWHT2"]), float(last["_SWHT2"])])
+        return dedupe(rows)
+
+    wfs_m, wfs_f = cdc_wfs(1), cdc_wfs(2)
+    write(dict(base, id="cdc2000_wfs", title="CDC 2000: Weight-for-stature, 2 to 5 years", shortTitle="CDC WFS 2-5 y",
+               source=CDC_SRC + " (wtstat)", version="CDC 2000 (3rd-97th percentiles; 85th and 95th shown on the clinical chart)",
+               centiles=[3, 5, 10, 25, 50, 75, 85, 90, 95, 97],
+               measures={"wfl": measure("Weight-for-stature", "Weight (kg)", "kg", "Weight and standing height", min(wfs_m[0][0], wfs_f[0][0]), max(wfs_m[-1][0], wfs_f[-1][0]),
+                                        wfs_m, wfs_f, xKind="length", xLabel="Stature (cm)", ageFrom=24.0, ageTo=60.0)}))
+
     c = json.load(open(os.path.join(rcpch, "cdc2-20.json")))["measurement"]["bmi"]
     write(dict(base, id="cdc2000_bmi", title="CDC 2000: BMI-for-age, 2 to 20 years (with CDC 2022 extended BMI)", shortTitle="CDC BMI 2-20 y",
                source=CDC_SRC + " (bmiagerev). Percentiles above the 95th use the CDC 2022 extended BMI-for-age method "

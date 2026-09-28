@@ -21,26 +21,32 @@ export function sheetImage(s) {
 export const px = (s, ageMonths) => s.x[0] + s.x[1] * ageMonths;
 export const py = (s, key, v) => s[key][0] + s[key][1] * v;
 
-/** Measurements that belong on this sheet, with their exact ages. */
+/** Measures a sheet shows: height & weight (default), "bmi" (BMI-for-age) or "wfl" (weight-for-stature). */
+export const sheetKeys = (s) => s.keys || ["height", "weight"];
+const isHW = (s) => !s.keys;
+
+/** Measurements that belong on this sheet, with their exact ages (x = age, or stature on weight-for-stature pages). */
 export function sheetPoints(s, p, ms) {
+  const keys = sheetKeys(s), has = (m) => keys.some((k) => G.mValue(m, k) != null);
   // plotted at the age corrected for prematurity when that applies (G.plotAge); a.chrono = chronological age
-  const withAge = ms.map((m) => ({ m, a: G.plotAge(p, m.date) })).filter(({ a }) => a.days >= 0 && a.months >= s.ageMin - 1e-9 && a.months <= s.ageMax + 1e-9);
+  const withAge = ms.map((m) => ({ m, a: G.plotAge(p, m.date) })).filter(({ m, a }) => a.days >= 0 && a.months >= s.ageMin - 1e-9 && a.months <= s.ageMax + 1e-9 &&
+    (s.xKind !== "length" || (m.height >= s.xMin - 1e-9 && m.height <= s.xMax + 1e-9)));
   const latest = {};
-  for (const key of ["height", "weight"]) {
-    const w = withAge.filter(({ m }) => m[key] != null).sort((x, y) => x.m.date.localeCompare(y.m.date) || x.m.createdAt - y.m.createdAt);
+  for (const key of keys) {
+    const w = withAge.filter(({ m }) => G.mValue(m, key) != null).sort((x, y) => x.m.date.localeCompare(y.m.date) || x.m.createdAt - y.m.createdAt);
     latest[key] = w.length ? w[w.length - 1].m.id : null;
   }
   const pts = [];
-  for (const { m, a } of withAge) for (const key of ["height", "weight"]) {
-    if (m[key] == null) continue;
-    pts.push({ id: m.id + ":" + key, mid: m.id, key, age: a.months, ageText: G.ageLabel(p, m.date), v: m[key], date: m.date, notes: m.notes, latest: m.id === latest[key] });
+  for (const { m, a } of withAge) for (const key of keys) {
+    const v = G.mValue(m, key); if (v == null) continue;
+    pts.push({ id: m.id + ":" + key, mid: m.id, key, age: s.xKind === "length" ? m.height : a.months, months: a.months, ageText: G.ageLabel(p, m.date), v, date: m.date, notes: m.notes, latest: m.id === latest[key] });
   }
-  const boneAge = withAge.filter(({ m }) => m.boneAge != null && m.height != null && m.boneAge * 12 >= s.ageMin && m.boneAge * 12 <= s.ageMax)
+  const boneAge = !isHW(s) ? [] : withAge.filter(({ m }) => m.boneAge != null && m.height != null && m.boneAge * 12 >= s.ageMin && m.boneAge * 12 <= s.ageMax)
     .map(({ m, a }) => ({ age: a.months, ba: m.boneAge * 12, v: m.height }));
-  const outside = ms.filter((m) => m.height != null || m.weight != null).length - withAge.filter(({ m }) => m.height != null || m.weight != null).length;
-  const events = (p.treatments || []).filter((x) => x.onChart && x.start && x.start >= p.dob)
+  const outside = ms.filter(has).length - withAge.filter(({ m }) => has(m)).length;
+  const events = !isHW(s) ? [] : (p.treatments || []).filter((x) => x.onChart && x.start && x.start >= p.dob)
     .map((x) => ({ age: Math.max(0, G.plotAge(p, x.start).months), label: `${x.name.replace(/\s*\(.*\)$/, "")} start` })).filter((e) => e.age >= s.ageMin && e.age <= s.ageMax);
-  return { pts, rows: withAge.filter(({ m }) => m.height != null || m.weight != null), outside, boneAge, events };
+  return { pts, rows: withAge.filter(({ m }) => has(m) || m.height != null || m.weight != null), outside, boneAge, events };
 }
 
 /** Text with a white outline so it stays readable over the chart grid. */
@@ -81,12 +87,13 @@ export function drawSheet(ctx, W, H, s, img, vp, data) {
   };
   const { p, rows } = data;
   // form fields
-  txt(p.name, s.fields.name[0], s.fields.name[1], 9.5, "left", 210);
-  txt(p.fileNumber, s.fields.record[0], s.fields.record[1], 9.5, "left", 95);
-  if (p.mother) txt(`${p.mother} cm`, s.fields.mother[0], s.fields.mother[1], 7.5);
-  if (p.father) txt(`${p.father} cm`, s.fields.father[0], s.fields.father[1], 7.5);
+  const f = s.fields || {};
+  if (f.name) txt(p.name, f.name[0], f.name[1], 9.5, "left", 210);
+  if (f.record) txt(p.fileNumber, f.record[0], f.record[1], 9.5, "left", 95);
+  if (f.mother && p.mother) txt(`${p.mother} cm`, f.mother[0], f.mother[1], 7.5);
+  if (f.father && p.father) txt(`${p.father} cm`, f.father[0], f.father[1], 7.5);
   // measurement table (most recent entries if there are more than the printed rows)
-  const t = s.table, sorted = [...rows].sort((a, b) => a.m.date.localeCompare(b.m.date));
+  const t = s.table || { cols: [], x: [], rows: [0] }, sorted = [...rows].sort((a, b) => a.m.date.localeCompare(b.m.date));
   const birth = t.birthRow ? sorted.find((r) => r.a.days === 0) : null;
   const rest = sorted.filter((r) => r !== birth);
   const nRows = t.rows.length - 1, shown = rest.slice(-nRows);
@@ -102,7 +109,7 @@ export function drawSheet(ctx, W, H, s, img, vp, data) {
   shown.forEach((r, i) => cell(r, t.rows[i], t.rows[i + 1]));
 
   // genetic target channel (MPH percentile at 20 y traced back to the start of the sheet)
-  const tgt = data.showMph ? G.mphTarget(p.sex, p.mph) : null;
+  const tgt = data.showMph && isHW(s) ? G.mphTarget(p.sex, p.mph) : null;
   if (tgt) {
     const hm = G.getRef(s.ref).measures.height;
     const curve = (z) => { const o = []; for (let a = s.ageMin; a <= s.ageMax + 1e-9; a += 0.25) { const v = G.zValue(hm, p.sex, Math.min(a, s.ageMax), z); if (v != null) o.push([px(s, a), py(s, "height", v)]); } return o; };
@@ -117,7 +124,7 @@ export function drawSheet(ctx, W, H, s, img, vp, data) {
 
   // trajectory lines and red crosses
   const pts = data.pts;
-  if (data.connect) for (const key of ["height", "weight"]) {
+  if (data.connect) for (const key of sheetKeys(s)) {
     const q = pts.filter((z) => z.key === key).sort((a, b) => a.age - b.age);
     if (q.length < 2) continue;
     ctx.strokeStyle = "rgba(200,16,28,.8)"; ctx.lineWidth = 0.8; ctx.beginPath();
@@ -125,7 +132,7 @@ export function drawSheet(ctx, W, H, s, img, vp, data) {
   }
   // treatment starts: dashed green line across the stature curves (P3 − 6 cm to P97 + 6 cm at that age)
   const hm = G.getRef(s.ref).measures.height;
-  for (const e of data.events || []) {
+  if (hm) for (const e of data.events || []) {
     const a = Math.min(Math.max(e.age, hm.ageMin), hm.ageMax), lo = G.centileValue(hm, p.sex, a, 3), hi = G.centileValue(hm, p.sex, a, 97);
     if (lo == null) continue;
     const x = px(s, e.age), y0 = py(s, "height", hi + 6), y1 = py(s, "height", lo - 6);
@@ -147,6 +154,9 @@ export function drawSheet(ctx, W, H, s, img, vp, data) {
   ctx.restore();
   return { toScreen: (x, y) => [x * scale + ox, y * scale + oy], toPage: (X, Y) => [(X - ox) / scale, (Y - oy) / scale], scale };
 }
+
+/** References that have an original CDC Set 2 page: BMI-for-age (2–20 y) and weight-for-stature (2–5 y). */
+export const SHEET_OF_REF = { cdc2000_bmi: "bmi", cdc2000_wfs: "wfs" };
 
 /** Which chart a measurement at this age belongs on, for a reference family setting. */
 export function viewForAge(family, ageMonths) {

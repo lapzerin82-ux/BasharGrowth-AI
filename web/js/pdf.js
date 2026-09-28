@@ -1,7 +1,7 @@
 // Printable patient report built with jsPDF (vendor/jspdf.umd.min.js, loaded on demand).
 import * as G from "./growth.js";
 import { drawChart, fullBounds, buildChart } from "./chart.js";
-import { loadSheets, sheetFor, sheetImage, sheetPoints, drawSheet, viewForAge } from "./sheet.js";
+import { loadSheets, sheetFor, sheetImage, sheetPoints, drawSheet, viewForAge, SHEET_OF_REF } from "./sheet.js";
 import * as C from "./clinical.js";
 
 function loadJsPdf() {
@@ -165,16 +165,19 @@ export async function buildPdf(p, ms, family, connect, clinician, invs = [], get
   const views = [...new Set(hw.map((m) => viewForAge(family, Math.max(0, G.plotAge(p, m.date).months))))];
   if (!views.length) views.push(viewForAge(family, Math.max(0, G.plotAge(p, today).months)));
   await loadSheets();
+  // Original CDC Set 2 page (US Letter), unmodified, with the patient's data written on it.
+  async function sheetPage(kind) {
+    const sheet = sheetFor(kind, p.sex); if (!sheet) return false;
+    const pts = sheetPoints(sheet, p, ms); if (!pts.pts.length && kind !== "0_36" && kind !== "2_20") return true;
+    const img = await sheetImage(sheet);
+    const cvs = document.createElement("canvas"), SC = 3.2; cvs.width = Math.round(612 * SC); cvs.height = Math.round(792 * SC);
+    drawSheet(cvs.getContext("2d"), cvs.width, cvs.height, sheet, img, { x0: 0, y0: 0, x1: 612, y1: 792 }, { p, ...pts, connect, sel: null, showMph: true, showPct: true });
+    footer(); doc.addPage([612, 792], "p"); page++; onSheet = true;
+    doc.addImage(cvs.toDataURL("image/jpeg", 0.92), "JPEG", 0, 0, 612, 792);
+    return true;
+  }
   for (const view of views) {
-    if (view.startsWith("sheet:")) {
-      // Original CDC Set 2 page (US Letter), unmodified, with the patient's data written on it.
-      const sheet = sheetFor(view.slice(6), p.sex), img = await sheetImage(sheet);
-      const cvs = document.createElement("canvas"), SC = 3.2; cvs.width = Math.round(612 * SC); cvs.height = Math.round(792 * SC);
-      drawSheet(cvs.getContext("2d"), cvs.width, cvs.height, sheet, img, { x0: 0, y0: 0, x1: 612, y1: 792 }, { p, ...sheetPoints(sheet, p, ms), connect, sel: null, showMph: true, showPct: true });
-      footer(); doc.addPage([612, 792], "p"); page++; onSheet = true;
-      doc.addImage(cvs.toDataURL("image/jpeg", 0.92), "JPEG", 0, 0, 612, 792);
-      continue;
-    }
+    if (view.startsWith("sheet:")) { await sheetPage(view.slice(6)); continue; }
     await chartPages(view, ["height", "weight"]);
   }
   // additional computed charts: BMI, head circumference, weight-for-length, condition-specific charts
@@ -184,7 +187,11 @@ export async function buildPdf(p, ms, family, connect, clinician, invs = [], get
     for (const key of ["bmi", "hc", "wfl"]) { const id = G.mValue(m, key) != null && G.refForKey(family, key, age); if (id) extraViews.push(id + "|" + key); }
     if (p.condition) for (const key of ["height", "weight", "hc", "bmi"]) { const id = G.mValue(m, key) != null && G.condRefFor(p.condition, key, age); if (id) extraViews.push(id + "|" + key); }
   }
-  for (const vk of [...new Set(extraViews)]) { const [id, key] = vk.split("|"); await chartPages(id, [key]); }
+  for (const vk of [...new Set(extraViews)]) {
+    const [id, key] = vk.split("|");
+    if (SHEET_OF_REF[id] && await sheetPage(SHEET_OF_REF[id])) continue; // original CDC BMI / weight-for-stature page
+    await chartPages(id, [key]);
+  }
 
   async function chartPages(view, keys) {
     const cv = document.createElement("canvas"); const S = 2.2; cv.width = Math.round(802 * S); cv.height = Math.round(551 * S);
