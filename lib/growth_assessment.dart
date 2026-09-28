@@ -20,6 +20,35 @@ const double implausibleWeightForHeightLimit = 5;
 
 const String implausibleClassification = 'Implausible - Recheck Measurement';
 
+class GrowthResultData {
+  final String measure;
+  final double value;
+  final double? zScore;
+  final double? percentile;
+  final String classification;
+  final String standard;
+
+  /// Extra clinical detail shown under the results, e.g. % of the 95th percentile.
+  final String? note;
+
+  /// Reference table and table index (age in days/months, or length/height
+  /// in cm) the value was scored against; used to plot it.
+  final GrowthIndicator? indicator;
+  final double? referenceX;
+
+  GrowthResultData({
+    required this.measure,
+    required this.value,
+    this.zScore,
+    this.percentile,
+    required this.classification,
+    required this.standard,
+    this.note,
+    this.indicator,
+    this.referenceX,
+  });
+}
+
 const String whoStandardName = 'WHO Child Growth Standards (2006)';
 const String cdcStandardName = 'CDC Growth Reference (2000)';
 
@@ -76,6 +105,8 @@ List<GrowthResultData> assessGrowth({
       percentile: p,
       classification: z < implausibleLow || z > implausibleHigh ? implausibleClassification : interpret(z, p),
       standard: standard,
+      indicator: indicator,
+      referenceX: x,
     );
   }
 
@@ -125,7 +156,7 @@ List<GrowthResultData> assessGrowth({
     }
 
     final bmi = calculateBMI(weight, height);
-    add(score(
+    final bmiResult = score(
       'BMI-for-Age',
       isWHO ? GrowthIndicator.whoBmiForAge : GrowthIndicator.cdcBmiForAge,
       ageX,
@@ -134,8 +165,34 @@ List<GrowthResultData> assessGrowth({
       implausibleLow: -implausibleWeightForHeightLimit,
       implausibleHigh: implausibleWeightForHeightLimit,
       whoRestricted: isWHO,
-    ));
+    );
+    add(isWHO || bmiResult == null ? bmiResult : _withCdcExtendedBmi(bmiResult, sex, ageMonths, refs));
   }
 
   return results;
+}
+
+/// Applies the CDC 2022 extended BMI-for-age method when BMI is at or above
+/// the 95th percentile: extended percentile and Z-score, % of the 95th
+/// percentile, and obesity class.
+GrowthResultData _withCdcExtendedBmi(GrowthResultData result, String sex, double ageMonths, GrowthReferences refs) {
+  if (result.classification == implausibleClassification) return result;
+  final lms = refs.table(GrowthIndicator.cdcBmiForAge, sex).lookup(ageMonths)!;
+  final p95 = valueAtZScore(z95, lms);
+  final bmi = result.value;
+  if (bmi < p95) return result;
+
+  final percentile = cdcExtendedBmiPercentile(bmi, p95, cdcExtendedBmiSigma(sex, ageMonths / 12));
+  final percentOfP95 = bmi / p95 * 100;
+  return GrowthResultData(
+    measure: result.measure,
+    value: bmi,
+    zScore: inverseNormalCdf(percentile / 100),
+    percentile: percentile,
+    classification: interpretObesityClass(bmi, percentOfP95),
+    standard: '$cdcStandardName, extended BMI (2022)',
+    note: 'BMI is ${percentOfP95.toStringAsFixed(0)}% of the 95th percentile (${p95.toStringAsFixed(1)} kg/m²)',
+    indicator: result.indicator,
+    referenceX: result.referenceX,
+  );
 }

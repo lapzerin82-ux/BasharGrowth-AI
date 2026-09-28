@@ -24,4 +24,10 @@ Z-score for a measurement `y` is `((y/M)^L - 1) / (L*S)`, or `ln(y/M)/S` when
   `bmiagerev.csv` from <https://www.cdc.gov/growthcharts/percentile_data_files.htm>),
   taken unchanged from the `cdc2-20.json` data table in the RCPCH
   `rcpchgrowth` Python package v4.6.5, with decimal ages converted back to
-  months. CDC's extended BMI-for-age (2022) is not included.
+  months.
+
+CDC 2022 extended BMI-for-age needs no table: its scale parameter is the
+published quadratic in age (`cdcExtendedBmiSigma` in
+`lib/growth_calculations.dart`; Hales et al., Vital Health Stat 1(197), 2022,
+PMID 36598420). It matches the `sigma` column of rcpchgrowth's CDC BMI table
+to within 5e-7 at every age.

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pediatric_growth_monitor/growth_chart.dart';
 import 'package:pediatric_growth_monitor/input_form.dart';
 import 'package:pediatric_growth_monitor/main.dart';
 
@@ -46,6 +47,13 @@ void main() {
     for (final measure in ['Weight-for-Age', 'Length-for-Age', 'Weight-for-Length', 'BMI-for-Age']) {
       expect(find.text(measure), findsOneWidget);
     }
+
+    final chartTile = find.text('Weight-for-Length (WHO 2006)');
+    await tester.ensureVisible(chartTile);
+    await tester.pumpAndSettle();
+    await tester.tap(chartTile);
+    await tester.pumpAndSettle();
+    expect(find.byType(GrowthChart), findsOneWidget);
   });
 
   testWidgets('out-of-range input is rejected', (tester) async {

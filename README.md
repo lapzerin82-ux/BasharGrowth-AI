@@ -11,7 +11,9 @@ This is a **complete Flutter (Dart)** implementation of the Pediatric Growth Mon
 - **Length/height adjustment** (WHO ±0.7 cm when the measuring position does not match the age)
 - **Plausibility checks**: input ranges, and WHO flags for biologically implausible Z-scores
 - **Mid-Parental Height (MPH)** calculation with target range
-- **Bone Age Analysis** (flags >20% discrepancy)
+- **Bone Age Analysis**: bone age minus chronological age; classified as advanced/delayed beyond ±2 SD when the atlas SD for the child's age is entered
+- **CDC 2022 extended BMI-for-age** at or above the 95th percentile: extended percentile/Z-score, % of the 95th percentile, obesity class 1-3
+- **Growth charts** for each indicator (WHO Z-score or CDC percentile curves with the measurement plotted)
 - **Clinical Interpretations** (Underweight, Stunting, Wasting, Overweight, Obesity)
 
 ### 📱 Mobile-First Design
@@ -76,7 +78,7 @@ flutter_app/
 ## 📊 Data Accuracy
 The app bundles the **complete LMS tables** in `assets/growth/` (sources in `assets/growth/README.md`):
 - WHO Child Growth Standards (2006): daily tables 0-1826 days, weight-for-length 45-110 cm, weight-for-height 65-120 cm. Weight-based Z-scores beyond ±3 SD use the WHO restricted method.
-- CDC 2000 Growth Charts: weight, stature and BMI-for-age, 24-240 months.
+- CDC 2000 Growth Charts: weight, stature and BMI-for-age, 24-240 months. At or above the 95th BMI percentile the CDC 2022 extended method is applied (Hales et al., Vital Health Stat 1(197), 2022; PMID 36598420).
 
 WHO is used below 60 months and CDC from 60 months. Measurements outside a table's range are not scored (no extrapolation). Run `flutter test` to check the calculations against the reference values.
 

@@ -3,6 +3,7 @@ import 'input_form.dart';
 import 'result_summary.dart';
 import 'growth_assessment.dart';
 import 'growth_calculations.dart';
+import 'growth_chart.dart';
 import 'growth_standards.dart';
 
 Future<void> main() async {
@@ -49,6 +50,7 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
   Map<String, double>? mph;
   Map<String, dynamic>? boneAgeResult;
   String? ageNote;
+  List<GrowthChartData> charts = [];
 
   void _handleCalculate(PatientData data) {
     final ageDays = calculateAgeDays(data.dob!, data.measurementDate);
@@ -86,6 +88,9 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
 
     setState(() {
       results = newResults;
+      charts = [
+        for (final r in newResults) buildGrowthChart(widget.refs, data.sex, r),
+      ].whereType<GrowthChartData>().toList();
       ageNote = corrected
           ? 'Corrected age ${formatAgeDays(plotAgeDays)} (chronological ${formatAge(data.dob!, data.measurementDate)}, '
               'born at ${formatWeeks(data.gestationalAgeWeeks!)} weeks)'
@@ -104,7 +109,7 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
       
       // Bone Age
       if (data.boneAgeMonths != null) {
-        boneAgeResult = analyzeBoneAge(ageMonths, data.boneAgeMonths);
+        boneAgeResult = analyzeBoneAge(ageMonths, data.boneAgeMonths, sdMonths: data.boneAgeSdMonths);
       } else {
         boneAgeResult = null;
       }
@@ -185,6 +190,7 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
                     results: results,
                     mph: mph,
                     ageNote: ageNote,
+                    charts: charts,
                     boneAgeAnalysis: boneAgeResult,
                   ),
                 

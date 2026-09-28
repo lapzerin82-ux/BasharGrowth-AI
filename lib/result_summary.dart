@@ -1,28 +1,32 @@
 import 'package:flutter/material.dart';
 
-import 'growth_assessment.dart' show implausibleClassification;
-import 'growth_calculations.dart';
+import 'growth_assessment.dart';
+import 'growth_chart.dart';
 
 class ResultSummary extends StatelessWidget {
   final List<GrowthResultData> results;
   final Map<String, double>? mph;
   final Map<String, dynamic>? boneAgeAnalysis;
   final String? ageNote;
+  final List<GrowthChartData> charts;
 
   const ResultSummary({
     Key? key,
     required this.results,
+    this.charts = const [],
     this.ageNote,
     this.mph,
     this.boneAgeAnalysis,
   }) : super(key: key);
+
+  static String _signed(double v) => '${v > 0 ? '+' : ''}${v.toStringAsFixed(1)}';
 
   Color _getStatusColor(String classification) {
     if (classification == implausibleClassification) {
       return Colors.blueGrey;
     } else if (classification == 'Normal' || classification == 'Healthy weight') {
       return Colors.green;
-    } else if (classification.contains('Severe') || classification == 'Obese') {
+    } else if (classification.contains('Severe') || classification.startsWith('Obese')) {
       return Colors.red;
     } else {
       return Colors.orange;
@@ -83,6 +87,21 @@ class ResultSummary extends StatelessWidget {
               ),
             ),
             
+            for (final r in results.where((r) => r.note != null)) ...[
+              const SizedBox(height: 8),
+              Text('${r.measure}: ${r.note}', style: TextStyle(color: Colors.grey.shade800)),
+            ],
+
+            // Growth charts
+            for (final chart in charts)
+              ExpansionTile(
+                title: Text(chart.title),
+                leading: const Icon(Icons.show_chart),
+                tilePadding: EdgeInsets.zero,
+                childrenPadding: const EdgeInsets.only(bottom: 8),
+                children: [GrowthChart(data: chart)],
+              ),
+
             // MPH Section
             if (mph != null) ...[
               const SizedBox(height: 24),
@@ -116,10 +135,10 @@ class ResultSummary extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: boneAgeAnalysis!['status'] == 'Normal' ? Colors.green.shade50 : Colors.amber.shade50,
+                  color: boneAgeAnalysis!['status'] == 'Normal' ? Colors.green.shade50 : boneAgeAnalysis!['status'] == 'Not classified' ? Colors.grey.shade100 : Colors.amber.shade50,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: boneAgeAnalysis!['status'] == 'Normal' ? Colors.green.shade100 : Colors.amber.shade100,
+                    color: boneAgeAnalysis!['status'] == 'Normal' ? Colors.green.shade100 : boneAgeAnalysis!['status'] == 'Not classified' ? Colors.grey.shade300 : Colors.amber.shade100,
                   ),
                 ),
                 child: Column(
@@ -128,7 +147,15 @@ class ResultSummary extends StatelessWidget {
                     const Text('Bone Age Analysis', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
                     Text(
-                      'Status: ${boneAgeAnalysis!['status']}${boneAgeAnalysis!['status'] != 'Normal' ? ' (${boneAgeAnalysis!['diff'] > 0 ? '+' : ''}${boneAgeAnalysis!['diff'].toStringAsFixed(1)} months difference)' : ''}',
+                      'Bone age − chronological age: ${_signed(boneAgeAnalysis!['diff'] as double)} months'
+                      '${boneAgeAnalysis!['sds'] != null ? ' (${_signed(boneAgeAnalysis!['sds'] as double)} SD)' : ''}',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      boneAgeAnalysis!['sds'] == null
+                          ? 'Enter the atlas SD for this age to classify (±2 SD).'
+                          : 'Status: ${boneAgeAnalysis!['status']}',
                       style: const TextStyle(fontSize: 14),
                     ),
                   ],

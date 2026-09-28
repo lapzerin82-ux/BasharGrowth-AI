@@ -10,6 +10,7 @@ class PatientData {
   double? height;
   DateTime measurementDate;
   double? boneAgeMonths;
+  double? boneAgeSdMonths;
   double? motherHeight;
   double? fatherHeight;
   double? gestationalAgeWeeks;
@@ -24,6 +25,7 @@ class PatientData {
     this.height,
     DateTime? measurementDate,
     this.boneAgeMonths,
+    this.boneAgeSdMonths,
     this.motherHeight,
     this.fatherHeight,
     this.gestationalAgeWeeks,
@@ -239,6 +241,19 @@ class _InputFormState extends State<InputForm> {
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 validator: rangeValidator(0, 240),
                 onSaved: (val) => _data.boneAgeMonths = parseNumber(val),
+              ),
+              const SizedBox(height: 16),
+
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Bone Age SD for Chronological Age (Months)',
+                  helperText: 'From the atlas used (e.g. Greulich-Pyle); classifies at ±2 SD',
+                  helperMaxLines: 2,
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                validator: rangeValidator(1, 36),
+                onSaved: (val) => _data.boneAgeSdMonths = parseNumber(val),
               ),
               const SizedBox(height: 16),
 

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pediatric_growth_monitor/growth_assessment.dart';
 import 'package:pediatric_growth_monitor/growth_calculations.dart';
+import 'package:pediatric_growth_monitor/growth_chart.dart';
 import 'package:pediatric_growth_monitor/growth_standards.dart';
 
 GrowthReferences loadReferences() {
@@ -134,7 +135,7 @@ void main() {
       final obeseBmi = valueAtZScore(1.8, lms); // ~96th percentile
       final girl = assessGrowth(
           refs: refs, sex: 'F', ageDays: 3668, weightKg: obeseBmi * heightM * heightM, heightCm: heightM * 100);
-      expect(resultFor(girl, 'BMI-for-Age').classification, 'Obese');
+      expect(resultFor(girl, 'BMI-for-Age').classification, startsWith('Obese'));
     });
 
     test('returns nothing outside the reference range', () {
@@ -212,6 +213,95 @@ void main() {
 
     final plausible = assessGrowth(refs: refs, sex: 'M', ageDays: 365, weightKg: 7.0);
     expect(resultFor(plausible, 'Weight-for-Age').classification, isNot(implausibleClassification));
+  });
+
+  group('CDC 2022 extended BMI', () {
+    test('sigma matches the published quadratic', () {
+      expect(cdcExtendedBmiSigma('M', 2), closeTo(1.3756, 1e-4));
+      expect(cdcExtendedBmiSigma('F', 2), closeTo(1.5714, 1e-4));
+    });
+
+    test('inverse normal CDF', () {
+      expect(inverseNormalCdf(0.5), closeTo(0, 1e-9));
+      expect(inverseNormalCdf(0.95), closeTo(z95, 1e-8));
+      expect(inverseNormalCdf(0.001), closeTo(-3.090232306, 1e-8));
+    });
+
+    test('BMI at 130% of P95 in a 10-year-old boy', () {
+      // 120.5 months = 3668 days. P95 22.1541, sigma 4.6729 (independently computed).
+      const p95 = 22.154092419730485;
+      final bmi = p95 * 1.3;
+      const heightM = 1.40;
+      final results = assessGrowth(refs: refs, sex: 'M', ageDays: 3668, weightKg: bmi * heightM * heightM, heightCm: 140);
+      final r = resultFor(results, 'BMI-for-Age');
+      expect(r.percentile, closeTo(99.22531402145383, 1e-3));
+      expect(r.zScore, closeTo(inverseNormalCdf(0.9922531402145383), 1e-3));
+      expect(r.classification, 'Obese Class 2 (Severe)');
+      expect(r.note, contains('130% of the 95th percentile'));
+      expect(r.standard, contains('extended BMI'));
+    });
+
+    test('below P95 keeps the LMS percentile', () {
+      final results = assessGrowth(refs: refs, sex: 'M', ageDays: 3668, weightKg: 17 * 1.96, heightCm: 140);
+      final r = resultFor(results, 'BMI-for-Age');
+      expect(r.note, isNull);
+      expect(r.classification, 'Healthy weight');
+    });
+
+    test('obesity class thresholds', () {
+      expect(interpretObesityClass(30, 110), 'Obese Class 1');
+      expect(interpretObesityClass(30, 120), 'Obese Class 2 (Severe)');
+      expect(interpretObesityClass(35, 110), 'Obese Class 2 (Severe)');
+      expect(interpretObesityClass(30, 140), 'Obese Class 3 (Severe)');
+      expect(interpretObesityClass(40, 110), 'Obese Class 3 (Severe)');
+    });
+  });
+
+  group('growth charts', () {
+    test('WHO chart: Z curves in months, patient at scored position', () {
+      final r = resultFor(assessGrowth(refs: refs, sex: 'F', ageDays: 365, weightKg: 9.5), 'Weight-for-Age');
+      final chart = buildGrowthChart(refs, 'F', r)!;
+      expect(chart.curves.map((c) => c.label), ['Z -3', 'Z -2', 'Z 0', 'Z +2', 'Z +3']);
+      expect(chart.minX, 0);
+      expect(chart.maxX, closeTo(60, 0.01));
+      expect(chart.patient.x, closeTo(365 / 30.4375, 1e-9));
+      expect(chart.patient.y, 9.5);
+      final median = chart.curves.singleWhere((c) => c.label == 'Z 0');
+      final at364 = median.points.firstWhere((p) => (p.x - 364 / 30.4375).abs() < 1e-9);
+      expect(at364.y, closeTo(refs.table(GrowthIndicator.whoWeightForAge, 'F').lookup(364)!.m, 1e-9));
+    });
+
+    test('CDC chart: percentile curves in years', () {
+      final r = resultFor(
+          assessGrowth(refs: refs, sex: 'M', ageDays: 3668, weightKg: 32, heightCm: 138), 'Height-for-Age');
+      final chart = buildGrowthChart(refs, 'M', r)!;
+      expect(chart.curves.map((c) => c.label), ['P5', 'P10', 'P25', 'P50', 'P75', 'P90', 'P95']);
+      expect(chart.minX, 2);
+      expect(chart.xLabel, 'Age (years)');
+      final p50 = chart.curves.singleWhere((c) => c.label == 'P50');
+      expect(p50.points.first.y, closeTo(86.45220101, 1e-6));
+    });
+
+    test('weight-for-length chart is indexed by length', () {
+      final r = resultFor(
+          assessGrowth(refs: refs, sex: 'M', ageDays: 300, weightKg: 9, heightCm: 72), 'Weight-for-Length');
+      final chart = buildGrowthChart(refs, 'M', r)!;
+      expect(chart.minX, 45);
+      expect(chart.maxX, 110);
+      expect(chart.patient.x, 72);
+    });
+  });
+
+  group('bone age', () {
+    test('classifies only with an atlas SD, at +/-2 SD', () {
+      expect(analyzeBoneAge(120, 100)!['status'], 'Not classified');
+      expect(analyzeBoneAge(120, 100)!['diff'], -20);
+      expect(analyzeBoneAge(120, 100, sdMonths: 10.8)!['status'], 'Normal');
+      expect(analyzeBoneAge(120, 96, sdMonths: 10.8)!['status'], 'Delayed');
+      expect(analyzeBoneAge(120, 144, sdMonths: 10.8)!['status'], 'Advanced');
+      expect(analyzeBoneAge(120, 144, sdMonths: 10.8)!['sds'], closeTo(24 / 10.8, 1e-12));
+      expect(analyzeBoneAge(120, null), isNull);
+    });
   });
 
   test('calendar age formatting', () {
