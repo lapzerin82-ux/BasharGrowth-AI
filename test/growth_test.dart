@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pediatric_growth_monitor/cdc_chart_page.dart';
 import 'package:pediatric_growth_monitor/growth_assessment.dart';
 import 'package:pediatric_growth_monitor/growth_calculations.dart';
 import 'package:pediatric_growth_monitor/growth_chart.dart';
@@ -19,6 +20,8 @@ void expectLms(LMSParameters? lms, double l, double m, double s) {
   expect(lms.m, closeTo(m, 1e-9));
   expect(lms.s, closeTo(s, 1e-9));
 }
+
+ChartCurve median(GrowthChartData chart) => chart.curves.singleWhere((c) => c.label == 'Z 0');
 
 GrowthResultData resultFor(List<GrowthResultData> results, String measure) {
   return results.singleWhere((r) => r.measure == measure);
@@ -40,8 +43,6 @@ void main() {
         }
         expect(refs.table(GrowthIndicator.whoWeightForLength, sex).minX, 45);
         expect(refs.table(GrowthIndicator.whoWeightForLength, sex).maxX, 110);
-        expect(refs.table(GrowthIndicator.whoWeightForHeight, sex).minX, 65);
-        expect(refs.table(GrowthIndicator.whoWeightForHeight, sex).maxX, 120);
         expect(refs.table(GrowthIndicator.cdcWeightForAge, sex).minX, 24);
         expect(refs.table(GrowthIndicator.cdcWeightForAge, sex).maxX, 240);
         expect(refs.table(GrowthIndicator.cdcStatureForAge, sex).maxX, 240);
@@ -112,18 +113,24 @@ void main() {
       expect(resultFor(results, 'Weight-for-Age').standard, whoStandardName);
     });
 
-    test('uses WHO below 60 months with length/height switch at 731 days', () {
-      final infant = assessGrowth(refs: refs, sex: 'M', ageDays: 700, weightKg: 11.5, heightCm: 85);
+    test('uses WHO below 24 months and CDC from 731 days', () {
+      final infant = assessGrowth(refs: refs, sex: 'M', ageDays: 730, weightKg: 11.5, heightCm: 85);
       expect(infant.map((r) => r.measure),
           ['Weight-for-Age', 'Length-for-Age', 'Weight-for-Length', 'BMI-for-Age']);
+      expect(infant.every((r) => r.standard == whoStandardName), isTrue);
 
-      final toddler = assessGrowth(refs: refs, sex: 'M', ageDays: 731, weightKg: 12.1645, heightCm: 87);
-      expect(toddler.map((r) => r.measure),
-          ['Weight-for-Age', 'Height-for-Age', 'Weight-for-Height', 'BMI-for-Age']);
-      expect(resultFor(toddler, 'Weight-for-Height').zScore, closeTo(0, 1e-9));
+      final medianWeight = refs.table(GrowthIndicator.cdcWeightForAge, 'M').lookup(731 / 30.4375)!.m;
+      final toddler = assessGrowth(refs: refs, sex: 'M', ageDays: 731, weightKg: medianWeight, heightCm: 87);
+      expect(toddler.map((r) => r.measure), ['Weight-for-Age', 'Height-for-Age', 'BMI-for-Age']);
+      expect(resultFor(toddler, 'Weight-for-Age').standard, cdcStandardName);
+      expect(resultFor(toddler, 'Weight-for-Age').zScore, closeTo(0, 1e-9));
+
+      // 3-year-olds were WHO before the switch; now CDC.
+      final threeYears = assessGrowth(refs: refs, sex: 'F', ageDays: 1096, weightKg: 14);
+      expect(resultFor(threeYears, 'Weight-for-Age').standard, cdcStandardName);
     });
 
-    test('uses CDC from 60 months with BMI percentile classification', () {
+    test('CDC BMI percentile classification', () {
       // 10 years (120.5 months = 3668 days) boy at the CDC weight median.
       final results = assessGrowth(refs: refs, sex: 'M', ageDays: 3668, weightKg: 32.08799062, heightCm: 138);
       expect(results.map((r) => r.measure), ['Weight-for-Age', 'Height-for-Age', 'BMI-for-Age']);
@@ -195,14 +202,11 @@ void main() {
       expect(resultFor(lying, 'Height-for-Age').zScore, closeTo(resultFor(standing, 'Height-for-Age').zScore!, 1e-9));
     });
 
-    test('no adjustment when position matches the age, or for CDC', () {
+    test('no adjustment when position matches the age', () {
       final auto = assessGrowth(refs: refs, sex: 'F', ageDays: 900, heightCm: 88.0);
       final explicit = assessGrowth(refs: refs, sex: 'F', ageDays: 900, heightCm: 88.0, measuredStanding: true);
       expect(resultFor(explicit, 'Height-for-Age').zScore, resultFor(auto, 'Height-for-Age').zScore);
-
-      final cdc = assessGrowth(refs: refs, sex: 'F', ageDays: 3000, heightCm: 130, measuredStanding: false);
-      final cdcAuto = assessGrowth(refs: refs, sex: 'F', ageDays: 3000, heightCm: 130);
-      expect(resultFor(cdc, 'Height-for-Age').zScore, resultFor(cdcAuto, 'Height-for-Age').zScore);
+      expect(resultFor(auto, 'Height-for-Age').standard, cdcStandardName);
     });
   });
 
@@ -263,23 +267,18 @@ void main() {
       final chart = buildGrowthChart(refs, 'F', r)!;
       expect(chart.curves.map((c) => c.label), ['Z -3', 'Z -2', 'Z 0', 'Z +2', 'Z +3']);
       expect(chart.minX, 0);
-      expect(chart.maxX, closeTo(60, 0.01));
+      expect(chart.maxX, 24);
+      expect(median(chart).points.last.x, closeTo(730 / 30.4375, 1e-9));
       expect(chart.patient.x, closeTo(365 / 30.4375, 1e-9));
       expect(chart.patient.y, 9.5);
-      final median = chart.curves.singleWhere((c) => c.label == 'Z 0');
-      final at364 = median.points.firstWhere((p) => (p.x - 364 / 30.4375).abs() < 1e-9);
+      final at364 = median(chart).points.firstWhere((p) => (p.x - 364 / 30.4375).abs() < 1e-9);
       expect(at364.y, closeTo(refs.table(GrowthIndicator.whoWeightForAge, 'F').lookup(364)!.m, 1e-9));
     });
 
-    test('CDC chart: percentile curves in years', () {
+    test('CDC results have no drawn chart: they go on the CDC pages', () {
       final r = resultFor(
           assessGrowth(refs: refs, sex: 'M', ageDays: 3668, weightKg: 32, heightCm: 138), 'Height-for-Age');
-      final chart = buildGrowthChart(refs, 'M', r)!;
-      expect(chart.curves.map((c) => c.label), ['P5', 'P10', 'P25', 'P50', 'P75', 'P90', 'P95']);
-      expect(chart.minX, 2);
-      expect(chart.xLabel, 'Age (years)');
-      final p50 = chart.curves.singleWhere((c) => c.label == 'P50');
-      expect(p50.points.first.y, closeTo(86.45220101, 1e-6));
+      expect(buildGrowthChart(refs, 'M', r), isNull);
     });
 
     test('weight-for-length chart is indexed by length', () {
@@ -289,6 +288,50 @@ void main() {
       expect(chart.minX, 45);
       expect(chart.maxX, 110);
       expect(chart.patient.x, 72);
+    });
+  });
+
+  group('CDC chart pages', () {
+    test('stature and weight share a page, BMI has its own, by sex', () {
+      final boy = assessGrowth(refs: refs, sex: 'M', ageDays: 3668, weightKg: 32, heightCm: 138);
+      final plots = buildCdcChartPlots('M', boy);
+      expect(plots.map((p) => p.page), [CdcChartPage.boysStatureWeight, CdcChartPage.boysBmi]);
+      expect(plots.first.points.map((p) => p.measure), ['Weight-for-Age', 'Height-for-Age']);
+
+      final girl = assessGrowth(refs: refs, sex: 'F', ageDays: 3668, weightKg: 32, heightCm: 138);
+      expect(buildCdcChartPlots('F', girl).map((p) => p.page), [CdcChartPage.girlsStatureWeight, CdcChartPage.girlsBmi]);
+
+      // WHO results (under 2 years) are not put on CDC pages.
+      expect(buildCdcChartPlots('M', assessGrowth(refs: refs, sex: 'M', ageDays: 365, weightKg: 9)), isEmpty);
+    });
+
+    test('positions come from the calibrated grid', () {
+      // Year grid lines: exact at whole years, linear in between.
+      expect(CdcChartPage.boysStatureWeight.x(10), 281.26);
+      expect(CdcChartPage.boysStatureWeight.x(10.5), closeTo((281.26 + 302.693) / 2, 1e-9));
+      final p = CdcChartPage.boysStatureWeight.position(GrowthIndicator.cdcStatureForAge, 10, 150)!;
+      expect(p.dx, 281.26);
+      expect(p.dy, closeTo(886.101 - 4.03735 * 150, 1e-9));
+      final bmi = CdcChartPage.girlsBmi.position(GrowthIndicator.cdcBmiForAge, 2, 16)!;
+      expect(bmi.dx, 97.81);
+      expect(bmi.dy, closeTo(919.707 - 22.7409 * 16, 1e-9));
+      // Every point is on the page.
+      for (final page in CdcChartPage.values) {
+        for (final age in [2.0, 11.0, 20.0]) {
+          expect(page.x(age), inInclusiveRange(0, cdcPageWidth));
+        }
+      }
+    });
+
+    test('values off the printed scale are not plotted', () {
+      final page = CdcChartPage.boysBmi;
+      expect(page.position(GrowthIndicator.cdcBmiForAge, 10, 36), isNull);
+      expect(page.position(GrowthIndicator.cdcBmiForAge, 1.9, 16), isNull);
+      expect(page.position(GrowthIndicator.cdcStatureForAge, 10, 140), isNull);
+
+      final severe = assessGrowth(refs: refs, sex: 'M', ageDays: 3668, weightKg: 80, heightCm: 140);
+      final bmiPlot = buildCdcChartPlots('M', severe).singleWhere((p) => p.page == CdcChartPage.boysBmi);
+      expect(bmiPlot.points.single.position, isNull);
     });
   });
 

@@ -236,7 +236,7 @@ String interpretWeightForAge(double z) {
   return 'Normal';
 }
 
-/// Interprets Length/Height-for-Age Z-score. WHO (< 5y) uses stunting
+/// Interprets Length/Height-for-Age Z-score. WHO (< 2y) uses stunting
 /// terminology; for CDC ages below -2 SD is reported as short stature.
 String interpretLengthHeightForAge(double z, {bool isWHO = true}) {
   if (isWHO) {
@@ -249,7 +249,7 @@ String interpretLengthHeightForAge(double z, {bool isWHO = true}) {
   return 'Normal';
 }
 
-/// Interprets Weight-for-Length/Height or BMI-for-Age Z-score (WHO < 5y)
+/// Interprets Weight-for-Length/Height or BMI-for-Age Z-score (WHO < 2y)
 String interpretWeightForLength(double z) {
   if (z < -3) return 'Severe Wasting';
   if (z < -2) return 'Wasting';

@@ -77,7 +77,6 @@ enum GrowthIndicator {
   whoLengthHeightForAge('who_length_height_for_age.csv'),
   whoBmiForAge('who_bmi_for_age.csv'),
   whoWeightForLength('who_weight_for_length.csv'),
-  whoWeightForHeight('who_weight_for_height.csv'),
   cdcWeightForAge('cdc_weight_for_age.csv'),
   cdcStatureForAge('cdc_stature_for_age.csv'),
   cdcBmiForAge('cdc_bmi_for_age.csv');

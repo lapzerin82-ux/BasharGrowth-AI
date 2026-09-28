@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'cdc_chart_page.dart';
 import 'input_form.dart';
 import 'result_summary.dart';
 import 'growth_assessment.dart';
@@ -51,6 +52,7 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
   Map<String, dynamic>? boneAgeResult;
   String? ageNote;
   List<GrowthChartData> charts = [];
+  List<CdcChartPlot> cdcPlots = [];
 
   void _handleCalculate(PatientData data) {
     final ageDays = calculateAgeDays(data.dob!, data.measurementDate);
@@ -91,6 +93,7 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
       charts = [
         for (final r in newResults) buildGrowthChart(widget.refs, data.sex, r),
       ].whereType<GrowthChartData>().toList();
+      cdcPlots = buildCdcChartPlots(data.sex, newResults);
       ageNote = corrected
           ? 'Corrected age ${formatAgeDays(plotAgeDays)} (chronological ${formatAge(data.dob!, data.measurementDate)}, '
               'born at ${formatWeeks(data.gestationalAgeWeeks!)} weeks)'
@@ -165,7 +168,7 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Precision growth assessment using WHO (0-5y) & CDC (5-20y) standards',
+                                  'Precision growth assessment using WHO (0-2y) & CDC (2-20y) standards',
                                   style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
                                 ),
                               ],
@@ -191,6 +194,7 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
                     mph: mph,
                     ageNote: ageNote,
                     charts: charts,
+                    cdcPlots: cdcPlots,
                     boneAgeAnalysis: boneAgeResult,
                   ),
                 

@@ -10,7 +10,6 @@ Z-score for a measurement `y` is `((y/M)^L - 1) / (L*S)`, or `ln(y/M)/S` when
 | `who_length_height_for_age.csv` | WHO 2006 (length < 731 d, height from 731 d) | age in days | 0–1826 |
 | `who_bmi_for_age.csv` | WHO 2006 (length-based < 731 d, height-based from 731 d) | age in days | 0–1826 |
 | `who_weight_for_length.csv` | WHO 2006 | recumbent length, cm | 45.0–110.0 |
-| `who_weight_for_height.csv` | WHO 2006 | standing height, cm | 65.0–120.0 |
 | `cdc_weight_for_age.csv` | CDC 2000 Growth Charts | age in months | 24–240 |
 | `cdc_stature_for_age.csv` | CDC 2000 Growth Charts | age in months | 24–240 |
 | `cdc_bmi_for_age.csv` | CDC 2000 Growth Charts | age in months | 24–240.5 |

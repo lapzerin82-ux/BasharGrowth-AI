@@ -10,7 +10,7 @@ class ChartCurve {
   final String label;
   final List<FlSpot> points;
 
-  /// 0 = median, 1 = inner cut-off (Z +/-2, P5/P95), 2 = outer (Z +/-3), 3 = other.
+  /// 0 = median, 1 = inner cut-off (Z +/-2), 2 = outer (Z +/-3).
   final int emphasis;
 
   const ChartCurve(this.label, this.points, this.emphasis);
@@ -42,74 +42,64 @@ class GrowthChartData {
 }
 
 const List<double> whoChartZScores = [-3, -2, 0, 2, 3];
-const List<double> cdcChartPercentiles = [5, 10, 25, 50, 75, 90, 95];
 
-/// Builds the chart for a scored result, or null if it was not scored
-/// against a reference table.
+/// Last day of age scored against WHO (see [whoUpperAgeMonths]).
+const double whoAgeChartMaxDays = standingHeightFromDays - 1;
+
+/// Builds the WHO chart for a scored result, or null if it was not scored
+/// against a WHO table. CDC results are drawn on the CDC chart pages instead
+/// (see `cdc_chart_page.dart`).
 GrowthChartData? buildGrowthChart(GrowthReferences refs, String sex, GrowthResultData result) {
   final indicator = result.indicator;
   final x = result.referenceX;
-  if (indicator == null || x == null) return null;
+  if (indicator == null || x == null || !indicator.name.startsWith('who')) return null;
 
   final table = refs.table(indicator, sex);
-  final isCdc = indicator.name.startsWith('cdc');
-  final isByLength = indicator == GrowthIndicator.whoWeightForLength || indicator == GrowthIndicator.whoWeightForHeight;
+  final isByLength = indicator == GrowthIndicator.whoWeightForLength;
 
-  // Table index -> displayed x: WHO age in months, CDC age in years, or cm.
-  final double Function(double) toDisplayX = isByLength
-      ? (v) => v
-      : isCdc
-          ? (v) => v / 12
-          : (v) => v / 30.4375;
-  final double step = isByLength ? 0.5 : (isCdc ? 1 : 7);
+  // Table index -> displayed x: age in months, or length in cm.
+  final double Function(double) toDisplayX = isByLength ? (v) => v : (v) => v / 30.4375;
+  final double step = isByLength ? 0.5 : 7;
+  // WHO age tables run to 5 years but are used only below 731 days.
+  final maxIndex = isByLength ? table.maxX : whoAgeChartMaxDays;
 
-  final levels = isCdc
-      ? [
-          for (final p in cdcChartPercentiles)
-            (
-              label: 'P${p.toStringAsFixed(0)}',
-              z: inverseNormalCdf(p / 100),
-              emphasis: p == 50 ? 0 : (p == 5 || p == 95 ? 1 : 3),
-            )
-        ]
-      : [
-          for (final z in whoChartZScores)
-            (
-              label: z == 0 ? 'Z 0' : 'Z ${z > 0 ? '+' : ''}${z.toStringAsFixed(0)}',
-              z: z,
-              emphasis: z == 0 ? 0 : (z.abs() == 2 ? 1 : 2),
-            )
-        ];
+  final levels = [
+    for (final z in whoChartZScores)
+      (
+        label: z == 0 ? 'Z 0' : 'Z ${z > 0 ? '+' : ''}${z.toStringAsFixed(0)}',
+        z: z,
+        emphasis: z == 0 ? 0 : (z.abs() == 2 ? 1 : 2),
+      )
+  ];
 
   final curves = [
     for (final level in levels)
       ChartCurve(
         level.label,
         [
-          for (var v = table.minX; v <= table.maxX; v += step)
+          for (var v = table.minX; v <= maxIndex; v += step)
             FlSpot(toDisplayX(v), valueAtZScore(level.z, table.lookup(v)!)),
+          if (!isByLength) FlSpot(toDisplayX(maxIndex), valueAtZScore(level.z, table.lookup(maxIndex)!)),
         ],
         level.emphasis,
       ),
   ];
 
   final unit = switch (indicator) {
-    GrowthIndicator.whoBmiForAge || GrowthIndicator.cdcBmiForAge => 'BMI (kg/m²)',
-    GrowthIndicator.whoLengthHeightForAge || GrowthIndicator.cdcStatureForAge => 'Length/height (cm)',
+    GrowthIndicator.whoBmiForAge => 'BMI (kg/m²)',
+    GrowthIndicator.whoLengthHeightForAge => 'Length (cm)',
     _ => 'Weight (kg)',
   };
 
   return GrowthChartData(
-    title: '${result.measure} (${isCdc ? 'CDC 2000' : 'WHO 2006'})',
-    xLabel: isByLength
-        ? (indicator == GrowthIndicator.whoWeightForLength ? 'Length (cm)' : 'Height (cm)')
-        : (isCdc ? 'Age (years)' : 'Age (months)'),
+    title: '${result.measure} (WHO 2006)',
+    xLabel: isByLength ? 'Length (cm)' : 'Age (months)',
     yLabel: unit,
     curves: curves,
     patient: FlSpot(toDisplayX(x), result.value),
     minX: toDisplayX(table.minX),
-    maxX: toDisplayX(table.maxX),
-    xInterval: isByLength ? 10 : (isCdc ? 2 : 6),
+    maxX: isByLength ? table.maxX : 24,
+    xInterval: isByLength ? 10 : 3,
   );
 }
 

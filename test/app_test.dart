@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pediatric_growth_monitor/cdc_chart_page.dart';
 import 'package:pediatric_growth_monitor/growth_chart.dart';
 import 'package:pediatric_growth_monitor/input_form.dart';
 import 'package:pediatric_growth_monitor/main.dart';
@@ -54,6 +55,34 @@ void main() {
     await tester.tap(chartTile);
     await tester.pumpAndSettle();
     expect(find.byType(GrowthChart), findsOneWidget);
+  });
+
+  testWidgets('from 2 years the CDC chart pages are shown', (tester) async {
+    tester.view.physicalSize = const Size(1200, 2400);
+    addTearDown(tester.view.resetPhysicalSize);
+
+    await tester.pumpWidget(MyApp(refs: refs));
+    final form = tester.state(find.byType(InputForm)) as dynamic;
+    final PatientData data = form.patientDataForTest;
+    data.dob = DateTime(2014, 1, 1);
+    data.measurementDate = DateTime(2024, 1, 1);
+
+    await enter(tester, 'Weight (kg)', '32');
+    await enter(tester, 'Length/Height (cm)', '138');
+    await tapCalculate(tester);
+
+    expect(find.text('Stature-for-age and Weight-for-age (CDC 2000)'), findsOneWidget);
+    expect(find.text('BMI-for-age (CDC 2000)'), findsOneWidget);
+    expect(find.byType(GrowthChart), findsNothing);
+
+    final tile = find.text('BMI-for-age (CDC 2000)');
+    await tester.ensureVisible(tile);
+    await tester.pumpAndSettle();
+    await tester.tap(tile);
+    await tester.pumpAndSettle();
+    final view = tester.widget<CdcChartPageView>(find.byType(CdcChartPageView));
+    expect(view.plot.page, CdcChartPage.boysBmi);
+    expect(view.plot.points.single.position, isNotNull);
   });
 
   testWidgets('out-of-range input is rejected', (tester) async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'cdc_chart_page.dart';
 import 'growth_assessment.dart';
 import 'growth_chart.dart';
 
@@ -9,11 +10,13 @@ class ResultSummary extends StatelessWidget {
   final Map<String, dynamic>? boneAgeAnalysis;
   final String? ageNote;
   final List<GrowthChartData> charts;
+  final List<CdcChartPlot> cdcPlots;
 
   const ResultSummary({
     Key? key,
     required this.results,
     this.charts = const [],
+    this.cdcPlots = const [],
     this.ageNote,
     this.mph,
     this.boneAgeAnalysis,
@@ -125,6 +128,14 @@ class ResultSummary extends StatelessWidget {
                 tilePadding: EdgeInsets.zero,
                 childrenPadding: const EdgeInsets.only(bottom: 8),
                 children: [GrowthChart(data: chart)],
+              ),
+            for (final plot in cdcPlots)
+              ExpansionTile(
+                title: Text(plot.page.title),
+                leading: const Icon(Icons.show_chart),
+                tilePadding: EdgeInsets.zero,
+                childrenPadding: const EdgeInsets.only(bottom: 8),
+                children: [CdcChartPageView(plot: plot)],
               ),
 
             // MPH Section

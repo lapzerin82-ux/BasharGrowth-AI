@@ -1,15 +1,16 @@
 import 'growth_calculations.dart';
 import 'growth_standards.dart';
 
-/// WHO Child Growth Standards are used below 60 months; CDC 2000 references
-/// from 60 months to 20 years.
-const double whoUpperAgeMonths = 60;
+/// WHO Child Growth Standards are used below 24 months and CDC 2000 references
+/// from 24 months to 20 years (CDC/AAP recommendation, MMWR 2010;59(RR-9)).
+const double whoUpperAgeMonths = 24;
 
-/// WHO measures recumbent length below 731 days and standing height from
-/// 731 days (24 completed months).
-const int whoStandingHeightFromDays = 731;
+/// Recumbent length is expected below 731 days and standing height from
+/// 731 days (24 completed months), matching the WHO/CDC switch.
+const int standingHeightFromDays = 731;
 
-/// WHO: standing height is on average 0.7 cm less than recumbent length.
+/// Standing height is on average 0.7 cm less than recumbent length (WHO).
+/// Also applied to CDC 2–20 y stature when a child is measured lying.
 const double lengthHeightDifferenceCm = 0.7;
 
 /// WHO flag limits for biologically implausible Z-scores (WHO Anthro).
@@ -56,10 +57,10 @@ const String cdcStandardName = 'CDC Growth Reference (2000)';
 ///
 /// [sex] is 'M' or 'F'. [ageDays] is the age to plot, already corrected for
 /// prematurity. [measuredStanding] says how [heightCm] was measured; when null
-/// it is assumed to match the WHO convention for the age (recumbent length
-/// below 731 days, standing height from 731 days). Otherwise WHO indicators
-/// convert it by 0.7 cm. Indicators whose value falls outside the reference
-/// range are omitted rather than extrapolated.
+/// it is assumed to match the convention for the age (recumbent length below
+/// 731 days, standing height from 731 days). Otherwise it is converted by
+/// 0.7 cm. Indicators whose value falls outside the reference range are
+/// omitted rather than extrapolated.
 List<GrowthResultData> assessGrowth({
   required GrowthReferences refs,
   required String sex,
@@ -75,8 +76,8 @@ List<GrowthResultData> assessGrowth({
   final isWHO = ageMonths < whoUpperAgeMonths;
   final weight = weightKg != null && weightKg > 0 ? weightKg : null;
   final measured = heightCm != null && heightCm > 0 ? heightCm : null;
-  final expectStanding = ageDays >= whoStandingHeightFromDays;
-  final height = measured == null || !isWHO || measuredStanding == null || measuredStanding == expectStanding
+  final expectStanding = ageDays >= standingHeightFromDays;
+  final height = measured == null || measuredStanding == null || measuredStanding == expectStanding
       ? measured
       : measured + (measuredStanding ? lengthHeightDifferenceCm : -lengthHeightDifferenceCm);
 
@@ -128,7 +129,7 @@ List<GrowthResultData> assessGrowth({
   }
 
   if (height != null) {
-    final lengthOrHeight = !isWHO || ageDays >= whoStandingHeightFromDays ? 'Height' : 'Length';
+    final lengthOrHeight = isWHO ? 'Length' : 'Height';
     add(score(
       '$lengthOrHeight-for-Age',
       isWHO ? GrowthIndicator.whoLengthHeightForAge : GrowthIndicator.cdcStatureForAge,
@@ -141,11 +142,11 @@ List<GrowthResultData> assessGrowth({
   }
 
   if (weight != null && height != null) {
+    // From 2 years CDC recommends BMI-for-age instead of weight-for-stature.
     if (isWHO) {
-      final useLength = ageDays < whoStandingHeightFromDays;
       add(score(
-        useLength ? 'Weight-for-Length' : 'Weight-for-Height',
-        useLength ? GrowthIndicator.whoWeightForLength : GrowthIndicator.whoWeightForHeight,
+        'Weight-for-Length',
+        GrowthIndicator.whoWeightForLength,
         height,
         weight,
         (z, _) => interpretWeightForLength(z),
