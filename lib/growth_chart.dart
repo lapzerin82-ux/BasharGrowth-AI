@@ -53,8 +53,7 @@ GrowthChartData? buildGrowthChart(GrowthReferences refs, String sex, GrowthResul
 
   final table = refs.table(indicator, sex);
   final isCdc = indicator.name.startsWith('cdc');
-  final isByLength =
-      indicator == GrowthIndicator.whoWeightForLength || indicator == GrowthIndicator.whoWeightForHeight;
+  final isByLength = indicator == GrowthIndicator.whoWeightForLength || indicator == GrowthIndicator.whoWeightForHeight;
 
   // Table index -> displayed x: WHO age in months, CDC age in years, or cm.
   final double Function(double) toDisplayX = isByLength
@@ -110,13 +109,15 @@ GrowthChartData? buildGrowthChart(GrowthReferences refs, String sex, GrowthResul
     patient: FlSpot(toDisplayX(x), result.value),
     minX: toDisplayX(table.minX),
     maxX: toDisplayX(table.maxX),
-    xInterval: isByLength ? 5 : (isCdc ? 2 : 6),
+    xInterval: isByLength ? 10 : (isCdc ? 2 : 6),
   );
 }
 
 Widget _axisLabel(double value, TitleMeta meta) {
-  // Skip the automatic min/max labels when they are not whole numbers.
-  if (value != value.roundToDouble()) return const SizedBox.shrink();
+  // fl_chart also labels the axis min and max; skip them unless they fall on
+  // the regular label spacing, so they cannot overlap a neighbouring label.
+  final onGrid = (value / meta.appliedInterval - (value / meta.appliedInterval).round()).abs() < 1e-6;
+  if (!onGrid || value != value.roundToDouble()) return const SizedBox.shrink();
   return SideTitleWidget(
     axisSide: meta.axisSide,
     child: Text(value.toStringAsFixed(0), style: const TextStyle(fontSize: 10)),
@@ -153,55 +154,59 @@ class GrowthChart extends StatelessWidget {
       children: [
         AspectRatio(
           aspectRatio: 1.3,
-          child: LineChart(
-            LineChartData(
-              minX: data.minX,
-              maxX: data.maxX,
-              minY: (minY - pad).floorToDouble(),
-              maxY: (maxY + pad).ceilToDouble(),
-              lineTouchData: const LineTouchData(enabled: false),
-              gridData: const FlGridData(show: true),
-              borderData: FlBorderData(show: true),
-              titlesData: FlTitlesData(
-                topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                bottomTitles: AxisTitles(
-                  axisNameWidget: Text(data.xLabel, style: const TextStyle(fontSize: 12)),
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    reservedSize: 28,
-                    interval: data.xInterval,
-                    getTitlesWidget: _axisLabel,
-                  ),
-                ),
-                leftTitles: AxisTitles(
-                  axisNameWidget: Text(data.yLabel, style: const TextStyle(fontSize: 12)),
-                  sideTitles: const SideTitles(showTitles: true, reservedSize: 40, getTitlesWidget: _axisLabel),
-                ),
-              ),
-              lineBarsData: [
-                for (final curve in data.curves)
-                  LineChartBarData(
-                    spots: curve.points,
-                    color: _curveColor(curve.emphasis),
-                    barWidth: curve.emphasis == 0 ? 2 : 1,
-                    dotData: const FlDotData(show: false),
-                  ),
-                LineChartBarData(
-                  spots: [data.patient],
-                  color: Colors.blue.shade800,
-                  barWidth: 0,
-                  dotData: FlDotData(
-                    show: true,
-                    getDotPainter: (_, __, ___, ____) => FlDotCirclePainter(
-                      radius: 5,
-                      color: Colors.blue.shade800,
-                      strokeWidth: 2,
-                      strokeColor: Colors.white,
+          // Room for the last x label and the top y label, which fl_chart centres on the edge.
+          child: Padding(
+            padding: const EdgeInsets.only(top: 10, right: 14),
+            child: LineChart(
+              LineChartData(
+                minX: data.minX,
+                maxX: data.maxX,
+                minY: (minY - pad).floorToDouble(),
+                maxY: (maxY + pad).ceilToDouble(),
+                lineTouchData: const LineTouchData(enabled: false),
+                gridData: FlGridData(show: true, verticalInterval: data.xInterval),
+                borderData: FlBorderData(show: true),
+                titlesData: FlTitlesData(
+                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  bottomTitles: AxisTitles(
+                    axisNameWidget: Text(data.xLabel, style: const TextStyle(fontSize: 12)),
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 28,
+                      interval: data.xInterval,
+                      getTitlesWidget: _axisLabel,
                     ),
                   ),
+                  leftTitles: AxisTitles(
+                    axisNameWidget: Text(data.yLabel, style: const TextStyle(fontSize: 12)),
+                    sideTitles: const SideTitles(showTitles: true, reservedSize: 40, getTitlesWidget: _axisLabel),
+                  ),
                 ),
-              ],
+                lineBarsData: [
+                  for (final curve in data.curves)
+                    LineChartBarData(
+                      spots: curve.points,
+                      color: _curveColor(curve.emphasis),
+                      barWidth: curve.emphasis == 0 ? 2 : 1,
+                      dotData: const FlDotData(show: false),
+                    ),
+                  LineChartBarData(
+                    spots: [data.patient],
+                    color: Colors.blue.shade800,
+                    barWidth: 0,
+                    dotData: FlDotData(
+                      show: true,
+                      getDotPainter: (_, __, ___, ____) => FlDotCirclePainter(
+                        radius: 5,
+                        color: Colors.blue.shade800,
+                        strokeWidth: 2,
+                        strokeColor: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

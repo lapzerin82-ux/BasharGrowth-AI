@@ -19,6 +19,22 @@ class ResultSummary extends StatelessWidget {
     this.boneAgeAnalysis,
   }) : super(key: key);
 
+  /// Z-score with sign, showing a value that rounds to zero as "0.00" rather than "-0.00".
+  static String _signedZ(double z) {
+    final text = z.abs().toStringAsFixed(2);
+    if (text == '0.00') return text;
+    return '${z > 0 ? '+' : '-'}$text';
+  }
+
+  static String _unit(String measure) {
+    if (measure.startsWith('BMI')) return 'kg/m²';
+    if (measure.startsWith('Weight')) return 'kg';
+    return 'cm';
+  }
+
+  /// One decimal place, or two above 99 so extended BMI percentiles stay distinct.
+  static String _percentile(double p) => p > 99 && p < 100 ? p.toStringAsFixed(2) : p.toStringAsFixed(1);
+
   static String _signed(double v) => '${v > 0 ? '+' : ''}${v.toStringAsFixed(1)}';
 
   Color _getStatusColor(String classification) {
@@ -52,45 +68,54 @@ class ResultSummary extends StatelessWidget {
             ],
             const SizedBox(height: 16),
             
-            // Results Table
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                columns: const [
-                  DataColumn(label: Text('Measure', style: TextStyle(fontWeight: FontWeight.bold))),
-                  DataColumn(label: Text('Value', style: TextStyle(fontWeight: FontWeight.bold))),
-                  DataColumn(label: Text('Z-Score', style: TextStyle(fontWeight: FontWeight.bold))),
-                  DataColumn(label: Text('Percentile', style: TextStyle(fontWeight: FontWeight.bold))),
-                  DataColumn(label: Text('Status', style: TextStyle(fontWeight: FontWeight.bold))),
-                ],
-                rows: results.map((r) {
-                  return DataRow(cells: [
-                    DataCell(Text(r.measure)),
-                    DataCell(Text(r.value.toStringAsFixed(1))),
-                    DataCell(Text(r.zScore != null ? r.zScore!.toStringAsFixed(2) : '-')),
-                    DataCell(Text(r.percentile != null ? '${r.percentile!.toStringAsFixed(1)}th' : '-')),
-                    DataCell(
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: _getStatusColor(r.classification),
-                          borderRadius: BorderRadius.circular(12),
+            // Results: one block per indicator so everything fits at phone width.
+            for (final r in results)
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey.shade300))),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Text(r.measure, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                         ),
-                        child: Text(
-                          r.classification,
-                          style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: _getStatusColor(r.classification),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              r.classification,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ]);
-                }).toList(),
+                    const SizedBox(height: 4),
+                    Text(
+                      [
+                        '${r.value.toStringAsFixed(1)} ${_unit(r.measure)}',
+                        if (r.zScore != null) 'Z ${_signedZ(r.zScore!)}',
+                        if (r.percentile != null) 'percentile ${_percentile(r.percentile!)}',
+                      ].join('  ·  '),
+                      style: TextStyle(fontSize: 14, color: Colors.grey.shade800),
+                    ),
+                    if (r.note != null) ...[
+                      const SizedBox(height: 2),
+                      Text(r.note!, style: TextStyle(fontSize: 13, color: Colors.grey.shade700)),
+                    ],
+                  ],
+                ),
               ),
-            ),
-            
-            for (final r in results.where((r) => r.note != null)) ...[
-              const SizedBox(height: 8),
-              Text('${r.measure}: ${r.note}', style: TextStyle(color: Colors.grey.shade800)),
-            ],
+            const SizedBox(height: 8),
 
             // Growth charts
             for (final chart in charts)
