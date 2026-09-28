@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
+import 'cdc_chart_page.dart';
 import 'input_form.dart';
 import 'result_summary.dart';
+import 'growth_assessment.dart';
 import 'growth_calculations.dart';
+import 'growth_chart.dart';
 import 'growth_standards.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final refs = await GrowthReferences.load();
+  runApp(MyApp(refs: refs));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final GrowthReferences refs;
+
+  const MyApp({Key? key, required this.refs}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +32,15 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: const GrowthMonitorHome(),
+      home: GrowthMonitorHome(refs: refs),
     );
   }
 }
 
 class GrowthMonitorHome extends StatefulWidget {
-  const GrowthMonitorHome({Key? key}) : super(key: key);
+  final GrowthReferences refs;
+
+  const GrowthMonitorHome({Key? key, required this.refs}) : super(key: key);
 
   @override
   State<GrowthMonitorHome> createState() => _GrowthMonitorHomeState();
@@ -41,46 +50,54 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
   List<GrowthResultData> results = [];
   Map<String, double>? mph;
   Map<String, dynamic>? boneAgeResult;
+  String? ageNote;
+  List<GrowthChartData> charts = [];
+  List<CdcChartPlot> cdcPlots = [];
 
   void _handleCalculate(PatientData data) {
-    final ageMonths = calculateAgeMonths(data.dob!, data.measurementDate);
-    final newResults = <GrowthResultData>[];
+    final ageDays = calculateAgeDays(data.dob!, data.measurementDate);
+    final ageMonths = ageDays / 30.4375;
+    final plotAgeDays = correctedAgeDays(ageDays, data.gestationalAgeWeeks);
+    final corrected = plotAgeDays != ageDays;
 
-    // 1. Weight for Age
-    final wfaData = getRelevantDataset(data.sex, 'weight', ageMonths);
-    final wfaDataset = wfaData['dataset'] as List<LMSDataPoint>;
-    
-    if (wfaDataset.isNotEmpty) {
-      final lms = getLMSForAge(wfaDataset, ageMonths);
-      if (lms != null && data.weight != null) {
-        final z = calculateZScore(data.weight!, lms);
-        final p = calculatePercentile(z);
-        newResults.add(GrowthResultData(
-          measure: 'Weight-for-Age',
-          value: data.weight!,
-          zScore: z,
-          percentile: p,
-          classification: interpretWeightForAge(z),
-          standard: wfaData['standardName'] as String,
-        ));
-      }
+    if (plotAgeDays < 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+              'Before term-equivalent age (40 weeks PMA): use a preterm chart such as Fenton 2013 or INTERGROWTH-21st'),
+        ),
+      );
+      setState(() => results = []);
+      return;
     }
 
-    // 2. BMI (if >= 2y)
-    if (ageMonths >= 24 && data.height != null && data.weight != null && data.height! > 0) {
-      final bmi = calculateBMI(data.weight!, data.height!);
-      newResults.add(GrowthResultData(
-        measure: 'BMI',
-        value: bmi,
-        zScore: null,
-        percentile: null,
-        classification: 'Data Required',
-        standard: 'CDC BMI',
-      ));
+    final newResults = assessGrowth(
+      refs: widget.refs,
+      sex: data.sex,
+      ageDays: plotAgeDays,
+      weightKg: data.weight,
+      heightCm: data.height,
+      measuredStanding: data.measuredStanding,
+    );
+
+    if (newResults.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No reference available: age must be 0-20 years and measurements within the WHO/CDC table ranges'),
+        ),
+      );
     }
 
     setState(() {
       results = newResults;
+      charts = [
+        for (final r in newResults) buildGrowthChart(widget.refs, data.sex, r),
+      ].whereType<GrowthChartData>().toList();
+      cdcPlots = buildCdcChartPlots(data.sex, newResults);
+      ageNote = corrected
+          ? 'Corrected age ${formatAgeDays(plotAgeDays)} (chronological ${formatAge(data.dob!, data.measurementDate)}, '
+              'born at ${formatWeeks(data.gestationalAgeWeeks!)} weeks)'
+          : 'Age ${formatAge(data.dob!, data.measurementDate)}';
       
       // MPH
       if (data.motherHeight != null && data.fatherHeight != null) {
@@ -95,7 +112,7 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
       
       // Bone Age
       if (data.boneAgeMonths != null) {
-        boneAgeResult = analyzeBoneAge(ageMonths, data.boneAgeMonths);
+        boneAgeResult = analyzeBoneAge(ageMonths, data.boneAgeMonths, sdMonths: data.boneAgeSdMonths);
       } else {
         boneAgeResult = null;
       }
@@ -151,7 +168,7 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Precision growth assessment using WHO (0-5y) & CDC (2-20y) standards',
+                                  'Precision growth assessment using WHO (0-2y) & CDC (2-20y) standards',
                                   style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
                                 ),
                               ],
@@ -175,6 +192,9 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
                   ResultSummary(
                     results: results,
                     mph: mph,
+                    ageNote: ageNote,
+                    charts: charts,
+                    cdcPlots: cdcPlots,
                     boneAgeAnalysis: boneAgeResult,
                   ),
                 

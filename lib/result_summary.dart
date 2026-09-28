@@ -1,39 +1,51 @@
 import 'package:flutter/material.dart';
 
-class GrowthResultData {
-  final String measure;
-  final double value;
-  final double? zScore;
-  final double? percentile;
-  final String classification;
-  final String standard;
-
-  GrowthResultData({
-    required this.measure,
-    required this.value,
-    this.zScore,
-    this.percentile,
-    required this.classification,
-    required this.standard,
-  });
-}
+import 'cdc_chart_page.dart';
+import 'growth_assessment.dart';
+import 'growth_chart.dart';
 
 class ResultSummary extends StatelessWidget {
   final List<GrowthResultData> results;
   final Map<String, double>? mph;
   final Map<String, dynamic>? boneAgeAnalysis;
+  final String? ageNote;
+  final List<GrowthChartData> charts;
+  final List<CdcChartPlot> cdcPlots;
 
   const ResultSummary({
     Key? key,
     required this.results,
+    this.charts = const [],
+    this.cdcPlots = const [],
+    this.ageNote,
     this.mph,
     this.boneAgeAnalysis,
   }) : super(key: key);
 
+  /// Z-score with sign, showing a value that rounds to zero as "0.00" rather than "-0.00".
+  static String _signedZ(double z) {
+    final text = z.abs().toStringAsFixed(2);
+    if (text == '0.00') return text;
+    return '${z > 0 ? '+' : '-'}$text';
+  }
+
+  static String _unit(String measure) {
+    if (measure.startsWith('BMI')) return 'kg/m²';
+    if (measure.startsWith('Weight')) return 'kg';
+    return 'cm';
+  }
+
+  /// One decimal place, or two above 99 so extended BMI percentiles stay distinct.
+  static String _percentile(double p) => p > 99 && p < 100 ? p.toStringAsFixed(2) : p.toStringAsFixed(1);
+
+  static String _signed(double v) => '${v > 0 ? '+' : ''}${v.toStringAsFixed(1)}';
+
   Color _getStatusColor(String classification) {
-    if (classification == 'Normal' || classification == 'Healthy weight') {
+    if (classification == implausibleClassification) {
+      return Colors.blueGrey;
+    } else if (classification == 'Normal' || classification == 'Healthy weight') {
       return Colors.green;
-    } else if (classification.contains('Severe') || classification == 'Obese') {
+    } else if (classification.contains('Severe') || classification.startsWith('Obese')) {
       return Colors.red;
     } else {
       return Colors.orange;
@@ -53,43 +65,79 @@ class ResultSummary extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Growth Assessment', style: Theme.of(context).textTheme.headlineSmall),
+            if (ageNote != null) ...[
+              const SizedBox(height: 4),
+              Text(ageNote!, style: TextStyle(color: Colors.grey.shade700)),
+            ],
             const SizedBox(height: 16),
             
-            // Results Table
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                columns: const [
-                  DataColumn(label: Text('Measure', style: TextStyle(fontWeight: FontWeight.bold))),
-                  DataColumn(label: Text('Value', style: TextStyle(fontWeight: FontWeight.bold))),
-                  DataColumn(label: Text('Z-Score', style: TextStyle(fontWeight: FontWeight.bold))),
-                  DataColumn(label: Text('Percentile', style: TextStyle(fontWeight: FontWeight.bold))),
-                  DataColumn(label: Text('Status', style: TextStyle(fontWeight: FontWeight.bold))),
-                ],
-                rows: results.map((r) {
-                  return DataRow(cells: [
-                    DataCell(Text(r.measure)),
-                    DataCell(Text(r.value.toStringAsFixed(1))),
-                    DataCell(Text(r.zScore != null ? r.zScore!.toStringAsFixed(2) : '-')),
-                    DataCell(Text(r.percentile != null ? '${r.percentile!.toStringAsFixed(1)}th' : '-')),
-                    DataCell(
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: _getStatusColor(r.classification),
-                          borderRadius: BorderRadius.circular(12),
+            // Results: one block per indicator so everything fits at phone width.
+            for (final r in results)
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey.shade300))),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Text(r.measure, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                         ),
-                        child: Text(
-                          r.classification,
-                          style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: _getStatusColor(r.classification),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              r.classification,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ]);
-                }).toList(),
+                    const SizedBox(height: 4),
+                    Text(
+                      [
+                        '${r.value.toStringAsFixed(1)} ${_unit(r.measure)}',
+                        if (r.zScore != null) 'Z ${_signedZ(r.zScore!)}',
+                        if (r.percentile != null) 'percentile ${_percentile(r.percentile!)}',
+                      ].join('  ·  '),
+                      style: TextStyle(fontSize: 14, color: Colors.grey.shade800),
+                    ),
+                    if (r.note != null) ...[
+                      const SizedBox(height: 2),
+                      Text(r.note!, style: TextStyle(fontSize: 13, color: Colors.grey.shade700)),
+                    ],
+                  ],
+                ),
               ),
-            ),
-            
+            const SizedBox(height: 8),
+
+            // Growth charts
+            for (final chart in charts)
+              ExpansionTile(
+                title: Text(chart.title),
+                leading: const Icon(Icons.show_chart),
+                tilePadding: EdgeInsets.zero,
+                childrenPadding: const EdgeInsets.only(bottom: 8),
+                children: [GrowthChart(data: chart)],
+              ),
+            for (final plot in cdcPlots)
+              ExpansionTile(
+                title: Text(plot.page.title),
+                leading: const Icon(Icons.show_chart),
+                tilePadding: EdgeInsets.zero,
+                childrenPadding: const EdgeInsets.only(bottom: 8),
+                children: [CdcChartPageView(plot: plot)],
+              ),
+
             // MPH Section
             if (mph != null) ...[
               const SizedBox(height: 24),
@@ -123,10 +171,10 @@ class ResultSummary extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: boneAgeAnalysis!['status'] == 'Normal' ? Colors.green.shade50 : Colors.amber.shade50,
+                  color: boneAgeAnalysis!['status'] == 'Normal' ? Colors.green.shade50 : boneAgeAnalysis!['status'] == 'Not classified' ? Colors.grey.shade100 : Colors.amber.shade50,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: boneAgeAnalysis!['status'] == 'Normal' ? Colors.green.shade100 : Colors.amber.shade100,
+                    color: boneAgeAnalysis!['status'] == 'Normal' ? Colors.green.shade100 : boneAgeAnalysis!['status'] == 'Not classified' ? Colors.grey.shade300 : Colors.amber.shade100,
                   ),
                 ),
                 child: Column(
@@ -135,7 +183,15 @@ class ResultSummary extends StatelessWidget {
                     const Text('Bone Age Analysis', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
                     Text(
-                      'Status: ${boneAgeAnalysis!['status']}${boneAgeAnalysis!['status'] != 'Normal' ? ' (${boneAgeAnalysis!['diff'] > 0 ? '+' : ''}${boneAgeAnalysis!['diff'].toStringAsFixed(1)} months difference)' : ''}',
+                      'Bone age − chronological age: ${_signed(boneAgeAnalysis!['diff'] as double)} months'
+                      '${boneAgeAnalysis!['sds'] != null ? ' (${_signed(boneAgeAnalysis!['sds'] as double)} SD)' : ''}',
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      boneAgeAnalysis!['sds'] == null
+                          ? 'Enter the atlas SD for this age to classify (±2 SD).'
+                          : 'Status: ${boneAgeAnalysis!['status']}',
                       style: const TextStyle(fontSize: 14),
                     ),
                   ],
