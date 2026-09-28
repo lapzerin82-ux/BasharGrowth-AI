@@ -48,16 +48,32 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
   List<GrowthResultData> results = [];
   Map<String, double>? mph;
   Map<String, dynamic>? boneAgeResult;
+  String? ageNote;
 
   void _handleCalculate(PatientData data) {
     final ageDays = calculateAgeDays(data.dob!, data.measurementDate);
     final ageMonths = ageDays / 30.4375;
+    final plotAgeDays = correctedAgeDays(ageDays, data.gestationalAgeWeeks);
+    final corrected = plotAgeDays != ageDays;
+
+    if (plotAgeDays < 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+              'Before term-equivalent age (40 weeks PMA): use a preterm chart such as Fenton 2013 or INTERGROWTH-21st'),
+        ),
+      );
+      setState(() => results = []);
+      return;
+    }
+
     final newResults = assessGrowth(
       refs: widget.refs,
       sex: data.sex,
-      ageDays: ageDays,
+      ageDays: plotAgeDays,
       weightKg: data.weight,
       heightCm: data.height,
+      measuredStanding: data.measuredStanding,
     );
 
     if (newResults.isEmpty) {
@@ -70,6 +86,10 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
 
     setState(() {
       results = newResults;
+      ageNote = corrected
+          ? 'Corrected age ${formatAgeDays(plotAgeDays)} (chronological ${formatAge(data.dob!, data.measurementDate)}, '
+              'born at ${formatWeeks(data.gestationalAgeWeeks!)} weeks)'
+          : 'Age ${formatAge(data.dob!, data.measurementDate)}';
       
       // MPH
       if (data.motherHeight != null && data.fatherHeight != null) {
@@ -164,6 +184,7 @@ class _GrowthMonitorHomeState extends State<GrowthMonitorHome> {
                   ResultSummary(
                     results: results,
                     mph: mph,
+                    ageNote: ageNote,
                     boneAgeAnalysis: boneAgeResult,
                   ),
                 

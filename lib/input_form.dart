@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'growth_calculations.dart';
+
 class PatientData {
   DateTime? dob;
   String sex;
@@ -10,6 +12,10 @@ class PatientData {
   double? boneAgeMonths;
   double? motherHeight;
   double? fatherHeight;
+  double? gestationalAgeWeeks;
+
+  /// null = assume the WHO convention for the age.
+  bool? measuredStanding;
 
   PatientData({
     this.dob,
@@ -20,8 +26,26 @@ class PatientData {
     this.boneAgeMonths,
     this.motherHeight,
     this.fatherHeight,
+    this.gestationalAgeWeeks,
+    this.measuredStanding,
   }) : measurementDate = measurementDate ?? DateTime.now();
 }
+
+/// Validator for a numeric field that must lie within [min, max].
+String? Function(String?) rangeValidator(double min, double max, {bool required = false}) {
+  return (val) {
+    final text = val?.trim() ?? '';
+    if (text.isEmpty) return required ? 'Required' : null;
+    final number = double.tryParse(text.replaceAll(',', '.'));
+    if (number == null) return 'Enter a number';
+    if (number < min || number > max) return 'Must be between ${_fmt(min)} and ${_fmt(max)}';
+    return null;
+  };
+}
+
+double? parseNumber(String? val) => double.tryParse((val ?? '').trim().replaceAll(',', '.'));
+
+String _fmt(double v) => v == v.roundToDouble() ? v.toStringAsFixed(0) : v.toString();
 
 class InputForm extends StatefulWidget {
   final Function(PatientData) onCalculate;
@@ -37,14 +61,13 @@ class _InputFormState extends State<InputForm> {
   final PatientData _data = PatientData();
   String _ageDisplay = '';
 
+  @visibleForTesting
+  PatientData get patientDataForTest => _data;
+
   void _updateAge() {
     if (_data.dob != null) {
-      final diff = _data.measurementDate.difference(_data.dob!);
-      final years = diff.inDays ~/ 365;
-      final months = (diff.inDays % 365) ~/ 30;
-      final days = diff.inDays % 30;
       setState(() {
-        _ageDisplay = '${years}y ${months}m ${days}d';
+        _ageDisplay = _data.measurementDate.isBefore(_data.dob!) ? '' : formatAge(_data.dob!, _data.measurementDate);
       });
     }
   }
@@ -84,7 +107,7 @@ class _InputFormState extends State<InputForm> {
                 children: [
                   Icon(Icons.person, color: Theme.of(context).primaryColor),
                   const SizedBox(width: 8),
-                  Text('Patient Demographics', style: Theme.of(context).textTheme.headlineSmall),
+                  Expanded(child: Text('Patient Demographics', style: Theme.of(context).textTheme.headlineSmall)),
                 ],
               ),
               const SizedBox(height: 16),
@@ -128,7 +151,7 @@ class _InputFormState extends State<InputForm> {
                 children: [
                   Icon(Icons.straighten, color: Theme.of(context).primaryColor),
                   const SizedBox(width: 8),
-                  Text('Anthropometry', style: Theme.of(context).textTheme.headlineSmall),
+                  Expanded(child: Text('Anthropometry', style: Theme.of(context).textTheme.headlineSmall)),
                 ],
               ),
               const SizedBox(height: 16),
@@ -140,9 +163,9 @@ class _InputFormState extends State<InputForm> {
                   border: OutlineInputBorder(),
                   hintText: 'e.g., 12.5',
                 ),
-                keyboardType: TextInputType.number,
-                validator: (val) => val == null || val.isEmpty ? 'Required' : null,
-                onSaved: (val) => _data.weight = double.tryParse(val ?? ''),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                validator: rangeValidator(0.3, 250, required: true),
+                onSaved: (val) => _data.weight = parseNumber(val),
               ),
               const SizedBox(height: 16),
               
@@ -153,9 +176,27 @@ class _InputFormState extends State<InputForm> {
                   border: OutlineInputBorder(),
                   hintText: 'e.g., 85.0',
                 ),
-                keyboardType: TextInputType.number,
-                validator: (val) => val == null || val.isEmpty ? 'Required' : null,
-                onSaved: (val) => _data.height = double.tryParse(val ?? ''),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                validator: rangeValidator(30, 230, required: true),
+                onSaved: (val) => _data.height = parseNumber(val),
+              ),
+              const SizedBox(height: 16),
+
+              DropdownButtonFormField<String>(
+                // ignore: deprecated_member_use
+                value: switch (_data.measuredStanding) { null => 'auto', true => 'standing', false => 'lying' },
+                isExpanded: true,
+                decoration: const InputDecoration(labelText: 'Measured', border: OutlineInputBorder()),
+                items: const [
+                  DropdownMenuItem(value: 'auto', child: Text('Standard for age (lying < 2y, standing ≥ 2y)')),
+                  DropdownMenuItem(value: 'lying', child: Text('Lying (recumbent length)')),
+                  DropdownMenuItem(value: 'standing', child: Text('Standing (height)')),
+                ],
+                onChanged: (val) => setState(() => _data.measuredStanding = switch (val) {
+                  'standing' => true,
+                  'lying' => false,
+                  _ => null,
+                }),
               ),
               const SizedBox(height: 24),
               
@@ -163,7 +204,7 @@ class _InputFormState extends State<InputForm> {
                 children: [
                   Icon(Icons.family_restroom, color: Theme.of(context).primaryColor),
                   const SizedBox(width: 8),
-                  Text('Clinical Context (Optional)', style: Theme.of(context).textTheme.headlineSmall),
+                  Expanded(child: Text('Clinical Context (Optional)', style: Theme.of(context).textTheme.headlineSmall)),
                 ],
               ),
               const SizedBox(height: 16),
@@ -173,8 +214,9 @@ class _InputFormState extends State<InputForm> {
                   labelText: "Mother's Height (cm)",
                   border: OutlineInputBorder(),
                 ),
-                keyboardType: TextInputType.number,
-                onSaved: (val) => _data.motherHeight = double.tryParse(val ?? ''),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                validator: rangeValidator(120, 230),
+                onSaved: (val) => _data.motherHeight = parseNumber(val),
               ),
               const SizedBox(height: 16),
               
@@ -183,8 +225,9 @@ class _InputFormState extends State<InputForm> {
                   labelText: "Father's Height (cm)",
                   border: OutlineInputBorder(),
                 ),
-                keyboardType: TextInputType.number,
-                onSaved: (val) => _data.fatherHeight = double.tryParse(val ?? ''),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                validator: rangeValidator(120, 230),
+                onSaved: (val) => _data.fatherHeight = parseNumber(val),
               ),
               const SizedBox(height: 16),
               
@@ -193,8 +236,21 @@ class _InputFormState extends State<InputForm> {
                   labelText: 'Bone Age (Months)',
                   border: OutlineInputBorder(),
                 ),
-                keyboardType: TextInputType.number,
-                onSaved: (val) => _data.boneAgeMonths = double.tryParse(val ?? ''),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                validator: rangeValidator(0, 240),
+                onSaved: (val) => _data.boneAgeMonths = parseNumber(val),
+              ),
+              const SizedBox(height: 16),
+
+              TextFormField(
+                decoration: const InputDecoration(
+                  labelText: 'Gestational Age at Birth (weeks)',
+                  helperText: 'Below 37 weeks: age is corrected until 2 years',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                validator: rangeValidator(22, 44),
+                onSaved: (val) => _data.gestationalAgeWeeks = parseNumber(val),
               ),
               const SizedBox(height: 24),
               

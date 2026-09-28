@@ -7,6 +7,9 @@ This is a **complete Flutter (Dart)** implementation of the Pediatric Growth Mon
 ### ✅ Core Features
 - **WHO Standards (0 to <5 years)** and **CDC 2000 References (5-20 years)**
 - **Z-score** and **Percentile** calculations using LMS method for weight-for-age, length/height-for-age, weight-for-length/height (WHO) and BMI-for-age
+- **Corrected age for prematurity** (< 37 weeks' gestation, until 24 months chronological age)
+- **Length/height adjustment** (WHO ±0.7 cm when the measuring position does not match the age)
+- **Plausibility checks**: input ranges, and WHO flags for biologically implausible Z-scores
 - **Mid-Parental Height (MPH)** calculation with target range
 - **Bone Age Analysis** (flags >20% discrepancy)
 - **Clinical Interpretations** (Underweight, Stunting, Wasting, Overweight, Obesity)

@@ -162,6 +162,64 @@ void main() {
     });
   });
 
+  group('prematurity correction', () {
+    test('subtracts weeks born early below 37 weeks until 24 months', () {
+      expect(correctedAgeDays(100, 32), 100 - 56);
+      expect(correctedAgeDays(100, 36.5), 100 - 25);
+      expect(correctedAgeDays(730, 28), 730 - 84);
+      expect(correctedAgeDays(731, 28), 731);
+    });
+
+    test('no correction at 37 weeks or more, or when unknown', () {
+      expect(correctedAgeDays(100, 37), 100);
+      expect(correctedAgeDays(100, null), 100);
+    });
+
+    test('negative before term-equivalent age', () {
+      expect(correctedAgeDays(20, 30), lessThan(0));
+    });
+  });
+
+  group('length/height position', () {
+    // WHO boys weight-for-length at 700 days vs height at 731 days.
+    test('standing measurement under 2y adds 0.7 cm', () {
+      final lying = assessGrowth(refs: refs, sex: 'M', ageDays: 700, heightCm: 85.7);
+      final standing = assessGrowth(refs: refs, sex: 'M', ageDays: 700, heightCm: 85.0, measuredStanding: true);
+      expect(resultFor(standing, 'Length-for-Age').zScore, closeTo(resultFor(lying, 'Length-for-Age').zScore!, 1e-9));
+    });
+
+    test('lying measurement from 2y subtracts 0.7 cm', () {
+      final standing = assessGrowth(refs: refs, sex: 'F', ageDays: 900, heightCm: 88.0);
+      final lying = assessGrowth(refs: refs, sex: 'F', ageDays: 900, heightCm: 88.7, measuredStanding: false);
+      expect(resultFor(lying, 'Height-for-Age').zScore, closeTo(resultFor(standing, 'Height-for-Age').zScore!, 1e-9));
+    });
+
+    test('no adjustment when position matches the age, or for CDC', () {
+      final auto = assessGrowth(refs: refs, sex: 'F', ageDays: 900, heightCm: 88.0);
+      final explicit = assessGrowth(refs: refs, sex: 'F', ageDays: 900, heightCm: 88.0, measuredStanding: true);
+      expect(resultFor(explicit, 'Height-for-Age').zScore, resultFor(auto, 'Height-for-Age').zScore);
+
+      final cdc = assessGrowth(refs: refs, sex: 'F', ageDays: 3000, heightCm: 130, measuredStanding: false);
+      final cdcAuto = assessGrowth(refs: refs, sex: 'F', ageDays: 3000, heightCm: 130);
+      expect(resultFor(cdc, 'Height-for-Age').zScore, resultFor(cdcAuto, 'Height-for-Age').zScore);
+    });
+  });
+
+  test('flags biologically implausible Z-scores (WHO limits)', () {
+    final results = assessGrowth(refs: refs, sex: 'M', ageDays: 365, weightKg: 30, heightCm: 40);
+    expect(resultFor(results, 'Weight-for-Age').classification, implausibleClassification);
+    expect(resultFor(results, 'Length-for-Age').classification, implausibleClassification);
+
+    final plausible = assessGrowth(refs: refs, sex: 'M', ageDays: 365, weightKg: 7.0);
+    expect(resultFor(plausible, 'Weight-for-Age').classification, isNot(implausibleClassification));
+  });
+
+  test('calendar age formatting', () {
+    expect(formatAge(DateTime(2020, 1, 31), DateTime(2021, 3, 1)), '1y 1m 1d');
+    expect(formatAge(DateTime(2020, 5, 15), DateTime(2020, 5, 15)), '0y 0m 0d');
+    expect(formatAge(DateTime(2019, 12, 20), DateTime(2020, 2, 10)), '0y 1m 21d');
+  });
+
   test('age in days ignores time of day', () {
     expect(calculateAgeDays(DateTime(2024, 3, 1, 23, 30), DateTime(2024, 3, 31, 0, 15)), 30);
   });

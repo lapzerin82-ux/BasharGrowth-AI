@@ -9,20 +9,35 @@ const double whoUpperAgeMonths = 60;
 /// 731 days (24 completed months).
 const int whoStandingHeightFromDays = 731;
 
+/// WHO: standing height is on average 0.7 cm less than recumbent length.
+const double lengthHeightDifferenceCm = 0.7;
+
+/// WHO flag limits for biologically implausible Z-scores (WHO Anthro).
+const double implausibleWeightForAgeLow = -6;
+const double implausibleWeightForAgeHigh = 5;
+const double implausibleHeightForAgeLimit = 6;
+const double implausibleWeightForHeightLimit = 5;
+
+const String implausibleClassification = 'Implausible - Recheck Measurement';
+
 const String whoStandardName = 'WHO Child Growth Standards (2006)';
 const String cdcStandardName = 'CDC Growth Reference (2000)';
 
 /// Computes every applicable anthropometric indicator for one visit.
 ///
-/// [sex] is 'M' or 'F'. [heightCm] is recumbent length below 24 months and
-/// standing height from 24 months. Indicators whose value falls outside the
-/// reference range are omitted rather than extrapolated.
+/// [sex] is 'M' or 'F'. [ageDays] is the age to plot, already corrected for
+/// prematurity. [measuredStanding] says how [heightCm] was measured; when null
+/// it is assumed to match the WHO convention for the age (recumbent length
+/// below 731 days, standing height from 731 days). Otherwise WHO indicators
+/// convert it by 0.7 cm. Indicators whose value falls outside the reference
+/// range are omitted rather than extrapolated.
 List<GrowthResultData> assessGrowth({
   required GrowthReferences refs,
   required String sex,
   required int ageDays,
   double? weightKg,
   double? heightCm,
+  bool? measuredStanding,
 }) {
   final results = <GrowthResultData>[];
   if (ageDays < 0) return results;
@@ -30,7 +45,11 @@ List<GrowthResultData> assessGrowth({
   final ageMonths = ageDays / 30.4375;
   final isWHO = ageMonths < whoUpperAgeMonths;
   final weight = weightKg != null && weightKg > 0 ? weightKg : null;
-  final height = heightCm != null && heightCm > 0 ? heightCm : null;
+  final measured = heightCm != null && heightCm > 0 ? heightCm : null;
+  final expectStanding = ageDays >= whoStandingHeightFromDays;
+  final height = measured == null || !isWHO || measuredStanding == null || measuredStanding == expectStanding
+      ? measured
+      : measured + (measuredStanding ? lengthHeightDifferenceCm : -lengthHeightDifferenceCm);
 
   // WHO tables are indexed by whole days, CDC tables by months.
   final ageX = isWHO ? ageDays.toDouble() : ageMonths;
@@ -42,6 +61,8 @@ List<GrowthResultData> assessGrowth({
     double x,
     double value,
     String Function(double z, double percentile) interpret, {
+    required double implausibleLow,
+    required double implausibleHigh,
     bool whoRestricted = false,
   }) {
     final lms = refs.table(indicator, sex).lookup(x);
@@ -53,7 +74,7 @@ List<GrowthResultData> assessGrowth({
       value: value,
       zScore: z,
       percentile: p,
-      classification: interpret(z, p),
+      classification: z < implausibleLow || z > implausibleHigh ? implausibleClassification : interpret(z, p),
       standard: standard,
     );
   }
@@ -69,6 +90,8 @@ List<GrowthResultData> assessGrowth({
       ageX,
       weight,
       (z, _) => interpretWeightForAge(z),
+      implausibleLow: implausibleWeightForAgeLow,
+      implausibleHigh: implausibleWeightForAgeHigh,
       whoRestricted: isWHO,
     ));
   }
@@ -81,6 +104,8 @@ List<GrowthResultData> assessGrowth({
       ageX,
       height,
       (z, _) => interpretLengthHeightForAge(z, isWHO: isWHO),
+      implausibleLow: -implausibleHeightForAgeLimit,
+      implausibleHigh: implausibleHeightForAgeLimit,
     ));
   }
 
@@ -93,6 +118,8 @@ List<GrowthResultData> assessGrowth({
         height,
         weight,
         (z, _) => interpretWeightForLength(z),
+        implausibleLow: -implausibleWeightForHeightLimit,
+        implausibleHigh: implausibleWeightForHeightLimit,
         whoRestricted: true,
       ));
     }
@@ -104,6 +131,8 @@ List<GrowthResultData> assessGrowth({
       ageX,
       bmi,
       isWHO ? (z, _) => interpretWeightForLength(z) : (_, p) => interpretBMIForAgeCDC(p),
+      implausibleLow: -implausibleWeightForHeightLimit,
+      implausibleHigh: implausibleWeightForHeightLimit,
       whoRestricted: isWHO,
     ));
   }

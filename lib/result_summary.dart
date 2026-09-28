@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
 
+import 'growth_assessment.dart' show implausibleClassification;
 import 'growth_calculations.dart';
 
 class ResultSummary extends StatelessWidget {
   final List<GrowthResultData> results;
   final Map<String, double>? mph;
   final Map<String, dynamic>? boneAgeAnalysis;
+  final String? ageNote;
 
   const ResultSummary({
     Key? key,
     required this.results,
+    this.ageNote,
     this.mph,
     this.boneAgeAnalysis,
   }) : super(key: key);
 
   Color _getStatusColor(String classification) {
-    if (classification == 'Normal' || classification == 'Healthy weight') {
+    if (classification == implausibleClassification) {
+      return Colors.blueGrey;
+    } else if (classification == 'Normal' || classification == 'Healthy weight') {
       return Colors.green;
     } else if (classification.contains('Severe') || classification == 'Obese') {
       return Colors.red;
@@ -37,6 +42,10 @@ class ResultSummary extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Growth Assessment', style: Theme.of(context).textTheme.headlineSmall),
+            if (ageNote != null) ...[
+              const SizedBox(height: 4),
+              Text(ageNote!, style: TextStyle(color: Colors.grey.shade700)),
+            ],
             const SizedBox(height: 16),
             
             // Results Table

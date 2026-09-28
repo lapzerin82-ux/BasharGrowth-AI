@@ -45,6 +45,55 @@ int calculateAgeDays(DateTime dob, DateTime measurementDate) {
   return end.difference(start).inDays;
 }
 
+/// Calendar age as "Xy Ym Zd": completed months since [dob], then days since
+/// the last monthly anniversary (clamped to the end of short months).
+String formatAge(DateTime dob, DateTime date) {
+  DateTime anniversary(int months) {
+    final year = dob.year + (dob.month - 1 + months) ~/ 12;
+    final month = (dob.month - 1 + months) % 12 + 1;
+    final lastDay = DateTime.utc(year, month + 1, 0).day;
+    return DateTime.utc(year, month, dob.day < lastDay ? dob.day : lastDay);
+  }
+
+  final end = DateTime.utc(date.year, date.month, date.day);
+  var months = (date.year - dob.year) * 12 + date.month - dob.month;
+  while (months > 0 && anniversary(months).isAfter(end)) {
+    months -= 1;
+  }
+  final days = end.difference(anniversary(months)).inDays;
+  return '${months ~/ 12}y ${months % 12}m ${days}d';
+}
+
+/// Gestational age in weeks without a trailing ".0".
+String formatWeeks(double weeks) => weeks.toStringAsFixed(weeks == weeks.roundToDouble() ? 0 : 1);
+
+/// Age in days as "Xm Yd", using 30.4375-day months.
+String formatAgeDays(int ageDays) {
+  final months = (ageDays / 30.4375).floor();
+  final days = (ageDays - months * 30.4375).round();
+  return '${months}m ${days}d';
+}
+
+/// Term gestation in weeks used for age correction.
+const int termGestationWeeks = 40;
+
+/// Prematurity correction applies below 37 weeks' gestation, until a
+/// chronological age of 24 months (730 days).
+const int pretermBelowWeeks = 37;
+const int correctAgeUntilDays = 730;
+
+/// Age in days to plot against the growth standard. For infants born before
+/// 37 weeks, subtracts the weeks born early ((40 - GA) x 7 days) until 24
+/// months of chronological age. May be negative before term-equivalent age.
+int correctedAgeDays(int chronologicalAgeDays, double? gestationalAgeWeeks) {
+  if (gestationalAgeWeeks == null ||
+      gestationalAgeWeeks >= pretermBelowWeeks ||
+      chronologicalAgeDays > correctAgeUntilDays) {
+    return chronologicalAgeDays;
+  }
+  return chronologicalAgeDays - ((termGestationWeeks - gestationalAgeWeeks) * 7).round();
+}
+
 /// Calculates accurate age in decimal months
 double calculateAgeMonths(DateTime dob, DateTime measurementDate) {
   return calculateAgeDays(dob, measurementDate) / 30.4375; // Average days per month
