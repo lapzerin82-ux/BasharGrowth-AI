@@ -2,8 +2,25 @@
  "format": "pgc-dose-notes",
  "version": 1,
  "exported": "2026-10-01",
- "description": "Items 301–550 from UNSOURCED lists described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025. Pure repeats of earlier items (etomidate, tigecycline, eravacycline, plazomicin, delafloxacin, omadacycline, baloxavir; and in 351–400 calcipotriol, chloramphenicol eye drops, epoetin, darbepoetin, iron sucrose, ferric carboxymaltose, penicillamine, trientine; and in 401–450 praziquantel, albendazole, mebendazole, ivermectin, permethrin, malathion, atovaquone–proguanil, octreotide; and in 451–500 the many repeats and dose-less entries) are omitted. Fixed doses are labelled 'Adult / age not stated'; weight-based doses 'Age not stated'. Doses that appear incorrect are NOT loaded. All notes unverified.",
+ "description": "Items 301–600 from UNSOURCED lists described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025. Pure repeats of earlier items (etomidate, tigecycline, eravacycline, plazomicin, delafloxacin, omadacycline, baloxavir; and in 351–400 calcipotriol, chloramphenicol eye drops, epoetin, darbepoetin, iron sucrose, ferric carboxymaltose, penicillamine, trientine; and in 401–450 praziquantel, albendazole, mebendazole, ivermectin, permethrin, malathion, atovaquone–proguanil, octreotide; and in 451–500 the many repeats and dose-less entries) are omitted. Fixed doses are labelled 'Adult / age not stated'; weight-based doses 'Age not stated'. Doses that appear incorrect are NOT loaded. All notes unverified.",
  "notes": [
+  {
+   "drug": "Abacavir",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Test HLA-B*5701 before starting (hypersensitivity). Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.",
+   "forms": "Tablet 300 mg, 600 mg (combinations); oral solution 20 mg/mL [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 3 months and over (unsourced list)",
+     "indication": "HIV",
+     "route": "Oral",
+     "dose": "8 mg/kg twice daily",
+     "max": "300 mg twice daily"
+    }
+   ]
+  },
   {
    "drug": "Acetic acid ear spray",
    "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
@@ -262,6 +279,23 @@
      "indication": "Hypophosphatasia",
      "route": "SC",
      "dose": "2 mg/kg three times a week, or 1 mg/kg six times a week",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Atazanavir",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.",
+   "forms": "Capsule 100–300 mg; powder for oral use [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 3 months and over (unsourced list)",
+     "indication": "HIV",
+     "route": "Oral",
+     "dose": "By weight, boosted with ritonavir (doses not given)",
      "max": ""
     }
    ]
@@ -550,6 +584,40 @@
    ]
   },
   {
+   "drug": "Calcium carbonate",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Write doses as mmol or mg of ELEMENTAL calcium (1.25 g carbonate = 500 mg = 12.5 mmol calcium).",
+   "forms": "Tablet (calcium carbonate 1.25 g = 500 mg calcium); chewable tablet; suspension [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Hypocalcaemia / rickets",
+     "route": "Oral",
+     "dose": "0.5–1 g elemental calcium daily in divided doses",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Calcium gluconate",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: BNFc usual dose is about 0.5 mL/kg of 10% (0.11 mmol/kg; max 20 mL) over 5–10 minutes with ECG monitoring; extravasation causes tissue necrosis. Use plastic (not glass) containers in children (aluminium).",
+   "forms": "Solution for injection 10% (0.22 mmol/mL), 10 mL ampoules [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Severe hypocalcaemia / tetany",
+     "route": "IV",
+     "dose": "0.5–1 mL/kg of 10% slowly (as listed)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Cannabidiol",
    "source": "Unsourced list (items 401–450) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier items and wrong doses (unverified)",
    "checked": "",
@@ -603,6 +671,23 @@
      "indication": "Epilepsy",
      "route": "Oral",
      "dose": "10–20 mg/kg/day in 3–4 divided doses (2 doses for modified-release)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Carbimazole / methimazole",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: BNFc initial doses may be higher (e.g. 250 micrograms/kg three times daily) — check. Agranulocytosis: advise to report sore throat/fever; avoid in pregnancy (first trimester).",
+   "forms": "Tablet 5 mg (also 20 mg) [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Hyperthyroidism",
+     "route": "Oral",
+     "dose": "Carbimazole: initially 400 micrograms/kg daily in 2–4 divided doses; maintenance 100–200 micrograms/kg daily",
      "max": ""
     }
    ]
@@ -888,6 +973,23 @@
    ]
   },
   {
+   "drug": "Darunavir",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.",
+   "forms": "Tablet 75, 100, 150 mg (as listed; UK also 400, 600, 800 mg); oral suspension 100 mg/mL ('oral pellets' as listed — check) [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 3 years and over (unsourced list)",
+     "indication": "HIV",
+     "route": "Oral",
+     "dose": "By weight, boosted with ritonavir (doses not given)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Deferasirox",
    "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
    "checked": "",
@@ -917,6 +1019,23 @@
      "indication": "Iron overload",
      "route": "Oral",
      "dose": "20–30 mg/kg three times daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Desmopressin (enuresis)",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Tablet doses differ from lyophilisate doses (200 micrograms tablet ≈ 120 micrograms lyophilisate); nasal sprays should not be used for enuresis (hyponatraemia); restrict fluids from 1 hour before to 8 hours after the dose.",
+   "forms": "Tablet 100 micrograms, 200 micrograms [list 551–600, unsourced]\nOral lyophilisate (sublingual) 60, 120, 240 micrograms [list 551–600, unsourced]\nNasal spray 100 micrograms/mL (10 micrograms/spray) [list 551–600, unsourced]\nInjection 4 micrograms/mL; 15 micrograms/mL [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Nocturnal enuresis",
+     "route": "Sublingual",
+     "dose": "120–240 micrograms at bedtime (oral lyophilisate)",
      "max": ""
     }
    ]
@@ -956,6 +1075,23 @@
    ]
   },
   {
+   "drug": "Dolutegravir",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Dispersible and film-coated dolutegravir tablets are NOT bioequivalent (dispersible doses are lower); the listed bands mix the two and conflict with your earlier dolutegravir note. Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.",
+   "forms": "Tablet 10, 25, 50 mg; dispersible tablet 5 mg [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 3–<6 kg: 5 mg daily; 6–<10 kg: 5 mg twice daily; 10–<14 kg: 25 mg daily). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Domperidone",
    "source": "Unsourced list (items 501–550) described as extracted from BNF for Children 2023 — not attributable to a specific page; about half repeats earlier items (unverified)",
    "checked": "",
@@ -985,6 +1121,23 @@
      "indication": "",
      "route": "Oral",
      "dose": "0.5 mg daily (benign prostatic hyperplasia)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Efavirenz",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Give at bedtime (CNS effects). Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.",
+   "forms": "Tablet 50, 200, 600 mg; capsule 50, 100, 200 mg [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 3 years and over (unsourced list)",
+     "indication": "HIV",
+     "route": "Oral",
+     "dose": "By weight (e.g. 10–<15 kg: 200 mg once daily)",
      "max": ""
     }
    ]
@@ -1024,6 +1177,40 @@
    ]
   },
   {
+   "drug": "Elvitegravir–cobicistat–emtricitabine–tenofovir alafenamide",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Cobicistat booster — many interactions. Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.",
+   "forms": "Tablet (fixed-dose combination, Genvoya) [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 6 years and over and 25 kg and over (unsourced list)",
+     "indication": "HIV",
+     "route": "Oral",
+     "dose": "1 tablet once daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Emtricitabine",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Emtricitabine oral solution is usually 6 mg/kg once daily (about 48–60 mg at 8–10 kg) — the listed 30 mg looks wrong. Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.",
+   "forms": "Capsule 200 mg; oral solution 10 mg/mL [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 8–<10 kg: 30 mg once daily). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Enalapril",
    "source": "Unsourced list (items 501–550) described as extracted from BNF for Children 2023 — not attributable to a specific page; about half repeats earlier items (unverified)",
    "checked": "",
@@ -1036,6 +1223,23 @@
      "indication": "",
      "route": "Oral",
      "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: Neonate: initially 50–100 micrograms/kg once daily, max 200 micrograms/kg). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Entecavir",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Dose bands differ for lamivudine-experienced patients; take on an empty stomach.",
+   "forms": "Tablet 0.5 mg, 1 mg [list 551–600, unsourced]\nOral solution 0.05 mg/mL [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 2 years and over (unsourced list)",
+     "indication": "Chronic hepatitis B",
+     "route": "Oral",
+     "dose": "By weight (e.g. 10–<15 kg: 0.2 mg once daily)",
      "max": ""
     }
    ]
@@ -1059,10 +1263,10 @@
   },
   {
    "drug": "Ergocalciferol",
-   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified); Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Many UK products/regimens now use colecalciferol; check calcium and the specific product.",
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Many UK products/regimens now use colecalciferol; check calcium and the specific product.\nFrom an unsourced list (items 551–600) said to be from BNFc 2023.",
    "forms": "Tablet 1000, 5000 units; capsule [list 351–400, unsourced]",
    "entries": [
     {
@@ -1070,6 +1274,13 @@
      "indication": "Rickets / osteomalacia",
      "route": "Oral",
      "dose": "1000–5000 units daily",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Rickets / osteomalacia",
+     "route": "Oral",
+     "dose": "10–25 micrograms (400–1000 units) daily (as listed)",
      "max": ""
     }
    ]
@@ -1126,6 +1337,23 @@
    ]
   },
   {
+   "drug": "Etravirine",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Common weight bands are 10–<20 kg 100 mg, 20–<25 kg 125 mg, 25–<30 kg 150 mg, 30 kg and over 200 mg twice daily — check the band edges. Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.",
+   "forms": "Tablet 25 (dispersible in water), 100, 200 mg [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 2 years and over (unsourced list)",
+     "indication": "HIV",
+     "route": "Oral",
+     "dose": "By weight (e.g. 10–<16 kg: 100 mg twice daily, as listed)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Fenoldopam",
    "source": "Unsourced list (items 401–450) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier items and wrong doses (unverified)",
    "checked": "",
@@ -1139,6 +1367,40 @@
      "route": "IV infusion",
      "dose": "0.1–0.3 micrograms/kg/minute; titrate by 0.05–0.1 every 15 minutes",
      "max": "1.6 micrograms/kg/minute"
+    }
+   ]
+  },
+  {
+   "drug": "Ferric carboxymaltose (IV)",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Maximum single dose is also limited per kg (about 20 mg/kg); hypophosphataemia with repeated doses.",
+   "forms": "Solution for infusion 50 mg/mL, 10 mL and 15 mL vials [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Child over 14 years (unsourced list)",
+     "indication": "Iron deficiency anaemia",
+     "route": "IV",
+     "dose": "500–1000 mg depending on Hb and weight",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Ferrous sulfate",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Doses are ELEMENTAL iron; liquid iron strengths vary widely between products.",
+   "forms": "Tablet 200 mg (65 mg elemental iron) [list 551–600, unsourced]\nElixir/drops (listed 28 mg/5 mL elemental — check product) [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Iron deficiency anaemia",
+     "route": "Oral",
+     "dose": "3–6 mg/kg elemental iron daily in 2–3 divided doses",
+     "max": ""
     }
    ]
   },
@@ -1380,6 +1642,30 @@
    ]
   },
   {
+   "drug": "Glucagon (hypoglycaemia rescue)",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.",
+   "forms": "Powder for solution for injection 1 mg (GlucaGen Hypokit) [list 551–600, unsourced]\nPre-filled pen/syringe 1 mg (also 0.5 mg) [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Child under 25 kg (unsourced list)",
+     "indication": "Severe hypoglycaemia",
+     "route": "IM / SC / IV",
+     "dose": "500 micrograms",
+     "max": ""
+    },
+    {
+     "ages": "Child 25 kg and over (unsourced list)",
+     "indication": "Severe hypoglycaemia",
+     "route": "IM / SC / IV",
+     "dose": "1 mg",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Glycerin suppository",
    "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified); Unsourced list (items 501–550) described as extracted from BNF for Children 2023 — not attributable to a specific page; about half repeats earlier items (unverified)",
    "checked": "",
@@ -1413,6 +1699,23 @@
      "indication": "",
      "route": "Rectal",
      "dose": "4 g",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Gonadorelin",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Check availability; many units now use alternative agents for stimulation testing.",
+   "forms": "Powder for solution for injection 100 micrograms vial [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "SC / IV",
+     "dose": "Diagnostic GnRH test — single dose by protocol (not given)",
      "max": ""
     }
    ]
@@ -1460,10 +1763,10 @@
   },
   {
    "drug": "Hydrocortisone",
-   "source": "Unsourced list (items 451–500) described as extracted from BNF for Children 2023 — not attributable to a specific page; several entries are misattributed (unverified)",
+   "source": "Unsourced list (items 451–500) described as extracted from BNF for Children 2023 — not attributable to a specific page; several entries are misattributed (unverified); Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 451–500) said to be from BNFc 2023.",
+   "notes": "From an unsourced list (items 451–500) said to be from BNFc 2023.\nFrom an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Sick-day rules (double/triple doses) and an emergency injection kit should be provided.",
    "forms": "Tablet 10 mg, 20 mg (UK also 2.5 mg, 5 mg) [list 451–500, unsourced]\nGranules in capsules for opening 0.5, 1, 2, 5 mg (Alkindi — children) [list 451–500, unsourced]\nInjection 100 mg vial [list 451–500, unsourced]",
    "entries": [
     {
@@ -1471,6 +1774,44 @@
      "indication": "",
      "route": "Oral / IV",
      "dose": "Adrenal insufficiency replacement — dose not given",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Adrenal insufficiency (replacement)",
+     "route": "Oral",
+     "dose": "8–10 mg/m² daily in 2–3 divided doses",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Hydrocortisone (adrenal crisis)",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: UK (BSPED) emergency doses are usually 25 mg under 1 year, 50 mg 1–5 years and 100 mg 6 years and over (including adolescents/adults); 200 mg is not the usual single bolus.",
+   "forms": "Powder for solution for injection 100 mg vial [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Child under 5 years (unsourced list)",
+     "indication": "Acute adrenal crisis",
+     "route": "IV",
+     "dose": "50 mg",
+     "max": ""
+    },
+    {
+     "ages": "Child 5–12 years (unsourced list)",
+     "indication": "Acute adrenal crisis",
+     "route": "IV",
+     "dose": "100 mg",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 200 mg for child over 12 years). Enter the regimen from your source.",
      "max": ""
     }
    ]
@@ -1544,6 +1885,24 @@
    ]
   },
   {
+   "drug": "Insulin (long-acting)",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.",
+   "forms": "Insulin detemir 100 units/mL (Levemir — being discontinued; check availability) [list 551–600, unsourced]",
+   "entries": []
+  },
+  {
+   "drug": "Insulin (rapid-acting)",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Premixed (biphasic) insulins are rarely used in children.",
+   "forms": "Biphasic insulin aspart 100 units/mL (premixed) [list 551–600, unsourced]\nBiphasic insulin lispro 100 units/mL (premixed) [list 551–600, unsourced]",
+   "entries": []
+  },
+  {
    "drug": "Insulin (soluble, IV infusion)",
    "source": "Unsourced list (items 451–500) described as extracted from BNF for Children 2023 — not attributable to a specific page; several entries are misattributed (unverified)",
    "checked": "",
@@ -1551,6 +1910,23 @@
    "notes": "From an unsourced list (items 451–500) said to be from BNFc 2023.",
    "forms": "Human soluble insulin solution for injection 100 units/mL [list 451–500, unsourced]",
    "entries": []
+  },
+  {
+   "drug": "Interferon alfa",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Largely superseded; specialist use only.",
+   "forms": "Solution for injection 3, 5, 10 million unit vials/pens [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Hepatitis B / C",
+     "route": "SC / IM",
+     "dose": "3–10 million units/m² three times a week (as listed)",
+     "max": ""
+    }
+   ]
   },
   {
    "drug": "Ipratropium bromide",
@@ -1573,6 +1949,23 @@
      "route": "Nebulised",
      "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 500 micrograms every 20 minutes for 3 doses — child 6 years and over). Enter the regimen from your source.",
      "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Iron sucrose (IV)",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Facilities for anaphylaxis must be available.",
+   "forms": "Solution for injection 20 mg/mL, 5 mL and 10 mL vials [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Iron deficiency anaemia",
+     "route": "IV",
+     "dose": "3–5 mg/kg per dose by slow injection or infusion",
+     "max": "200 mg per dose"
     }
    ]
   },
@@ -1707,6 +2100,23 @@
    ]
   },
   {
+   "drug": "Lamivudine",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Hepatitis B doses are lower than HIV doses. Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.",
+   "forms": "Tablet 150 mg, 300 mg; oral solution 10 mg/mL [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 3 months and over (unsourced list)",
+     "indication": "HIV",
+     "route": "Oral",
+     "dose": "4 mg/kg twice daily",
+     "max": "150 mg twice daily"
+    }
+   ]
+  },
+  {
    "drug": "Lamotrigine",
    "source": "Unsourced list (items 501–550) described as extracted from BNF for Children 2023 — not attributable to a specific page; about half repeats earlier items (unverified)",
    "checked": "",
@@ -1776,17 +2186,24 @@
   },
   {
    "drug": "Levothyroxine",
-   "source": "Unsourced list (items 451–500) described as extracted from BNF for Children 2023 — not attributable to a specific page; several entries are misattributed (unverified)",
+   "source": "Unsourced list (items 451–500) described as extracted from BNF for Children 2023 — not attributable to a specific page; several entries are misattributed (unverified); Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 451–500) said to be from BNFc 2023.\nCHECK: BNFc doses are per kg/age (e.g. congenital hypothyroidism in neonates 10–15 micrograms/kg once daily); the list's '>16 years: TSH >10 on 2 occasions' is a diagnostic criterion, not a dose.",
-   "forms": "Tablet 25, 50, 100 micrograms (also 12.5, 75) [list 451–500, unsourced]\nOral solution 25, 50, 100 micrograms/5 mL [list 451–500, unsourced]",
+   "notes": "From an unsourced list (items 451–500) said to be from BNFc 2023.\nCHECK: BNFc doses are per kg/age (e.g. congenital hypothyroidism in neonates 10–15 micrograms/kg once daily); the list's '>16 years: TSH >10 on 2 occasions' is a diagnostic criterion, not a dose.\nFrom an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Brands and liquids are not always interchangeable — keep to one product and monitor TFTs. The listed mcg/m² doses for older children were not loaded.",
+   "forms": "Tablet 25, 50, 100 micrograms (also 12.5, 75) [list 451–500, unsourced]\nOral solution 25, 50, 100 micrograms/5 mL [list 451–500, unsourced]\nTablet 25, 50, 100, 125, 150, 175, 200 micrograms [list 551–600, unsourced]\nOral suspension listed as special order (licensed oral solutions 25, 50, 100 micrograms/5 mL exist) [list 551–600, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
      "indication": "",
      "route": "Oral",
      "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: Child 1–6 months: 50–100 micrograms/m²/day). Enter the regimen from your source.",
+     "max": ""
+    },
+    {
+     "ages": "Neonate (unsourced list)",
+     "indication": "Congenital hypothyroidism",
+     "route": "Oral",
+     "dose": "10–15 micrograms/kg once daily",
      "max": ""
     }
    ]
@@ -1826,6 +2243,40 @@
    ]
   },
   {
+   "drug": "Liothyronine",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Specialist use in children.",
+   "forms": "Tablet 20 micrograms (also 5, 10 micrograms) [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "5–10 micrograms daily, increased gradually",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Lopinavir–ritonavir",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Oral solution contains ethanol and propylene glycol — avoid in preterm neonates and under 14 days. Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.",
+   "forms": "Oral solution 80 mg/20 mg per mL [list 551–600, unsourced]\nTablet 100/25 mg, 200/50 mg [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 14 days and over (unsourced list)",
+     "indication": "HIV",
+     "route": "Oral",
+     "dose": "By weight/BSA (e.g. 7–<15 kg: 12 mg/3 mg per kg twice daily)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Loratadine",
    "source": "Unsourced list (items 451–500) described as extracted from BNF for Children 2023 — not attributable to a specific page; several entries are misattributed (unverified)",
    "checked": "",
@@ -1838,6 +2289,23 @@
      "indication": "Allergy",
      "route": "Oral",
      "dose": "Under 30 kg: 5 mg once daily; over 30 kg: 10 mg once daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Magnesium sulfate (IV)",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Single doses are usually capped (e.g. 2 g); 50% must be diluted for IV use in children.",
+   "forms": "Solution for injection 50% 2 mL, 4 mL ampoules; 10% 10 mL [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Severe hypomagnesaemia / torsades",
+     "route": "IV",
+     "dose": "0.2–0.4 mmol/kg (50–100 mg/kg) over 10–20 minutes",
      "max": ""
     }
    ]
@@ -1862,6 +2330,23 @@
      "indication": "Head lice",
      "route": "Topical",
      "dose": "Dimeticone 4%: apply to hair, wash off after 8 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Maraviroc",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Paediatric maraviroc doses are fixed weight-band doses that depend on interacting drugs (CYP3A4 inhibitors/inducers), not mg/kg; requires CCR5 tropism testing. Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.",
+   "forms": "Tablet 25, 75, 150, 300 mg; oral solution 20 mg/mL (listed tablet strengths 15, 30, 60 mg — check) [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: By weight (e.g. 10–<14 kg: 2 mg/kg twice daily)). Enter the regimen from your source.",
      "max": ""
     }
    ]
@@ -2116,6 +2601,23 @@
    ]
   },
   {
+   "drug": "Nevirapine",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: 14-day once-daily lead-in reduces rash/hepatotoxicity. Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.",
+   "forms": "Tablet 50, 100, 200 mg (and modified-release); oral suspension 10 mg/mL [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 15 days and over (unsourced list)",
+     "indication": "HIV",
+     "route": "Oral",
+     "dose": "150 mg/m² twice daily (after a once-daily lead-in)",
+     "max": "200 mg per dose (listed as '200 mg/m²' — check)"
+    }
+   ]
+  },
+  {
    "drug": "Nicardipine",
    "source": "Unsourced list (items 401–450) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier items and wrong doses (unverified)",
    "checked": "",
@@ -2145,6 +2647,23 @@
      "indication": "Primary biliary cholangitis",
      "route": "Oral",
      "dose": "5–10 mg daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Octreotide",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Doses vary by indication (hyperinsulinism, chylothorax, bleeding) — confirm.",
+   "forms": "",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "GI bleeding (variceal)",
+     "route": "IV infusion",
+     "dose": "1–2 micrograms/kg/hour",
      "max": ""
     }
    ]
@@ -2213,6 +2732,23 @@
      "indication": "",
      "route": "Oral",
      "dose": "Dose by lipase units with meals and snacks (no dose given)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Peginterferon alfa",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: 1.5 micrograms/kg weekly is the ADULT peginterferon alfa-2b dose; paediatric doses are by body-surface area and differ between alfa-2a and alfa-2b (not interchangeable).",
+   "forms": "Pre-filled syringe/pen [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "SC",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 1.5 micrograms/kg once weekly). Enter the regimen from your source.",
      "max": ""
     }
    ]
@@ -2399,6 +2935,23 @@
    ]
   },
   {
+   "drug": "Potassium chloride",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Usual paediatric maximum IV rate is about 0.2 mmol/kg/hour; faster rates only in intensive care with ECG monitoring.",
+   "forms": "Modified-release tablet 600 mg (8 mmol) [list 551–600, unsourced]\nEffervescent tablet; oral solution [list 551–600, unsourced]\nConcentrate for infusion 15%, 20% (HIGH-ALERT — must be diluted) [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Hypokalaemia",
+     "route": "Oral / IV",
+     "dose": "1–2 mmol/kg/day in divided doses; IV maximum rate 0.5 mmol/kg/hour (as listed)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Praziquantel",
    "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
    "checked": "",
@@ -2515,6 +3068,23 @@
    ]
   },
   {
+   "drug": "Propylthiouracil",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Severe hepatotoxicity — generally not first-line in children (carbimazole preferred).",
+   "forms": "Tablet 50 mg [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Hyperthyroidism",
+     "route": "Oral",
+     "dose": "Initially 4–5 mg/kg daily in 3 divided doses; maintenance 1–2 mg/kg daily",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Proxymetacaine",
    "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
    "checked": "",
@@ -2566,6 +3136,23 @@
    ]
   },
   {
+   "drug": "Raltegravir",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: The listed doses do not match any recognised raltegravir regimen (infant granule doses are per kg; chewable and film-coated tablets are not interchangeable). Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.",
+   "forms": "Film-coated tablet 400 mg, 600 mg; chewable tablet 25 mg, 100 mg; granules for oral suspension 100 mg sachet [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 3–<6 kg: 4 mg once daily; 6 kg and over: 4 mg twice daily or 25 mg once daily). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Ranitidine",
    "source": "Unsourced list (items 451–500) described as extracted from BNF for Children 2023 — not attributable to a specific page; several entries are misattributed (unverified)",
    "checked": "",
@@ -2600,6 +3187,23 @@
    ]
   },
   {
+   "drug": "Ribavirin",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Nebulised ribavirin (SPAG) is usually given as 6 g in 300 mL over 12–18 hours daily (or a high-dose short-duration regimen given several times a day); 6 g over 2–4 hours once daily matches neither. Teratogenic — staff exposure precautions.",
+   "forms": "Powder for nebuliser solution 6 g vial [list 551–600, unsourced]\nTablet/capsule 200 mg; oral solution [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Inhaled",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 6 g over 2–4 hours daily for 3–7 days). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Rifaximin",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -2612,6 +3216,23 @@
      "indication": "",
      "route": "Oral",
      "dose": "550 mg three times daily (as listed)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Rilpivirine",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Avoid PPIs (reduced absorption); separate from antacids/H2 blockers. Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.",
+   "forms": "Tablet 25 mg [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 12 years and over and 35 kg and over (unsourced list)",
+     "indication": "HIV",
+     "route": "Oral",
+     "dose": "25 mg once daily with food",
      "max": ""
     }
    ]
@@ -2733,6 +3354,23 @@
    ]
   },
   {
+   "drug": "Sodium bicarbonate",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Use 4.2% in neonates and infants; flush lines (incompatible with calcium and adrenaline).",
+   "forms": "8.4% 10 mL ampoules, 50 mL/100 mL bottles; 4.2% 100 mL [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Metabolic acidosis / cardiac arrest",
+     "route": "IV",
+     "dose": "1–2 mmol/kg (1–2 mL/kg of 8.4%) slowly",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Sodium chloride 5% eye drops",
    "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
    "checked": "",
@@ -2763,6 +3401,23 @@
      "route": "IV infusion",
      "dose": "Start 0.3–0.5 micrograms/kg/minute; titrate by 0.5 micrograms/kg/minute every 5 minutes",
      "max": "10 micrograms/kg/minute (as listed)"
+    }
+   ]
+  },
+  {
+   "drug": "Somatropin (growth hormone)",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Dose depends on indication (e.g. GH deficiency about 23–39 micrograms/kg/day; Turner/Prader–Willi/SGA higher) — prescribe by device/brand.",
+   "forms": "Powder/solution for injection in many device-specific strengths (e.g. 5, 10, 12 mg pens) [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Growth failure",
+     "route": "SC",
+     "dose": "25–50 micrograms/kg daily (as listed; the alternative '0.7–1.4 mg/m² weekly' should read per DAY)",
+     "max": ""
     }
    ]
   },
@@ -2864,6 +3519,23 @@
      "indication": "",
      "route": "SC",
      "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 0.2 mg/kg weekly). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Tenofovir",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Tenofovir disoproxil and tenofovir alafenamide are dosed differently. Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.",
+   "forms": "Tablet 150, 200, 250, 300 mg (disoproxil); oral granules [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 2 years and over (unsourced list)",
+     "indication": "HIV / hepatitis B",
+     "route": "Oral",
+     "dose": "Tenofovir disoproxil by weight (e.g. 17–<22 kg: 150 mg once daily)",
      "max": ""
     }
    ]
@@ -3156,17 +3828,24 @@
   },
   {
    "drug": "Vitamin D (cholecalciferol)",
-   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified); Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Units per drop vary widely between products — check the specific product to avoid overdose.",
-   "forms": "Tablet 400, 1000, 5000 units; oral drops (listed 400 units/drop — check product) [list 351–400, unsourced]",
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Units per drop vary widely between products — check the specific product to avoid overdose.\nFrom an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: BNFc treatment courses for deficiency are usually higher (e.g. 3000–10 000 units daily by age for 8–12 weeks) — check; 1 microgram = 40 units.",
+   "forms": "Tablet 400, 1000, 5000 units; oral drops (listed 400 units/drop — check product) [list 351–400, unsourced]\nCapsule 400, 1000, 2000, 5000, 10 000, 20 000 units [list 551–600, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
      "indication": "",
      "route": "Oral",
      "dose": "400–1000 units daily (prophylaxis); higher doses for deficiency",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Deficiency / rickets",
+     "route": "Oral",
+     "dose": "20–40 micrograms (800–1600 units) daily for treatment; lower for prophylaxis (as listed)",
      "max": ""
     }
    ]
@@ -3208,6 +3887,30 @@
      "indication": "Influenza (treatment)",
      "route": "Inhalation",
      "dose": "10 mg twice daily for 5 days",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Zidovudine",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: IV zidovudine in children is usually lower than this (e.g. about 120 mg/m² every 6 hours, or weight-based) — check. Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.",
+   "forms": "Tablet 250, 300 mg; capsule 100 mg; oral solution 10 mg/mL; injection 10 mg/mL [list 551–600, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 3 months and over (unsourced list)",
+     "indication": "HIV",
+     "route": "Oral",
+     "dose": "120–180 mg/m² twice daily (as listed)",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 160 mg/m² every 6 hours). Enter the regimen from your source.",
      "max": ""
     }
    ]
