@@ -23,7 +23,11 @@ a PDF report.
 | Accounts | Email + password sign-in. Each account has its own encrypted database; passwords are never stored (PBKDF2 verifier). |
 | Multi-device | Optional Firebase sync (free plan): same account on several devices, works offline and syncs when online; records are end-to-end encrypted. |
 
-## Web version (Netlify) — install without an APK
+## Web version — install without an APK
+
+**Live app (Vercel): https://pediatric-growth-chart.vercel.app** — Vercel project `pediatric-growth-chart`, root directory `web/` (static, no build; headers in `web/vercel.json`).
+
+### Netlify (alternative)
 
 `web/` contains an installable web app (PWA) with the same charts, maths and
 backup format as the Android app. It needs no build step and runs fully offline
