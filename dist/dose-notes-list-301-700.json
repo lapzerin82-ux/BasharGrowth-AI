@@ -2,7 +2,7 @@
  "format": "pgc-dose-notes",
  "version": 1,
  "exported": "2026-10-01",
- "description": "Items 301–650 from UNSOURCED lists described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025. Pure repeats of earlier items (etomidate, tigecycline, eravacycline, plazomicin, delafloxacin, omadacycline, baloxavir; and in 351–400 calcipotriol, chloramphenicol eye drops, epoetin, darbepoetin, iron sucrose, ferric carboxymaltose, penicillamine, trientine; and in 401–450 praziquantel, albendazole, mebendazole, ivermectin, permethrin, malathion, atovaquone–proguanil, octreotide; and in 451–500 the many repeats and dose-less entries) are omitted. Fixed doses are labelled 'Adult / age not stated'; weight-based doses 'Age not stated'. Doses that appear incorrect are NOT loaded. All notes unverified.",
+ "description": "Items 301–700 from UNSOURCED lists described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025. Pure repeats of earlier items (etomidate, tigecycline, eravacycline, plazomicin, delafloxacin, omadacycline, baloxavir; and in 351–400 calcipotriol, chloramphenicol eye drops, epoetin, darbepoetin, iron sucrose, ferric carboxymaltose, penicillamine, trientine; and in 401–450 praziquantel, albendazole, mebendazole, ivermectin, permethrin, malathion, atovaquone–proguanil, octreotide; and in 451–500 the many repeats and dose-less entries) are omitted. Fixed doses are labelled 'Adult / age not stated'; weight-based doses 'Age not stated'. Doses that appear incorrect are NOT loaded. All notes unverified.",
  "notes": [
   {
    "drug": "Abacavir",
@@ -119,6 +119,23 @@
      "indication": "Anaphylaxis",
      "route": "IM",
      "dose": "Emerade 300 micrograms (child over 31 kg as listed); Emerade 500 micrograms (over 60 kg / 12–17 years)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Aflibercept (IV, oncology)",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: Not the same product as intravitreal aflibercept (Eylea). ADULT oncology regimen (breast/colorectal/lung etc.) — not a paediatric dose. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Concentrate for infusion 25 mg/mL (100 mg/4 mL, 200 mg/8 mL) [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "Colorectal cancer",
+     "route": "IV",
+     "dose": "4 mg/kg every 2 weeks",
      "max": ""
     }
    ]
@@ -553,6 +570,23 @@
    ]
   },
   {
+   "drug": "Bevacizumab",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: ADULT oncology regimen (breast/colorectal/lung etc.) — not a paediatric dose. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Concentrate for infusion 25 mg/mL [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "5–15 mg/kg every 2–3 weeks",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Bictegravir–emtricitabine–tenofovir alafenamide",
    "source": "Unsourced list (items 601–650) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page (unverified)",
    "checked": "",
@@ -614,6 +648,23 @@
      "route": "Oral",
      "dose": "Initially 1.25 mg once daily, titrated",
      "max": "10 mg once daily"
+    }
+   ]
+  },
+  {
+   "drug": "Bleomycin",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: Bleomycin doses are in the range of about 10–20 units/m² (US units) or 10 000–15 000 IU/m² (UK IU); the listed 150–250 units/m² is about 10-fold too high. Note US 'units' and UK 'IU' differ by 1000. Pulmonary toxicity. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Powder for solution for injection 15 units / 15 000 IU vials (listed also 30 units) [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV / IM / SC",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 150–250 units/m² weekly). Enter the regimen from your source.",
+     "max": ""
     }
    ]
   },
@@ -846,6 +897,23 @@
    ]
   },
   {
+   "drug": "Carboplatin",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: Paediatric carboplatin is dosed by protocol (GFR-based or mg/m²/mg/kg), not the adult Calvert AUC formula. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Solution for infusion 10 mg/mL [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "AUC-based (e.g. AUC 5–6 every 3–4 weeks — adult Calvert formula)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Caspofungin",
    "source": "Unsourced list (items 501–550) described as extracted from BNF for Children 2023 — not attributable to a specific page; about half repeats earlier items (unverified)",
    "checked": "",
@@ -918,6 +986,23 @@
    ]
   },
   {
+   "drug": "Cetuximab",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: ADULT oncology regimen (breast/colorectal/lung etc.) — not a paediatric dose. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Solution for infusion 5 mg/mL (listed 2 mg/mL — check) [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Loading 400 mg/m², then 250 mg/m² weekly",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Chloramphenicol eye drops",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -971,6 +1056,23 @@
      "indication": "",
      "route": "Oral",
      "dose": "Dose not given (listed for diarrhoea associated with Crohn's disease)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Cisplatin",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: Hydration and electrolyte (magnesium) replacement; ototoxicity and nephrotoxicity monitoring. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Solution for infusion 1 mg/mL [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "20 mg/m² daily for 5 days, or 70–100 mg/m² every 3–4 weeks (adult regimens)",
      "max": ""
     }
    ]
@@ -1202,17 +1304,24 @@
   },
   {
    "drug": "Daunorubicin / doxorubicin",
-   "source": "Unsourced list (items 601–650) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page (unverified)",
+   "source": "Unsourced list (items 601–650) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page (unverified); Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 601–650).\nCHECK: Cumulative anthracycline dose limits and echocardiographic monitoring (cardiotoxicity); vesicant. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
-   "forms": "Daunorubicin powder for solution for injection 20 mg [list 601–650, unsourced]",
+   "notes": "From an unsourced list (items 601–650).\nCHECK: Cumulative anthracycline dose limits and echocardiographic monitoring (cardiotoxicity); vesicant. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.\nFrom an unsourced list (items 651–700).\nCHECK: Cumulative anthracycline limits; liposomal doxorubicin is a different product. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Daunorubicin powder for solution for injection 20 mg [list 601–650, unsourced]\nDoxorubicin solution for injection 2 mg/mL [list 651–700, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
      "indication": "",
      "route": "IV",
      "dose": "Daunorubicin 45 mg/m² daily for 3 days (induction, per protocol)",
+     "max": ""
+    },
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Doxorubicin 20–30 mg/m² weekly or 60–75 mg/m² every 3 weeks (adult regimen)",
      "max": ""
     }
    ]
@@ -1298,6 +1407,23 @@
      "indication": "Psoriasis",
      "route": "Topical",
      "dose": "Apply once daily as short-contact therapy",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Docetaxel",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: Different concentrations exist — confirm. ADULT oncology regimen (breast/colorectal/lung etc.) — not a paediatric dose. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Concentrate for infusion 10 mg/mL, 20 mg/mL [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "60–100 mg/m² every 3 weeks",
      "max": ""
     }
    ]
@@ -1553,6 +1679,23 @@
      "indication": "Chronic hepatitis B",
      "route": "Oral",
      "dose": "By weight (e.g. 10–<15 kg: 0.2 mg once daily)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Epirubicin",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: ADULT oncology regimen (breast/colorectal/lung etc.) — not a paediatric dose. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Solution for injection 2 mg/mL [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "Breast / gastric cancer",
+     "route": "IV",
+     "dose": "60–120 mg/m² every 3–4 weeks",
      "max": ""
     }
    ]
@@ -1955,6 +2098,23 @@
    ]
   },
   {
+   "drug": "Gemcitabine",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: ADULT oncology regimen (breast/colorectal/lung etc.) — not a paediatric dose. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Powder for solution for infusion 200 mg, 1 g, 2 g [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "1000 mg/m² weekly for 3 weeks, every 4 weeks",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Gentamicin eye drops",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -1967,6 +2127,23 @@
      "indication": "",
      "route": "Eye",
      "dose": "1–2 drops every 4 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Glecaprevir–pibrentasvir",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: Duration depends on genotype/cirrhosis/treatment history.",
+   "forms": "Tablet 100/40 mg (coated granules for younger children) [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 12 years and over (unsourced list)",
+     "indication": "Hepatitis C",
+     "route": "Oral",
+     "dose": "300 mg/120 mg (3 tablets) once daily with food",
      "max": ""
     }
    ]
@@ -2351,6 +2528,23 @@
    ]
   },
   {
+   "drug": "Irinotecan",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: Severe diarrhoea (atropine/loperamide protocol); UGT1A1 status. Paediatric regimens differ. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Concentrate for infusion 20 mg/mL [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "180 mg/m² every 2 weeks or 350 mg/m² every 3 weeks (adult colorectal regimens)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Iron sucrose (IV)",
    "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
    "checked": "",
@@ -2595,6 +2789,23 @@
      "indication": "Glaucoma",
      "route": "Eye",
      "dose": "1 drop once daily in the evening",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Ledipasvir–sofosbuvir",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).",
+   "forms": "Tablet 90/400 mg (also 45/200 mg); granules 30/120 mg sachet [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 3 years and over (unsourced list)",
+     "indication": "Hepatitis C",
+     "route": "Oral",
+     "dose": "Weight-based once daily (doses not given)",
      "max": ""
     }
    ]
@@ -3278,6 +3489,23 @@
    ]
   },
   {
+   "drug": "Oxaliplatin",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: ADULT oncology regimen (breast/colorectal/lung etc.) — not a paediatric dose. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Concentrate for infusion 5 mg/mL [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "Colorectal cancer",
+     "route": "IV",
+     "dose": "85 mg/m² every 2 weeks or 130 mg/m² every 3 weeks",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Oxcarbazepine",
    "source": "Unsourced list (items 401–450) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier items and wrong doses (unverified)",
    "checked": "",
@@ -3295,6 +3523,23 @@
    ]
   },
   {
+   "drug": "Paclitaxel",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: Hypersensitivity premedication; albumin-bound paclitaxel is a different product. ADULT oncology regimen (breast/colorectal/lung etc.) — not a paediatric dose. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Concentrate for infusion 6 mg/mL [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "175 mg/m² every 3 weeks or 80 mg/m² weekly",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Pancreatic enzymes (pancrelipase)",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -3307,6 +3552,23 @@
      "indication": "",
      "route": "Oral",
      "dose": "Dose by lipase units with meals and snacks (no dose given)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Panitumumab",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: ADULT oncology regimen (breast/colorectal/lung etc.) — not a paediatric dose. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Concentrate for infusion 20 mg/mL [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "6 mg/kg every 2 weeks",
      "max": ""
     }
    ]
@@ -3375,6 +3637,23 @@
      "indication": "Scabies",
      "route": "Topical",
      "dose": "Apply to the whole body; wash off after 8–12 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Pertuzumab",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: ADULT oncology regimen (breast/colorectal/lung etc.) — not a paediatric dose. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Concentrate for infusion 420 mg/14 mL [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Loading 840 mg, then 420 mg every 3 weeks",
      "max": ""
     }
    ]
@@ -3762,6 +4041,23 @@
    ]
   },
   {
+   "drug": "Regorafenib",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: ADULT oncology regimen (breast/colorectal/lung etc.) — not a paediatric dose. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Tablet 40 mg (listed also 100 mg — check) [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "160 mg once daily for 3 weeks, then 1 week off",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Remifentanil",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -4082,6 +4378,23 @@
    ]
   },
   {
+   "drug": "Sofosbuvir–velpatasvir",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: Check interactions (e.g. PPIs, amiodarone).",
+   "forms": "Tablet 400/100 mg (also 200/50 mg); granules 150/37.5 mg, 200/50 mg sachets [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 6 years and over (as listed; licensed from 3 years) (unsourced list)",
+     "indication": "Hepatitis C",
+     "route": "Oral",
+     "dose": "Weight-based, once daily for 12 weeks (doses not given)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Somatropin (growth hormone)",
    "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
    "checked": "",
@@ -4094,6 +4407,23 @@
      "indication": "Growth failure",
      "route": "SC",
      "dose": "25–50 micrograms/kg daily (as listed; the alternative '0.7–1.4 mg/m² weekly' should read per DAY)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Sorafenib",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: ADULT oncology regimen (breast/colorectal/lung etc.) — not a paediatric dose. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Tablet 200 mg [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "400 mg twice daily",
      "max": ""
     }
    ]
@@ -4453,6 +4783,23 @@
    ]
   },
   {
+   "drug": "Topotecan",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: Paediatric regimens differ. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Powder for solution for infusion 4 mg [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "1.5 mg/m² daily for 5 days every 3 weeks (adult regimen)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Tralokinumab",
    "source": "Unsourced list (items 601–650) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page (unverified)",
    "checked": "",
@@ -4465,6 +4812,23 @@
      "indication": "Atopic dermatitis",
      "route": "SC",
      "dose": "300 mg every 2 weeks (after a 600 mg loading dose)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Trastuzumab",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: IV and SC trastuzumab (and trastuzumab emtansine/deruxtecan) are different products — check name carefully; cardiac monitoring. ADULT oncology regimen (breast/colorectal/lung etc.) — not a paediatric dose. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Powder for infusion 150 mg (listed also 440 mg) [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "HER2-positive cancer",
+     "route": "IV",
+     "dose": "Loading 8 mg/kg, then 6 mg/kg every 3 weeks",
      "max": ""
     }
    ]
@@ -4653,6 +5017,23 @@
      "route": "IV",
      "dose": "1.5–2 mg/m² weekly (per protocol)",
      "max": "2 mg per dose"
+    }
+   ]
+  },
+  {
+   "drug": "Vinorelbine",
+   "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 651–700).\nCHECK: FATAL IF GIVEN INTRATHECALLY. ADULT oncology regimen (breast/colorectal/lung etc.) — not a paediatric dose. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Solution for injection 10 mg/mL [list 651–700, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "25–30 mg/m² weekly",
+     "max": ""
     }
    ]
   },
