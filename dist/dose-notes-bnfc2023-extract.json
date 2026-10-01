@@ -2,8 +2,31 @@
  "format": "pgc-dose-notes",
  "version": 1,
  "exported": "2026-10-01",
- "description": "Draft dose notes prepared from a user-supplied extract of BNF for Children 2023. Every note is marked unverified and must be checked against the complete current source before use. Version 2: adds drug-level targets (amikacin, procainamide, quinidine, theophylline, tobramycin, valproate, vancomycin), oxycodone strengths, ulipristal, morphine/diamorphine equianalgesic values and etravirine (flagged). Re-importing adds only regimens you do not already have.",
+ "description": "Draft dose notes prepared from a user-supplied extract of BNF for Children 2023. Every note is marked unverified and must be checked against the complete current source before use. Version 3: adds items 81–120 (antimicrobials, cardiovascular drugs, PPIs, rufinamide); 'CHECK' notes mark entries that appear to differ from BNFc or mix indications. Re-importing adds only regimens you do not already have.",
  "notes": [
+  {
+   "drug": "Aciclovir",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "IV dose is higher (500 mg/m²) in encephalitis/immunocompromised varicella in BNFc — check indication.",
+   "entries": [
+    {
+     "ages": "Child 3 months–17 years",
+     "indication": "Herpes simplex / varicella",
+     "route": "IV",
+     "dose": "250 mg/m² every 8 hours",
+     "max": ""
+    },
+    {
+     "ages": "Child 3 months–17 years",
+     "indication": "Varicella",
+     "route": "Oral",
+     "dose": "20 mg/kg four times daily",
+     "max": "800 mg per dose"
+    }
+   ]
+  },
   {
    "drug": "Amikacin",
    "source": "Therapeutic-drug-level table supplied with the BNF for Children 2023 extract — likely from a non-BNFc reference (units mcg/mL; includes procainamide/quinidine) (unverified)",
@@ -16,6 +39,93 @@
      "indication": "Therapeutic drug monitoring — target level",
      "route": "",
      "dose": "Peak 20–35 micrograms/mL, 30 minutes after the end of infusion",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Amlodipine",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Younger children dosed per kg in BNFc.",
+   "entries": [
+    {
+     "ages": "Child 6–17 years",
+     "indication": "Hypertension",
+     "route": "Oral",
+     "dose": "Initially 2.5 mg once daily, up to 5 mg (or 10 mg in older/heavier children)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Amoxicillin",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "CHECK: BNFc gives oral amoxicillin mainly as age-banded fixed doses (with 30 mg/kg tds for severe infection) and different IV doses; route not stated in the extract.",
+   "entries": [
+    {
+     "ages": "Neonate",
+     "indication": "Bacterial infection",
+     "route": "",
+     "dose": "30 mg/kg every 12 hours",
+     "max": ""
+    },
+    {
+     "ages": "Child 1 month–17 years",
+     "indication": "Bacterial infection",
+     "route": "",
+     "dose": "20–30 mg/kg every 8 hours",
+     "max": "1 g per dose"
+    }
+   ]
+  },
+  {
+   "drug": "Amphotericin B (conventional)",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Conventional (non-liposomal) formulation; usually started lower with a test dose — check.",
+   "entries": [
+    {
+     "ages": "Child",
+     "indication": "Systemic fungal infection",
+     "route": "IV",
+     "dose": "1 mg/kg once daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Amphotericin B (liposomal)",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Liposomal and conventional preparations are NOT interchangeable.",
+   "entries": [
+    {
+     "ages": "Child",
+     "indication": "Systemic fungal infection",
+     "route": "IV",
+     "dose": "3–5 mg/kg once daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Atenolol",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "",
+   "entries": [
+    {
+     "ages": "Child 12–17 years",
+     "indication": "Hypertension",
+     "route": "Oral",
+     "dose": "25–50 mg once daily",
      "max": ""
     }
    ]
@@ -44,6 +154,22 @@
    ]
   },
   {
+   "drug": "Azithromycin",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "",
+   "entries": [
+    {
+     "ages": "Child 6 months–17 years",
+     "indication": "Bacterial infection",
+     "route": "Oral",
+     "dose": "10 mg/kg once daily for 3 days",
+     "max": "500 mg per day"
+    }
+   ]
+  },
+  {
    "drug": "Baclofen (intrathecal)",
    "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
    "checked": "",
@@ -60,6 +186,162 @@
    ]
   },
   {
+   "drug": "Baloxavir marboxil",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "",
+   "entries": [
+    {
+     "ages": "Child 12–17 years, under 80 kg",
+     "indication": "Influenza (treatment)",
+     "route": "Oral",
+     "dose": "40 mg single dose",
+     "max": ""
+    },
+    {
+     "ages": "Child 12–17 years, 80 kg or more",
+     "indication": "Influenza (treatment)",
+     "route": "Oral",
+     "dose": "80 mg single dose",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Benzylpenicillin (penicillin G)",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "CHECK: BNFc usually gives 25 mg/kg every 6 hours for most infections and higher doses (with a larger per-dose maximum) for meningitis/severe infection; the 1.2 g maximum may not fit 50–100 mg/kg.",
+   "entries": [
+    {
+     "ages": "Neonate under 7 days",
+     "indication": "Bacterial infection",
+     "route": "IV",
+     "dose": "50 mg/kg every 12 hours",
+     "max": ""
+    },
+    {
+     "ages": "Child 1 month–17 years",
+     "indication": "Bacterial infection",
+     "route": "IV",
+     "dose": "50–100 mg/kg every 6–8 hours",
+     "max": "1.2 g per dose"
+    }
+   ]
+  },
+  {
+   "drug": "Captopril",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "First-dose hypotension: give test dose under supervision. Neonatal doses are lower.",
+   "entries": [
+    {
+     "ages": "Child",
+     "indication": "Hypertension / heart failure",
+     "route": "Oral",
+     "dose": "Initially 25–50 micrograms/kg every 8–12 hours, titrated to 1–2 mg/kg every 8 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Cefotaxime",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "",
+   "entries": [
+    {
+     "ages": "Neonate under 7 days",
+     "indication": "Bacterial infection",
+     "route": "IV",
+     "dose": "50 mg/kg every 12 hours",
+     "max": ""
+    },
+    {
+     "ages": "Child 1 month–17 years",
+     "indication": "Bacterial infection",
+     "route": "IV",
+     "dose": "50 mg/kg every 8 hours",
+     "max": "2 g per dose"
+    }
+   ]
+  },
+  {
+   "drug": "Ceftriaxone",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Avoid with IV calcium in neonates; caution in neonatal jaundice.",
+   "entries": [
+    {
+     "ages": "Neonate",
+     "indication": "Meningitis / sepsis",
+     "route": "IV",
+     "dose": "50 mg/kg once daily",
+     "max": ""
+    },
+    {
+     "ages": "Child 1 month–17 years",
+     "indication": "Meningitis / sepsis",
+     "route": "IV",
+     "dose": "80–100 mg/kg once daily",
+     "max": "4 g per day"
+    }
+   ]
+  },
+  {
+   "drug": "Cefuroxime",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Route assumed IV from the per-kg dose; oral cefuroxime is dosed differently — check.",
+   "entries": [
+    {
+     "ages": "Child 1 month–17 years",
+     "indication": "Bacterial infection",
+     "route": "IV",
+     "dose": "20–30 mg/kg every 8 hours",
+     "max": "1.5 g per dose"
+    }
+   ]
+  },
+  {
+   "drug": "Chloramphenicol (systemic)",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "CHECK: BNFc gives 12.5 mg/kg every 6 hours, doubled only in severe infection, with plasma-level monitoring (grey baby syndrome in neonates).",
+   "entries": [
+    {
+     "ages": "Child 1 month–17 years",
+     "indication": "Meningitis / penicillin allergy",
+     "route": "IV",
+     "dose": "25 mg/kg every 6 hours",
+     "max": "4 g per day"
+    }
+   ]
+  },
+  {
+   "drug": "Ciprofloxacin",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "CHECK: 20 mg/kg twice daily is a severe-infection/pseudomonal oral dose; meningococcal prophylaxis is a single dose with age-banded amounts, and UTI doses are lower. Indication label in the extract does not match.",
+   "entries": [
+    {
+     "ages": "Child 1–17 years",
+     "indication": "",
+     "route": "Oral",
+     "dose": "20 mg/kg every 12 hours",
+     "max": "750 mg per dose"
+    }
+   ]
+  },
+  {
    "drug": "Clozapine",
    "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
    "checked": "",
@@ -71,6 +353,22 @@
      "indication": "",
      "route": "Oral",
      "dose": "12.5 mg 1–2 times a day on day 1, then 25–50 mg on day 2, gradually increased over 14–21 days up to 300 mg daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Co-amoxiclav (amoxicillin–clavulanate)",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "CHECK: BNFc oral co-amoxiclav is mostly age-banded by suspension strength (125/31 or 250/62); route and preparation not stated.",
+   "entries": [
+    {
+     "ages": "Child 1 month–17 years",
+     "indication": "Bacterial infection",
+     "route": "",
+     "dose": "20–30 mg/kg (amoxicillin component) every 8 hours",
      "max": ""
     }
    ]
@@ -108,6 +406,36 @@
    ]
   },
   {
+   "drug": "Digoxin",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "CHECK: these look like daily maintenance totals from a non-BNFc reference; BNFc gives a loading regimen plus maintenance in divided doses. Narrow therapeutic index — check carefully.",
+   "entries": [
+    {
+     "ages": "Child 1 month–2 years",
+     "indication": "Heart failure / arrhythmia",
+     "route": "Oral",
+     "dose": "10–15 micrograms/kg daily",
+     "max": ""
+    },
+    {
+     "ages": "Child 2–10 years",
+     "indication": "Heart failure / arrhythmia",
+     "route": "Oral",
+     "dose": "10–12 micrograms/kg daily",
+     "max": ""
+    },
+    {
+     "ages": "Child 10–17 years",
+     "indication": "Heart failure / arrhythmia",
+     "route": "Oral",
+     "dose": "8–10 micrograms/kg daily",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Dolutegravir",
    "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
    "checked": "",
@@ -134,6 +462,45 @@
      "route": "Oral",
      "dose": "25 mg twice daily",
      "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Doxycycline (≥ 8 y)",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Tooth staining: generally avoided under 12 years except specific indications (e.g. Lyme disease, rickettsial infection).",
+   "entries": [
+    {
+     "ages": "Child 12–17 years",
+     "indication": "Bacterial infection",
+     "route": "Oral",
+     "dose": "200 mg on day 1 (or 100 mg every 12 hours), then 100 mg once daily or 50 mg every 12 hours",
+     "max": ""
+    },
+    {
+     "ages": "Child under 12 years",
+     "indication": "Lyme disease",
+     "route": "Oral",
+     "dose": "4 mg/kg daily in 1–2 divided doses",
+     "max": "200 mg per day"
+    }
+   ]
+  },
+  {
+   "drug": "Enalapril",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Test dose and monitoring (renal function, potassium) apply; BNFc maximum may differ — check.",
+   "entries": [
+    {
+     "ages": "Child 1 month–17 years",
+     "indication": "Hypertension / heart failure",
+     "route": "Oral",
+     "dose": "Initially 50–100 micrograms/kg once daily, up to 200 micrograms/kg",
+     "max": "20 mg per day"
     }
    ]
   },
@@ -177,6 +544,93 @@
    ]
   },
   {
+   "drug": "Flucloxacillin / cloxacillin",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "",
+   "entries": [
+    {
+     "ages": "Child 1 month–17 years",
+     "indication": "Staphylococcal infection",
+     "route": "Oral",
+     "dose": "12.5–25 mg/kg every 6 hours",
+     "max": "1 g per dose"
+    }
+   ]
+  },
+  {
+   "drug": "Fluconazole",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Neonatal dosing interval depends on postnatal age in BNFc — check.",
+   "entries": [
+    {
+     "ages": "Neonate",
+     "indication": "Candidiasis",
+     "route": "",
+     "dose": "6 mg/kg loading dose, then 3–6 mg/kg once daily",
+     "max": ""
+    },
+    {
+     "ages": "Child 1 month–17 years",
+     "indication": "Candidiasis",
+     "route": "",
+     "dose": "3–6 mg/kg once daily",
+     "max": "400 mg per day"
+    }
+   ]
+  },
+  {
+   "drug": "Fosfomycin",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "",
+   "entries": [
+    {
+     "ages": "Child 12–17 years",
+     "indication": "Uncomplicated UTI",
+     "route": "Oral",
+     "dose": "3 g as a single dose",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Ganciclovir",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Induction regimen; duration and maintenance not given. Monitor blood counts.",
+   "entries": [
+    {
+     "ages": "Child",
+     "indication": "CMV",
+     "route": "IV",
+     "dose": "5 mg/kg every 12 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Gentamicin",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "CHECK: BNFc once-daily regimens differ by age (e.g. neonate dosing interval depends on postnatal age); adjust by drug levels and renal function.",
+   "entries": [
+    {
+     "ages": "Neonate and child",
+     "indication": "Bacterial infection",
+     "route": "IV / IM",
+     "dose": "5–7 mg/kg once daily",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Isoniazid",
    "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
    "checked": "",
@@ -189,6 +643,29 @@
      "route": "Oral",
      "dose": "15 mg/kg 3 times a week for 6 months",
      "max": "900 mg per dose"
+    }
+   ]
+  },
+  {
+   "drug": "Lansoprazole",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "CHECK: BNFc doses lansoprazole by body weight (e.g. under 30 kg 0.5–1 mg/kg, max 15 mg) rather than by age alone.",
+   "entries": [
+    {
+     "ages": "Child 1–11 years",
+     "indication": "GORD / ulcer",
+     "route": "Oral",
+     "dose": "15 mg once daily",
+     "max": ""
+    },
+    {
+     "ages": "Child 12–17 years",
+     "indication": "GORD / ulcer",
+     "route": "Oral",
+     "dose": "30 mg once daily",
+     "max": ""
     }
    ]
   },
@@ -209,6 +686,22 @@
    ]
   },
   {
+   "drug": "Lisinopril",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Monitor renal function and potassium.",
+   "entries": [
+    {
+     "ages": "Child 6–17 years",
+     "indication": "Hypertension / heart failure",
+     "route": "Oral",
+     "dose": "Initially 0.07 mg/kg once daily (max 5 mg), titrated to 0.6 mg/kg",
+     "max": "40 mg per day"
+    }
+   ]
+  },
+  {
    "drug": "Lithium",
    "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
    "checked": "",
@@ -221,6 +714,54 @@
      "route": "Oral",
      "dose": "Camcolit (lithium carbonate): initially 1–1.5 g daily, adjusted according to serum-lithium concentration",
      "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Losartan",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "",
+   "entries": [
+    {
+     "ages": "Child 6–17 years",
+     "indication": "Hypertension",
+     "route": "Oral",
+     "dose": "Initially 0.7 mg/kg once daily (max 50 mg), titrated to 1.4 mg/kg",
+     "max": "100 mg per day"
+    }
+   ]
+  },
+  {
+   "drug": "Metronidazole",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "",
+   "entries": [
+    {
+     "ages": "Child 1 month–17 years",
+     "indication": "Anaerobic infection",
+     "route": "",
+     "dose": "7.5 mg/kg every 8 hours",
+     "max": "500 mg per dose"
+    }
+   ]
+  },
+  {
+   "drug": "Micafungin",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "1 mg/kg is the prophylaxis dose, 2 mg/kg the treatment dose (fixed doses above 40 kg).",
+   "entries": [
+    {
+     "ages": "Neonate and child",
+     "indication": "Candidiasis (prophylaxis / treatment)",
+     "route": "IV",
+     "dose": "1–2 mg/kg once daily",
+     "max": "50–100 mg per day"
     }
    ]
   },
@@ -243,6 +784,77 @@
      "indication": "Equianalgesic reference (not a dosing regimen)",
      "route": "IM / IV / SC",
      "dose": "5 mg",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Nifedipine",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "CHECK: modified-release nifedipine is given once or twice daily, not every 6–8 hours; preparations are not interchangeable. Check preparation and frequency.",
+   "entries": [
+    {
+     "ages": "Child",
+     "indication": "Hypertension",
+     "route": "Oral",
+     "dose": "0.2–0.5 mg/kg every 6–8 hours (as extracted, 'modified release')",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Nitrofurantoin",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "CHECK: BNFc treatment dose for children 3 months–11 years is 750 micrograms/kg every 6 hours (50 mg qds from 12 years); prophylaxis is 1 mg/kg at night.",
+   "entries": [
+    {
+     "ages": "Child 3 months–17 years",
+     "indication": "UTI (treatment)",
+     "route": "Oral",
+     "dose": "1 mg/kg every 6 hours",
+     "max": "50 mg per dose"
+    }
+   ]
+  },
+  {
+   "drug": "Omeprazole",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "BNFc gives weight-banded fixed doses for older children — check.",
+   "entries": [
+    {
+     "ages": "Neonate",
+     "indication": "GORD / ulcer",
+     "route": "Oral",
+     "dose": "700 micrograms/kg once daily",
+     "max": ""
+    },
+    {
+     "ages": "Child 1 month–17 years",
+     "indication": "GORD / ulcer",
+     "route": "Oral",
+     "dose": "500 micrograms–1 mg/kg once daily",
+     "max": "20–40 mg per day"
+    }
+   ]
+  },
+  {
+   "drug": "Oseltamivir",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "CHECK: weight bands as I recall them: 15–23 kg 45 mg and 23–40 kg 60 mg twice daily (treatment); the extract's '15–40 kg: 60 mg' combines two bands. Prophylaxis is once daily.",
+   "entries": [
+    {
+     "ages": "Child 1–17 years",
+     "indication": "Influenza (treatment)",
+     "route": "Oral",
+     "dose": "Weight-based; e.g. 60 mg twice daily (as extracted for 15–40 kg)",
      "max": ""
     }
    ]
@@ -287,6 +899,22 @@
    ]
   },
   {
+   "drug": "Pivmecillinam",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Weight limits and maximum dose not given in the extract.",
+   "entries": [
+    {
+     "ages": "Child 3 months–17 years",
+     "indication": "UTI",
+     "route": "Oral",
+     "dose": "10–15 mg/kg every 8 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Procainamide",
    "source": "Therapeutic-drug-level table supplied with the BNF for Children 2023 extract — likely from a non-BNFc reference (units mcg/mL; includes procainamide/quinidine) (unverified)",
    "checked": "",
@@ -299,6 +927,22 @@
      "route": "",
      "dose": "4–10 micrograms/mL, just before the next dose",
      "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Propranolol",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "CHECK: BNFc hypertension dosing is about 250 micrograms–1 mg/kg three times daily (max 5 mg/kg/day); haemangioma, migraine and arrhythmia doses differ.",
+   "entries": [
+    {
+     "ages": "Child",
+     "indication": "Hypertension / arrhythmia",
+     "route": "Oral",
+     "dose": "0.5–1 mg/kg every 6–8 hours",
+     "max": "4 mg/kg per day"
     }
    ]
   },
@@ -355,7 +999,7 @@
    "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "Only the 3-times-weekly TB regimen was extracted; daily and other indications not included.",
+   "notes": "Only the 3-times-weekly TB regimen was extracted; daily and other indications not included.\nCHECK: item 88 merges two indications: meningococcal prophylaxis (every 12 hours for 2 days) and tuberculosis (once daily). Record each indication separately.",
    "entries": [
     {
      "ages": "Child",
@@ -363,6 +1007,29 @@
      "route": "Oral",
      "dose": "15 mg/kg 3 times a week for 6 months",
      "max": "900 mg per dose"
+    },
+    {
+     "ages": "Child 1 month–17 years",
+     "indication": "",
+     "route": "Oral",
+     "dose": "10 mg/kg every 12–24 hours",
+     "max": "600 mg per dose"
+    }
+   ]
+  },
+  {
+   "drug": "Rufinamide",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "CHECK: BNFc doses rufinamide by body weight and adjusts for concomitant valproate; confirm.",
+   "entries": [
+    {
+     "ages": "Child 1–17 years",
+     "indication": "Epilepsy (e.g. Lennox–Gastaut)",
+     "route": "Oral",
+     "dose": "Initially 10 mg/kg daily in 2 divided doses, increased every 3 days to a target of about 45 mg/kg daily",
+     "max": "2.4 g per day"
     }
    ]
   },
@@ -371,7 +1038,7 @@
    "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "Valproate pregnancy-prevention requirements apply to girls of child-bearing potential. Check monitoring advice (hepatic function) in the source.\nTarget levels in micrograms/mL (= mg/L). These values appear to come from a general drug-level table, not BNFc; check against BNFc and your local laboratory/antimicrobial guidance (e.g. BNFc vancomycin pre-dose target is usually lower).",
+   "notes": "Valproate pregnancy-prevention requirements apply to girls of child-bearing potential. Check monitoring advice (hepatic function) in the source.\nTarget levels in micrograms/mL (= mg/L). These values appear to come from a general drug-level table, not BNFc; check against BNFc and your local laboratory/antimicrobial guidance (e.g. BNFc vancomycin pre-dose target is usually lower).\nCHECK: item 81 conflicts with the earlier extract (maintenance 25–30 vs 20–30 mg/kg daily; maximum 2.5 g vs 2 g daily). Keep only the regimen that matches your source.",
    "entries": [
     {
      "ages": "Child 1 month–11 years",
@@ -407,6 +1074,27 @@
      "route": "",
      "dose": "Mania: trough 45–125 micrograms/mL, just before the next dose",
      "max": ""
+    },
+    {
+     "ages": "Neonate",
+     "indication": "Epilepsy",
+     "route": "",
+     "dose": "Initially 20 mg/kg once daily; maintenance 10 mg/kg twice daily",
+     "max": ""
+    },
+    {
+     "ages": "Child 1 month–1 year",
+     "indication": "Epilepsy",
+     "route": "",
+     "dose": "Initially 10–15 mg/kg daily; maintenance 20–30 mg/kg daily",
+     "max": ""
+    },
+    {
+     "ages": "Child 1–17 years",
+     "indication": "Epilepsy",
+     "route": "",
+     "dose": "Initially 10–15 mg/kg daily; maintenance 20–30 mg/kg daily",
+     "max": "2 g per day"
     }
    ]
   },
@@ -450,6 +1138,22 @@
    ]
   },
   {
+   "drug": "Trimethoprim",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "CHECK: BNFc treatment dose is 4 mg/kg twice daily (max 200 mg); 2 mg/kg is the once-nightly prophylaxis dose. The extract appears to mix the two.",
+   "entries": [
+    {
+     "ages": "Child 6 weeks–17 years",
+     "indication": "UTI",
+     "route": "Oral",
+     "dose": "2 mg/kg every 12 hours",
+     "max": "200 mg per dose"
+    }
+   ]
+  },
+  {
    "drug": "Ulipristal acetate (emergency contraception)",
    "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
    "checked": "",
@@ -477,6 +1181,36 @@
      "indication": "Therapeutic drug monitoring — target level",
      "route": "",
      "dose": "Trough 10–20 micrograms/mL, just before the next dose",
+     "max": ""
+    },
+    {
+     "ages": "Child 1 month–17 years",
+     "indication": "Bacterial infection / MRSA",
+     "route": "IV",
+     "dose": "15 mg/kg every 6–8 hours, adjusted by trough level",
+     "max": "2 g per day (initial)"
+    }
+   ]
+  },
+  {
+   "drug": "Voriconazole",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "9 mg/kg is the loading dose in BNFc (first 24 hours), then 8 mg/kg twice daily — check. Therapeutic level monitoring recommended.",
+   "entries": [
+    {
+     "ages": "Child 2–11 years",
+     "indication": "Invasive aspergillosis",
+     "route": "IV",
+     "dose": "9 mg/kg every 12 hours",
+     "max": ""
+    },
+    {
+     "ages": "Child 2–11 years over 40 kg",
+     "indication": "Invasive aspergillosis",
+     "route": "Oral",
+     "dose": "200 mg every 12 hours",
      "max": ""
     }
    ]
