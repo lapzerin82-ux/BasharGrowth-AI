@@ -900,7 +900,7 @@ function viewSettings() {
     <section class="card stack"><h2>Growth references (bundled, work offline)</h2>
       ${G.allRefs().map((r) => `<div><b>${esc(r.title)}</b><br><small>Version: ${esc(r.version)} · Percentile curves ${r.centiles.join(", ")}</small><br><small class="muted">Source: ${esc(r.source)}</small></div>`).join("<hr>")}
       <p class="hint">Curves are generated from the official LMS parameters. Each measurement is plotted at the exact age (days ÷ 30.4375 months) with no rounding.</p></section>
-    <section class="card stack"><h2>About</h2><p>Pediatric Growth Chart (web app), version 24. Clinical decision support only; verify measurements and interpret results in clinical context.</p>${CREDIT}</section>
+    <section class="card stack"><h2>About</h2><p>Pediatric Growth Chart (web app), version 25. Clinical decision support only; verify measurements and interpret results in clinical context.</p>${CREDIT}</section>
   </main>`;
   bindBack();
   $app.querySelectorAll('input[name="fam"]').forEach((r) => r.onchange = () => { settings.family = r.value; toast("Saved"); });
@@ -1405,11 +1405,24 @@ function viewDoseNotes() {
       unverified: n.unverified !== false || !n.checked, // imported regimens stay unverified until the clinician checks them
       entries: (Array.isArray(n.entries) ? n.entries : []).map((x) => ({ ages: str(x.ages, 120), indication: str(x.indication, 120), route: str(x.route, 60), dose: str(x.dose), max: str(x.max, 120) })).filter((x) => x.dose),
     })).filter((n) => n.drug && n.entries.length);
-    const have = new Set(session.doseNoteList().map((d) => d.drug.trim().toLowerCase()));
-    const add = incoming.filter((n) => !have.has(n.drug.toLowerCase())), skip = incoming.length - add.length;
-    confirmBox(`Import ${add.length} dose note${add.length === 1 ? "" : "s"}?`, `${skip ? `${skip} skipped because you already have a note for that drug. ` : ""}Imported notes are marked “Unverified” until you check each one against your source.`, "Import", async () => {
+    // new drugs are added; for drugs you already have, only regimens not yet in your note are appended
+    // (the note is then marked unverified again); your own text is never overwritten
+    const key = (e) => [e.ages, e.indication, e.route, e.dose, e.max].map((t) => String(t || "").trim().toLowerCase()).join("|");
+    const byDrug = new Map(session.doseNoteList().map((d) => [d.drug.trim().toLowerCase(), d]));
+    const add = [], upd = []; let same = 0;
+    for (const n of incoming) {
+      const old = byDrug.get(n.drug.toLowerCase());
+      if (!old) { add.push(n); continue; }
+      const seen = new Set((old.entries || []).map(key)), extra = n.entries.filter((e) => !seen.has(key(e)));
+      if (!extra.length) { same++; continue; }
+      const notes = n.notes && !String(old.notes || "").includes(n.notes) ? [old.notes, n.notes].filter(Boolean).join("\n") : old.notes;
+      upd.push({ ...old, entries: [...old.entries, ...extra], notes, unverified: true, added: extra.length });
+    }
+    if (!add.length && !upd.length) return toast("Nothing new to import: you already have all of these regimens.");
+    confirmBox("Import dose notes?", `${add.length} new note${add.length === 1 ? "" : "s"}; ${upd.length} existing note${upd.length === 1 ? " gets" : "s get"} new regimens${same ? `; ${same} unchanged` : ""}. Imported regimens are marked “Unverified” until you check them against your source.`, "Import", async () => {
       for (const n of add) await session.saveDoseNote(n);
-      toast(`Imported ${add.length} dose notes`); viewDoseNotes();
+      for (const { added, ...n } of upd) await session.saveDoseNote(n);
+      toast(`Imported: ${add.length} new, ${upd.length} updated`); viewDoseNotes();
     });
   };
 }

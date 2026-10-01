@@ -2,27 +2,43 @@
  "format": "pgc-dose-notes",
  "version": 1,
  "exported": "2026-10-01",
- "description": "Draft dose notes prepared from a user-supplied extract of BNF for Children 2023. Every note is marked unverified and must be checked against the complete current source before use.",
+ "description": "Draft dose notes prepared from a user-supplied extract of BNF for Children 2023. Every note is marked unverified and must be checked against the complete current source before use. Version 2: adds drug-level targets (amikacin, procainamide, quinidine, theophylline, tobramycin, valproate, vancomycin), oxycodone strengths, ulipristal, morphine/diamorphine equianalgesic values and etravirine (flagged). Re-importing adds only regimens you do not already have.",
  "notes": [
   {
-   "drug": "Ethambutol",
+   "drug": "Amikacin",
+   "source": "Therapeutic-drug-level table supplied with the BNF for Children 2023 extract — likely from a non-BNFc reference (units mcg/mL; includes procainamide/quinidine) (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Target levels in micrograms/mL (= mg/L). These values appear to come from a general drug-level table, not BNFc; check against BNFc and your local laboratory/antimicrobial guidance (e.g. BNFc vancomycin pre-dose target is usually lower).",
+   "entries": [
+    {
+     "ages": "",
+     "indication": "Therapeutic drug monitoring — target level",
+     "route": "",
+     "dose": "Peak 20–35 micrograms/mL, 30 minutes after the end of infusion",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Atropine",
    "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "Ethambutol hydrochloride. Extract items 21 and 36 merged (same regimen). Check visual-acuity monitoring advice in the source.",
+   "notes": "Atropine sulfate. Only the intra-operative bradycardia indication was extracted (not resuscitation or organophosphate poisoning).",
    "entries": [
     {
-     "ages": "Child",
-     "indication": "Tuberculosis — initial phase",
-     "route": "Oral",
-     "dose": "20 mg/kg once daily OR 30 mg/kg 3 times a week for 2 months",
+     "ages": "Neonate and child 1 month–11 years",
+     "indication": "Intra-operative bradycardia",
+     "route": "Intravenous",
+     "dose": "10–20 micrograms/kg",
      "max": ""
     },
     {
-     "ages": "Neonate",
-     "indication": "Congenital tuberculosis",
-     "route": "Oral",
-     "dose": "20 mg/kg once daily for 2 months",
+     "ages": "Child 12–17 years",
+     "indication": "Intra-operative bradycardia",
+     "route": "Intravenous",
+     "dose": "300–600 micrograms",
      "max": ""
     }
    ]
@@ -76,127 +92,17 @@
    ]
   },
   {
-   "drug": "Rabies immunoglobulin",
+   "drug": "Diamorphine (incl. intranasal)",
    "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "Give together with rabies vaccine as per national guidance; check what to do with any remaining volume.",
+   "notes": "Equivalence value from an opioid conversion table, not a dose to give. Paediatric diamorphine dosing (including intranasal) is not included in the extract.",
    "entries": [
     {
-     "ages": "Child",
-     "indication": "Post-exposure prophylaxis",
-     "route": "Infiltration",
-     "dose": "20 units/kg by infiltration in and around the cleansed wound",
-     "max": ""
-    }
-   ]
-  },
-  {
-   "drug": "Lithium",
-   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
-   "checked": "",
-   "unverified": true,
-   "notes": "Preparation-specific (Camcolit); lithium brands are not interchangeable. Indication not stated in the extract.",
-   "entries": [
-    {
-     "ages": "Child 12–17 years",
-     "indication": "",
-     "route": "Oral",
-     "dose": "Camcolit (lithium carbonate): initially 1–1.5 g daily, adjusted according to serum-lithium concentration",
-     "max": ""
-    }
-   ]
-  },
-  {
-   "drug": "Isoniazid",
-   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
-   "checked": "",
-   "unverified": true,
-   "notes": "Only the 3-times-weekly regimen was extracted; the daily regimen is not included. Consider pyridoxine.",
-   "entries": [
-    {
-     "ages": "Child",
-     "indication": "Tuberculosis — intermittent regimen",
-     "route": "Oral",
-     "dose": "15 mg/kg 3 times a week for 6 months",
-     "max": "900 mg per dose"
-    }
-   ]
-  },
-  {
-   "drug": "Rifampicin",
-   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
-   "checked": "",
-   "unverified": true,
-   "notes": "Only the 3-times-weekly TB regimen was extracted; daily and other indications not included.",
-   "entries": [
-    {
-     "ages": "Child",
-     "indication": "Tuberculosis — intermittent regimen",
-     "route": "Oral",
-     "dose": "15 mg/kg 3 times a week for 6 months",
-     "max": "900 mg per dose"
-    }
-   ]
-  },
-  {
-   "drug": "Pyrazinamide",
-   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
-   "checked": "",
-   "unverified": true,
-   "notes": "Only the 3-times-weekly regimen was extracted.",
-   "entries": [
-    {
-     "ages": "Child up to 50 kg",
-     "indication": "Tuberculosis — intermittent regimen, initial phase",
-     "route": "Oral",
-     "dose": "50 mg/kg 3 times a week for 2 months",
-     "max": "2 g per dose"
-    }
-   ]
-  },
-  {
-   "drug": "Paracetamol (acetaminophen)",
-   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
-   "checked": "",
-   "unverified": true,
-   "notes": "PARTIAL: only two age bands were extracted; other age bands, routes (IV, rectal) and indications are missing.",
-   "entries": [
-    {
-     "ages": "Neonate 28–32 weeks corrected gestational age",
-     "indication": "",
-     "route": "Oral",
-     "dose": "20 mg/kg for 1 dose, then 10–15 mg/kg every 8–12 hours",
-     "max": "30 mg/kg per day"
-    },
-    {
-     "ages": "Child 12–15 years",
-     "indication": "",
-     "route": "Oral",
-     "dose": "480–750 mg every 4–6 hours",
-     "max": "4 doses in 24 hours"
-    }
-   ]
-  },
-  {
-   "drug": "Atropine",
-   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
-   "checked": "",
-   "unverified": true,
-   "notes": "Atropine sulfate. Only the intra-operative bradycardia indication was extracted (not resuscitation or organophosphate poisoning).",
-   "entries": [
-    {
-     "ages": "Neonate and child 1 month–11 years",
-     "indication": "Intra-operative bradycardia",
-     "route": "Intravenous",
-     "dose": "10–20 micrograms/kg",
-     "max": ""
-    },
-    {
-     "ages": "Child 12–17 years",
-     "indication": "Intra-operative bradycardia",
-     "route": "Intravenous",
-     "dose": "300–600 micrograms",
+     "ages": "",
+     "indication": "Equianalgesic reference (not a dosing regimen)",
+     "route": "IM / IV / SC",
+     "dose": "3 mg (≈ oral morphine 10 mg)",
      "max": ""
     }
    ]
@@ -232,6 +138,61 @@
    ]
   },
   {
+   "drug": "Ethambutol",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Ethambutol hydrochloride. Extract items 21 and 36 merged (same regimen). Check visual-acuity monitoring advice in the source.",
+   "entries": [
+    {
+     "ages": "Child",
+     "indication": "Tuberculosis — initial phase",
+     "route": "Oral",
+     "dose": "20 mg/kg once daily OR 30 mg/kg 3 times a week for 2 months",
+     "max": ""
+    },
+    {
+     "ages": "Neonate",
+     "indication": "Congenital tuberculosis",
+     "route": "Oral",
+     "dose": "20 mg/kg once daily for 2 months",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Etravirine",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "⚠ LIKELY MISATTRIBUTED — DO NOT USE WITHOUT CHECKING. Etravirine is, as far as known, dosed by body-weight band twice daily; a 150–200 mg/m² once-daily lead-in resembles another antiretroviral's regimen. Verify against BNFc / current paediatric HIV guidance before relying on this note.",
+   "entries": [
+    {
+     "ages": "Child",
+     "indication": "HIV infection",
+     "route": "Oral",
+     "dose": "As extracted: initially 150–200 mg/m² once daily for the first 14 days",
+     "max": "200 mg per dose"
+    }
+   ]
+  },
+  {
+   "drug": "Isoniazid",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Only the 3-times-weekly regimen was extracted; the daily regimen is not included. Consider pyridoxine.",
+   "entries": [
+    {
+     "ages": "Child",
+     "indication": "Tuberculosis — intermittent regimen",
+     "route": "Oral",
+     "dose": "15 mg/kg 3 times a week for 6 months",
+     "max": "900 mg per dose"
+    }
+   ]
+  },
+  {
    "drug": "Levamisole (roundworm)",
    "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
    "checked": "",
@@ -248,11 +209,169 @@
    ]
   },
   {
+   "drug": "Lithium",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Preparation-specific (Camcolit); lithium brands are not interchangeable. Indication not stated in the extract.",
+   "entries": [
+    {
+     "ages": "Child 12–17 years",
+     "indication": "",
+     "route": "Oral",
+     "dose": "Camcolit (lithium carbonate): initially 1–1.5 g daily, adjusted according to serum-lithium concentration",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Morphine",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "These are equivalence values from an opioid conversion table (doses approximately equal in analgesic effect), not doses to give. Paediatric morphine dosing is not included in the extract.",
+   "entries": [
+    {
+     "ages": "",
+     "indication": "Equianalgesic reference (not a dosing regimen)",
+     "route": "Oral",
+     "dose": "10 mg",
+     "max": ""
+    },
+    {
+     "ages": "",
+     "indication": "Equianalgesic reference (not a dosing regimen)",
+     "route": "IM / IV / SC",
+     "dose": "5 mg",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Oxycodone",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Strengths only — the extract contains no paediatric dosing regimen. Controlled drug.",
+   "entries": [
+    {
+     "ages": "",
+     "indication": "Product information",
+     "route": "Oral",
+     "dose": "Modified-release tablets available as 5 mg, 10 mg, 15 mg, 30 mg and 60 mg (no dose given in the extract)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Paracetamol (acetaminophen)",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "PARTIAL: only two age bands were extracted; other age bands, routes (IV, rectal) and indications are missing.",
+   "entries": [
+    {
+     "ages": "Neonate 28–32 weeks corrected gestational age",
+     "indication": "",
+     "route": "Oral",
+     "dose": "20 mg/kg for 1 dose, then 10–15 mg/kg every 8–12 hours",
+     "max": "30 mg/kg per day"
+    },
+    {
+     "ages": "Child 12–15 years",
+     "indication": "",
+     "route": "Oral",
+     "dose": "480–750 mg every 4–6 hours",
+     "max": "4 doses in 24 hours"
+    }
+   ]
+  },
+  {
+   "drug": "Procainamide",
+   "source": "Therapeutic-drug-level table supplied with the BNF for Children 2023 extract — likely from a non-BNFc reference (units mcg/mL; includes procainamide/quinidine) (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Target levels in micrograms/mL (= mg/L). These values appear to come from a general drug-level table, not BNFc; check against BNFc and your local laboratory/antimicrobial guidance (e.g. BNFc vancomycin pre-dose target is usually lower). Rarely used in children.",
+   "entries": [
+    {
+     "ages": "",
+     "indication": "Therapeutic drug monitoring — target level",
+     "route": "",
+     "dose": "4–10 micrograms/mL, just before the next dose",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Pyrazinamide",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Only the 3-times-weekly regimen was extracted.",
+   "entries": [
+    {
+     "ages": "Child up to 50 kg",
+     "indication": "Tuberculosis — intermittent regimen, initial phase",
+     "route": "Oral",
+     "dose": "50 mg/kg 3 times a week for 2 months",
+     "max": "2 g per dose"
+    }
+   ]
+  },
+  {
+   "drug": "Quinidine",
+   "source": "Therapeutic-drug-level table supplied with the BNF for Children 2023 extract — likely from a non-BNFc reference (units mcg/mL; includes procainamide/quinidine) (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Target levels in micrograms/mL (= mg/L). These values appear to come from a general drug-level table, not BNFc; check against BNFc and your local laboratory/antimicrobial guidance (e.g. BNFc vancomycin pre-dose target is usually lower). Rarely used in children.",
+   "entries": [
+    {
+     "ages": "",
+     "indication": "Therapeutic drug monitoring — target level",
+     "route": "",
+     "dose": "1.5–4.5 micrograms/mL, just before the next dose",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Rabies immunoglobulin",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Give together with rabies vaccine as per national guidance; check what to do with any remaining volume.",
+   "entries": [
+    {
+     "ages": "Child",
+     "indication": "Post-exposure prophylaxis",
+     "route": "Infiltration",
+     "dose": "20 units/kg by infiltration in and around the cleansed wound",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Rifampicin",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Only the 3-times-weekly TB regimen was extracted; daily and other indications not included.",
+   "entries": [
+    {
+     "ages": "Child",
+     "indication": "Tuberculosis — intermittent regimen",
+     "route": "Oral",
+     "dose": "15 mg/kg 3 times a week for 6 months",
+     "max": "900 mg per dose"
+    }
+   ]
+  },
+  {
    "drug": "Sodium valproate",
    "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "Valproate pregnancy-prevention requirements apply to girls of child-bearing potential. Check monitoring advice (hepatic function) in the source.",
+   "notes": "Valproate pregnancy-prevention requirements apply to girls of child-bearing potential. Check monitoring advice (hepatic function) in the source.\nTarget levels in micrograms/mL (= mg/L). These values appear to come from a general drug-level table, not BNFc; check against BNFc and your local laboratory/antimicrobial guidance (e.g. BNFc vancomycin pre-dose target is usually lower).",
    "entries": [
     {
      "ages": "Child 1 month–11 years",
@@ -273,6 +392,91 @@
      "indication": "Epilepsy",
      "route": "Rectal",
      "dose": "Initially 20 mg/kg once daily; maintenance 10 mg/kg twice daily",
+     "max": ""
+    },
+    {
+     "ages": "",
+     "indication": "Therapeutic drug monitoring — target level",
+     "route": "",
+     "dose": "Epilepsy: trough 50–100 micrograms/mL",
+     "max": ""
+    },
+    {
+     "ages": "",
+     "indication": "Therapeutic drug monitoring — target level",
+     "route": "",
+     "dose": "Mania: trough 45–125 micrograms/mL, just before the next dose",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Theophylline",
+   "source": "Therapeutic-drug-level table supplied with the BNF for Children 2023 extract — likely from a non-BNFc reference (units mcg/mL; includes procainamide/quinidine) (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Target levels in micrograms/mL (= mg/L). These values appear to come from a general drug-level table, not BNFc; check against BNFc and your local laboratory/antimicrobial guidance (e.g. BNFc vancomycin pre-dose target is usually lower). BNFc commonly quotes a lower target range (around 10 mg/L, up to 20 mg/L); check.",
+   "entries": [
+    {
+     "ages": "",
+     "indication": "Therapeutic drug monitoring — target level",
+     "route": "",
+     "dose": "10–20 micrograms/mL, 8–12 hours after a once-daily dose",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Tobramycin",
+   "source": "Therapeutic-drug-level table supplied with the BNF for Children 2023 extract — likely from a non-BNFc reference (units mcg/mL; includes procainamide/quinidine) (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Target levels in micrograms/mL (= mg/L). These values appear to come from a general drug-level table, not BNFc; check against BNFc and your local laboratory/antimicrobial guidance (e.g. BNFc vancomycin pre-dose target is usually lower).",
+   "entries": [
+    {
+     "ages": "",
+     "indication": "Therapeutic drug monitoring — target level",
+     "route": "",
+     "dose": "Peak 5–10 micrograms/mL, 30 minutes after the end of infusion",
+     "max": ""
+    },
+    {
+     "ages": "",
+     "indication": "Therapeutic drug monitoring — target level",
+     "route": "",
+     "dose": "Trough < 2 micrograms/mL, just before the next dose",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Ulipristal acetate (emergency contraception)",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "The extract also lists Esmya 5 mg: that is a uterine-fibroid treatment, NOT contraception, and its use has been restricted because of serious liver injury — not included here.",
+   "entries": [
+    {
+     "ages": "",
+     "indication": "Emergency contraception",
+     "route": "Oral",
+     "dose": "ellaOne 30 mg tablet (dose regimen not given in the extract)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Vancomycin",
+   "source": "Therapeutic-drug-level table supplied with the BNF for Children 2023 extract — likely from a non-BNFc reference (units mcg/mL; includes procainamide/quinidine) (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Target levels in micrograms/mL (= mg/L). These values appear to come from a general drug-level table, not BNFc; check against BNFc and your local laboratory/antimicrobial guidance (e.g. BNFc vancomycin pre-dose target is usually lower).",
+   "entries": [
+    {
+     "ages": "",
+     "indication": "Therapeutic drug monitoring — target level",
+     "route": "",
+     "dose": "Trough 10–20 micrograms/mL, just before the next dose",
      "max": ""
     }
    ]
