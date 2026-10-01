@@ -2,7 +2,7 @@
  "format": "pgc-dose-notes",
  "version": 1,
  "exported": "2026-10-01",
- "description": "Items 301–1150 from UNSOURCED lists described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025. Pure repeats of earlier items (etomidate, tigecycline, eravacycline, plazomicin, delafloxacin, omadacycline, baloxavir; and in 351–400 calcipotriol, chloramphenicol eye drops, epoetin, darbepoetin, iron sucrose, ferric carboxymaltose, penicillamine, trientine; and in 401–450 praziquantel, albendazole, mebendazole, ivermectin, permethrin, malathion, atovaquone–proguanil, octreotide; and in 451–500 the many repeats and dose-less entries) are omitted. Fixed doses are labelled 'Adult / age not stated'; weight-based doses 'Age not stated'. Doses that appear incorrect are NOT loaded. All notes unverified.",
+ "description": "Items 301–1200 from UNSOURCED lists described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025. Pure repeats of earlier items (etomidate, tigecycline, eravacycline, plazomicin, delafloxacin, omadacycline, baloxavir; and in 351–400 calcipotriol, chloramphenicol eye drops, epoetin, darbepoetin, iron sucrose, ferric carboxymaltose, penicillamine, trientine; and in 401–450 praziquantel, albendazole, mebendazole, ivermectin, permethrin, malathion, atovaquone–proguanil, octreotide; and in 451–500 the many repeats and dose-less entries) are omitted. Fixed doses are labelled 'Adult / age not stated'; weight-based doses 'Age not stated'. Doses that appear incorrect are NOT loaded. All notes unverified.",
  "notes": [
   {
    "drug": "Abacavir",
@@ -642,6 +642,23 @@
      "indication": "CF (anti-inflammatory)",
      "route": "Oral",
      "dose": "Under 40 kg: 250 mg; 40 kg and over: 500 mg — three times a week",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Aztreonam (inhaled)",
+   "source": "Unsourced list (items 1151–1200) described as a cross-reference of BNF for Children 2023 / ICU Quick Drug Guide 2025 — about 85% repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1151–1200).\nCHECK: Give a bronchodilator first.",
+   "forms": "Powder for nebuliser solution 75 mg (Cayston, with Altera nebuliser) [list 1151–1200, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 6 years and over (unsourced list)",
+     "indication": "CF Pseudomonas",
+     "route": "Nebulised",
+     "dose": "75 mg three times daily for 28 days (then 28 days off)",
      "max": ""
     }
    ]
@@ -1690,11 +1707,11 @@
   },
   {
    "drug": "Colistin",
-   "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified); Unsourced list (items 601–650) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page (unverified)",
+   "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified); Unsourced list (items 601–650) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page (unverified); Unsourced list (items 1151–1200) described as a cross-reference of BNF for Children 2023 / ICU Quick Drug Guide 2025 — about 85% repeats earlier items (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 301–350). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Current adult IV regimens often use a 9 million unit loading dose and 9 million units/day — check; paediatric doses are per kg (units/kg).\nFrom an unsourced list (items 601–650).\nCHECK: Children under 2 years usually receive lower doses (0.5–1 million units twice daily); bronchospasm — first dose under supervision.",
-   "forms": "Powder for solution for injection/inhalation: 1 million unit vials [list 301–350, unsourced]",
+   "notes": "From an unsourced list (items 301–350). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Current adult IV regimens often use a 9 million unit loading dose and 9 million units/day — check; paediatric doses are per kg (units/kg).\nFrom an unsourced list (items 601–650).\nCHECK: Children under 2 years usually receive lower doses (0.5–1 million units twice daily); bronchospasm — first dose under supervision.\nFrom an unsourced list (items 1151–1200).\nCHECK: Each Colobreathe capsule contains about 1 662 500 units (125 mg colistimethate) — 1 capsule twice daily; '1.25 million units' confuses mg with units.",
+   "forms": "Powder for solution for injection/inhalation: 1 million unit vials [list 301–350, unsourced]\nInhalation powder capsules (Colobreathe, Turbospire device) [list 1151–1200, unsourced]",
    "entries": [
     {
      "ages": "Adult / age not stated (unsourced list)",
@@ -1715,6 +1732,13 @@
      "indication": "CF Pseudomonas",
      "route": "Nebulised",
      "dose": "1–2 million units twice daily",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Inhaled",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: Colobreathe: 1.25 million units twice daily). Enter the regimen from your source.",
      "max": ""
     }
    ]
@@ -2013,6 +2037,23 @@
    ]
   },
   {
+   "drug": "Dobutamine",
+   "source": "Unsourced list (items 1151–1200) described as a cross-reference of BNF for Children 2023 / ICU Quick Drug Guide 2025 — about 85% repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1151–1200).",
+   "forms": "Concentrate for infusion 12.5 mg/mL, 25 mg/mL [list 1151–1200, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV infusion",
+     "dose": "2–20 micrograms/kg/minute, titrated to effect",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Docetaxel",
    "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
    "checked": "",
@@ -2077,6 +2118,23 @@
      "route": "Oral",
      "dose": "10 mg up to three times daily",
      "max": "30 mg per day; usually up to 1 week"
+    }
+   ]
+  },
+  {
+   "drug": "Dopamine",
+   "source": "Unsourced list (items 1151–1200) described as a cross-reference of BNF for Children 2023 / ICU Quick Drug Guide 2025 — about 85% repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1151–1200).\nCHECK: Extravasation causes tissue necrosis — central line preferred.",
+   "forms": "Concentrate for infusion 40, 80, 160 mg/mL [list 1151–1200, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV infusion",
+     "dose": "2–20 micrograms/kg/minute, titrated to effect",
+     "max": ""
     }
    ]
   },
@@ -3496,6 +3554,23 @@
      "indication": "Abdominal cramps",
      "route": "Oral / IM / IV",
      "dose": "20 mg three to four times daily (as listed)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Hypertonic saline (nebulised)",
+   "source": "Unsourced list (items 1151–1200) described as a cross-reference of BNF for Children 2023 / ICU Quick Drug Guide 2025 — about 85% repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1151–1200).\nCHECK: Give a bronchodilator first; first dose supervised (bronchospasm).",
+   "forms": "Nebuliser solution 7%, 4 mL ampoules [list 1151–1200, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 6 years and over (unsourced list)",
+     "indication": "CF airway clearance",
+     "route": "Nebulised",
+     "dose": "7%: 4 mL twice daily",
      "max": ""
     }
    ]
@@ -6542,6 +6617,30 @@
    ]
   },
   {
+   "drug": "Sodium thiosulfate",
+   "source": "Unsourced list (items 1151–1200) described as a cross-reference of BNF for Children 2023 / ICU Quick Drug Guide 2025 — about 85% repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1151–1200).\nCHECK: Children's cyanide dose is weight-based (about 400 mg/kg, max 12.5 g). In paediatric oncology sodium thiosulfate (Pedmark) is used to reduce cisplatin OTOTOXICITY at protocol doses timed after cisplatin — not '1–2 g/kg for extravasation'.",
+   "forms": "Solution for injection 25% (250 mg/mL; 12.5 g/50 mL); 10% [list 1151–1200, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "Cyanide poisoning",
+     "route": "IV",
+     "dose": "12.5 g over 10 minutes (with hydroxocobalamin)",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 1–2 g/kg for cisplatin extravasation). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Sofosbuvir–velpatasvir",
    "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
    "checked": "",
@@ -6965,17 +7064,24 @@
   },
   {
    "drug": "Tobramycin (inhaled)",
-   "source": "Unsourced list (items 601–650) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page (unverified)",
+   "source": "Unsourced list (items 601–650) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page (unverified); Unsourced list (items 1151–1200) described as a cross-reference of BNF for Children 2023 / ICU Quick Drug Guide 2025 — about 85% repeats earlier items (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 601–650).\nCHECK: Use only with the specified nebuliser; give bronchodilator first.",
-   "forms": "Nebuliser solution 300 mg/5 mL (also dry-powder inhaler) [list 601–650, unsourced]",
+   "notes": "From an unsourced list (items 601–650).\nCHECK: Use only with the specified nebuliser; give bronchodilator first.\nFrom an unsourced list (items 1151–1200).",
+   "forms": "Nebuliser solution 300 mg/5 mL (also dry-powder inhaler) [list 601–650, unsourced]\nInhalation powder capsules 28 mg (TOBI Podhaler) [list 1151–1200, unsourced]",
    "entries": [
     {
      "ages": "Child 6 years and over (unsourced list)",
      "indication": "CF Pseudomonas",
      "route": "Nebulised",
      "dose": "300 mg twice daily (28 days on, 28 days off)",
+     "max": ""
+    },
+    {
+     "ages": "Child 6 years and over (unsourced list)",
+     "indication": "CF Pseudomonas",
+     "route": "Inhaled",
+     "dose": "Podhaler: 112 mg (4 × 28 mg capsules) twice daily for 28 days (then 28 days off)",
      "max": ""
     }
    ]
