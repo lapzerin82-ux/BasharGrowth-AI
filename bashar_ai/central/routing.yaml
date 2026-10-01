@@ -1,0 +1,47 @@
+# Intent → module routing for the central agent.
+# `signals` are indicative, not exhaustive; the central agent uses judgement.
+# `also_consult` lists modules usually needed for verification or output.
+
+intents:
+  clinical:
+    module: medical
+    signals: [patient, case, diagnosis, differential, dose, dosing, management, growth chart, z-score, vaccine, emergency]
+    also_consult: [web_research]
+  research:
+    module: research
+    signals: [study design, sample size, SPSS, statistics, regression, manuscript, abstract, critical appraisal, journal, reviewer, protocol, ethics approval]
+    also_consult: [web_research, document]
+  teaching:
+    module: teaching
+    signals: [lecture, curriculum, MCQ, OSCE, case-based, learning objectives, exam, rubric, students, residents]
+    also_consult: [document]
+  personal:
+    module: personal
+    signals: [remind, schedule, calendar, to-do, plan my week, meeting, deadline]
+  administrative:
+    module: administrative
+    signals: [department, committee, dean, university, promotion, memo, official letter, accreditation, timetable]
+    also_consult: [document]
+  technology:
+    module: technology
+    signals: [app, code, Flutter, bug, build, deploy, GitHub, database, automation]
+  evidence_lookup:
+    module: web_research
+    signals: [latest, current guideline, verify, source, reference, "is it true", update]
+  document:
+    module: document
+    signals: [Word, PDF, slides, presentation, poster, format, template, export]
+
+multi_intent:
+  strategy: plan_then_sequence   # resolve dependencies, run independent modules in parallel
+  merge: central/unified_output.md
+
+escalation:
+  - condition: "clinical red flag or possible emergency in the request"
+    action: "Lead with red flags and urgent actions before anything else"
+  - condition: "request would breach research integrity (fabrication, plagiarism, ghost authorship, p-hacking)"
+    action: "Decline that part, explain why, offer a legitimate alternative"
+  - condition: "consequential action"
+    action: "Stop and ask for explicit approval (policies/autonomy.md)"
+  - condition: "no module fits"
+    action: "Central agent answers directly under shared policies"
