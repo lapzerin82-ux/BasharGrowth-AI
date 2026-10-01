@@ -2,7 +2,7 @@
  "format": "pgc-dose-notes",
  "version": 1,
  "exported": "2026-10-01",
- "description": "Items 301–950 from UNSOURCED lists described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025. Pure repeats of earlier items (etomidate, tigecycline, eravacycline, plazomicin, delafloxacin, omadacycline, baloxavir; and in 351–400 calcipotriol, chloramphenicol eye drops, epoetin, darbepoetin, iron sucrose, ferric carboxymaltose, penicillamine, trientine; and in 401–450 praziquantel, albendazole, mebendazole, ivermectin, permethrin, malathion, atovaquone–proguanil, octreotide; and in 451–500 the many repeats and dose-less entries) are omitted. Fixed doses are labelled 'Adult / age not stated'; weight-based doses 'Age not stated'. Doses that appear incorrect are NOT loaded. All notes unverified.",
+ "description": "Items 301–1000 from UNSOURCED lists described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025. Pure repeats of earlier items (etomidate, tigecycline, eravacycline, plazomicin, delafloxacin, omadacycline, baloxavir; and in 351–400 calcipotriol, chloramphenicol eye drops, epoetin, darbepoetin, iron sucrose, ferric carboxymaltose, penicillamine, trientine; and in 401–450 praziquantel, albendazole, mebendazole, ivermectin, permethrin, malathion, atovaquone–proguanil, octreotide; and in 451–500 the many repeats and dose-less entries) are omitted. Fixed doses are labelled 'Adult / age not stated'; weight-based doses 'Age not stated'. Doses that appear incorrect are NOT loaded. All notes unverified.",
  "notes": [
   {
    "drug": "Abacavir",
@@ -185,10 +185,10 @@
   },
   {
    "drug": "Aflibercept (intravitreal)",
-   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified)",
+   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified); Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 901–950).\nCHECK: Ophthalmology only; not the same as IV aflibercept (Zaltrap).",
+   "notes": "From an unsourced list (items 901–950).\nCHECK: Ophthalmology only; not the same as IV aflibercept (Zaltrap).\nFrom an unsourced list (items 951–1000).\nCHECK: ROP dose 0.4 mg (0.01 mL) — specialist ophthalmology only.",
    "forms": "Solution for injection 40 mg/mL (2 mg/0.05 mL) [list 901–950, unsourced]",
    "entries": [
     {
@@ -196,6 +196,13 @@
      "indication": "",
      "route": "Intravitreal",
      "dose": "2 mg every 4 weeks initially",
+     "max": ""
+    },
+    {
+     "ages": "Preterm infant (unsourced list)",
+     "indication": "Retinopathy of prematurity",
+     "route": "Intravitreal",
+     "dose": "0.4 mg",
      "max": ""
     }
    ]
@@ -373,6 +380,23 @@
      "indication": "Chemotherapy nausea",
      "route": "Oral",
      "dose": "125 mg on day 1, then 80 mg on days 2 and 3",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Arginine",
+   "source": "Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 951–1000).\nCHECK: High-dose IV arginine hydrochloride causes hyperchloraemic acidosis. Urea-cycle/metabolic emergency doses must follow the BIMDG emergency protocol and the metabolic team.",
+   "forms": "Oral powder; arginine hydrochloride injection 10% (special order) [list 951–1000, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral / IV",
+     "dose": "Dose by specific urea cycle defect and plasma arginine (not given)",
      "max": ""
     }
    ]
@@ -716,10 +740,10 @@
   },
   {
    "drug": "Bevacizumab (intravitreal, off-label)",
-   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified)",
+   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified); Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 901–950).\nCHECK: ROP doses are much smaller (e.g. 0.625 mg or less) — specialist ophthalmology only.",
+   "notes": "From an unsourced list (items 901–950).\nCHECK: ROP doses are much smaller (e.g. 0.625 mg or less) — specialist ophthalmology only.\nFrom an unsourced list (items 951–1000).",
    "forms": "Repackaged from concentrate for infusion [list 901–950, unsourced]",
    "entries": [
     {
@@ -727,6 +751,13 @@
      "indication": "",
      "route": "Intravitreal",
      "dose": "1.25–2.5 mg (adult off-label)",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Intravitreal",
+     "dose": "0.375–1.25 mg (diluted under aseptic conditions)",
      "max": ""
     }
    ]
@@ -917,17 +948,24 @@
   },
   {
    "drug": "Calcipotriol–betamethasone",
-   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified)",
+   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified); Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 901–950).\nCHECK: Contains a potent steroid — limit area and duration; most products licensed for adults (gel from 12 years for scalp in some) — check.",
-   "forms": "Ointment 50 micrograms/g + 0.05%; gel; foam (Enstilar) [list 901–950, unsourced]",
+   "notes": "From an unsourced list (items 901–950).\nCHECK: Contains a potent steroid — limit area and duration; most products licensed for adults (gel from 12 years for scalp in some) — check.\nFrom an unsourced list (items 951–1000).",
+   "forms": "Ointment 50 micrograms/g + 0.05%; gel; foam (Enstilar) [list 901–950, unsourced]\nDovobet ointment 50 micrograms/0.5 mg per g; gel; Enstilar foam [list 951–1000, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
      "indication": "Psoriasis",
      "route": "Topical",
      "dose": "Once daily",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Topical",
+     "dose": "Once daily for up to 4 weeks",
      "max": ""
     }
    ]
@@ -1320,6 +1358,23 @@
      "indication": "",
      "route": "IV",
      "dose": "20 mg/m² daily for 5 days, or 70–100 mg/m² every 3–4 weeks (adult regimens)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Citrulline",
+   "source": "Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 951–1000).\nCHECK: Urea-cycle/metabolic emergency doses must follow the BIMDG emergency protocol and the metabolic team.",
+   "forms": "Oral powder (special order) [list 951–1000, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "OTC / CPS deficiency",
+     "route": "Oral",
+     "dose": "150–200 mg/kg/day in divided doses",
      "max": ""
     }
    ]
@@ -3319,6 +3374,23 @@
    ]
   },
   {
+   "drug": "IVIG (immunoglobulin replacement / Kawasaki)",
+   "source": "Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 951–1000).\nCHECK: Doses are indication-specific (e.g. Kawasaki 2 g/kg single dose); prescribe by brand; use ideal body weight in obesity; thrombosis/haemolysis/renal risks.",
+   "forms": "Privigen 100 mg/mL (10%) solution for infusion [list 951–1000, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Replacement 0.4–0.8 g/kg every 3–4 weeks; immunomodulation 1–2 g/kg",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Ixekizumab",
    "source": "Unsourced list (items 601–650) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page (unverified)",
    "checked": "",
@@ -3861,11 +3933,11 @@
   },
   {
    "drug": "Meningococcal ACWY vaccine",
-   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified)",
+   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified); Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 901–950).\nCHECK: Follow the current UK Green Book / national schedule for ages, intervals and products.",
-   "forms": "Powder and solvent for solution for injection [list 901–950, unsourced]",
+   "notes": "From an unsourced list (items 901–950).\nCHECK: Follow the current UK Green Book / national schedule for ages, intervals and products.\nFrom an unsourced list (items 951–1000).",
+   "forms": "Powder and solvent for solution for injection [list 901–950, unsourced]\nNimenrix — from 6 weeks of age (0.5 mL) [list 951–1000, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
@@ -4540,6 +4612,23 @@
    ]
   },
   {
+   "drug": "Pegvaliase",
+   "source": "Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 951–1000).\nCHECK: Pegvaliase is titrated to 20 mg (up to 40–60 mg) DAILY, not weekly; adolescents/adults only; anaphylaxis risk — patients carry adrenaline auto-injectors.",
+   "forms": "Solution for injection (pre-filled syringe 2.5, 10, 20 mg) [list 951–1000, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "SC",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: Titration up to 20 mg weekly). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Peramivir",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -4766,10 +4855,10 @@
   },
   {
    "drug": "Podophyllotoxin",
-   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified)",
+   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified); Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 901–950).\nCHECK: Not for molluscum (as listed) and not licensed for children; consider safeguarding.",
+   "notes": "From an unsourced list (items 901–950).\nCHECK: Not for molluscum (as listed) and not licensed for children; consider safeguarding.\nFrom an unsourced list (items 951–1000).",
    "forms": "Solution 0.5%; cream 0.15% [list 901–950, unsourced]",
    "entries": [
     {
@@ -4777,6 +4866,13 @@
      "indication": "",
      "route": "Topical",
      "dose": "Anogenital warts only (as per product course)",
+     "max": ""
+    },
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "Anogenital warts",
+     "route": "Topical",
+     "dose": "Twice daily for 3 days, then 4 days off (repeat cycles)",
      "max": ""
     }
    ]
@@ -5073,10 +5169,10 @@
   },
   {
    "drug": "Ranibizumab (intravitreal)",
-   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified)",
+   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified); Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 901–950).\nCHECK: In retinopathy of prematurity ranibizumab is licensed at a much smaller dose (0.2 mg) — specialist ophthalmology only.",
+   "notes": "From an unsourced list (items 901–950).\nCHECK: In retinopathy of prematurity ranibizumab is licensed at a much smaller dose (0.2 mg) — specialist ophthalmology only.\nFrom an unsourced list (items 951–1000).",
    "forms": "Solution for injection 10 mg/mL [list 901–950, unsourced]",
    "entries": [
     {
@@ -5084,6 +5180,13 @@
      "indication": "",
      "route": "Intravitreal",
      "dose": "0.5 mg monthly (adult)",
+     "max": ""
+    },
+    {
+     "ages": "Preterm infant (unsourced list)",
+     "indication": "Retinopathy of prematurity",
+     "route": "Intravitreal",
+     "dose": "0.2 mg",
      "max": ""
     }
    ]
@@ -5294,11 +5397,11 @@
   },
   {
    "drug": "Rotavirus vaccine",
-   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified)",
+   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified); Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 901–950).\nCHECK: STRICT AGE LIMITS (UK Rotarix: first dose from 6 weeks and before 15 weeks; second dose before 24 weeks) — not given outside them; contraindicated in SCID and previous intussusception. Follow the current UK Green Book / national schedule for ages, intervals and products.",
-   "forms": "Oral suspension [list 901–950, unsourced]",
+   "notes": "From an unsourced list (items 901–950).\nCHECK: STRICT AGE LIMITS (UK Rotarix: first dose from 6 weeks and before 15 weeks; second dose before 24 weeks) — not given outside them; contraindicated in SCID and previous intussusception. Follow the current UK Green Book / national schedule for ages, intervals and products.\nFrom an unsourced list (items 951–1000).",
+   "forms": "Oral suspension [list 901–950, unsourced]\nRotarix oral suspension 1.5 mL tube [list 951–1000, unsourced]\nRotaTeq oral suspension 2 mL tube (first dose by 12 weeks, course complete by 32 weeks — product-specific) [list 951–1000, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
@@ -5363,6 +5466,23 @@
      "indication": "",
      "route": "Inhaled",
      "dose": "50 micrograms twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Sapropterin (PKU)",
+   "source": "Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 951–1000).\nCHECK: Responsiveness must be confirmed by a trial with phenylalanine monitoring.",
+   "forms": "Soluble tablet 100 mg; powder for oral solution 100 mg, 500 mg sachets (listed '500 mg tablet' — check) [list 951–1000, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "BH4-responsive PKU",
+     "route": "Oral",
+     "dose": "10–20 mg/kg once daily",
      "max": ""
     }
    ]
@@ -5451,12 +5571,20 @@
   },
   {
    "drug": "Sodium benzoate",
-   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified)",
+   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified); Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 901–950).\nCHECK: Metabolic team / BIMDG emergency protocols.",
+   "notes": "From an unsourced list (items 901–950).\nCHECK: Metabolic team / BIMDG emergency protocols.\nFrom an unsourced list (items 951–1000).\nCHECK: Urea-cycle/metabolic emergency doses must follow the BIMDG emergency protocol and the metabolic team.",
    "forms": "Oral powder/solution (special order); injection (with sodium phenylacetate for acute hyperammonaemia) [list 901–950, unsourced]",
-   "entries": []
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Urea cycle disorders / hyperammonaemia",
+     "route": "Oral / IV",
+     "dose": "250–500 mg/kg/day in divided doses (adjunct)",
+     "max": ""
+    }
+   ]
   },
   {
    "drug": "Sodium bicarbonate",
@@ -5527,13 +5655,38 @@
    ]
   },
   {
-   "drug": "Sodium phenylbutyrate",
-   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified)",
+   "drug": "Sodium phenylacetate–sodium benzoate (IV, acute hyperammonaemia)",
+   "source": "Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 901–950).\nCHECK: Glycerol phenylbutyrate and sodium phenylbutyrate are not dose-equivalent; metabolic team only.",
-   "forms": "Glycerol phenylbutyrate oral liquid 1.1 g/mL (Ravicti) — different drug and dose from sodium phenylbutyrate [list 901–950, unsourced]",
-   "entries": []
+   "notes": "From an unsourced list (items 951–1000).\nCHECK: The list put this IV regimen under sodium PHENYLBUTYRATE; the IV product is sodium phenylacetate + sodium benzoate. Maintenance is usually 250 mg/kg/24 hours — check. Urea-cycle/metabolic emergency doses must follow the BIMDG emergency protocol and the metabolic team.",
+   "forms": "Concentrate for infusion (Ammonul / special order) [list 951–1000, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Acute hyperammonaemia",
+     "route": "IV",
+     "dose": "Loading 250 mg/kg (of each component) over 90 minutes, then continuous infusion (listed 250–500 mg/kg/day)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Sodium phenylbutyrate",
+   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified); Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 901–950).\nCHECK: Glycerol phenylbutyrate and sodium phenylbutyrate are not dose-equivalent; metabolic team only.\nFrom an unsourced list (items 951–1000).\nCHECK: Larger children are dosed by body-surface area (about 9.9–13 g/m²/day). Urea-cycle/metabolic emergency doses must follow the BIMDG emergency protocol and the metabolic team.",
+   "forms": "Glycerol phenylbutyrate oral liquid 1.1 g/mL (Ravicti) — different drug and dose from sodium phenylbutyrate [list 901–950, unsourced]\nGranules 940 mg/g; tablet 500 mg [list 951–1000, unsourced]\nGlycerol phenylbutyrate (Ravicti) oral liquid 1.1 g/mL: dosed by BSA (e.g. 4.5–11.2 mL/m²/day in 3 divided doses — listed '4.5–7 mL/m²/day', check) [list 951–1000, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Urea cycle disorders",
+     "route": "Oral",
+     "dose": "450–600 mg/kg/day in 3–4 divided doses (smaller children); max 20 g/day",
+     "max": ""
+    }
+   ]
   },
   {
    "drug": "Sofosbuvir–velpatasvir",
@@ -5599,6 +5752,23 @@
      "indication": "",
      "route": "Oral",
      "dose": "1–3 mg/kg/day in 2 divided doses",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Subcutaneous immunoglobulin (SCIG)",
+   "source": "Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 951–1000).",
+   "forms": "Hizentra 200 mg/mL pre-filled syringes/vials [list 951–1000, unsourced]\nCuvitru 200 mg/mL vials [list 951–1000, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "SC",
+     "dose": "Weekly (or every 2 weeks) maintenance after loading",
      "max": ""
     }
    ]
@@ -5673,11 +5843,11 @@
   },
   {
    "drug": "Tazarotene",
-   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified)",
+   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified); Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 901–950).\nCHECK: Contraindicated in pregnancy; check UK availability (Zorac discontinued).",
-   "forms": "Gel 0.05%, 0.1% [list 901–950, unsourced]",
+   "notes": "From an unsourced list (items 901–950).\nCHECK: Contraindicated in pregnancy; check UK availability (Zorac discontinued).\nFrom an unsourced list (items 951–1000).",
+   "forms": "Gel 0.05%, 0.1% [list 901–950, unsourced]\nCream 0.1% [list 951–1000, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
@@ -6026,6 +6196,23 @@
    ]
   },
   {
+   "drug": "Triheptanoin",
+   "source": "Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 951–1000).\nCHECK: Not licensed in the UK (US product); metabolic dietitian supervision.",
+   "forms": "Oral liquid [list 951–1000, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Long-chain fatty acid oxidation disorders",
+     "route": "Oral",
+     "dose": "Target 25–35% of total daily calories, in divided doses with food",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Tropicamide",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -6147,6 +6334,23 @@
      "indication": "C. difficile infection",
      "route": "Oral",
      "dose": "10 mg/kg four times daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Vancomycin eye drops (fortified)",
+   "source": "Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 951–1000).\nCHECK: Unlicensed fortified preparation — ophthalmology/pharmacy protocol (bacterial keratitis is usually treated hourly initially).",
+   "forms": "Eye drops 5% (50 mg/mL), hospital-compounded from IV powder [list 951–1000, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Eye",
+     "dose": "1–2 drops every 4–6 hours (as listed)",
      "max": ""
     }
    ]
@@ -6313,10 +6517,10 @@
   },
   {
    "drug": "Xylometazoline / oxymetazoline nasal drops",
-   "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
+   "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified); Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 301–350). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: MHRA: OTC nasal decongestants should not be used in children under 6 years; 0.1% is for 12 years and over.",
+   "notes": "From an unsourced list (items 301–350). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: MHRA: OTC nasal decongestants should not be used in children under 6 years; 0.1% is for 12 years and over.\nFrom an unsourced list (items 951–1000).\nCHECK: MHRA: maximum 5 days in children 6–11 years — check.",
    "forms": "Xylometazoline nasal spray: 0.05%, 0.1% [list 301–350, unsourced]\nOxymetazoline nasal spray: 0.05% [list 301–350, unsourced]",
    "entries": [
     {
@@ -6332,6 +6536,20 @@
      "route": "Nasal",
      "dose": "Oxymetazoline: 1–2 sprays per nostril twice daily",
      "max": "7 days"
+    },
+    {
+     "ages": "Child 6–11 years (unsourced list)",
+     "indication": "",
+     "route": "Nasal",
+     "dose": "Xylometazoline 0.05%: 1 spray twice daily (max 7 days)",
+     "max": ""
+    },
+    {
+     "ages": "Child 12 years and over (unsourced list)",
+     "indication": "",
+     "route": "Nasal",
+     "dose": "Xylometazoline 0.1%: 1–2 sprays twice daily (max 7 days)",
+     "max": ""
     }
    ]
   },
@@ -6378,10 +6596,10 @@
   },
   {
    "drug": "Zoster vaccine (live)",
-   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified)",
+   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified); Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 901–950).\nCHECK: Zostavax has been discontinued in the UK (replaced by the non-live Shingrix) and is not a paediatric vaccine. Follow the current UK Green Book / national schedule for ages, intervals and products.",
+   "notes": "From an unsourced list (items 901–950).\nCHECK: Zostavax has been discontinued in the UK (replaced by the non-live Shingrix) and is not a paediatric vaccine. Follow the current UK Green Book / national schedule for ages, intervals and products.\nFrom an unsourced list (items 951–1000).",
    "forms": "Powder and solvent for solution for injection [list 901–950, unsourced]",
    "entries": [
     {
@@ -6389,6 +6607,13 @@
      "indication": "",
      "route": "SC",
      "dose": "Zostavax: single dose",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "SC",
+     "dose": "⚠ NOT LOADED — listed as 'for immunocompromised adolescents/adults'. Zostavax is a LIVE vaccine and is CONTRAINDICATED in immunocompromised patients (non-live Shingrix is used instead).",
      "max": ""
     }
    ]
