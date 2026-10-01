@@ -2,8 +2,25 @@
  "format": "pgc-dose-notes",
  "version": 1,
  "exported": "2026-10-01",
- "description": "ADULT critical-care regimens and forms from a user-supplied extract of the ICU Quick Drug Guide 2025 (items 101–150). Every regimen is labelled 'Adult (ICU guide)' and every form line '[ICU guide 2025]'; none is a paediatric dose. All notes are unverified; 'CHECK' lines mark entries that look inconsistent. Importing merges into existing notes of the same drug name, adding only new rows.",
+ "description": "ADULT critical-care regimens and forms from a user-supplied extract of the ICU Quick Drug Guide 2025 (items 101–200; version 2 adds 151–200: vasopressors, pulmonary hypertension, GI/hepatic, haematology, toxicology). Every regimen is labelled 'Adult (ICU guide)' and every form line '[ICU guide 2025]'; none is a paediatric dose. All notes are unverified; 'CHECK' lines mark entries that look inconsistent. Importing merges into existing notes of the same drug name, adding only new rows.",
  "notes": [
+  {
+   "drug": "Acetylcysteine (paracetamol)",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: UK practice now uses the 2-bag (SNAP) regimen, 100 mg/kg over 2 hours then 200 mg/kg over 10 hours — follow your current national/local protocol.",
+   "forms": "Solution for infusion: 200 mg/mL ampoules [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "150 mg/kg over 1 hour, then 50 mg/kg over 4 hours, then 100 mg/kg over 16 hours",
+     "max": ""
+    }
+   ]
+  },
   {
    "drug": "Aciclovir",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
@@ -17,6 +34,47 @@
      "indication": "",
      "route": "IV",
      "dose": "5–10 mg/kg every 8 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Adrenaline (epinephrine)",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: In UK practice IV adrenaline for cardiac arrest is usually given as 1:10,000 (100 micrograms/mL); confirm the concentration. Paediatric arrest dose is 10 micrograms/kg.",
+   "forms": "Solution for injection: 1 mg/mL (1:1000) ampoules [ICU guide 2025]\nSolution for infusion: premixed [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV infusion",
+     "dose": "Start 0.01–0.1 micrograms/kg/minute; titrate to effect",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Cardiac arrest: 1 mg every 3–5 minutes",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Albumin (human) 25%",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Paracentesis replacement is usually dosed per litre removed (about 6–8 g/L) and SBP per kg; the single 25 g figure is a simplification — check.",
+   "forms": "Solution for infusion: 25 g/100 mL, 50 g/200 mL [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "25 g over 2–4 hours (SBP / large-volume paracentesis, as extracted)",
      "max": ""
     }
    ]
@@ -39,6 +97,23 @@
    ]
   },
   {
+   "drug": "Angiotensin II",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Dose is in NANOgrams/kg/minute.",
+   "forms": "Solution for infusion: 2.5 mg/mL vials [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV infusion",
+     "dose": "Start 20 nanograms/kg/minute; titrate by 15 nanograms/kg/minute every 5 minutes",
+     "max": "80 nanograms/kg/minute"
+    }
+   ]
+  },
+  {
    "drug": "Aztreonam",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -51,6 +126,23 @@
      "indication": "",
      "route": "IV",
      "dose": "1–2 g every 8 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Budesonide (inhaled / nebulised)",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Nebuliser suspension: 0.25 mg/2 mL, 0.5 mg/2 mL [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "Nebulised",
+     "dose": "0.25–0.5 mg two to four times daily",
      "max": ""
     }
    ]
@@ -92,6 +184,23 @@
      "indication": "",
      "route": "Oral",
      "dose": "5–10 mg three times daily, titrated up to 20–30 mg twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Calcium chloride / gluconate",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Calcium chloride 10% contains about three times the calcium of calcium gluconate 10%; central line preferred (extravasation injury).",
+   "forms": "Calcium chloride solution for injection: 10%, 10 mL ampoules [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Calcium chloride 10%: 10 mL over 5–10 minutes (hyperkalaemia / magnesium toxicity)",
      "max": ""
     }
    ]
@@ -206,6 +315,23 @@
    ]
   },
   {
+   "drug": "Cryoprecipitate",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: UK adult cryoprecipitate is usually issued as pools of 5 units — check local blood-bank units.",
+   "forms": "Frozen bag: 15–20 mL per unit [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "1 unit per 10 kg body weight",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Daptomycin",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -274,6 +400,98 @@
    ]
   },
   {
+   "drug": "Digoxin-specific antibody",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Digibind has been replaced by DigiFab (40 mg vial).",
+   "forms": "Powder for solution for injection: 40 mg vials [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Dose calculated from serum digoxin concentration or amount ingested",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Dobutamine",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Solution for infusion: 250 mg/20 mL; 500 mg/20 mL as extracted — check [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV infusion",
+     "dose": "Start 2–5 micrograms/kg/minute; titrate by 2–5 micrograms/kg/minute every 15 minutes",
+     "max": "20 micrograms/kg/minute"
+    }
+   ]
+  },
+  {
+   "drug": "Dopamine",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: 'Renal-dose' dopamine is not supported by evidence; several concentrations exist — confirm.",
+   "forms": "Solution for injection: 40 mg/mL, 80 mg/mL, 160 mg/mL vials [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV infusion",
+     "dose": "2–5 micrograms/kg/minute ('renal'); 5–10 (cardiac); above 10 (vasoconstrictor)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Epoprostenol",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Dose is in NANOgrams/kg/minute; never interrupt the infusion abruptly.",
+   "forms": "Powder for solution for infusion: 0.5 mg, 1.5 mg, 5 mg vials [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV infusion",
+     "dose": "Start 2 nanograms/kg/minute; titrate by 2 nanograms/kg/minute every 15 minutes",
+     "max": "50 nanograms/kg/minute"
+    }
+   ]
+  },
+  {
+   "drug": "Erythropoietin (epoetin / darbepoetin)",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Epoetin (units) and darbepoetin (micrograms) are dosed in different units and are not interchangeable.",
+   "forms": "Epoetin alfa solution for injection: 2000, 3000, 4000, 10 000, 20 000, 40 000 units/mL [ICU guide 2025]\nDarbepoetin alfa solution for injection: 15–300 micrograms syringes/vials [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "SC / IV",
+     "dose": "Epoetin alfa: 50–100 units/kg three times a week",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "SC / IV",
+     "dose": "Darbepoetin alfa: 0.45 micrograms/kg once weekly",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Etomidate",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -308,6 +526,57 @@
    ]
   },
   {
+   "drug": "Famotidine",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Solution for injection: 10 mg/mL vials [ICU guide 2025]\nTablet: 10 mg, 20 mg, 40 mg [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV / Oral",
+     "dose": "20 mg twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Ferric carboxymaltose (IV)",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Maximum single dose also limited by body weight (20 mg/kg) — check.",
+   "forms": "Solution for infusion: 50 mg/mL [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "500–1000 mg over 15 minutes",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Filgrastim (G-CSF)",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Solution for injection: 300 micrograms/0.5 mL, 480 micrograms/0.5 mL syringes/vials [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "SC / IV",
+     "dose": "5 micrograms/kg daily",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Fluconazole",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -325,6 +594,64 @@
    ]
   },
   {
+   "drug": "Fludrocortisone",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Tablet: 0.1 mg (100 micrograms) [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "0.1–0.2 mg daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Fomepizole / ethanol",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Both need adjustment during haemodialysis; ethanol requires blood-ethanol monitoring.",
+   "forms": "Fomepizole solution for injection: 1.5 g/1.5 mL vials [ICU guide 2025]\nEthanol solution for infusion: 5%, 10% bags [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Fomepizole: loading 15 mg/kg over 30 minutes, then 10 mg/kg every 12 hours for 4 doses, then 15 mg/kg every 12 hours",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Ethanol: loading 600–800 mg/kg over 30–60 minutes, then 66–154 mg/kg/hour",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Fresh frozen plasma",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Frozen plasma bag: 200–250 mL [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "10–15 mL/kg",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Ganciclovir",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -337,6 +664,23 @@
      "indication": "",
      "route": "IV",
      "dose": "5 mg/kg every 12 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Glucagon (beta-blocker)",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Overdose regimens usually continue with an infusion; large doses need many 1 mg vials.",
+   "forms": "Powder for solution for injection: 1 mg vials [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV / IM / SC",
+     "dose": "1–5 mg bolus (beta-blocker / calcium-channel-blocker overdose)",
      "max": ""
     }
    ]
@@ -407,6 +751,23 @@
    ]
   },
   {
+   "drug": "Hydroxocobalamin (cyanide)",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Powder for solution for infusion: 2.5 g vials (as extracted; current Cyanokit is a single 5 g vial) [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "5 g over 15 minutes, repeated if necessary",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Imipenem–cilastatin",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -420,6 +781,23 @@
      "route": "IV",
      "dose": "500 mg every 6 hours",
      "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Inhaled nitric oxide",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Doses above 20 ppm rarely add benefit and raise methaemoglobin and NO2; monitor methaemoglobin; wean gradually.",
+   "forms": "Medical gas cylinder [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "Inhalation",
+     "dose": "Start 20 ppm; titrate to response",
+     "max": "80 ppm (as extracted)"
     }
    ]
   },
@@ -475,6 +853,57 @@
    ]
   },
   {
+   "drug": "Insulin high-dose (beta-blocker / CCB overdose)",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Requires concurrent glucose infusion and close glucose and potassium monitoring.",
+   "forms": "Solution for injection: 100 units/mL vials [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV infusion",
+     "dose": "1 unit/kg bolus, then 0.5–1 unit/kg/hour",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Ipratropium bromide",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Nebuliser solution: 0.25 mg/mL; 0.5 mg/2.5 mL vials [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "Nebulised",
+     "dose": "0.5 mg every 20 minutes for 3 doses, then every 4–6 hours when required",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Iron sucrose (IV)",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Solution for injection: 20 mg/mL [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "200 mg over 2–5 minutes, up to 3 times a week",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Ketamine",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -494,6 +923,47 @@
      "indication": "",
      "route": "IV infusion",
      "dose": "0.1–0.5 mg/kg/hour",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Lactulose",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Oral solution: 10 g/15 mL [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "Hepatic encephalopathy",
+     "route": "Oral / NG",
+     "dose": "30–45 mL every 1–2 hours until evacuation, then 15–30 mL every 8–12 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Levosimendan",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Concentrate for solution for infusion: 2.5 mg/mL vials [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Loading dose 6–12 micrograms/kg over 10 minutes",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV infusion",
+     "dose": "0.05–0.2 micrograms/kg/minute",
      "max": ""
     }
    ]
@@ -550,6 +1020,23 @@
    ]
   },
   {
+   "drug": "Lipid emulsion 20% (local anaesthetic toxicity)",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: AAGBI/RCoA guidance expresses the infusion as 15 mL/kg/hour (equivalent) with repeat boluses and a maximum cumulative dose of 12 mL/kg — check your local LAST guideline.",
+   "forms": "Emulsion for infusion: 20%, 100 mL, 250 mL, 500 mL bags [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "1.5 mL/kg bolus, then 0.25 mL/kg/minute",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Lorazepam",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -569,6 +1056,23 @@
      "indication": "",
      "route": "IV infusion",
      "dose": "1–2 mg/hour",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Macitentan",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Tablet: 10 mg [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "10 mg once daily",
      "max": ""
     }
    ]
@@ -615,6 +1119,23 @@
    ]
   },
   {
+   "drug": "Methylene blue",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Serotonin syndrome risk with serotonergic drugs; contraindicated in G6PD deficiency.",
+   "forms": "Solution for injection: 10 mg/mL ampoules (as extracted — check; UK methylthioninium chloride is 5 mg/mL) [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "1–2 mg/kg over 10–60 minutes",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Methylprednisolone (IV pulse)",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -649,6 +1170,47 @@
    ]
   },
   {
+   "drug": "Midodrine",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Tablet: 2.5 mg, 5 mg, 10 mg [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "2.5–10 mg three times daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Milrinone",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Loading dose often omitted because of hypotension; reduce in renal impairment.",
+   "forms": "Solution for injection: 10 mg/20 mL vials (as extracted — check; commonly 1 mg/mL, e.g. 10 mg/10 mL) [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Loading dose 50 micrograms/kg over 10 minutes",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV infusion",
+     "dose": "0.375–0.75 micrograms/kg/minute",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Naloxone",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -668,6 +1230,40 @@
      "indication": "",
      "route": "IV infusion",
      "dose": "0.4–2 mg/hour",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Noradrenaline (norepinephrine)",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: The stated maximum (3 micrograms/kg/minute) is far above usual ranges; doses may also be expressed as noradrenaline base vs tartrate — confirm.",
+   "forms": "Solution for infusion: 4 mg/4 mL ampoules/vials [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV infusion",
+     "dose": "Start 0.05–0.1 micrograms/kg/minute; titrate by 0.05–0.1 micrograms/kg/minute every 5 minutes",
+     "max": "3 micrograms/kg/minute (as extracted)"
+    }
+   ]
+  },
+  {
+   "drug": "Octreotide",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Tenfold range of concentrations — confirm strength.",
+   "forms": "Solution for injection: 50, 100, 500 micrograms/mL ampoules [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "Variceal bleeding",
+     "route": "IV",
+     "dose": "50 micrograms bolus, then 50 micrograms/hour infusion",
      "max": ""
     }
    ]
@@ -707,6 +1303,23 @@
    ]
   },
   {
+   "drug": "Pantoprazole",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Powder for solution for injection: 40 mg vials [ICU guide 2025]\nGastro-resistant tablet: 20 mg, 40 mg [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV / Oral",
+     "dose": "40 mg once daily",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Pethidine (meperidine)",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -724,6 +1337,23 @@
    ]
   },
   {
+   "drug": "Phenylephrine",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Solution for injection: 10 mg/mL vials (must be diluted) [ICU guide 2025]\nSolution for infusion [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV infusion",
+     "dose": "Start 0.5–1 micrograms/kg/minute; titrate by 0.5–1 micrograms/kg/minute every 5 minutes",
+     "max": "5 micrograms/kg/minute"
+    }
+   ]
+  },
+  {
    "drug": "Piperacillin–tazobactam",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -736,6 +1366,23 @@
      "indication": "",
      "route": "IV",
      "dose": "3.375–4.5 g every 6–8 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Platelet transfusion",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Paediatric platelet dosing is by volume (mL/kg) — use a paediatric transfusion guideline.",
+   "forms": "Platelet concentrate bag: 200–300 mL [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "1 adult dose (apheresis unit) or 4–6 pooled units",
      "max": ""
     }
    ]
@@ -792,6 +1439,40 @@
    ]
   },
   {
+   "drug": "Rifaximin",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Tablet: 550 mg [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "Hepatic encephalopathy",
+     "route": "Oral",
+     "dose": "550 mg twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Riociguat",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Tablet: 0.5, 1, 1.5, 2, 2.5 mg [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "1 mg three times daily; increase by 0.5 mg three times daily every 2 weeks",
+     "max": "2.5 mg three times daily"
+    }
+   ]
+  },
+  {
    "drug": "Risperidone",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -804,6 +1485,71 @@
      "indication": "Delirium",
      "route": "Oral / NG",
      "dose": "0.25–0.5 mg once or twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Salbutamol (albuterol)",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Nebuliser solution: 2.5 mg/2.5 mL, 5 mg/2.5 mL [ICU guide 2025]\nSolution for injection [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "Nebulised",
+     "dose": "2.5–5 mg every 20 minutes for 3 doses, then every 1–4 hours when required",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "5–15 micrograms/minute",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Sildenafil (pulmonary hypertension)",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Tablet: 20 mg [ICU guide 2025]\nSolution for injection: 10 mg/12.5 mL vials [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "20 mg three times daily",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "10 mg three times daily (if unable to take orally)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Sodium bicarbonate",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Use 4.2% (or diluted 8.4%) in neonates and infants.",
+   "forms": "Solution for injection: 8.4% (1 mmol/mL) 50 mmol/50 mL; 4.2% 50 mmol/100 mL [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "1–2 mmol/kg (mEq/kg) bolus for severe acidosis / tricyclic overdose",
      "max": ""
     }
    ]
@@ -850,6 +1596,23 @@
    ]
   },
   {
+   "drug": "Terlipressin",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Powder for solution for injection: 1 mg vials [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "2 mg every 4 hours for 48 hours, then 1 mg every 4 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Tramadol",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -867,6 +1630,57 @@
    ]
   },
   {
+   "drug": "Tranexamic acid",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Solution for injection: 100 mg/mL [ICU guide 2025]\nTablet: 500 mg [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV",
+     "dose": "1 g over 10 minutes, then 1 g over 8 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Treprostinil",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Dose is in NANOgrams/kg/minute.",
+   "forms": "Solution for infusion: 1.5 mg/20 mL vials (as extracted — check; vials are usually labelled by concentration, e.g. 1, 2.5, 5, 10 mg/mL in 20 mL) [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV infusion",
+     "dose": "Start 1–2 nanograms/kg/minute; titrate by 1–2 nanograms/kg/minute every 15 minutes",
+     "max": "40 nanograms/kg/minute"
+    }
+   ]
+  },
+  {
+   "drug": "Ursodeoxycholic acid",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Capsule: 250 mg, 300 mg [ICU guide 2025]\nTablet: 250 mg, 500 mg [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "13–15 mg/kg/day in 2–3 divided doses",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Vancomycin",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -879,6 +1693,40 @@
      "indication": "",
      "route": "IV",
      "dose": "15–20 mg/kg every 8–12 hours (target trough 15–20 micrograms/mL)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Vasopressin",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Solution for injection: 20 units/mL vials [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV infusion",
+     "dose": "0.03 units/minute (fixed dose, not titrated)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Vitamin K (phytomenadione)",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
+   "forms": "Solution for injection: 10 mg/mL ampoules [ICU guide 2025]\nTablet: 5 mg (as extracted; UK tablets are 10 mg) [ICU guide 2025]",
+   "entries": [
+    {
+     "ages": "Adult (ICU guide)",
+     "indication": "",
+     "route": "IV / SC / Oral",
+     "dose": "1–10 mg daily",
      "max": ""
     }
    ]
