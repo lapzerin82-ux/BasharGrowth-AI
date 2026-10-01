@@ -2,7 +2,7 @@
  "format": "pgc-dose-notes",
  "version": 1,
  "exported": "2026-10-01",
- "description": "Draft dose notes prepared from a user-supplied extract of BNF for Children 2023. Every note is marked unverified and must be checked against the complete current source before use. Version 4: adds available forms and strengths for 50 drugs (items 1–50 of the forms extract; valproate forms not loaded because the extract listed lithium products). Version 3 added items 81–120; 'CHECK' notes mark entries that appear to differ from BNFc or mix indications. Re-importing adds only regimens and forms you do not already have.",
+ "description": "Draft dose notes prepared from a user-supplied extract of BNF for Children 2023. Every note is marked unverified and must be checked against the complete current source before use. Version 5: adds 5 form lines from the second forms extract (valproate oral solution, doxycycline dispersible tablet, IV fosfomycin, morphine 1 mg/mL injection). Version 4 added available forms and strengths for 50 drugs (items 1–50 of the forms extract; valproate forms not loaded because the extract listed lithium products). Version 3 added items 81–120; 'CHECK' notes mark entries that appear to differ from BNFc or mix indications. Re-importing adds only regimens and forms you do not already have.",
  "notes": [
   {
    "drug": "Aciclovir",
@@ -517,7 +517,7 @@
      "max": "200 mg per day"
     }
    ],
-   "forms": "Capsule: 100 mg (described in the extract as implied/standard, not quoted from the source)\nTablet: 100 mg (described in the extract as implied/standard, not quoted from the source)\nOral suspension (special order — unlicensed)"
+   "forms": "Capsule: 100 mg (described in the extract as implied/standard, not quoted from the source)\nTablet: 100 mg (described in the extract as implied/standard, not quoted from the source)\nOral suspension (special order — unlicensed)\nDispersible tablet: 100 mg (second forms extract; it states capsule 100 mg without 'implied')"
   },
   {
    "drug": "Enalapril",
@@ -633,7 +633,7 @@
      "max": ""
     }
    ],
-   "forms": "Granules (sachet) for oral solution: 3 g"
+   "forms": "Granules (sachet) for oral solution: 3 g\nPowder for solution for infusion: 5 g vial, hospital only (as extracted — check vial size; IV fosfomycin is a different salt and product from oral fosfomycin trometamol)"
   },
   {
    "drug": "Ganciclovir",
@@ -833,7 +833,7 @@
      "max": ""
     }
    ],
-   "forms": "Immediate-release tablet: 10 mg, 20 mg\nModified-release tablet: MST Continus 5, 10, 15, 30, 60, 100, 200 mg\nOral solution: 10 mg/5 mL, 20 mg/5 mL, 100 mg/5 mL (as extracted — check strength; concentrated solution carries overdose risk)\nInjection: 10 mg/mL, 15 mg/mL, 30 mg/mL"
+   "forms": "Immediate-release tablet: 10 mg, 20 mg\nModified-release tablet: MST Continus 5, 10, 15, 30, 60, 100, 200 mg\nOral solution: 10 mg/5 mL, 20 mg/5 mL, 100 mg/5 mL (as extracted — check strength; concentrated solution carries overdose risk)\nInjection: 10 mg/mL, 15 mg/mL, 30 mg/mL\nInjection: 1 mg/mL (second forms extract)"
   },
   {
    "drug": "Nifedipine",
@@ -1153,7 +1153,7 @@
      "max": "2 g per day"
     }
    ],
-   "forms": "⚠ Not loaded: the extract listed lithium products (Camcolit 400 mg, Liskonum 450 mg, Priadel) under sodium valproate. Enter valproate forms from your source."
+   "forms": "⚠ Not loaded: the extract listed lithium products (Camcolit 400 mg, Liskonum 450 mg, Priadel) under sodium valproate. Enter valproate forms from your source.\nOral solution: 200 mg/5 mL (e.g. Epilim) — from the second forms extract\nImmediate-release tablet: special order (as extracted — check; gastro-resistant and modified-release valproate tablets are separate products)"
   },
   {
    "drug": "Theophylline",
