@@ -296,3 +296,9 @@ details.opt[open] > summary { margin-bottom: 12px; }
 .installed { margin: 0; justify-self: start; background: #d4f5e6; color: #0d5a3d; font-weight: 800; font-size: 14px; padding: 8px 14px; border-radius: 999px; }
 @media (prefers-color-scheme: dark) { .installed { background: #173d2e; color: #b7f0d4; } }
 .howto p { margin: 0; font-size: 14.5px; }
+/* my dose notes */
+.dnote { border: 2px solid color-mix(in srgb, var(--sky) 40%, transparent); background: color-mix(in srgb, var(--sky) 8%, var(--card)); border-radius: 14px; padding: 8px 12px; font-size: 14px; }
+.dnote summary { cursor: pointer; font-weight: 800; color: var(--on-tonal); }
+.dnote ul { margin: 8px 0 4px; padding-left: 18px; display: grid; gap: 4px; }
+.dnote .hint { font-size: 12.5px; margin-top: 4px; }
+.dnslot:empty { display: none; }

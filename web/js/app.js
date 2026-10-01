@@ -91,6 +91,8 @@ async function route() {
     case "dev": return viewMilestones(a);
     case "vax": return viewVaccines(a);
     case "rx": return viewTreatment(a);
+    case "doses": return viewDoseNotes();
+    case "dose": return viewDoseNote(a || "new");
     case "letter": return viewLetter(a);
     case "backup": return viewBackup(a === "restore");
     case "settings": return viewSettings();
@@ -139,6 +141,7 @@ const ICONS = {
   pdf: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z",
   lock: "M18 8h-1V6a5 5 0 0 0-10 0v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2zm-6 9a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm3.1-9H8.9V6a3.1 3.1 0 0 1 6.2 0v2z",
   restore: "M17.65 6.35A8 8 0 1 0 19.73 14h-2.08A6 6 0 1 1 12 6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z",
+  book: "M18 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM9 4h2v5l-1-.75L9 9V4zm9 16H6V4h1v9l3-2.25L13 13V4h5v16z",
   gear: "M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7 7 0 0 0-1.7-1L15 3.3h-4l-.4 2.6a7 7 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.5 7.5 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1c.5.4 1.1.7 1.7 1l.4 2.6h4l.4-2.6c.6-.3 1.2-.6 1.7-1l2.5 1 2-3.5-2.1-1.6zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z",
   out: "M10.1 15.6 11.5 17l5-5-5-5-1.4 1.4 2.6 2.6H3v2h9.7l-2.6 2.6zM19 3H5a2 2 0 0 0-2 2v4h2V5h14v14H5v-4H3v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z",
 };
@@ -169,7 +172,7 @@ function viewHome() {
   const tiles = [
     ["New Patient", "add", "#new"], ["Search Patient", "search", "#list/search"], ["Patient List", "list", "#list/browse"],
     ["Add Measurement", "edit", "#list/measure"], ["Growth Charts", "chart", "#list/chart"], ["Export PDF", "pdf", "#list/pdf"],
-    ["Backup", "lock", "#backup"], ["Restore", "restore", "#backup/restore"], ["Settings", "gear", "#settings"],
+    ["Backup", "lock", "#backup"], ["Restore", "restore", "#backup/restore"], ["Dose notes", "book", "#doses"], ["Settings", "gear", "#settings"],
   ];
   const recent = session.recent(6);
   $app.innerHTML = bar("Pediatric Growth Chart", false) + `
@@ -829,7 +832,7 @@ function viewBackup(restoreFirst) {
       const c = await S.decodeBackup(new Uint8Array(await f.arrayBuffer()), $("rp").value);
       const replace = $app.querySelector('input[name="mode"]:checked').value === "replace";
       const go2 = async () => { const r = await session.restore(c, replace);
-        confirmBox("Restore complete", `Restored ${r.np} patients, ${r.nm} measurements and ${r.ni} investigations${r.skipped ? ` (${r.skipped} older copies skipped)` : ""}.`, "OK", () => go("#home")); };
+        confirmBox("Restore complete", `Restored ${r.np} patients, ${r.nm} measurements, ${r.ni} investigations${r.nd ? ` and ${r.nd} dose notes` : ""}${r.skipped ? ` (${r.skipped} older copies skipped)` : ""}.`, "OK", () => go("#home")); };
       if (replace) confirmBox("Replace all records?", `This account will contain exactly the ${c.patients.length} patients in the backup. Records not in the backup are deleted.`, "Replace", go2, true);
       else go2();
     } catch (ex) { $("re").textContent = ex.message; }
@@ -858,7 +861,7 @@ function viewSettings() {
     <section class="card stack"><h2>Growth references (bundled, work offline)</h2>
       ${G.allRefs().map((r) => `<div><b>${esc(r.title)}</b><br><small>Version: ${esc(r.version)} · Percentile curves ${r.centiles.join(", ")}</small><br><small class="muted">Source: ${esc(r.source)}</small></div>`).join("<hr>")}
       <p class="hint">Curves are generated from the official LMS parameters. Each measurement is plotted at the exact age (days ÷ 30.4375 months) with no rounding.</p></section>
-    <section class="card stack"><h2>About</h2><p>Pediatric Growth Chart (web app), version 21. Clinical decision support only; verify measurements and interpret results in clinical context.</p>${CREDIT}</section>
+    <section class="card stack"><h2>About</h2><p>Pediatric Growth Chart (web app), version 22. Clinical decision support only; verify measurements and interpret results in clinical context.</p>${CREDIT}</section>
   </main>`;
   bindBack();
   $app.querySelectorAll('input[name="fam"]').forEach((r) => r.onchange = () => { settings.family = r.value; toast("Saved"); });
@@ -1152,7 +1155,7 @@ function viewPrescribe(pid) {
       <label class="switch"><input type="checkbox" id="pc"> Mark the start on the growth charts <small class="muted">(growth-relevant treatment)</small></label>
       <small class="e" id="pe"></small>
       <button class="primary" id="psave">Save prescription</button>
-      <p class="hint">Duration (days) sets the stop date automatically; leave it empty for ongoing treatment. mg/kg × weight fills the dose (capped at the maximum if one is entered). The app suggests names only, never doses — check each dose against your formulary.</p>
+      <p class="hint">Duration (days) sets the stop date automatically; leave it empty for ongoing treatment. mg/kg × weight fills the dose (capped at the maximum if one is entered). The app suggests names only, never doses — check each dose against your formulary. Your own dose notes (Home → Dose notes) appear under a drug when you choose it.</p>
     </section>
     ${treatmentListHtml(p, list)}
   </main>`;
@@ -1184,7 +1187,7 @@ function viewPrescribe(pid) {
         <label>Duration (days)<input data-f="days" inputmode="numeric" value="${esc(r.days)}" placeholder="ongoing"></label>
         <label>Per kg<input data-f="perKg" inputmode="decimal" value="${esc(r.perKg)}" placeholder="optional"></label>
         <label>Max dose<input data-f="max" inputmode="decimal" value="${esc(r.max)}" placeholder="optional"></label>
-      </div><small class="hi rxcalc"></small></div>`).join("");
+      </div><small class="hi rxcalc"></small><div class="dnslot">${doseNoteHtml(session.doseNoteFor(r.name))}</div></div>`).join("");
     $("rxrows").querySelectorAll(".rxrow").forEach((el) => {
       const i = +el.dataset.i;
       el.querySelectorAll("[data-f]").forEach((inp) => {
@@ -1192,7 +1195,7 @@ function viewPrescribe(pid) {
           rows[i][inp.dataset.f] = inp.value;
           if (inp.dataset.f === "dose") rows[i].note = "";
           if (["perKg", "max", "unit"].includes(inp.dataset.f)) calcRow(i, el);
-          if (inp.dataset.f === "name") autoChart();
+          if (inp.dataset.f === "name") { autoChart(); el.querySelector(".dnslot").innerHTML = doseNoteHtml(session.doseNoteFor(inp.value)); }
         };
         inp.addEventListener("input", upd); inp.addEventListener("change", upd);
       });
@@ -1238,6 +1241,7 @@ function viewTreatmentEdit(pid, editIdx) {
       <label>Drug / treatment<input id="tn" list="dlist" value="${esc(t?.name)}" placeholder="Start typing, e.g. amoxicillin, salbutamol, levetiracetam…" autocomplete="off"></label>
       <datalist id="dlist"></datalist>
       <p class="hint" id="tacount"></p>
+      <div id="tdn">${doseNoteHtml(session.doseNoteFor(t?.name))}</div>
       <label>Indication<input id="ti" value="${esc(t?.indication)}" placeholder="e.g. pneumonia, asthma, epilepsy, iron-deficiency anaemia, GH deficiency"></label>
       <div class="three"><label>Dose<input id="td" inputmode="decimal" value="${esc(t?.dose ?? "")}"></label>
         <label>Unit<select id="tu">${opt(C.DOSE_UNITS, t?.unit || "mg")}</select></label>
@@ -1278,6 +1282,7 @@ function viewTreatmentEdit(pid, editIdx) {
   $("ta").onchange = () => { fillDrugs(); autoChart(); if (/^Non-drug/.test($("ta").value)) $("tt").value = "Therapy (physio, speech, OT)"; };
   fillDrugs();
   // picking a name from the full list sets its area automatically
+  $("tn").addEventListener("input", () => { $("tdn").innerHTML = doseNoteHtml(session.doseNoteFor($("tn").value)); });
   $("tn").addEventListener("change", () => { if (!$("ta").value) { const hit = Object.entries(TREATMENT_CATS).find(([, l]) => l.includes($("tn").value.trim())); if (hit) { $("ta").value = hit[0]; fillDrugs(); } } });
   const calc = () => {
     const k = num($("hk").value), w = num($("hw").value), h = num($("hh").value), mx = num($("hm").value), unit = $("tu").value || "units";
@@ -1305,6 +1310,96 @@ function viewTreatmentEdit(pid, editIdx) {
   $("tcancel")?.addEventListener("click", () => viewTreatment(pid));
   $("tdel")?.addEventListener("click", () => confirmBox("Delete this treatment?", t.name, "Delete", () => saveAll(list.filter((x) => x !== t)), true));
   $app.querySelectorAll("tr[data-i]").forEach((tr) => tr.onclick = () => { viewTreatment(pid, +tr.dataset.i); window.scrollTo(0, 0); });
+}
+
+// ------------------------------------------------------------ my dose notes (clinician's own formulary)
+// Regimens the clinician has verified from their own source (e.g. BNF for Children). The app never supplies
+// doses: these notes are entered, dated and owned by the clinician, and shown only as a reference.
+const DOSE_NOTE_LABEL = "Your own dose note — not supplied or checked by the app. Verify against your current formulary.";
+function doseNoteHtml(d, open = false) {
+  if (!d) return "";
+  const rows = (d.entries || []).filter((e) => e.dose);
+  return `<details class="dnote"${open ? " open" : ""}><summary>📘 My dose note: ${esc(d.drug)}${d.checked ? ` <small>checked ${G.fmtDate(d.checked)}</small>` : ""}</summary>
+    ${rows.length ? `<ul>${rows.map((e) => `<li>${[e.ages, e.indication, e.route].filter(Boolean).map((t) => `<b>${esc(t)}</b>`).join(" · ")}${e.ages || e.indication || e.route ? ": " : ""}${esc(e.dose)}${e.max ? ` <span class="muted">(max ${esc(e.max)})</span>` : ""}</li>`).join("")}</ul>` : `<p class="hint">No regimens entered.</p>`}
+    ${d.notes ? `<p class="hint pre">${esc(d.notes)}</p>` : ""}
+    <p class="hint">${d.source ? `Source: ${esc(d.source)}. ` : "No source recorded. "}${esc(DOSE_NOTE_LABEL)}</p></details>`;
+}
+
+function viewDoseNotes() {
+  const list = session.doseNoteList();
+  $app.innerHTML = bar("My dose notes", true, `<a class="icon" href="#dose/new" aria-label="New dose note">＋</a>`) + `
+  <main class="page">
+    <section class="card stack"><p>Your personal formulary: enter the regimens you use for each drug, with the source and the date you checked them. They appear as a reference under the drug when you prescribe, sync to your other devices and are included in backups.</p>
+      <p class="hint">${esc(DOSE_NOTE_LABEL)}</p></section>
+    <input id="q" type="search" placeholder="Search drug" autocomplete="off" aria-label="Search dose notes">
+    <div class="plist" id="res"></div>
+    <a class="fab" href="#dose/new">+ New dose note</a>
+  </main>`;
+  bindBack();
+  const render = () => {
+    const q = document.getElementById("q").value.trim().toLowerCase();
+    const l = list.filter((d) => !q || d.drug.toLowerCase().includes(q));
+    document.getElementById("res").innerHTML = l.length ? l.map((d) => `<a class="prow" href="#dose/${d.id}"><span class="av" aria-hidden="true">📘</span><span><b>${esc(d.drug)}</b><small>${(d.entries || []).filter((e) => e.dose).length} regimen(s)${d.source ? ` · ${esc(d.source)}` : ""}</small></span>${d.checked ? `<em>${G.fmtDate(d.checked)}</em>` : ""}</a>`).join("")
+      : `<p class="muted">${q ? "No dose note for this drug." : "No dose notes yet. Tap “New dose note” to add your first one."}</p>`;
+  };
+  document.getElementById("q").oninput = render; render();
+}
+
+function viewDoseNote(id) {
+  const d = id && id !== "new" ? session.doseNotes.get(id) : null;
+  if (id && id !== "new" && !d) return go("#doses");
+  const preset = id === "new" ? sessionStorage.getItem("pgc.newdose") || "" : "";
+  sessionStorage.removeItem("pgc.newdose");
+  const entries = d?.entries?.length ? d.entries.map((e) => ({ ...e })) : [{ ages: "", indication: "", route: "", dose: "", max: "" }];
+  $app.innerHTML = bar(d ? "Edit dose note" : "New dose note", true, d ? `<button class="icon" id="del" aria-label="Delete dose note">🗑</button>` : "") + `
+  <main class="page"><div class="stack">
+    <section class="card stack">
+      <label>Drug<input id="dn" list="dlist" value="${esc(d?.drug || preset)}" placeholder="e.g. Sodium valproate" autocomplete="off"></label>
+      <datalist id="dlist">${ALL_TREATMENTS.map((t) => `<option value="${esc(t)}">`).join("")}</datalist>
+      <div class="two"><label>Source<input id="ds" value="${esc(d?.source)}" placeholder="e.g. BNF for Children 2025–2026"></label>
+      <label>Date checked<input id="dc" type="date" value="${esc(d?.checked || G.todayIso())}"></label></div>
+    </section>
+    <section class="card stack"><h2>Regimens</h2>
+      <div id="rows" class="stack"></div>
+      <datalist id="routes">${C.ROUTES.map((r) => `<option value="${esc(r)}">`).join("")}</datalist>
+      <button type="button" class="ghost" id="addr">+ Add regimen</button>
+      <p class="hint">One row per age band, indication or route, e.g. “Child 1 month–11 years · Epilepsy · Oral: initially 10–15 mg/kg daily in 1–2 divided doses; maintenance 25–30 mg/kg daily”.</p>
+    </section>
+    <section class="card stack"><label>Notes (monitoring, cautions, renal/hepatic adjustment)<textarea id="dt" rows="3">${esc(d?.notes)}</textarea></label></section>
+    <p class="err" id="de" hidden></p>
+    <button class="primary" id="dsave">Save dose note</button>
+    <p class="hint">${esc(DOSE_NOTE_LABEL)}</p>
+  </div></main>`;
+  bindBack();
+  const $ = (i) => document.getElementById(i);
+  const render = () => {
+    $("rows").innerHTML = entries.map((e, i) => `<div class="rxrow" data-i="${i}">
+      <div class="rxhead"><b>${i + 1}</b><input data-f="dose" value="${esc(e.dose)}" placeholder="Dose, e.g. 10–15 mg/kg daily in 1–2 divided doses" aria-label="Dose ${i + 1}">
+        ${entries.length > 1 ? `<button type="button" class="icon rm" aria-label="Remove regimen ${i + 1}">✕</button>` : ""}</div>
+      <div class="rxgrid">
+        <label class="wide">Age band / weight<input data-f="ages" value="${esc(e.ages)}" placeholder="e.g. Child 1 month–11 years"></label>
+        <label>Indication<input data-f="indication" value="${esc(e.indication)}" placeholder="e.g. Epilepsy"></label>
+        <label>Route<input data-f="route" list="routes" value="${esc(e.route)}" placeholder="e.g. Oral"></label>
+        <label>Maximum<input data-f="max" value="${esc(e.max)}" placeholder="e.g. 2.5 g/day"></label>
+      </div></div>`).join("");
+    $("rows").querySelectorAll(".rxrow").forEach((el) => {
+      const i = +el.dataset.i;
+      el.querySelectorAll("[data-f]").forEach((inp) => inp.oninput = () => { entries[i][inp.dataset.f] = inp.value; });
+      el.querySelector(".rm")?.addEventListener("click", () => { entries.splice(i, 1); render(); });
+    });
+  };
+  render();
+  $("addr").onclick = () => { entries.push({ ages: "", indication: "", route: "", dose: "", max: "" }); render(); $("rows").lastElementChild.querySelector("input").focus(); };
+  $("dsave").onclick = async () => {
+    const drug = $("dn").value.trim();
+    const clean = entries.map((e) => Object.fromEntries(Object.entries(e).map(([k, v]) => [k, String(v || "").trim()]))).filter((e) => e.dose);
+    const dup = session.doseNoteList().find((x) => x.id !== d?.id && x.drug.trim().toLowerCase() === drug.toLowerCase());
+    const err = !drug ? "Enter the drug name." : !clean.length ? "Enter at least one dose." : dup ? `There is already a dose note for ${dup.drug}; edit that one instead.` : "";
+    $("de").textContent = err; $("de").hidden = !err; if (err) return;
+    await session.saveDoseNote({ id: d?.id, drug, source: $("ds").value.trim(), checked: $("dc").value, entries: clean, notes: $("dt").value.trim() });
+    toast("Dose note saved"); history.back();
+  };
+  $("del")?.addEventListener("click", () => confirmBox(`Delete the dose note for ${d.drug}?`, "This removes it from all synced devices.", "Delete", async () => { await session.deleteDoseNote(d.id); toast("Deleted"); go("#doses"); }, true));
 }
 
 // ------------------------------------------------------------ letters

@@ -143,13 +143,13 @@ export async function signOut() { const m = await metaDb(); await idbDel(m, "ses
 // Record kinds: "p" patient, "m" measurement, "i" investigation. A deleted record is kept as a small
 // tombstone { id, deleted: true, updatedAt } so the deletion also reaches other synced devices.
 // Photos are stored separately (store "files"), each AES-GCM encrypted.
-const KINDS = { p: "patients", m: "measurements", i: "investigations" };
+const KINDS = { p: "patients", m: "measurements", i: "investigations", d: "doseNotes" }; // d: clinician's own dose notes
 
 export class Session {
   static async open(acc, key) {
     const s = new Session(); s.email = acc.email; s.key = key; s.onChange = () => {};
     s.db = await idb(acc.dbName, ["records", "files"], 2);
-    s.patients = new Map(); s.measurements = new Map(); s.investigations = new Map(); s.tombs = new Map();
+    s.patients = new Map(); s.measurements = new Map(); s.investigations = new Map(); s.doseNotes = new Map(); s.tombs = new Map();
     for (const row of await idbAll(s.db, "records")) {
       const rec = JSON.parse(dec.decode(await gcmDecrypt(key, row.data)));
       if (rec.deleted) s.tombs.set(row.kind + ":" + rec.id, rec); else s[KINDS[row.kind]].set(rec.id, rec);
@@ -190,6 +190,16 @@ export class Session {
   savePatient(p) { return this._save("p", p, false); }
   saveMeasurement(m) { return this._save("m", m, true); }
   saveInvestigation(x) { return this._save("i", x, true); }
+  saveDoseNote(d) { return this._save("d", d, false); }
+  async deleteDoseNote(id) { await this._del("d", id); }
+  doseNoteList() { return [...this.doseNotes.values()].sort((a, b) => a.drug.localeCompare(b.drug)); }
+  /** Dose note for a drug name: exact match first, then the same name without a bracketed qualifier. */
+  doseNoteFor(name) {
+    const norm = (t) => String(t || "").toLowerCase().replace(/\s*\(.*?\)\s*/g, " ").replace(/\s+/g, " ").trim();
+    const n = String(name || "").trim().toLowerCase(); if (!n) return null;
+    const list = this.doseNoteList();
+    return list.find((d) => d.drug.trim().toLowerCase() === n) || list.find((d) => norm(d.drug) === norm(n)) || null;
+  }
   async deleteMeasurement(id) { await this._del("m", id); }
   async deleteInvestigation(id) {
     const x = this.investigations.get(id);
@@ -242,16 +252,18 @@ export class Session {
       patients: [...this.patients.values()].map((p) => ({ id: p.id, name: p.name, sex: p.sex, fileNumber: p.fileNumber, dobEpochDay: E(p.dob), fatherHeightCm: p.father ?? null, motherHeightCm: p.mother ?? null, mphCm: p.mph ?? null, mphManual: !!p.mphManual, notes: p.notes || "", complaint: p.complaint || "", features: p.features || "", dobEstimated: !!p.dobEstimated, ageEntered: p.ageEntered || null, preferredReference: p.preferredReference || null, createdAt: p.createdAt, updatedAt: p.updatedAt, deleted: false, ext: ext(p, KP) })),
       measurements: [...this.measurements.values()].map((m) => ({ id: m.id, patientId: m.patientId, dateEpochDay: E(m.date), heightCm: m.height ?? null, weightKg: m.weight ?? null, notes: m.notes || "", createdAt: m.createdAt, updatedAt: m.updatedAt, deleted: false, ext: ext(m, KM) })),
       investigations: [...this.investigations.values()],
+      doseNotes: [...this.doseNotes.values()],
       files,
     };
   }
   async restore(c, replace) {
     const iso = (d) => new Date(d * 86400000).toISOString().slice(0, 10);
-    const now = Date.now(); let np = 0, nm = 0, ni = 0, skipped = 0;
+    const now = Date.now(); let np = 0, nm = 0, ni = 0, nd = 0, skipped = 0;
     if (replace) {
       // deletions become tombstones so that synced devices also drop records missing from the backup
-      const keep = new Set([...(c.patients || []).map((r) => "p:" + r.id), ...(c.measurements || []).map((r) => "m:" + r.id), ...(c.investigations || []).map((r) => "i:" + r.id)]);
-      for (const [k, r] of this.allRecords()) if (!r.deleted && !keep.has(k + ":" + r.id)) await this._put(k, { id: r.id, deleted: true, updatedAt: Math.max(now, r.updatedAt + 1) }, true);
+      const keep = new Set([...(c.patients || []).map((r) => "p:" + r.id), ...(c.measurements || []).map((r) => "m:" + r.id), ...(c.investigations || []).map((r) => "i:" + r.id), ...(c.doseNotes || []).map((r) => "d:" + r.id)]);
+      // dose notes are the clinician's formulary, not patient data: kept when the backup has none
+      for (const [k, r] of this.allRecords()) if (!r.deleted && !keep.has(k + ":" + r.id) && !(k === "d" && !c.doseNotes)) await this._put(k, { id: r.id, deleted: true, updatedAt: Math.max(now, r.updatedAt + 1) }, true);
     }
     const take = (kind, r) => { const old = this.get(kind, r.id); return replace || !old || old.deleted || old.updatedAt <= r.updatedAt; };
     const stamp = (kind, r) => replace ? Math.max(now, (this.get(kind, r.id)?.updatedAt || 0) + 1) : r.updatedAt || now;
@@ -275,7 +287,13 @@ export class Session {
     }
     for (const [id, data] of Object.entries(c.files || {})) await this.putFile(unb64(data), id);
     this.onChange();
-    return { np, nm, ni, skipped };
+    for (const r of c.doseNotes || []) {
+      if (r.deleted) continue;
+      if (!take("d", r)) { skipped++; continue; }
+      await this._put("d", { ...r, updatedAt: stamp("d", r) }, true);
+      nd++;
+    }
+    return { np, nm, ni, nd, skipped };
   }
 }
 

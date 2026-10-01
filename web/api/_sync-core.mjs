@@ -1,12 +1,12 @@
 // Storage logic of the sync endpoint, shared by the Vercel function (web/api/sync.mjs) and the Netlify function
 // (netlify/functions/sync.mts); independent of either platform so it can be tested locally.
 // The server only ever sees opaque, end-to-end encrypted blobs:
-//   <vault>/r/<kind>.<id>   an encrypted record (patient / measurement / investigation / tombstone)
+//   <vault>/r/<kind>.<id>   an encrypted record (patient / measurement / investigation / dose note / tombstone)
 //   <vault>/f/<id>          an encrypted photo
 // <vault> is a 64-hex identifier derived on the device from the sync code; it is not the key.
 
 const VAULT = /^[0-9a-f]{64}$/;
-const KEY = /^(r\/[pmi]\.[A-Za-z0-9-]{1,80}|f\/[A-Za-z0-9-]{1,80})$/;
+const KEY = /^(r\/[pmid]\.[A-Za-z0-9-]{1,80}|f\/[A-Za-z0-9-]{1,80})$/;
 const MAX_BATCH = 100;
 const MAX_ITEM = 8 * 1024 * 1024; // base64 characters
 
