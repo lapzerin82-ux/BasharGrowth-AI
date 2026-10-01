@@ -2,8 +2,25 @@
  "format": "pgc-dose-notes",
  "version": 1,
  "exported": "2026-10-01",
- "description": "ADULT critical-care regimens and forms from a user-supplied extract of the ICU Quick Drug Guide 2025 (items 101–200; version 2 adds 151–200: vasopressors, pulmonary hypertension, GI/hepatic, haematology, toxicology). Every regimen is labelled 'Adult (ICU guide)' and every form line '[ICU guide 2025]'; none is a paediatric dose. All notes are unverified; 'CHECK' lines mark entries that look inconsistent. Importing merges into existing notes of the same drug name, adding only new rows.",
+ "description": "ADULT critical-care regimens and forms from a user-supplied extract of the ICU Quick Drug Guide 2025 (items 101–200; version 2 added 151–200; version 3 adds 201–250 from an UNSOURCED list described as 'standard ICU guidelines', labelled 'Adult (ICU list, unsourced)'). Every regimen is labelled 'Adult (ICU guide)' and every form line '[ICU guide 2025]'; none is a paediatric dose. All notes are unverified; 'CHECK' lines mark entries that look inconsistent. Importing merges into existing notes of the same drug name, adding only new rows.",
  "notes": [
+  {
+   "drug": "Acetazolamide",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.",
+   "forms": "Powder for solution for injection: 500 mg vials [ICU list 201–250, unsourced]\nTablet: 125 mg, 250 mg, 500 mg [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / Oral",
+     "dose": "250–500 mg two to four times daily (metabolic alkalosis, idiopathic intracranial hypertension)",
+     "max": ""
+    }
+   ]
+  },
   {
    "drug": "Acetylcysteine (paracetamol)",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
@@ -80,6 +97,23 @@
    ]
   },
   {
+   "drug": "Aminocaproic acid",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Not marketed in the UK (tranexamic acid is used).",
+   "forms": "Solution for infusion: 250 mg/mL [ICU list 201–250, unsourced]\nTablet: 500 mg [ICU list 201–250, unsourced]\nOral solution: 250 mg/mL [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Loading 5 g over 1 hour, then 1–1.25 g/hour (hyperfibrinolysis)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Amphotericin B (liposomal)",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -92,6 +126,30 @@
      "indication": "",
      "route": "IV",
      "dose": "3–5 mg/kg daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Andexanet alfa",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Low vs high dose depends on the factor Xa inhibitor, its dose and the time since the last dose.",
+   "forms": "Powder for solution for infusion: 200 mg vials [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Low dose: 400 mg bolus, then 4 mg/minute for 120 minutes",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "High dose: 800 mg bolus, then 8 mg/minute for 120 minutes",
      "max": ""
     }
    ]
@@ -143,6 +201,30 @@
      "indication": "",
      "route": "Nebulised",
      "dose": "0.25–0.5 mg two to four times daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Bumetanide",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: About 1 mg bumetanide ≈ 40 mg furosemide.",
+   "forms": "Solution for injection: 0.25 mg/mL, 0.5 mg/mL [ICU list 201–250, unsourced]\nTablet: 0.5 mg, 1 mg, 2 mg [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / Oral",
+     "dose": "0.5–2 mg per dose",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV infusion",
+     "dose": "0.5–2 mg/hour",
      "max": ""
     }
    ]
@@ -257,6 +339,40 @@
    ]
   },
   {
+   "drug": "Cefiderocol",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Adjust for renal function (and augmented renal clearance).",
+   "forms": "Powder for solution for infusion: 1 g vials [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "2 g every 8 hours over 3 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Ceftaroline",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.",
+   "forms": "Powder for solution for infusion: 400 mg, 600 mg vials [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "600 mg every 12 hours (MRSA pneumonia / skin and soft tissue)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Ceftazidime",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -269,6 +385,40 @@
      "indication": "",
      "route": "IV",
      "dose": "1–2 g every 8 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Cimetidine",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Many CYP450 interactions.",
+   "forms": "Solution for injection: 150 mg/mL; 300 mg/2 mL [ICU list 201–250, unsourced]\nTablet: 200, 300, 400, 800 mg [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / Oral",
+     "dose": "300 mg every 6–8 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Clindamycin",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.",
+   "forms": "Solution for injection: 150 mg/mL [ICU list 201–250, unsourced]\nCapsule: 150 mg, 300 mg [ICU list 201–250, unsourced]\nOral solution: 75 mg/5 mL [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / Oral",
+     "dose": "600–900 mg every 8 hours (toxic shock, anaerobes)",
      "max": ""
     }
    ]
@@ -451,6 +601,57 @@
    ]
   },
   {
+   "drug": "Doxycycline (≥ 8 y)",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.",
+   "forms": "Powder for solution for infusion: 100 mg, 200 mg vials (not marketed in the UK) [ICU list 201–250, unsourced]\nCapsule: 50 mg, 100 mg [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / Oral",
+     "dose": "100 mg every 12 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Droperidol",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: QT prolongation — ECG monitoring.",
+   "forms": "Solution for injection: 5 mg/mL (UK 2.5 mg/mL) [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / IM",
+     "dose": "0.625–2.5 mg when required (severe nausea / agitation)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Eltrombopag",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Lower starting dose in East/South-East Asian ancestry and hepatic impairment; separate from calcium/dairy/antacids by 4 hours.",
+   "forms": "Tablet: 12.5, 25, 50, 75 mg [ICU list 201–250, unsourced]\nPowder for oral suspension [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "25–75 mg daily",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Epoprostenol",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -464,6 +665,47 @@
      "route": "IV infusion",
      "dose": "Start 2 nanograms/kg/minute; titrate by 2 nanograms/kg/minute every 15 minutes",
      "max": "50 nanograms/kg/minute"
+    }
+   ]
+  },
+  {
+   "drug": "Eravacycline",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.",
+   "forms": "Powder for solution for infusion: 50 mg vials [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "1 mg/kg every 12 hours (complicated intra-abdominal infection)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Erythromycin (prokinetic)",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: QT prolongation and CYP3A4 interactions.",
+   "forms": "Powder for solution for infusion: 500 mg, 1 g vials [ICU list 201–250, unsourced]\nTablet / capsule: 250 mg, 500 mg [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Gastroparesis / feed intolerance",
+     "route": "IV",
+     "dose": "3 mg/kg every 12 hours",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Gastroparesis",
+     "route": "Oral",
+     "dose": "250 mg four times daily",
+     "max": ""
     }
    ]
   },
@@ -487,6 +729,23 @@
      "indication": "",
      "route": "SC / IV",
      "dose": "Darbepoetin alfa: 0.45 micrograms/kg once weekly",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Esomeprazole",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.",
+   "forms": "Powder for solution for infusion: 20 mg, 40 mg vials [ICU list 201–250, unsourced]\nGastro-resistant capsule: 20 mg, 40 mg [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / Oral",
+     "dose": "20–40 mg daily",
      "max": ""
     }
    ]
@@ -555,6 +814,23 @@
      "indication": "",
      "route": "IV",
      "dose": "500–1000 mg over 15 minutes",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Fibrinogen concentrate",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Dose is usually calculated from the target and measured fibrinogen level — check.",
+   "forms": "Powder for solution for injection: 1 g vials [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "70 mg/kg (congenital afibrinogenaemia / massive haemorrhage)",
      "max": ""
     }
    ]
@@ -652,6 +928,30 @@
    ]
   },
   {
+   "drug": "Furosemide",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.",
+   "forms": "Solution for injection: 10 mg/mL [ICU list 201–250, unsourced]\nTablet: 20 mg, 40 mg, 80 mg [ICU list 201–250, unsourced]\nOral solution: 10 mg/mL, 40 mg/5 mL (check: UK solutions include 20 mg/5 mL, 40 mg/5 mL, 50 mg/5 mL) [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / Oral",
+     "dose": "20–80 mg per dose",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV infusion",
+     "dose": "5–40 mg/hour",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Ganciclovir",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -710,6 +1010,23 @@
    ]
   },
   {
+   "drug": "Hydrochlorothiazide",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.",
+   "forms": "Tablet: 12.5, 25, 50 mg [ICU list 201–250, unsourced]\nCapsule: 12.5 mg [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "12.5–50 mg daily (e.g. nephrogenic diabetes insipidus, sequential nephron blockade)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Hydrocortisone",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -763,6 +1080,64 @@
      "indication": "",
      "route": "IV",
      "dose": "5 g over 15 minutes, repeated if necessary",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Hypertonic saline 23.4%",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: HIGH-ALERT concentrated electrolyte: central line only, never as a peripheral or undiluted push outside a protocol; not a standard UK product.",
+   "forms": "Solution for injection/infusion: 23.4%, 30 mL and 50 mL (usually pharmacy-compounded) [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV (central line only)",
+     "dose": "30 mL over 10–20 minutes for ICP crisis / herniation",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Hypertonic saline 3%",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Paediatric ICP regimens are by mL/kg (e.g. 2–5 mL/kg bolus, 0.1–1 mL/kg/hour) — use a paediatric protocol; monitor sodium.",
+   "forms": "Solution for infusion: 3%, 500 mL and 1000 mL bags [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Raised ICP",
+     "route": "IV infusion",
+     "dose": "1–2 mL/kg/hour",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Raised ICP",
+     "route": "IV",
+     "dose": "250 mL over 10–20 minutes (bolus)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Idarucizumab (dabigatran)",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.",
+   "forms": "Solution for injection: 50 mg/mL (2.5 g/50 mL vials) [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "5 g (two 2.5 g doses, or as one 5 g infusion)",
      "max": ""
     }
    ]
@@ -928,6 +1303,47 @@
    ]
   },
   {
+   "drug": "Labetalol",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.",
+   "forms": "Solution for injection: 5 mg/mL [ICU list 201–250, unsourced]\nTablet: 100 mg, 200 mg, 300 mg [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "10–20 mg over 2 minutes, then 20–80 mg every 10 minutes",
+     "max": "300 mg total"
+    },
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV infusion",
+     "dose": "0.5–2 mg/minute",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Lacosamide",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: PR-interval prolongation — ECG before loading.",
+   "forms": "Solution for infusion: 10 mg/mL [ICU list 201–250, unsourced]\nTablet: 50, 100, 150, 200 mg [ICU list 201–250, unsourced]\nOral solution: 10 mg/mL [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / Oral",
+     "dose": "Loading 200–400 mg; maintenance 100–200 mg twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Lactulose",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -940,6 +1356,30 @@
      "indication": "Hepatic encephalopathy",
      "route": "Oral / NG",
      "dose": "30–45 mL every 1–2 hours until evacuation, then 15–30 mL every 8–12 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Levetiracetam",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.",
+   "forms": "Solution for injection: 100 mg/mL [ICU list 201–250, unsourced]\nTablet: 250, 500, 750, 1000 mg [ICU list 201–250, unsourced]\nOral solution: 100 mg/mL [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Status epilepticus",
+     "route": "IV / Oral",
+     "dose": "Loading 20–60 mg/kg",
+     "max": "4.5 g (loading)"
+    },
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / Oral",
+     "dose": "Maintenance 500–1500 mg twice daily",
      "max": ""
     }
    ]
@@ -1037,6 +1477,23 @@
    ]
   },
   {
+   "drug": "Loperamide (not < 2 y)",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.",
+   "forms": "Capsule: 2 mg [ICU list 201–250, unsourced]\nOral solution: 1 mg/5 mL [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "4 mg initially, then 2 mg after each loose stool",
+     "max": "16 mg per day"
+    }
+   ]
+  },
+  {
    "drug": "Lorazepam",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -1102,6 +1559,23 @@
    ]
   },
   {
+   "drug": "Mannitol",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.",
+   "forms": "Solution for infusion: 20%, 500 mL and 1000 mL [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Raised ICP",
+     "route": "IV",
+     "dose": "0.25–1 g/kg over 30–60 minutes",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Meropenem",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -1148,6 +1622,40 @@
      "indication": "",
      "route": "IV",
      "dose": "40–125 mg every 6–24 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Metoclopramide",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: MHRA/EMA restrict metoclopramide to 10 mg up to three times daily (max 30 mg/day, 5 days) in adults, with tighter limits and restricted indications in children (extrapyramidal reactions) — the listed 10–20 mg every 6 hours exceeds this.",
+   "forms": "Solution for injection: 5 mg/mL [ICU list 201–250, unsourced]\nTablet: 5 mg, 10 mg [ICU list 201–250, unsourced]\nOral solution: 5 mg/5 mL [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / Oral",
+     "dose": "10–20 mg every 6 hours when required (as listed)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Metolazone",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Profound diuresis and hypokalaemia/hyponatraemia with loop diuretics — monitor electrolytes closely.",
+   "forms": "Tablet: 2.5, 5, 10 mg [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "2.5–10 mg daily (with a loop diuretic)",
      "max": ""
     }
    ]
@@ -1211,6 +1719,23 @@
    ]
   },
   {
+   "drug": "Minocycline",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.",
+   "forms": "Powder for solution for infusion: 100 mg vials [ICU list 201–250, unsourced]\nCapsule: 50 mg, 100 mg [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / Oral",
+     "dose": "200 mg loading, then 100 mg every 12 hours (Acinetobacter / Stenotrophomonas)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Naloxone",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -1230,6 +1755,23 @@
      "indication": "",
      "route": "IV infusion",
      "dose": "0.4–2 mg/hour",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Nimodipine",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Capsule contents must NEVER be given intravenously (fatal hypotension/arrest reported).",
+   "forms": "Capsule: 30 mg [ICU list 201–250, unsourced]\nOral liquid (from capsule contents by special protocol) [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Subarachnoid haemorrhage (vasospasm prophylaxis)",
+     "route": "Oral / NG",
+     "dose": "60 mg every 4 hours for 21 days",
      "max": ""
     }
    ]
@@ -1286,6 +1828,23 @@
    ]
   },
   {
+   "drug": "Ondansetron",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: QT prolongation.",
+   "forms": "Solution for injection: 2 mg/mL [ICU list 201–250, unsourced]\nTablet: 4 mg, 8 mg [ICU list 201–250, unsourced]\nOrodispersible tablet: 4 mg, 8 mg [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / Oral",
+     "dose": "4–8 mg every 8 hours when required",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Oseltamivir",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -1315,6 +1874,40 @@
      "indication": "",
      "route": "IV / Oral",
      "dose": "40 mg once daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Pegfilgrastim",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Paediatric patients under 45 kg are dosed by weight (about 100 micrograms/kg).",
+   "forms": "Solution for injection: 6 mg/0.6 mL prefilled syringe [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "SC",
+     "dose": "6 mg once per chemotherapy cycle",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Pentobarbital",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Not licensed in the UK (thiopental is the usual UK barbiturate); requires EEG and haemodynamic monitoring.",
+   "forms": "Solution for injection: 50 mg/mL vials [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Refractory status epilepticus / ICP (burst suppression)",
+     "route": "IV",
+     "dose": "Loading 5–15 mg/kg over 1–2 hours; maintenance 1–5 mg/kg/hour",
      "max": ""
     }
    ]
@@ -1354,6 +1947,54 @@
    ]
   },
   {
+   "drug": "Phenytoin / fosphenytoin",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: The 1000 mg cap on loading doses is not standard (20 mg/kg is usually given in full, commonly up to about 2 g) — check. UK phenytoin oral suspension is 30 mg/5 mL, not 125 mg/5 mL. Capsules (phenytoin sodium) and suspension (phenytoin base) are not mg-for-mg equivalent. Doses in 'mg PE' apply to fosphenytoin only. Paediatric IV phenytoin rate is limited per kg (about 1 mg/kg/minute).",
+   "forms": "Fosphenytoin solution for injection: 50 mg PE/mL [ICU list 201–250, unsourced]\nPhenytoin solution for injection: 50 mg/mL [ICU list 201–250, unsourced]\nPhenytoin capsule: 30 mg, 100 mg [ICU list 201–250, unsourced]\nPhenytoin oral suspension: 125 mg/5 mL (US strength) [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / IM",
+     "dose": "Fosphenytoin: loading 15–20 mg PE/kg; maintenance 4–6 mg PE/kg/day",
+     "max": "1000 mg PE (as listed)"
+    },
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Phenytoin: loading 15–20 mg/kg at no more than 50 mg/minute; maintenance 100 mg every 6–8 hours",
+     "max": "1000 mg (as listed)"
+    }
+   ]
+  },
+  {
+   "drug": "Phosphate",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Potassium phosphate also delivers potassium — include it in the potassium infusion limits. Phosphate enemas are contraindicated in young children; oral sodium phosphate bowel preparations can cause phosphate nephropathy.",
+   "forms": "Potassium phosphate injection: 3 mmol/mL phosphate (also contains about 4.4 mmol/mL potassium) [ICU list 201–250, unsourced]\nSodium phosphate oral solution / enema; IV solution (compounded) [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Severe hypophosphataemia",
+     "route": "IV",
+     "dose": "Potassium phosphate 0.25–0.5 mmol/kg over 4–6 hours",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Severe hypophosphataemia / bowel preparation",
+     "route": "IV / Oral",
+     "dose": "Sodium phosphate: dose not specified in the list",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Piperacillin–tazobactam",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -1383,6 +2024,132 @@
      "indication": "",
      "route": "IV",
      "dose": "1 adult dose (apheresis unit) or 4–6 pooled units",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Polymyxin B",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Doses may be written in mg or units (10 000 units = 1 mg) — confirm which is used. Nephrotoxic and neurotoxic.",
+   "forms": "Powder for solution for injection: 500 000 units vials (= 50 mg) [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Loading 2.5 mg/kg, then 1.5 mg/kg every 12 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Posaconazole",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: The oral suspension is NOT interchangeable with the tablets (different bioavailability and dosing); the 300 mg regimen applies to IV and tablets only. Monitor levels.",
+   "forms": "Concentrate for infusion: 18 mg/mL [ICU list 201–250, unsourced]\nGastro-resistant tablet: 100 mg [ICU list 201–250, unsourced]\nOral suspension: 40 mg/mL [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / Oral",
+     "dose": "Loading 300 mg every 12 hours for 2 doses, then 300 mg daily (IV or delayed-release tablets)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Potassium chloride",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: HIGH-ALERT: concentrated KCl must never be given undiluted. Peripheral rates are usually limited to about 10 mmol/hour; paediatric rates are per kg (commonly up to 0.2 mmol/kg/hour, higher only in PICU with ECG monitoring).",
+   "forms": "Concentrate for injection: 2 mmol/mL (must be diluted) [ICU list 201–250, unsourced]\nOral solution: 10%, 20% [ICU list 201–250, unsourced]\nExtended-release tablet: 8, 10, 20 mmol [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Maximum 10–20 mmol (mEq)/hour (via central line)",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "20–100 mmol (mEq)/day in divided doses",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Prochlorperazine",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Dystonic reactions are common in children and young people.",
+   "forms": "Solution for injection: 5 mg/mL (UK 12.5 mg/mL) [ICU list 201–250, unsourced]\nTablet: 5 mg, 10 mg, 25 mg [ICU list 201–250, unsourced]\nSuppository: 2.5 mg, 5 mg, 25 mg [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / IM / Oral",
+     "dose": "5–10 mg every 6–8 hours when required",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Promethazine",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Contraindicated under 2 years (fatal respiratory depression). IV promethazine can cause severe tissue injury/gangrene — deep IM preferred.",
+   "forms": "Solution for injection: 25 mg/mL, 50 mg/mL [ICU list 201–250, unsourced]\nTablet: 12.5, 25, 50 mg [ICU list 201–250, unsourced]\nSuppository: 12.5, 25, 50 mg [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / IM / Oral",
+     "dose": "12.5–25 mg every 4–6 hours when required",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Protamine (heparin)",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Dose depends on time since the heparin dose; partial reversal of LMWH only.",
+   "forms": "Solution for injection: 10 mg/mL [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "1 mg per 100 units of heparin",
+     "max": "50 mg per dose"
+    }
+   ]
+  },
+  {
+   "drug": "Prothrombin complex concentrate",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Give with IV vitamin K; dose by product and INR.",
+   "forms": "Powder for solution for injection: about 500 units factor IX per vial [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "25–50 units/kg (by INR) for warfarin reversal",
      "max": ""
     }
    ]
@@ -1490,6 +2257,23 @@
    ]
   },
   {
+   "drug": "Romiplostim",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.",
+   "forms": "Powder for solution for injection: 250 micrograms, 500 micrograms vials [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "SC",
+     "dose": "1–10 micrograms/kg once weekly",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Salbutamol (albuterol)",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -1509,6 +2293,23 @@
      "indication": "",
      "route": "IV",
      "dose": "5–15 micrograms/minute",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Sevelamer",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.",
+   "forms": "Tablet: 800 mg [ICU list 201–250, unsourced]\nPowder sachet: 800 mg [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "800–1600 mg three times daily with meals",
      "max": ""
     }
    ]
@@ -1550,6 +2351,23 @@
      "indication": "",
      "route": "IV",
      "dose": "1–2 mmol/kg (mEq/kg) bolus for severe acidosis / tricyclic overdose",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Sucralfate",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Aluminium accumulation in renal impairment; separate from enteral feeds and other drugs (bezoar risk).",
+   "forms": "Tablet: 1 g [ICU list 201–250, unsourced]\nOral suspension: 1 g/5 mL or 1 g/10 mL (check) [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "Oral / NG",
+     "dose": "1 g four times daily (stress ulcer prophylaxis)",
      "max": ""
     }
    ]
@@ -1613,6 +2431,40 @@
    ]
   },
   {
+   "drug": "Tigecycline",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Tetracycline class (tooth staining under 8 years); increased all-cause mortality warning.",
+   "forms": "Powder for solution for infusion: 50 mg vials [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Loading 100 mg, then 50 mg every 12 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Torasemide",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.",
+   "forms": "Solution for injection: 10 mg/mL (not marketed in the UK) [ICU list 201–250, unsourced]\nTablet: 5, 10, 20, 100 mg [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / Oral",
+     "dose": "10–200 mg daily",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Tramadol",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -1660,6 +2512,23 @@
      "route": "IV infusion",
      "dose": "Start 1–2 nanograms/kg/minute; titrate by 1–2 nanograms/kg/minute every 15 minutes",
      "max": "40 nanograms/kg/minute"
+    }
+   ]
+  },
+  {
+   "drug": "Trimethoprim–sulfamethoxazole (co-trimoxazole)",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Doses refer to the trimethoprim component; monitor potassium and blood counts.",
+   "forms": "Concentrate for infusion: 80 mg/400 mg per 5 mL [ICU list 201–250, unsourced]\nTablet: 80/400 mg, 160/800 mg [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / Oral",
+     "dose": "5–20 mg/kg/day (trimethoprim component) in divided doses every 6–12 hours (PCP 15–20 mg/kg/day)",
+     "max": ""
     }
    ]
   },
@@ -1727,6 +2596,23 @@
      "indication": "",
      "route": "IV / SC / Oral",
      "dose": "1–10 mg daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Von Willebrand factor concentrate",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nCHECK: Product-specific dosing (VWF:RCo units vs FVIII units) — follow the haemophilia centre's advice.",
+   "forms": "Powder for solution for injection: various IU vials [ICU list 201–250, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "40–80 IU/kg (von Willebrand disease / major bleeding)",
      "max": ""
     }
    ]
