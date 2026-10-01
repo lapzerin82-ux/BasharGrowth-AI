@@ -1,0 +1,9 @@
+{
+  "name": "pediatric-growth-chart",
+  "private": true,
+  "description": "Installable web app (static files) plus the Vercel sync function in api/.",
+  "type": "module",
+  "dependencies": {
+    "@vercel/blob": "^2.8.0"
+  }
+}

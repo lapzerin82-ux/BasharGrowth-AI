@@ -25,7 +25,8 @@ async function api(body) {
   try {
     r = await fetch("api/sync", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
   } catch { throw Object.assign(new Error("No internet connection. Changes are saved on this device and will sync later."), { offline: true }); }
-  if (r.status === 404) throw new Error("The sync service is not deployed. Deploy the site from GitHub (see Settings → Sync) to enable it.");
+  if (r.status === 404) throw new Error("Sync is not available on this web address (the site was uploaded without its sync service). Use the main app address, e.g. pediatric-growth-chart.vercel.app.");
+  if (r.status === 503) throw new Error("Sync storage is not set up on the server yet. Please try again later.");
   if (!r.ok) throw new Error(`Sync server error (${r.status})`);
   return r.json();
 }

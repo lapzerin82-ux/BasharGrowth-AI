@@ -1,4 +1,5 @@
-// Storage logic of the sync endpoint, independent of Netlify so it can be tested locally.
+// Storage logic of the sync endpoint, shared by the Vercel function (web/api/sync.mjs) and the Netlify function
+// (netlify/functions/sync.mts); independent of either platform so it can be tested locally.
 // The server only ever sees opaque, end-to-end encrypted blobs:
 //   <vault>/r/<kind>.<id>   an encrypted record (patient / measurement / investigation / tombstone)
 //   <vault>/f/<id>          an encrypted photo

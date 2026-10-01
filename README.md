@@ -25,7 +25,7 @@ a PDF report.
 
 ## Web version — install without an APK
 
-**Live app (Vercel): https://pediatric-growth-chart.vercel.app** — Vercel project `pediatric-growth-chart`, root directory `web/` (static, no build; headers in `web/vercel.json`).
+**Live app (Vercel): https://pediatric-growth-chart.vercel.app** — Vercel project `pediatric-growth-chart`, root directory `web/` (static files + one Vercel Function `web/api/sync.mjs` for phone/computer sync, storing end-to-end encrypted records in a private Vercel Blob store; headers in `web/vercel.json`).
 
 ### Netlify (alternative)
 
