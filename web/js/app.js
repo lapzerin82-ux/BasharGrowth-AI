@@ -900,7 +900,7 @@ function viewSettings() {
     <section class="card stack"><h2>Growth references (bundled, work offline)</h2>
       ${G.allRefs().map((r) => `<div><b>${esc(r.title)}</b><br><small>Version: ${esc(r.version)} · Percentile curves ${r.centiles.join(", ")}</small><br><small class="muted">Source: ${esc(r.source)}</small></div>`).join("<hr>")}
       <p class="hint">Curves are generated from the official LMS parameters. Each measurement is plotted at the exact age (days ÷ 30.4375 months) with no rounding.</p></section>
-    <section class="card stack"><h2>About</h2><p>Pediatric Growth Chart (web app), version 39. Clinical decision support only; verify measurements and interpret results in clinical context.</p>${CREDIT}</section>
+    <section class="card stack"><h2>About</h2><p>Pediatric Growth Chart (web app), version 40. Clinical decision support only; verify measurements and interpret results in clinical context.</p>${CREDIT}</section>
   </main>`;
   bindBack();
   $app.querySelectorAll('input[name="fam"]').forEach((r) => r.onchange = () => { settings.family = r.value; toast("Saved"); });
@@ -1370,26 +1370,49 @@ function doseNoteHtml(d, open = false) {
     <p class="hint">${d.source ? `Source: ${esc(d.source)}. ` : "No source recorded. "}${esc(DOSE_NOTE_LABEL)}</p></details>`;
 }
 
+// group a note's (possibly merged) source text into short labels for filtering
+function doseSourceGroups(src) {
+  const t = String(src || ""), g = [];
+  if (/BNF for Children 2023 — as extracted/.test(t)) g.push("BNFc 2023 extract");
+  if (/Therapeutic-drug-level table supplied with the BNF/.test(t)) g.push("BNFc 2023 extract (drug-level table)");
+  if (/ICU Quick Drug Guide 2025 — adult/.test(t)) g.push("ICU guide 2025 (adult, items 101–200)");
+  for (const m of t.matchAll(/items (\d+)–(\d+)/g)) g.push(`Unsourced list, items ${m[1]}–${m[2]}`);
+  if (!g.length) g.push(t.trim() ? "Other source" : "No source recorded");
+  return [...new Set(g)];
+}
+const DOSE_STATUS = { all: "All notes", unv: "Unverified only", chk: "Checked only", adult: "With ADULT regimens", held: "With doses not loaded (⚠)" };
+const doseStatusOk = (d, st) => st === "all" || (st === "unv" && d.unverified) || (st === "chk" && !d.unverified)
+  || (st === "adult" && (d.entries || []).some((e) => /^adult/i.test(e.ages || "")))
+  || (st === "held" && (d.entries || []).some((e) => /^⚠ NOT LOADED/.test(e.dose || "")));
 function viewDoseNotes() {
   const list = session.doseNoteList();
+  const groups = [...new Set(list.flatMap((d) => doseSourceGroups(d.source)))].sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+  let saved = {}; try { saved = JSON.parse(sessionStorage.getItem("pgc.dosefilter") || "{}"); } catch {}
   $app.innerHTML = bar("My dose notes", true, `<a class="icon" href="#dose/new" aria-label="New dose note">＋</a>`) + `
   <main class="page">
     <section class="card stack"><p>Your personal formulary: enter the regimens you use for each drug, with the source and the date you checked them. They appear as a reference under the drug when you prescribe, sync to your other devices and are included in backups.</p>
       <p class="hint">${esc(DOSE_NOTE_LABEL)}</p></section>
     <div class="row wrap"><button class="tonal small" id="dexp">Export dose notes</button><button class="ghost small" id="dimpb">Import dose notes…</button>
       <input type="file" id="dimp" accept=".json,application/json" hidden></div>
-    <input id="q" type="search" placeholder="Search drug" autocomplete="off" aria-label="Search dose notes">
+    <input id="q" type="search" placeholder="Search drug" autocomplete="off" aria-label="Search dose notes" value="${esc(saved.q || "")}">
+    <div class="two dfilt"><label>Show<select id="dst">${Object.entries(DOSE_STATUS).map(([k, t]) => `<option value="${k}"${saved.st === k ? " selected" : ""}>${esc(t)}</option>`).join("")}</select></label>
+      <label>Source<select id="dsrc"><option value="">All sources</option>${groups.map((g) => `<option${saved.src === g ? " selected" : ""}>${esc(g)}</option>`).join("")}</select></label></div>
+    <p class="hint" id="dcount"></p>
     <div class="plist" id="res"></div>
     <a class="fab" href="#dose/new">+ New dose note</a>
   </main>`;
   bindBack();
   const render = () => {
-    const q = document.getElementById("q").value.trim().toLowerCase();
-    const l = list.filter((d) => !q || d.drug.toLowerCase().includes(q));
-    document.getElementById("res").innerHTML = l.length ? l.map((d) => `<a class="prow" href="#dose/${d.id}"><span class="av" aria-hidden="true">📘</span><span><b>${esc(d.drug)}</b><small>${(d.entries || []).filter((e) => e.dose).length} regimen(s)${formLines(d.forms).length ? ` · ${formLines(d.forms).length} form(s)` : ""}${d.source ? ` · ${esc(d.source)}` : ""}</small></span>${d.unverified ? `<em class="unv">⚠ Unverified</em>` : d.checked ? `<em>${G.fmtDate(d.checked)}</em>` : ""}</a>`).join("")
-      : `<p class="muted">${q ? "No dose note for this drug." : "No dose notes yet. Tap “New dose note” to add your first one."}</p>`;
+    const qRaw = document.getElementById("q").value, q = qRaw.trim().toLowerCase();
+    const st = document.getElementById("dst").value, src = document.getElementById("dsrc").value;
+    try { sessionStorage.setItem("pgc.dosefilter", JSON.stringify({ q: qRaw, st, src })); } catch {}
+    const l = list.filter((d) => (!q || d.drug.toLowerCase().includes(q)) && doseStatusOk(d, st) && (!src || doseSourceGroups(d.source).includes(src)));
+    const unv = list.filter((d) => d.unverified).length;
+    document.getElementById("dcount").textContent = list.length ? `Showing ${l.length} of ${list.length} notes · ${unv} unverified, ${list.length - unv} checked` : "";
+    document.getElementById("res").innerHTML = l.length ? l.map((d) => `<a class="prow" href="#dose/${d.id}"><span class="av" aria-hidden="true">📘</span><span><b>${esc(d.drug)}</b><small>${(d.entries || []).filter((e) => e.dose).length} regimen(s)${formLines(d.forms).length ? ` · ${formLines(d.forms).length} form(s)` : ""} · ${esc(doseSourceGroups(d.source).join(" + "))}</small></span>${d.unverified ? `<em class="unv">⚠ Unverified</em>` : d.checked ? `<em>${G.fmtDate(d.checked)}</em>` : ""}</a>`).join("")
+      : `<p class="muted">${list.length ? "No dose notes match these filters." : "No dose notes yet. Tap “New dose note” to add your first one."}</p>`;
   };
-  document.getElementById("q").oninput = render; render();
+  document.getElementById("q").oninput = render; document.getElementById("dst").onchange = render; document.getElementById("dsrc").onchange = render; render();
   // export / import (JSON file) — for sharing a formulary between colleagues or loading a prepared list
   document.getElementById("dexp").onclick = () => {
     const notes = session.doseNoteList().map(({ id, createdAt, updatedAt, ...n }) => n);
@@ -1419,7 +1442,8 @@ function viewDoseNotes() {
       const haveF = new Set(formLines(old.forms).map((f) => f.toLowerCase())), newF = formLines(n.forms).filter((f) => !haveF.has(f.toLowerCase()));
       if (!extra.length && !newF.length) { same++; continue; }
       const notes = n.notes && !String(old.notes || "").includes(n.notes) ? [old.notes, n.notes].filter(Boolean).join("\n") : old.notes;
-      upd.push({ ...old, entries: [...old.entries, ...extra], forms: [...formLines(old.forms), ...newF].join("\n"), notes, unverified: true, added: extra.length });
+      const source = n.source && !String(old.source || "").includes(n.source) ? [old.source, n.source].filter(Boolean).join("; ").slice(0, 1000) : old.source;
+      upd.push({ ...old, source, entries: [...old.entries, ...extra], forms: [...formLines(old.forms), ...newF].join("\n"), notes, unverified: true, added: extra.length });
     }
     if (!add.length && !upd.length) return toast("Nothing new to import: you already have all of these regimens and forms.");
     confirmBox("Import dose notes?", `${add.length} new note${add.length === 1 ? "" : "s"}; ${upd.length} existing note${upd.length === 1 ? " gets" : "s get"} new regimens or forms${same ? `; ${same} unchanged` : ""}. Imported regimens are marked “Unverified” until you check them against your source.`, "Import", async () => {
