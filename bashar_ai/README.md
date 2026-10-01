@@ -49,8 +49,12 @@ quality standard.
 | `central/unified_output.md` | Output contract and pre-delivery verification checklist |
 | `modules/*.md` | One instruction file per specialist module |
 | `policies/*.md` | Shared policies: clinical safety, research integrity, autonomy, memory/privacy |
+| `claude_project/` | Paste-ready Claude Project setup (instructions EN/AR, knowledge file, setup and checks) |
 
 ## How to use
+
+- **Claude Project (ready-made):** see `claude_project/SETUP.md`. It has a
+  paste-ready instructions file, one knowledge file, and acceptance checks.
 
 - **Single-prompt platforms** (Claude Projects, custom GPTs, etc.):
   paste `central/system_prompt.md` + the four `policies/` files as the main
