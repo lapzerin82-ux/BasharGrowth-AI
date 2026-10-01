@@ -2,7 +2,7 @@
  "format": "pgc-dose-notes",
  "version": 1,
  "exported": "2026-10-01",
- "description": "Items 301–1050 from UNSOURCED lists described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025. Pure repeats of earlier items (etomidate, tigecycline, eravacycline, plazomicin, delafloxacin, omadacycline, baloxavir; and in 351–400 calcipotriol, chloramphenicol eye drops, epoetin, darbepoetin, iron sucrose, ferric carboxymaltose, penicillamine, trientine; and in 401–450 praziquantel, albendazole, mebendazole, ivermectin, permethrin, malathion, atovaquone–proguanil, octreotide; and in 451–500 the many repeats and dose-less entries) are omitted. Fixed doses are labelled 'Adult / age not stated'; weight-based doses 'Age not stated'. Doses that appear incorrect are NOT loaded. All notes unverified.",
+ "description": "Items 301–1100 from UNSOURCED lists described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025. Pure repeats of earlier items (etomidate, tigecycline, eravacycline, plazomicin, delafloxacin, omadacycline, baloxavir; and in 351–400 calcipotriol, chloramphenicol eye drops, epoetin, darbepoetin, iron sucrose, ferric carboxymaltose, penicillamine, trientine; and in 401–450 praziquantel, albendazole, mebendazole, ivermectin, permethrin, malathion, atovaquone–proguanil, octreotide; and in 451–500 the many repeats and dose-less entries) are omitted. Fixed doses are labelled 'Adult / age not stated'; weight-based doses 'Age not stated'. Doses that appear incorrect are NOT loaded. All notes unverified.",
  "notes": [
   {
    "drug": "Abacavir",
@@ -170,6 +170,23 @@
      "indication": "Acne",
      "route": "Topical",
      "dose": "Apply once daily at night",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Adapalene–benzoyl peroxide",
+   "source": "Unsourced list (items 1051–1100) described as a cross-reference of the BNF for Children 2023 — mostly repeats 901–1050 (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1051–1100).\nCHECK: Licensed from 9 years; bleaches fabric.",
+   "forms": "Gel adapalene 0.1% + benzoyl peroxide 2.5% (Epiduo; also 0.3%/2.5%) [list 1051–1100, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Acne",
+     "route": "Topical",
+     "dose": "Once daily in the evening",
      "max": ""
     }
    ]
@@ -1505,6 +1522,23 @@
    ]
   },
   {
+   "drug": "Clindamycin–tretinoin",
+   "source": "Unsourced list (items 1051–1100) described as a cross-reference of the BNF for Children 2023 — mostly repeats 901–1050 (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1051–1100).\nCHECK: Licensed from 12 years; avoid in pregnancy.",
+   "forms": "Gel clindamycin 1% + tretinoin 0.025% (Treclin) [list 1051–1100, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Acne",
+     "route": "Topical",
+     "dose": "Once daily in the evening",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Clobetasol propionate",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -1576,6 +1610,23 @@
      "route": "Topical",
      "dose": "Apply as directed",
      "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Codeine (not < 12 y)",
+   "source": "Unsourced list (items 1051–1100) described as a cross-reference of the BNF for Children 2023 — mostly repeats 901–1050 (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1051–1100).\nCHECK: MHRA: CONTRAINDICATED under 12 years, after tonsillectomy/adenoidectomy for obstructive sleep apnoea, in CYP2D6 ultra-rapid metabolisers and when breastfeeding; 12–18 years only if other analgesics fail, max 240 mg/day for 3 days. Opioid: monitor sedation/respiration; naloxone available; prescribe in mg AND mL for liquids.",
+   "forms": "Tablet 15, 30, 60 mg [list 1051–1100, unsourced]\nOral solution (listed 15 mg/5 mL — check: UK codeine oral solution is 25 mg/5 mL; 15 mg/5 mL is a linctus) [list 1051–1100, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 12–17 years (unsourced list)",
+     "indication": "Acute moderate pain",
+     "route": "Oral",
+     "dose": "0.5–1 mg/kg every 4–6 hours",
+     "max": "60 mg per dose"
     }
    ]
   },
@@ -1840,17 +1891,31 @@
   },
   {
    "drug": "Diclofenac",
-   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified)",
+   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified); Unsourced list (items 1051–1100) described as a cross-reference of the BNF for Children 2023 — mostly repeats 901–1050 (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 901–950).\nCHECK: Topical NSAIDs are generally licensed from 14 years (some 12); avoid on broken skin.",
-   "forms": "Gel 1%, 2.32% (twice-daily product) [list 901–950, unsourced]",
+   "notes": "From an unsourced list (items 901–950).\nCHECK: Topical NSAIDs are generally licensed from 14 years (some 12); avoid on broken skin.\nFrom an unsourced list (items 1051–1100).\nCHECK: BNFc rectal dosing is about 0.5–1 mg/kg twice daily (max 75 mg per dose; max 150 mg/day) — the listed '1–2 mg/kg' may be a daily total; check. 100 mg suppositories are adult.",
+   "forms": "Gel 1%, 2.32% (twice-daily product) [list 901–950, unsourced]\nTablet 25, 50, 75 mg [list 1051–1100, unsourced]\nSuppository 12.5, 25, 50, 100 mg [list 1051–1100, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
      "indication": "",
      "route": "Topical",
      "dose": "Gel: apply 3–4 times daily",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "2–3 mg/kg/day in 3 divided doses",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Rectal",
+     "dose": "1–2 mg/kg (as listed)",
      "max": ""
     }
    ]
@@ -2314,6 +2379,23 @@
    ]
   },
   {
+   "drug": "Erythromycin–retinoid gel",
+   "source": "Unsourced list (items 1051–1100) described as a cross-reference of the BNF for Children 2023 — mostly repeats 901–1050 (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1051–1100).\nCHECK: Topical retinoids: avoid in pregnancy.",
+   "forms": "Listed as 'tretinoin 0.05% + erythromycin 4%' — check: the UK product Isotrexin is ISOTRETINOIN 0.05% + erythromycin 2%; tretinoin/erythromycin solutions exist elsewhere [list 1051–1100, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Acne",
+     "route": "Topical",
+     "dose": "Twice daily (as listed)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Eslicarbazepine",
    "source": "Unsourced list (items 401–450) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier items and wrong doses (unverified)",
    "checked": "",
@@ -2460,17 +2542,31 @@
   },
   {
    "drug": "Fentanyl",
-   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified); Unsourced list (items 1051–1100) described as a cross-reference of the BNF for Children 2023 — mostly repeats 901–1050 (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 701–800).\nCHECK: Transdermal patches are for opioid-tolerant patients only; heat increases absorption.",
-   "forms": "Solution for injection 50 micrograms/mL [list 701–800, unsourced]\nTransdermal patch [list 701–800, unsourced]\nLozenges (adult cancer pain only — not for children) [list 701–800, unsourced]",
+   "notes": "From an unsourced list (items 701–800).\nCHECK: Transdermal patches are for opioid-tolerant patients only; heat increases absorption.\nFrom an unsourced list (items 1051–1100).\nCHECK: Opioid: monitor sedation/respiration; naloxone available; prescribe in mg AND mL for liquids.",
+   "forms": "Solution for injection 50 micrograms/mL [list 701–800, unsourced]\nTransdermal patch [list 701–800, unsourced]\nLozenges (adult cancer pain only — not for children) [list 701–800, unsourced]\nTransdermal patch 12–100 micrograms/hour [list 1051–1100, unsourced]\nBuccal tablet; nasal spray (adult breakthrough cancer pain only) [list 1051–1100, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
      "indication": "",
      "route": "IV",
      "dose": "Weight-based (dose not given)",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "1–2 micrograms/kg",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Transdermal",
+     "dose": "Patch strength based on prior opioid requirement",
      "max": ""
     }
    ]
@@ -3238,6 +3334,23 @@
    ]
   },
   {
+   "drug": "Ibuprofen",
+   "source": "Unsourced list (items 1051–1100) described as a cross-reference of the BNF for Children 2023 — mostly repeats 901–1050 (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1051–1100).\nCHECK: BNFc usual maximum is about 30 mg/kg/day (max 2.4 g), with 40 mg/kg/day reserved for specific indications (e.g. JIA) — check. Avoid in dehydration, chickenpox, and under 3 months/5 kg for OTC use.",
+   "forms": "Oral suspension 100 mg/5 mL [list 1051–1100, unsourced]\nTablet 200 mg, 400 mg; chewable tablet [list 1051–1100, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "5–10 mg/kg every 6–8 hours",
+     "max": "40 mg/kg/day (as listed)"
+    }
+   ]
+  },
+  {
    "drug": "Idursulfase",
    "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified)",
    "checked": "",
@@ -3615,6 +3728,23 @@
      "route": "Topical",
      "dose": "Twice daily (as listed)",
      "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Ketorolac",
+   "source": "Unsourced list (items 1051–1100) described as a cross-reference of the BNF for Children 2023 — mostly repeats 901–1050 (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1051–1100).\nCHECK: Maximum duration usually 2 days; max 60 mg/day; avoid in renal impairment, bleeding risk, dehydration.",
+   "forms": "Solution for injection 10 mg/mL, 30 mg/mL [list 1051–1100, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IM / IV",
+     "dose": "0.5 mg/kg every 6 hours",
+     "max": "15 mg per dose"
     }
    ]
   },
@@ -4381,12 +4511,27 @@
   },
   {
    "drug": "Midazolam (buccal / intranasal)",
-   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified); Unsourced list (items 1051–1100) described as a cross-reference of the BNF for Children 2023 — mostly repeats 901–1050 (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 701–800).",
-   "forms": "Oromucosal solution (Buccolam 2.5, 5, 7.5, 10 mg pre-filled syringes; listed as 'buccal gel' — check) [list 701–800, unsourced]\nOral syrup [list 701–800, unsourced]",
-   "entries": []
+   "notes": "From an unsourced list (items 701–800).\nFrom an unsourced list (items 1051–1100).\nCHECK: BNFc buccal doses are age-banded (e.g. 2.5 mg at 3–11 months, 5 mg at 1–4 years, 7.5 mg at 5–9 years, 10 mg at 10 years and over) — use the band rather than mg/kg. Products have different concentrations: specify the brand.",
+   "forms": "Oromucosal solution (Buccolam 2.5, 5, 7.5, 10 mg pre-filled syringes; listed as 'buccal gel' — check) [list 701–800, unsourced]\nOral syrup [list 701–800, unsourced]\nOromucosal solution Buccolam 5 mg/mL pre-filled syringes (2.5, 5, 7.5, 10 mg); Epistatus 10 mg/mL (listed as 'buccal gel 10 mg/mL' — these are solutions, not gels) [list 1051–1100, unsourced]\nInjection 1, 2, 5 mg/mL (listed also 10 mg/mL — check) [list 1051–1100, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Prolonged seizures",
+     "route": "Buccal / intranasal",
+     "dose": "0.2–0.5 mg/kg (seizure rescue)",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "50–100 micrograms/kg (sedation)",
+     "max": ""
+    }
+   ]
   },
   {
    "drug": "Minoxidil",
@@ -4449,6 +4594,30 @@
      "indication": "",
      "route": "Oral",
      "dose": "10 mg daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Morphine",
+   "source": "Unsourced list (items 1051–1100) described as a cross-reference of the BNF for Children 2023 — mostly repeats 901–1050 (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1051–1100).\nCHECK: Neonates and infants under 6 months need much lower doses. Concentrated oral solution (20 mg/mL) is a recognised overdose risk. Opioid: monitor sedation/respiration; naloxone available; prescribe in mg AND mL for liquids.",
+   "forms": "Oral solution 10 mg/5 mL, 20 mg/5 mL, 100 mg/5 mL (concentrate) [list 1051–1100, unsourced]\nTablet 10 mg; modified-release 30, 60, 100, 200 mg [list 1051–1100, unsourced]\nInjection 10, 15, 30 mg/mL (listed also 2 mg/mL) [list 1051–1100, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "0.2–0.4 mg/kg every 4 hours",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV / SC",
+     "dose": "50–100 micrograms/kg every 4 hours",
      "max": ""
     }
    ]
@@ -4816,6 +4985,23 @@
    ]
   },
   {
+   "drug": "Oxycodone",
+   "source": "Unsourced list (items 1051–1100) described as a cross-reference of the BNF for Children 2023 — mostly repeats 901–1050 (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1051–1100).\nCHECK: Usual single-dose cap (e.g. 5 mg initially) — check. Opioid: monitor sedation/respiration; naloxone available; prescribe in mg AND mL for liquids.",
+   "forms": "Tablet 5, 10, 20, 40, 80 mg; modified-release tablets [list 1051–1100, unsourced]\nOral solution 5 mg/5 mL; concentrate 10 mg/mL (listed '10 mg/5 mL' — check) [list 1051–1100, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "0.1–0.2 mg/kg every 4–6 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Ozenoxacin",
    "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
    "checked": "",
@@ -4879,6 +5065,30 @@
      "indication": "",
      "route": "IV",
      "dose": "6 mg/kg every 2 weeks",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Paracetamol (acetaminophen)",
+   "source": "Unsourced list (items 1051–1100) described as a cross-reference of the BNF for Children 2023 — mostly repeats 901–1050 (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1051–1100).\nCHECK: IV doses are weight-banded: under 10 kg usually 10 mg/kg (max 30 mg/kg/day) — mg/mL confusion has caused 10-fold IV overdoses in infants; 10–50 kg 15 mg/kg (max 60 mg/kg/day); over 50 kg 1 g. Oral maximum about 75 mg/kg/day (lower in neonates, dehydration, malnutrition, hepatic risk); max 1 g per dose.",
+   "forms": "Oral suspension 120 mg/5 mL, 250 mg/5 mL [list 1051–1100, unsourced]\nSuppository 60, 125, 250 mg (also 500 mg, 1 g) [list 1051–1100, unsourced]\nSoluble tablet [list 1051–1100, unsourced]\nIV infusion 10 mg/mL [list 1051–1100, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral / rectal",
+     "dose": "15 mg/kg every 4–6 hours",
+     "max": "4 doses in 24 hours"
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "15 mg/kg every 6 hours",
      "max": ""
     }
    ]
@@ -6616,6 +6826,23 @@
      "indication": "Atopic dermatitis",
      "route": "SC",
      "dose": "300 mg every 2 weeks (after a 600 mg loading dose)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Tramadol",
+   "source": "Unsourced list (items 1051–1100) described as a cross-reference of the BNF for Children 2023 — mostly repeats 901–1050 (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1051–1100).\nCHECK: Not licensed under 12 years in the UK; maximum 400 mg/day; seizures and serotonin syndrome risk; CYP2D6 variability. Opioid: monitor sedation/respiration; naloxone available; prescribe in mg AND mL for liquids.",
+   "forms": "Tablet 50, 100 mg; capsule; oral drops; solution for injection [list 1051–1100, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral / IV",
+     "dose": "1–2 mg/kg every 4–6 hours (as listed)",
      "max": ""
     }
    ]
