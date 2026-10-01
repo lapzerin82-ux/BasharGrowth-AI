@@ -1,0 +1,281 @@
+{
+ "format": "pgc-dose-notes",
+ "version": 1,
+ "exported": "2026-10-01",
+ "description": "Draft dose notes prepared from a user-supplied extract of BNF for Children 2023. Every note is marked unverified and must be checked against the complete current source before use.",
+ "notes": [
+  {
+   "drug": "Ethambutol",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Ethambutol hydrochloride. Extract items 21 and 36 merged (same regimen). Check visual-acuity monitoring advice in the source.",
+   "entries": [
+    {
+     "ages": "Child",
+     "indication": "Tuberculosis — initial phase",
+     "route": "Oral",
+     "dose": "20 mg/kg once daily OR 30 mg/kg 3 times a week for 2 months",
+     "max": ""
+    },
+    {
+     "ages": "Neonate",
+     "indication": "Congenital tuberculosis",
+     "route": "Oral",
+     "dose": "20 mg/kg once daily for 2 months",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Baclofen (intrathecal)",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Specialist use only. Maintenance regimen not included in the extract.",
+   "entries": [
+    {
+     "ages": "Child 4–17 years",
+     "indication": "Severe chronic spasticity",
+     "route": "Intrathecal",
+     "dose": "Test dose 25–50 micrograms over at least 1 minute, increased in steps of 25 micrograms every 24 hours to determine maintenance",
+     "max": "100 micrograms per dose (test phase)"
+    }
+   ]
+  },
+  {
+   "drug": "Clozapine",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Specialist use with mandatory haematological monitoring. Indication not stated in the extract.",
+   "entries": [
+    {
+     "ages": "Child 12–17 years",
+     "indication": "",
+     "route": "Oral",
+     "dose": "12.5 mg 1–2 times a day on day 1, then 25–50 mg on day 2, gradually increased over 14–21 days up to 300 mg daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Cycloserine (MDR-TB)",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Check plasma-concentration monitoring advice in the source. Older age band not included in the extract.",
+   "entries": [
+    {
+     "ages": "Child 2–11 years",
+     "indication": "Tuberculosis (resistant)",
+     "route": "Oral",
+     "dose": "Initially 5 mg/kg twice daily, increased up to 10 mg/kg twice daily",
+     "max": "250 mg per dose"
+    }
+   ]
+  },
+  {
+   "drug": "Rabies immunoglobulin",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Give together with rabies vaccine as per national guidance; check what to do with any remaining volume.",
+   "entries": [
+    {
+     "ages": "Child",
+     "indication": "Post-exposure prophylaxis",
+     "route": "Infiltration",
+     "dose": "20 units/kg by infiltration in and around the cleansed wound",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Lithium",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Preparation-specific (Camcolit); lithium brands are not interchangeable. Indication not stated in the extract.",
+   "entries": [
+    {
+     "ages": "Child 12–17 years",
+     "indication": "",
+     "route": "Oral",
+     "dose": "Camcolit (lithium carbonate): initially 1–1.5 g daily, adjusted according to serum-lithium concentration",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Isoniazid",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Only the 3-times-weekly regimen was extracted; the daily regimen is not included. Consider pyridoxine.",
+   "entries": [
+    {
+     "ages": "Child",
+     "indication": "Tuberculosis — intermittent regimen",
+     "route": "Oral",
+     "dose": "15 mg/kg 3 times a week for 6 months",
+     "max": "900 mg per dose"
+    }
+   ]
+  },
+  {
+   "drug": "Rifampicin",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Only the 3-times-weekly TB regimen was extracted; daily and other indications not included.",
+   "entries": [
+    {
+     "ages": "Child",
+     "indication": "Tuberculosis — intermittent regimen",
+     "route": "Oral",
+     "dose": "15 mg/kg 3 times a week for 6 months",
+     "max": "900 mg per dose"
+    }
+   ]
+  },
+  {
+   "drug": "Pyrazinamide",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Only the 3-times-weekly regimen was extracted.",
+   "entries": [
+    {
+     "ages": "Child up to 50 kg",
+     "indication": "Tuberculosis — intermittent regimen, initial phase",
+     "route": "Oral",
+     "dose": "50 mg/kg 3 times a week for 2 months",
+     "max": "2 g per dose"
+    }
+   ]
+  },
+  {
+   "drug": "Paracetamol (acetaminophen)",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "PARTIAL: only two age bands were extracted; other age bands, routes (IV, rectal) and indications are missing.",
+   "entries": [
+    {
+     "ages": "Neonate 28–32 weeks corrected gestational age",
+     "indication": "",
+     "route": "Oral",
+     "dose": "20 mg/kg for 1 dose, then 10–15 mg/kg every 8–12 hours",
+     "max": "30 mg/kg per day"
+    },
+    {
+     "ages": "Child 12–15 years",
+     "indication": "",
+     "route": "Oral",
+     "dose": "480–750 mg every 4–6 hours",
+     "max": "4 doses in 24 hours"
+    }
+   ]
+  },
+  {
+   "drug": "Atropine",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Atropine sulfate. Only the intra-operative bradycardia indication was extracted (not resuscitation or organophosphate poisoning).",
+   "entries": [
+    {
+     "ages": "Neonate and child 1 month–11 years",
+     "indication": "Intra-operative bradycardia",
+     "route": "Intravenous",
+     "dose": "10–20 micrograms/kg",
+     "max": ""
+    },
+    {
+     "ages": "Child 12–17 years",
+     "indication": "Intra-operative bradycardia",
+     "route": "Intravenous",
+     "dose": "300–600 micrograms",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Dolutegravir",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "CHECK: the extract's wording 'Child 6–17 years (6–9 kg)' combines an age and weight band inconsistently; the preparation (film-coated vs dispersible tablets, which are not bioequivalent) is not stated. Higher weight bands not included.",
+   "entries": [
+    {
+     "ages": "6–9 kg",
+     "indication": "HIV infection",
+     "route": "Oral",
+     "dose": "15 mg twice daily",
+     "max": ""
+    },
+    {
+     "ages": "10–13 kg",
+     "indication": "HIV infection",
+     "route": "Oral",
+     "dose": "20 mg twice daily",
+     "max": ""
+    },
+    {
+     "ages": "14–19 kg",
+     "indication": "HIV infection",
+     "route": "Oral",
+     "dose": "25 mg twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Levamisole (roundworm)",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Frequency/number of doses not stated in the extract.",
+   "entries": [
+    {
+     "ages": "Child",
+     "indication": "Roundworm infections",
+     "route": "Oral",
+     "dose": "2.5–3 mg/kg",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Sodium valproate",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Valproate pregnancy-prevention requirements apply to girls of child-bearing potential. Check monitoring advice (hepatic function) in the source.",
+   "entries": [
+    {
+     "ages": "Child 1 month–11 years",
+     "indication": "Epilepsy",
+     "route": "Oral",
+     "dose": "Initially 10–15 mg/kg daily in 1–2 divided doses; maintenance 25–30 mg/kg daily (up to 60 mg/kg daily may be used in infantile spasms)",
+     "max": ""
+    },
+    {
+     "ages": "Child 12–17 years",
+     "indication": "Epilepsy",
+     "route": "Oral",
+     "dose": "Initially 600 mg daily; maintenance 1–2 g daily",
+     "max": "2.5 g per day"
+    },
+    {
+     "ages": "Neonate",
+     "indication": "Epilepsy",
+     "route": "Rectal",
+     "dose": "Initially 20 mg/kg once daily; maintenance 10 mg/kg twice daily",
+     "max": ""
+    }
+   ]
+  }
+ ]
+}

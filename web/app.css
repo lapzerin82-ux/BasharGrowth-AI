@@ -302,3 +302,7 @@ details.opt[open] > summary { margin-bottom: 12px; }
 .dnote ul { margin: 8px 0 4px; padding-left: 18px; display: grid; gap: 4px; }
 .dnote .hint { font-size: 12.5px; margin-top: 4px; }
 .dnslot:empty { display: none; }
+.dnote.unver { border-color: #ff9aa9; background: color-mix(in srgb, #ff9aa9 10%, var(--card)); }
+.dnote .flag { margin: 6px 0 2px; font-size: 13px; }
+.prow em.unv { background: #ffe1e6; color: #85132a; }
+.unvcard { border-color: #ffb3bf; }
