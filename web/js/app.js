@@ -900,7 +900,7 @@ function viewSettings() {
     <section class="card stack"><h2>Growth references (bundled, work offline)</h2>
       ${G.allRefs().map((r) => `<div><b>${esc(r.title)}</b><br><small>Version: ${esc(r.version)} · Percentile curves ${r.centiles.join(", ")}</small><br><small class="muted">Source: ${esc(r.source)}</small></div>`).join("<hr>")}
       <p class="hint">Curves are generated from the official LMS parameters. Each measurement is plotted at the exact age (days ÷ 30.4375 months) with no rounding.</p></section>
-    <section class="card stack"><h2>About</h2><p>Pediatric Growth Chart (web app), version 27. Clinical decision support only; verify measurements and interpret results in clinical context.</p>${CREDIT}</section>
+    <section class="card stack"><h2>About</h2><p>Pediatric Growth Chart (web app), version 28. Clinical decision support only; verify measurements and interpret results in clinical context.</p>${CREDIT}</section>
   </main>`;
   bindBack();
   $app.querySelectorAll('input[name="fam"]').forEach((r) => r.onchange = () => { settings.family = r.value; toast("Saved"); });
@@ -1364,7 +1364,7 @@ function doseNoteHtml(d, open = false) {
   const rows = (d.entries || []).filter((e) => e.dose);
   return `<details class="dnote${d.unverified ? " unver" : ""}"${open ? " open" : ""}><summary>📘 My dose note: ${esc(d.drug)}${d.unverified ? ` <span class="flag">⚠ Unverified</span>` : d.checked ? ` <small>checked ${G.fmtDate(d.checked)}</small>` : ""}</summary>
     ${d.unverified ? `<p class="flag">Imported and not yet checked. Verify every regimen against the full current source before use, then mark it as checked.</p>` : ""}
-    ${rows.length ? `<ul>${rows.map((e) => `<li>${[e.ages, e.indication, e.route].filter(Boolean).map((t) => `<b>${esc(t)}</b>`).join(" · ")}${e.ages || e.indication || e.route ? ": " : ""}${esc(e.dose)}${e.max ? ` <span class="muted">(max ${esc(e.max)})</span>` : ""}</li>`).join("")}</ul>` : `<p class="hint">No regimens entered.</p>`}
+    ${rows.length ? `<ul>${rows.map((e) => `<li${/^adult/i.test(e.ages || "") ? ` class="adultrow"` : ""}>${/^adult/i.test(e.ages || "") ? `<span class="adulttag">ADULT</span> ` : ""}${[e.ages, e.indication, e.route].filter(Boolean).map((t) => `<b>${esc(t)}</b>`).join(" · ")}${e.ages || e.indication || e.route ? ": " : ""}${esc(e.dose)}${e.max ? ` <span class="muted">(max ${esc(e.max)})</span>` : ""}</li>`).join("")}</ul>` : `<p class="hint">No regimens entered.</p>`}
     ${formLines(d.forms).length ? `<p class="dnf"><b>Forms &amp; strengths</b></p><ul class="dnforms">${formLines(d.forms).map((f) => `<li>${esc(f)}</li>`).join("")}</ul>` : ""}
     ${d.notes ? `<p class="hint pre">${esc(d.notes)}</p>` : ""}
     <p class="hint">${d.source ? `Source: ${esc(d.source)}. ` : "No source recorded. "}${esc(DOSE_NOTE_LABEL)}</p></details>`;

@@ -300,6 +300,8 @@ details.opt[open] > summary { margin-bottom: 12px; }
 .dnote { border: 2px solid color-mix(in srgb, var(--sky) 40%, transparent); background: color-mix(in srgb, var(--sky) 8%, var(--card)); border-radius: 14px; padding: 8px 12px; font-size: 14px; }
 .dnote summary { cursor: pointer; font-weight: 800; color: var(--on-tonal); }
 .dnote .dnf { margin: 6px 0 0; }
+.dnote li.adultrow { background: color-mix(in srgb, #ff9aa9 14%, transparent); border-radius: 8px; padding: 2px 6px; }
+.dnote .adulttag { display: inline-block; font-size: 11px; font-weight: 900; color: #fff; background: #d6336c; border-radius: 6px; padding: 0 6px; }
 .dnote ul.dnforms { margin-top: 2px; }
 .dnote ul { margin: 8px 0 4px; padding-left: 18px; display: grid; gap: 4px; }
 .dnote .hint { font-size: 12.5px; margin-top: 4px; }
