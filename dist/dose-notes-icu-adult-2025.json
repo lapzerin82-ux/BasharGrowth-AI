@@ -2,7 +2,7 @@
  "format": "pgc-dose-notes",
  "version": 1,
  "exported": "2026-10-01",
- "description": "ADULT critical-care regimens and forms from a user-supplied extract of the ICU Quick Drug Guide 2025 (items 101–200; version 2 added 151–200; version 3 adds 201–250 from an UNSOURCED list described as 'standard ICU guidelines', labelled 'Adult (ICU list, unsourced)'). Every regimen is labelled 'Adult (ICU guide)' and every form line '[ICU guide 2025]'; none is a paediatric dose. All notes are unverified; 'CHECK' lines mark entries that look inconsistent. Importing merges into existing notes of the same drug name, adding only new rows.",
+ "description": "ADULT critical-care regimens and forms from a user-supplied extract of the ICU Quick Drug Guide 2025 (items 101–200; version 2 added 151–200; version 3 added 201–250 and version 4 adds 251–300, both from UNSOURCED lists, labelled 'Adult (ICU list, unsourced)'; entries whose listed dose appears wrong are NOT loaded and say so). Every regimen is labelled 'Adult (ICU guide)' and every form line '[ICU guide 2025]'; none is a paediatric dose. All notes are unverified; 'CHECK' lines mark entries that look inconsistent. Importing merges into existing notes of the same drug name, adding only new rows.",
  "notes": [
   {
    "drug": "Acetazolamide",
@@ -97,6 +97,40 @@
    ]
   },
   {
+   "drug": "Albumin 4.5–5%",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.",
+   "forms": "Solution for infusion: 5%, 250 mL and 500 mL (UK 4.5%) [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "12.5–25 g (volume expansion / hypoalbuminaemia)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Ambrisentan",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Teratogenic — pregnancy prevention programme.",
+   "forms": "Tablet: 5 mg, 10 mg [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "PAH",
+     "route": "Oral",
+     "dose": "5–10 mg daily",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Aminocaproic acid",
    "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
    "checked": "",
@@ -172,6 +206,23 @@
    ]
   },
   {
+   "drug": "Antithymocyte globulin (rabbit)",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Premedicate (steroid, antihistamine, paracetamol); monitor for cytokine release; products (rabbit vs horse) are not interchangeable.",
+   "forms": "Powder for solution for infusion: 25 mg vials [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Rejection treatment",
+     "route": "IV",
+     "dose": "1.5 mg/kg/day for 7–14 days",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Aztreonam",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -184,6 +235,57 @@
      "indication": "",
      "route": "IV",
      "dose": "1–2 g every 8 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Basiliximab",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Basiliximab is given as fixed doses (adults 20 mg; small children 10 mg) on day 0 and day 4, not per kg.",
+   "forms": "Powder for solution for injection: 10 mg, 20 mg vials [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 1 mg/kg within 2 hours pre-transplant, then at day 4). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Belatacept",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Belatacept is dosed per kg (mg/kg) on a different schedule; the fixed 500 mg regimen does not match the licence.",
+   "forms": "Powder for solution for infusion: 250 mg vials [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 500 mg on days 1, 4, 7, 14, 28, then monthly). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Bosentan",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Monthly liver function tests; teratogenic. Children use the 32 mg dispersible tablet, dosed per kg.",
+   "forms": "Tablet: 62.5 mg, 125 mg [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "PAH",
+     "route": "Oral",
+     "dose": "62.5 mg twice daily for 4 weeks, then 125 mg twice daily",
      "max": ""
     }
    ]
@@ -390,6 +492,23 @@
    ]
   },
   {
+   "drug": "Ceftolozane–tazobactam",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: The licensed cUTI/cIAI dose is 1 g/0.5 g (1.5 g) every 8 hours, with a higher dose for HAP/VAP; neither matches the list.",
+   "forms": "Powder for solution for infusion: listed as 2 g/0.5 g vials (check — vials are 1 g/0.5 g) [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 2 g/0.5 g every 8 hours over 3 hours). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Cimetidine",
    "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
    "checked": "",
@@ -499,6 +618,40 @@
    ]
   },
   {
+   "drug": "Deferoxamine (iron)",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: In acute iron poisoning deferoxamine is given by IV infusion at a much lower rate (commonly about 15 mg/kg/hour, with a 24-hour maximum); the listed 20–40 mg/kg/hour exceeds this. IM/SC routes are for chronic overload.",
+   "forms": "Powder for solution for injection: 500 mg, 2 g vials [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / IM / SC",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 20–40 mg/kg/hour (acute iron poisoning)). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Delafloxacin",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: IV and oral doses differ (IV 300 mg, oral 450 mg every 12 hours); 400 mg matches neither.",
+   "forms": "Powder for solution for infusion: listed as 400 mg (check — 300 mg vials) [ICU list 251–300, unsourced]\nTablet: 450 mg [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / Oral",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 400 mg every 12 hours). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Desmopressin (diabetes insipidus)",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -533,18 +686,42 @@
    ]
   },
   {
-   "drug": "Diazepam (rectal / IV)",
-   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "drug": "Dextran 40",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.",
-   "forms": "Solution for injection: 5 mg/mL [ICU guide 2025]",
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Risk of anaphylactoid reactions, renal failure and interference with blood grouping.",
+   "forms": "Solution for infusion: 10%, 500 mL [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "1–2 g/kg/day (microcirculation)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Diazepam (rectal / IV)",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified); Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nRegimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: US Diastat is dosed by age band (0.5 mg/kg at 2–5 years, 0.3 at 6–11, 0.2 at 12 years and over); buccal midazolam is often preferred in UK practice.",
+   "forms": "Solution for injection: 5 mg/mL [ICU guide 2025]\nRectal gel/tubes: 2.5, 5, 10, 15, 20 mg devices (US Diastat); UK rectal tubes 2.5, 5, 10 mg [ICU list 251–300, unsourced]",
    "entries": [
     {
      "ages": "Adult (ICU guide)",
      "indication": "",
      "route": "IV",
      "dose": "5–10 mg every 8–10 minutes when required",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced ICU list)",
+     "indication": "",
+     "route": "Rectal",
+     "dose": "0.2–0.5 mg/kg (rescue for prolonged seizures)",
      "max": ""
     }
    ]
@@ -562,6 +739,37 @@
      "indication": "",
      "route": "IV",
      "dose": "Dose calculated from serum digoxin concentration or amount ingested",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Dimercaprol / DMSA / EDTA (lead)",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Use only CALCIUM disodium EDTA (sodium calcium edetate) — disodium EDTA causes fatal hypocalcaemia. Dimercaprol is contraindicated in peanut allergy (peanut oil vehicle). Succimer is licensed for children in some countries.",
+   "forms": "Succimer capsule: 100 mg [ICU list 251–300, unsourced]\nSodium calcium edetate solution for injection: 200 mg/mL [ICU list 251–300, unsourced]\nDimercaprol (BAL in oil) injection: 100 mg/mL ampoules [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Lead poisoning",
+     "route": "Oral",
+     "dose": "Succimer (DMSA): 10 mg/kg every 8 hours for 5 days, then every 12 hours for 14 days",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Lead poisoning",
+     "route": "IV",
+     "dose": "Sodium calcium edetate (calcium EDTA): 1000–1500 mg/m²/day (with dimercaprol if severe)",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IM",
+     "dose": "Dimercaprol: 3–5 mg/kg every 4 hours for 2 days, then every 6 hours for 2 days, then every 12 hours for 1 week",
      "max": ""
     }
    ]
@@ -630,6 +838,23 @@
      "indication": "",
      "route": "IV / IM",
      "dose": "0.625–2.5 mg when required (severe nausea / agitation)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Eculizumab (aHUS)",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Meningococcal vaccination (ACWY and B) and antibiotic prophylaxis are mandatory. Children are dosed by weight band.",
+   "forms": "Concentrate for solution for infusion: 300 mg/30 mL [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "aHUS (PNH regimen differs)",
+     "route": "IV",
+     "dose": "900 mg weekly for 4 doses, then 1200 mg every 2 weeks",
      "max": ""
     }
    ]
@@ -763,6 +988,23 @@
      "indication": "",
      "route": "IV",
      "dose": "0.3 mg/kg over 30–60 seconds",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Everolimus",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Transplant everolimus (Certican/Zortress) and TSC/oncology everolimus (Votubia/Afinitor) differ in dosing and presentations.",
+   "forms": "Tablet: 0.25 mg, 0.5 mg, 0.75 mg, 1 mg [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Transplant",
+     "route": "Oral",
+     "dose": "0.75 mg twice daily",
      "max": ""
     }
    ]
@@ -986,6 +1228,23 @@
    ]
   },
   {
+   "drug": "Glucagon (hypoglycaemia rescue)",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Licensed from 4 years of age in the UK — check.",
+   "forms": "Nasal powder: 3 mg single-use device [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced ICU list)",
+     "indication": "Severe hypoglycaemia",
+     "route": "Intranasal",
+     "dose": "3 mg single dose (Baqsimi)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Haloperidol",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -1085,6 +1344,23 @@
    ]
   },
   {
+   "drug": "Hydroxyethyl starch (HES)",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: DO NOT USE: HES solutions were suspended/withdrawn in the UK and EU because of kidney injury and increased mortality in critically ill and septic patients.",
+   "forms": "Solution for infusion: 6%, 500 mL [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 500–1000 mL/day). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Hypertonic saline 23.4%",
    "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
    "checked": "",
@@ -1126,6 +1402,40 @@
    ]
   },
   {
+   "drug": "Hypertonic saline 7.5%",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Concentrated sodium chloride — high-alert; not a standard UK product.",
+   "forms": "Solution for infusion: 7.5%, 250 mL [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "250 mL over 10–20 minutes (shock / ICP)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Ibrexafungerp",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: For vulvovaginal candidiasis the licensed course is a single day (300 mg twice); there is no 200 mg continuation.",
+   "forms": "Tablet: listed as 100 mg, 200 mg (check — 150 mg tablets) [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 300 mg twice daily on day 1, then 200 mg twice daily). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Idarucizumab (dabigatran)",
    "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
    "checked": "",
@@ -1143,6 +1453,23 @@
    ]
   },
   {
+   "drug": "Iloprost (inhaled)",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: The 10 and 20 micrograms/mL ampoules give different doses per inhalation — confirm which device and strength.",
+   "forms": "Nebuliser solution: 10 micrograms/mL, 20 micrograms/mL [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "PAH",
+     "route": "Inhalation",
+     "dose": "2.5–5 micrograms 6–9 times daily",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Imipenem–cilastatin",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -1155,6 +1482,40 @@
      "indication": "",
      "route": "IV",
      "dose": "500 mg every 6 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Imipenem–cilastatin–relebactam",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.",
+   "forms": "Powder for solution for infusion: 1.25 g vials [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "1.25 g every 6 hours over 30 minutes",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Inebilizumab",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Brand is Uplizna (the list's 'Viivjo' is not a recognised name); maintenance is every 6 months.",
+   "forms": "Concentrate for solution for infusion: 100 mg/10 mL (listed as 300 mg/20 mL — check) [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "NMOSD",
+     "route": "IV",
+     "dose": "300 mg on days 1 and 15",
      "max": ""
     }
    ]
@@ -1178,11 +1539,11 @@
   },
   {
    "drug": "Insulin (long-acting)",
-   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified); Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Glargine 100 and 300 units/mL are not dose-for-dose interchangeable; confirm the strength.",
-   "forms": "Insulin glargine solution for injection: 100 units/mL, 300 units/mL pens/vials [ICU guide 2025]",
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Glargine 100 and 300 units/mL are not dose-for-dose interchangeable; confirm the strength.\nRegimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Degludec 200 units/mL is pen-only; the pen dials units, not volume.",
+   "forms": "Insulin glargine solution for injection: 100 units/mL, 300 units/mL pens/vials [ICU guide 2025]\nInsulin degludec solution for injection: 100 units/mL, 200 units/mL pens [ICU list 251–300, unsourced]",
    "entries": [
     {
      "ages": "Adult (ICU guide)",
@@ -1195,11 +1556,11 @@
   },
   {
    "drug": "Insulin (rapid-acting)",
-   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified); Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Lispro 200 units/mL is pen-only; confirm strength.",
-   "forms": "Insulin lispro solution for injection: 100 units/mL, 200 units/mL pens/vials [ICU guide 2025]",
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Lispro 200 units/mL is pen-only; confirm strength.\nRegimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.",
+   "forms": "Insulin lispro solution for injection: 100 units/mL, 200 units/mL pens/vials [ICU guide 2025]\nInsulin glulisine solution for injection: 100 units/mL vials/pens [ICU list 251–300, unsourced]\nInsulin aspart solution for injection: 100 units/mL vials/pens [ICU list 251–300, unsourced]",
    "entries": [
     {
      "ages": "Adult (ICU guide)",
@@ -1274,6 +1635,23 @@
      "indication": "",
      "route": "IV",
      "dose": "200 mg over 2–5 minutes, up to 3 times a week",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Isavuconazole",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Doses may be written as isavuconazonium sulfate (372 mg) or isavuconazole (200 mg) — same dose, different labels.",
+   "forms": "Powder for solution for infusion: 372 mg isavuconazonium vials [ICU list 251–300, unsourced]\nCapsule: 186 mg (two capsules per 372 mg dose) [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV / Oral",
+     "dose": "Isavuconazonium sulfate 372 mg (= isavuconazole 200 mg) every 8 hours for 6 doses, then 372 mg once daily",
      "max": ""
     }
    ]
@@ -1560,17 +1938,24 @@
   },
   {
    "drug": "Mannitol",
-   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
+   "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified); Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.",
-   "forms": "Solution for infusion: 20%, 500 mL and 1000 mL [ICU list 201–250, unsourced]",
+   "notes": "ADULT ICU regimen from an unsourced list ('standard critical-care guidelines', items 201–250) — not quoted from any document and not a paediatric dose.\nRegimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Several concentrations (10%, 15%, 20%) — calculate volume from grams.",
+   "forms": "Solution for infusion: 20%, 500 mL and 1000 mL [ICU list 201–250, unsourced]\nSolution for infusion: 15%, 500 mL [ICU list 251–300, unsourced]",
    "entries": [
     {
      "ages": "Adult (ICU list, unsourced)",
      "indication": "Raised ICP",
      "route": "IV",
      "dose": "0.25–1 g/kg over 30–60 minutes",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "0.25–1 g/kg (15% solution)",
      "max": ""
     }
    ]
@@ -1593,18 +1978,42 @@
    ]
   },
   {
-   "drug": "Methylene blue",
-   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "drug": "Meropenem–vaborbactam",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Serotonin syndrome risk with serotonergic drugs; contraindicated in G6PD deficiency.",
-   "forms": "Solution for injection: 10 mg/mL ampoules (as extracted — check; UK methylthioninium chloride is 5 mg/mL) [ICU guide 2025]",
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: The licensed dose is 4 g total (2 g meropenem/2 g vaborbactam) every 8 hours; '4 g/2 g' would double the meropenem.",
+   "forms": "Powder for solution for infusion: listed as 4 g/2 g vials (check — vials are 1 g/1 g) [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 4 g/2 g every 8 hours over 3 hours). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Methylene blue",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified); Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Serotonin syndrome risk with serotonergic drugs; contraindicated in G6PD deficiency.\nRegimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.",
+   "forms": "Solution for injection: 10 mg/mL ampoules (as extracted — check; UK methylthioninium chloride is 5 mg/mL) [ICU guide 2025]\nSolution for injection: 10 mg/mL (as listed — UK 5 mg/mL) [ICU list 251–300, unsourced]",
    "entries": [
     {
      "ages": "Adult (ICU guide)",
      "indication": "",
      "route": "IV",
      "dose": "1–2 mg/kg over 10–60 minutes",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Methaemoglobinaemia (> 30%)",
+     "route": "IV",
+     "dose": "1–2 mg/kg",
      "max": ""
     }
    ]
@@ -1736,6 +2145,23 @@
    ]
   },
   {
+   "drug": "Mycophenolate mofetil",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Mycophenolate mofetil and mycophenolic acid (Myfortic) are not interchangeable mg-for-mg. Teratogenic.",
+   "forms": "Powder for solution for infusion: 500 mg vials [ICU list 251–300, unsourced]\nCapsule 250 mg; tablet 500 mg [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Transplant prophylaxis",
+     "route": "IV / Oral",
+     "dose": "1 g twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Naloxone",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -1828,6 +2254,23 @@
    ]
   },
   {
+   "drug": "Omadacycline",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Maintenance is once daily, not every 12 hours.",
+   "forms": "Powder for solution for infusion: 100 mg vials [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 200 mg loading, then 100 mg every 12 hours). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Ondansetron",
    "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
    "checked": "",
@@ -1891,6 +2334,30 @@
      "indication": "",
      "route": "SC",
      "dose": "6 mg once per chemotherapy cycle",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Penicillamine / zinc (Wilson disease)",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Give pyridoxine with penicillamine. Paediatric doses are lower (per kg / age).",
+   "forms": "Penicillamine capsule: 250 mg (UK: tablets 125 mg, 250 mg) [ICU list 251–300, unsourced]\nZinc acetate capsule: 25 mg, 50 mg [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Wilson disease",
+     "route": "Oral",
+     "dose": "Penicillamine: 250–500 mg four times daily",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Wilson disease maintenance",
+     "route": "Oral",
+     "dose": "Zinc acetate: 50 mg (elemental) three times daily",
      "max": ""
     }
    ]
@@ -2029,6 +2496,23 @@
    ]
   },
   {
+   "drug": "Plazomicin",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: The licensed dose is about 15 mg/kg once daily with therapeutic drug monitoring; 4 mg/kg is far lower.",
+   "forms": "Solution for injection: listed as 40 mg/mL (check — 500 mg/10 mL, 50 mg/mL) [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 4 mg/kg once daily). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Polymyxin B",
    "source": "Unsourced list described as 'standard critical-care / ICU guidelines' (items 201–250) — not extracted from a cited document (unverified)",
    "checked": "",
@@ -2082,6 +2566,23 @@
      "indication": "",
      "route": "Oral",
      "dose": "20–100 mmol (mEq)/day in divided doses",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Potassium iodide",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Children receive smaller age-banded doses; follow public-health instructions.",
+   "forms": "Tablet: 130 mg [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Radioiodine exposure (thyroid blocking)",
+     "route": "Oral",
+     "dose": "130 mg once daily",
      "max": ""
     }
    ]
@@ -2155,6 +2656,23 @@
    ]
   },
   {
+   "drug": "Prussian blue",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.",
+   "forms": "Capsule: 500 mg [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Caesium / thallium poisoning",
+     "route": "Oral",
+     "dose": "3 g three times daily",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Quetiapine",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -2167,6 +2685,23 @@
      "indication": "Delirium",
      "route": "Oral / NG",
      "dose": "25–50 mg twice to three times daily (elderly 12.5–25 mg)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Ravulizumab",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Meningococcal vaccination is mandatory; 10 mg/mL and 100 mg/mL products have different infusion volumes.",
+   "forms": "Concentrate for solution for infusion: 10 mg/mL; 30 mg/mL as listed (check — 100 mg/mL) [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Weight-based loading dose, then maintenance every 8 weeks (doses not given)",
      "max": ""
     }
    ]
@@ -2201,6 +2736,23 @@
      "indication": "",
      "route": "IV infusion",
      "dose": "0.05–0.1 micrograms/kg/minute; titrate by 0.05 micrograms/kg/minute every 5 minutes",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Rezafungin",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.",
+   "forms": "Powder for solution for infusion: 400 mg vials (as listed) [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Invasive candidiasis",
+     "route": "IV",
+     "dose": "400 mg on day 1, then 200 mg once weekly",
      "max": ""
     }
    ]
@@ -2274,6 +2826,23 @@
    ]
   },
   {
+   "drug": "Sacubitril–valsartan",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Stop ACE inhibitors at least 36 hours before starting.",
+   "forms": "Tablet: 24/26 mg, 49/51 mg, 97/103 mg [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Heart failure",
+     "route": "Oral",
+     "dose": "49/51 mg twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Salbutamol (albuterol)",
    "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
    "checked": "",
@@ -2293,6 +2862,23 @@
      "indication": "",
      "route": "IV",
      "dose": "5–15 micrograms/minute",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Selexipag",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Selexipag is given twice daily and titrated weekly to the individual maximum tolerated dose (up to 1600 micrograms twice daily).",
+   "forms": "Tablet: 200, 400, 600 micrograms (and higher strengths) [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 200 micrograms daily, titrated to 600 micrograms daily). Enter the regimen from your source.",
      "max": ""
     }
    ]
@@ -2334,6 +2920,23 @@
      "indication": "",
      "route": "IV",
      "dose": "10 mg three times daily (if unable to take orally)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Sirolimus",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.",
+   "forms": "Oral solution: 1 mg/mL [ICU list 251–300, unsourced]\nTablet: 0.5 mg, 1 mg, 2 mg [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "2 mg daily, adjusted to trough level",
      "max": ""
     }
    ]
@@ -2392,6 +2995,30 @@
      "indication": "",
      "route": "IV infusion",
      "dose": "0.05–0.1 micrograms/kg/hour",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Tacrolimus",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: IV tacrolimus is usually written in mg/kg/day; check the unit conversion. Oral brands (immediate vs prolonged release) are NOT interchangeable — prescribe by brand; dose by trough level.",
+   "forms": "Concentrate for solution for infusion: 5 mg/mL [ICU list 251–300, unsourced]\nCapsule: 0.5 mg, 1 mg, 5 mg [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "IV infusion",
+     "dose": "0.03–0.05 micrograms/kg/minute (as listed)",
+     "max": ""
+    },
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "Transplant",
+     "route": "Oral",
+     "dose": "0.1–0.2 mg/kg/day in 2 divided doses",
      "max": ""
     }
    ]
@@ -2500,11 +3127,11 @@
   },
   {
    "drug": "Treprostinil",
-   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified)",
+   "source": "ICU Quick Drug Guide 2025 — adult critical-care guide, as extracted (unverified); Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Dose is in NANOgrams/kg/minute.",
-   "forms": "Solution for infusion: 1.5 mg/20 mL vials (as extracted — check; vials are usually labelled by concentration, e.g. 1, 2.5, 5, 10 mg/mL in 20 mL) [ICU guide 2025]",
+   "notes": "ADULT ICU regimen from the ICU Quick Drug Guide 2025 — not a paediatric dose. Do not apply to children without a paediatric source.\nCHECK: Dose is in NANOgrams/kg/minute.\nRegimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: Inhaled treprostinil is given as breaths per session (about 6 micrograms per breath) usually 4 times daily; the listed '9 micrograms × 9 sessions' resembles iloprost dosing.",
+   "forms": "Solution for infusion: 1.5 mg/20 mL vials (as extracted — check; vials are usually labelled by concentration, e.g. 1, 2.5, 5, 10 mg/mL in 20 mL) [ICU guide 2025]\nInhalation solution (Tyvaso): listed as 0.9 mg/2.5 mL ampoules (check) [ICU list 251–300, unsourced]",
    "entries": [
     {
      "ages": "Adult (ICU guide)",
@@ -2512,6 +3139,30 @@
      "route": "IV infusion",
      "dose": "Start 1–2 nanograms/kg/minute; titrate by 1–2 nanograms/kg/minute every 15 minutes",
      "max": "40 nanograms/kg/minute"
+    },
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "Inhalation",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 9 micrograms per session, 9 times daily (Tyvaso)). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Trientine",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: The listed total (2–3 g/day) exceeds usual adult doses; trientine dihydrochloride and tetrahydrochloride (Cuprior) salts have different mg doses.",
+   "forms": "Capsule: 250 mg [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 500–750 mg four times daily). Enter the regimen from your source.",
+     "max": ""
     }
    ]
   },
@@ -2579,6 +3230,23 @@
      "indication": "",
      "route": "IV infusion",
      "dose": "0.03 units/minute (fixed dose, not titrated)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Vericiguat",
+   "source": "Unsourced list described as 'ICU Quick Drug Guide 2025 and standard critical-care practice' (items 251–300) — individual items not attributable to a document (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Regimen from an unsourced ICU list (items 251–300) — not quoted from a document and not a paediatric dose.\nCHECK: MISATTRIBUTED: Adempas is riociguat (already in your notes); vericiguat (Verquvo) is a once-daily heart-failure drug. Do not use this entry.",
+   "forms": "Tablet: listed strengths are riociguat's (0.5–2.5 mg) — check [ICU list 251–300, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult (ICU list, unsourced)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 0.5–1.5 mg three times daily (for PAH/CTEPH), brand given as Adempas). Enter the regimen from your source.",
      "max": ""
     }
    ]
