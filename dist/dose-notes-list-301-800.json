@@ -2,7 +2,7 @@
  "format": "pgc-dose-notes",
  "version": 1,
  "exported": "2026-10-01",
- "description": "Items 301–700 from UNSOURCED lists described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025. Pure repeats of earlier items (etomidate, tigecycline, eravacycline, plazomicin, delafloxacin, omadacycline, baloxavir; and in 351–400 calcipotriol, chloramphenicol eye drops, epoetin, darbepoetin, iron sucrose, ferric carboxymaltose, penicillamine, trientine; and in 401–450 praziquantel, albendazole, mebendazole, ivermectin, permethrin, malathion, atovaquone–proguanil, octreotide; and in 451–500 the many repeats and dose-less entries) are omitted. Fixed doses are labelled 'Adult / age not stated'; weight-based doses 'Age not stated'. Doses that appear incorrect are NOT loaded. All notes unverified.",
+ "description": "Items 301–800 from UNSOURCED lists described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025. Pure repeats of earlier items (etomidate, tigecycline, eravacycline, plazomicin, delafloxacin, omadacycline, baloxavir; and in 351–400 calcipotriol, chloramphenicol eye drops, epoetin, darbepoetin, iron sucrose, ferric carboxymaltose, penicillamine, trientine; and in 401–450 praziquantel, albendazole, mebendazole, ivermectin, permethrin, malathion, atovaquone–proguanil, octreotide; and in 451–500 the many repeats and dose-less entries) are omitted. Fixed doses are labelled 'Adult / age not stated'; weight-based doses 'Age not stated'. Doses that appear incorrect are NOT loaded. All notes unverified.",
  "notes": [
   {
    "drug": "Abacavir",
@@ -18,6 +18,23 @@
      "route": "Oral",
      "dose": "8 mg/kg twice daily",
      "max": "300 mg twice daily"
+    }
+   ]
+  },
+  {
+   "drug": "Abatacept",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).",
+   "forms": "Powder for concentrate for infusion 250 mg; pre-filled syringe (SC) [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Child under 75 kg (unsourced list)",
+     "indication": "JIA",
+     "route": "IV",
+     "dose": "10 mg/kg at weeks 0, 2 and 4, then every 4 weeks",
+     "max": ""
     }
    ]
   },
@@ -90,6 +107,40 @@
    ]
   },
   {
+   "drug": "Activated charcoal",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: Usual maximum 50 g; only within about 1 hour of ingestion of an adsorbable toxin with a protected airway; not for iron, lithium, alcohols, hydrocarbons, corrosives.",
+   "forms": "Powder / suspension for oral use [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Poisoning",
+     "route": "Oral / NG",
+     "dose": "1 g/kg single dose",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Adalimumab",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: JIA doses differ (e.g. 20 mg every 2 weeks for 10–<30 kg, 40 mg for 30 kg and over); Humira 40 mg is also available as 40 mg/0.4 mL — biosimilar concentrations differ. Screen for TB/hepatitis B.",
+   "forms": "Pre-filled pen 40 mg/0.8 mL (Humira, Hyrimoz); pre-filled syringe 20 mg/0.2 mL (Humira) [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 6–17 years, 40 kg or less (unsourced list)",
+     "indication": "Crohn's disease (accelerated induction)",
+     "route": "SC",
+     "dose": "80 mg initially, 40 mg after 2 weeks, then 20 mg every 2 weeks",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Adapalene",
    "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
    "checked": "",
@@ -105,6 +156,15 @@
      "max": ""
     }
    ]
+  },
+  {
+   "drug": "Adrenaline (epinephrine)",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: 1:10 000 (100 micrograms/mL) is the IV/arrest strength; 1:1000 (1 mg/mL) is the IM anaphylaxis strength — never confuse them.",
+   "forms": "Solution for injection 100 micrograms/mL (1:10 000) — 1 mg/10 mL pre-filled syringes and ampoules [list 701–800, unsourced]",
+   "entries": []
   },
   {
    "drug": "Adrenaline (epinephrine) auto-injector",
@@ -387,11 +447,11 @@
   },
   {
    "drug": "Atracurium",
-   "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
+   "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified); Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 301–350). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.",
-   "forms": "Solution for injection: 10 mg/mL [list 301–350, unsourced]",
+   "notes": "From an unsourced list (items 301–350). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nFrom an unsourced list (items 701–800).",
+   "forms": "Solution for injection: 10 mg/mL [list 301–350, unsourced]\nSolution for injection 10 mg/mL: 25 mg/2.5 mL, 50 mg/5 mL ampoules; 250 mg/25 mL vials [list 701–800, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
@@ -480,6 +540,23 @@
      "indication": "Asthma prophylaxis",
      "route": "Inhaled",
      "dose": "200–400 micrograms twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Belimumab",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).",
+   "forms": "Powder for concentrate for infusion 120 mg, 400 mg; pre-filled syringe/pen 200 mg [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 5 years and over (unsourced list)",
+     "indication": "SLE",
+     "route": "IV",
+     "dose": "10 mg/kg (SC fixed dose for older patients — not given)",
      "max": ""
     }
    ]
@@ -766,6 +843,23 @@
      "indication": "Psoriasis",
      "route": "Topical",
      "dose": "Apply twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Calcitonin (salmon)",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: Long-term use restricted (malignancy risk).",
+   "forms": "Solution for injection; nasal spray (check current availability) [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "SC / IM / nasal",
+     "dose": "Dose by weight/age in units (not given)",
      "max": ""
     }
    ]
@@ -1061,6 +1155,23 @@
    ]
   },
   {
+   "drug": "Cisatracurium",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: Two concentrations exist — confirm.",
+   "forms": "Solution for injection/infusion 2 mg/mL (also 5 mg/mL) [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 12–17 years (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "150 micrograms/kg bolus, then 180 micrograms/kg/hour infusion, reduced to 60–120 micrograms/kg/hour",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Cisplatin",
    "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
    "checked": "",
@@ -1213,6 +1324,23 @@
      "indication": "CF Pseudomonas",
      "route": "Nebulised",
      "dose": "1–2 million units twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Crizanlizumab",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: Its EU/UK marketing authorisation was revoked in 2023 (no benefit in the confirmatory trial) — check availability.",
+   "forms": "Concentrate for infusion 100 mg/10 mL (Adakveo) [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Sickle cell disease",
+     "route": "IV",
+     "dose": "5 mg/kg at weeks 0 and 2, then every 4 weeks",
      "max": ""
     }
    ]
@@ -1378,6 +1506,23 @@
    ]
   },
   {
+   "drug": "Dextrose 10% bolus",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: Children are usually given 2 mL/kg of 10% glucose (0.2 g/kg) IV, followed by an infusion; 50% glucose is hyperosmolar and not used peripherally in children; 0.5–1 g/kg is an old, much larger dose.",
+   "forms": "Glucose 20% 100 mL; glucose 50% 20 mL ampoules and 50 mL vials [list 701–800, unsourced]\nOral glucose solution (Rapilose OGTT) [list 701–800, unsourced]\nGlucose oral gel (Dextrogel) [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV / oral",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 0.5–1 g/kg for hypoglycaemia). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Diazoxide",
    "source": "Unsourced list (items 401–450) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier items and wrong doses (unverified); Unsourced list (items 451–500) described as extracted from BNF for Children 2023 — not attributable to a specific page; several entries are misattributed (unverified)",
    "checked": "",
@@ -1526,6 +1671,23 @@
      "indication": "",
      "route": "Oral",
      "dose": "0.5 mg daily (benign prostatic hyperplasia)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Eculizumab (aHUS)",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: For aHUS at 40 kg and over the usual regimen is 900 mg weekly × 4, then 1200 mg every 2 weeks (as in your earlier note); 600 mg/900 mg is the PNH regimen.",
+   "forms": "Concentrate for infusion 300 mg/30 mL (Soliris) [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: Child 40 kg and over: 600 mg weekly for 4 doses, then 900 mg every 12–16 days). Enter the regimen from your source.",
      "max": ""
     }
    ]
@@ -1718,6 +1880,23 @@
    ]
   },
   {
+   "drug": "Eptacog alfa (factor VIIa)",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: Haemophilia-centre directed; thrombosis risk.",
+   "forms": "Powder for solution for injection (NovoSeven 1, 2, 5, 8 mg) [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Haemophilia with inhibitors",
+     "route": "IV",
+     "dose": "90 micrograms/kg every 2–3 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Ergocalciferol",
    "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified); Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
    "checked": "",
@@ -1793,6 +1972,32 @@
    ]
   },
   {
+   "drug": "Etanercept",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).",
+   "forms": "Powder for solution for injection; pre-filled syringe/pen [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "JIA / psoriasis",
+     "route": "SC",
+     "dose": "Weight-based weekly (dose not given)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Etomidate",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).",
+   "forms": "Emulsion for injection 2 mg/mL (Etomidate-Lipuro) [list 701–800, unsourced]",
+   "entries": []
+  },
+  {
    "drug": "Etoposide",
    "source": "Unsourced list (items 601–650) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page (unverified)",
    "checked": "",
@@ -1827,6 +2032,23 @@
    ]
   },
   {
+   "drug": "Factor IX concentrate",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: Recombinant and plasma-derived factor IX have different recovery — dose per haemophilia centre.",
+   "forms": "Replenine-VF 1000 units; BeneFIX 250, 500, 1000 units [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Haemophilia B",
+     "route": "IV",
+     "dose": "Weight-based units (dose not given)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Fenoldopam",
    "source": "Unsourced list (items 401–450) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier items and wrong doses (unverified)",
    "checked": "",
@@ -1840,6 +2062,23 @@
      "route": "IV infusion",
      "dose": "0.1–0.3 micrograms/kg/minute; titrate by 0.05–0.1 every 15 minutes",
      "max": "1.6 micrograms/kg/minute"
+    }
+   ]
+  },
+  {
+   "drug": "Fentanyl",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: Transdermal patches are for opioid-tolerant patients only; heat increases absorption.",
+   "forms": "Solution for injection 50 micrograms/mL [list 701–800, unsourced]\nTransdermal patch [list 701–800, unsourced]\nLozenges (adult cancer pain only — not for children) [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Weight-based (dose not given)",
+     "max": ""
     }
    ]
   },
@@ -1862,17 +2101,31 @@
   },
   {
    "drug": "Ferrous sulfate",
-   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified); Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Doses are ELEMENTAL iron; liquid iron strengths vary widely between products.",
-   "forms": "Tablet 200 mg (65 mg elemental iron) [list 551–600, unsourced]\nElixir/drops (listed 28 mg/5 mL elemental — check product) [list 551–600, unsourced]",
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: Doses are ELEMENTAL iron; liquid iron strengths vary widely between products.\nFrom an unsourced list (items 701–800).\nCHECK: Iron content per mL differs between products — check.",
+   "forms": "Tablet 200 mg (65 mg elemental iron) [list 551–600, unsourced]\nElixir/drops (listed 28 mg/5 mL elemental — check product) [list 551–600, unsourced]\nOral drops Ironorm 125 mg/mL (25 mg iron/mL) [list 701–800, unsourced]\nFeospan spansule 150 mg (47 mg iron) [list 701–800, unsourced]\nFerrograd tablet 325 mg (105 mg iron) [list 701–800, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
      "indication": "Iron deficiency anaemia",
      "route": "Oral",
      "dose": "3–6 mg/kg elemental iron daily in 2–3 divided doses",
+     "max": ""
+    },
+    {
+     "ages": "Child 6–11 years (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "Drops: 0.12–0.24 mL/kg daily (as listed)",
+     "max": ""
+    },
+    {
+     "ages": "Child 12–17 years (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "4 mL once or twice daily (drops)",
      "max": ""
     }
    ]
@@ -1921,6 +2174,23 @@
    ]
   },
   {
+   "drug": "Flecainide",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: Specialist (cardiology) initiation; ECG monitoring; reduce milk intake changes in infants (milk reduces absorption).",
+   "forms": "Immediate-release tablets; modified-release capsules [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 12–17 years (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "Immediate-release 50 mg two to three times daily; modified-release 200 mg once daily",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Flucloxacillin / cloxacillin",
    "source": "Unsourced list (items 451–500) described as extracted from BNF for Children 2023 — not attributable to a specific page; several entries are misattributed (unverified)",
    "checked": "",
@@ -1950,6 +2220,23 @@
      "indication": "Adrenal insufficiency",
      "route": "Oral",
      "dose": "50–100 micrograms daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Flumazenil",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: Usual single-dose maximum about 200 micrograms; can precipitate seizures — avoid in mixed overdoses/epilepsy; short duration of action.",
+   "forms": "Solution for injection 100 micrograms/mL (500 micrograms/5 mL) [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Benzodiazepine reversal",
+     "route": "IV",
+     "dose": "10 micrograms/kg initially (repeat at 1-minute intervals as needed)",
      "max": ""
     }
    ]
@@ -2025,6 +2312,23 @@
      "indication": "",
      "route": "Inhaled",
      "dose": "6–12 micrograms twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Fosamprenavir",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: Must be boosted with ritonavir (the list omits this); check availability. Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.",
+   "forms": "Tablet 700 mg; oral suspension 50 mg/mL [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 6–17 years, 40 kg and over (unsourced list)",
+     "indication": "HIV",
+     "route": "Oral",
+     "dose": "700 mg twice daily (with ritonavir 100 mg twice daily)",
      "max": ""
     }
    ]
@@ -2286,6 +2590,23 @@
    ]
   },
   {
+   "drug": "Hepatitis B vaccine",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: Renal/haemodialysis schedules are usually 0, 1, 2 and 6 months (Engerix B 40 micrograms) or as in the Green Book — check.",
+   "forms": "Suspension for injection (pre-filled syringe/vial) [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 16–17 years (unsourced list)",
+     "indication": "Chronic haemodialysis",
+     "route": "IM",
+     "dose": "Engerix B 40 micrograms at 0, 1 and 5 months (as listed)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Hydralazine",
    "source": "Unsourced list (items 401–450) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier items and wrong doses (unverified)",
    "checked": "",
@@ -2393,11 +2714,11 @@
   },
   {
    "drug": "Hydroxyurea (hydroxycarbamide)",
-   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified); Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Monitor blood counts; titrate to maximum tolerated dose by protocol.",
-   "forms": "Capsule 500 mg; tablet 1 g (also 100 mg tablets; oral solution 100 mg/mL) [list 351–400, unsourced]",
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Monitor blood counts; titrate to maximum tolerated dose by protocol.\nFrom an unsourced list (items 701–800).",
+   "forms": "Capsule 500 mg; tablet 1 g (also 100 mg tablets; oral solution 100 mg/mL) [list 351–400, unsourced]\nTablet Siklos 100 mg (also 1 g) [list 701–800, unsourced]\nOral solution Xromi 100 mg/mL [list 701–800, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
@@ -2455,6 +2776,23 @@
      "indication": "Gaucher disease",
      "route": "IV",
      "dose": "1–60 units/kg every 2 weeks (as listed)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Infliximab",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: Prescribe by brand (biosimilars); screen for TB/hepatitis B; infusion reactions.",
+   "forms": "Powder for concentrate for infusion 100 mg (Flixabi, Inflectra, Remicade, Remsima) [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Crohn's disease / UC (and JIA off-label)",
+     "route": "IV",
+     "dose": "5 mg/kg at weeks 0, 2 and 6, then every 8 weeks",
      "max": ""
     }
    ]
@@ -2648,11 +2986,11 @@
   },
   {
    "drug": "Ketamine",
-   "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
+   "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified); Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 301–350). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.",
-   "forms": "Solution for injection: 10 mg/mL, 50 mg/mL, 100 mg/mL [list 301–350, unsourced]",
+   "notes": "From an unsourced list (items 301–350). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nFrom an unsourced list (items 701–800).",
+   "forms": "Solution for injection: 10 mg/mL, 50 mg/mL, 100 mg/mL [list 301–350, unsourced]\nSolution for injection 50 mg/5 mL (10 mg/mL) ampoules (Ketamin Curamed) [list 701–800, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
@@ -2988,6 +3326,15 @@
    ]
   },
   {
+   "drug": "Magnesium",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: Express magnesium doses in mmol.",
+   "forms": "Tablet magnesium glycerophosphate 97.2 mg (4 mmol) (listed 'Mag-4') [list 701–800, unsourced]\nOral solution LiquaMag GP 121.25 mg/5 mL (5 mmol/5 mL — check) [list 701–800, unsourced]",
+   "entries": []
+  },
+  {
    "drug": "Magnesium sulfate (IV)",
    "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
    "checked": "",
@@ -3254,6 +3601,15 @@
    ]
   },
   {
+   "drug": "Midazolam (buccal / intranasal)",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).",
+   "forms": "Oromucosal solution (Buccolam 2.5, 5, 7.5, 10 mg pre-filled syringes; listed as 'buccal gel' — check) [list 701–800, unsourced]\nOral syrup [list 701–800, unsourced]",
+   "entries": []
+  },
+  {
    "drug": "Minoxidil",
    "source": "Unsourced list (items 401–450) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier items and wrong doses (unverified)",
    "checked": "",
@@ -3336,6 +3692,15 @@
    ]
   },
   {
+   "drug": "Naloxone",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).",
+   "forms": "Nasal spray (e.g. 1.8 mg; take-home kits) [list 701–800, unsourced]",
+   "entries": []
+  },
+  {
    "drug": "Neostigmine",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -3354,11 +3719,11 @@
   },
   {
    "drug": "Nevirapine",
-   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "source": "Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified); Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: 14-day once-daily lead-in reduces rash/hepatotoxicity. Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.",
-   "forms": "Tablet 50, 100, 200 mg (and modified-release); oral suspension 10 mg/mL [list 551–600, unsourced]",
+   "notes": "From an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: 14-day once-daily lead-in reduces rash/hepatotoxicity. Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.\nFrom an unsourced list (items 701–800).\nCHECK: Paediatric antiretroviral doses change frequently and depend on formulation — confirm against current CHIVA/PENTA/WHO dosing tables and an HIV specialist.",
+   "forms": "Tablet 50, 100, 200 mg (and modified-release); oral suspension 10 mg/mL [list 551–600, unsourced]\nTablet 200 mg; modified-release tablet 400 mg; oral suspension 50 mg/5 mL (10 mg/mL) [list 701–800, unsourced]",
    "entries": [
     {
      "ages": "Child 15 days and over (unsourced list)",
@@ -3366,6 +3731,13 @@
      "route": "Oral",
      "dose": "150 mg/m² twice daily (after a once-daily lead-in)",
      "max": "200 mg per dose (listed as '200 mg/m²' — check)"
+    },
+    {
+     "ages": "Child 3–17 years with BSA 1.18 m² or more (unsourced list)",
+     "indication": "HIV",
+     "route": "Oral",
+     "dose": "400 mg once daily (modified-release, after lead-in)",
+     "max": ""
     }
    ]
   },
@@ -3470,6 +3842,15 @@
      "max": "8 mg per dose"
     }
    ]
+  },
+  {
+   "drug": "Oral nutritional supplement",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: Borderline substances (ACBS) — prescribe under dietetic advice; age suitability as listed.",
+   "forms": "Fortisip Compact Fibre — not under 3 years (listed 500 mL bottles; check: 125 mL) [list 701–800, unsourced]\nFortisip Compact Protein — not under 3 years (listed 200 mL; check: 125 mL) [list 701–800, unsourced]\nCalogen fat emulsion — 200 mL, 500 mL [list 701–800, unsourced]\nBetaquik — not under 3 years (listed as a glucose polymer; check: Betaquik is an MCT emulsion for ketogenic diets) [list 701–800, unsourced]\nRenilon 7.5 — not under 3 years, not recommended under 6 years [list 701–800, unsourced]\nResource 2.0 Fibre — high-energy feed (listed as renal — check) [list 701–800, unsourced]\nNutrison 800 / 1000 Complete Multi Fibre tube feeds — not under 6 years, not recommended under 12 years (1000 mL) [list 701–800, unsourced]\nEnsure Plus Juce — not under 1 year, not recommended 1–5 years (220 mL) [list 701–800, unsourced]\nFortijuce — not under 1 year (200 mL) [list 701–800, unsourced]",
+   "entries": []
   },
   {
    "drug": "Oseltamivir",
@@ -3751,6 +4132,23 @@
    ]
   },
   {
+   "drug": "Pneumococcal conjugate vaccine",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: Follow the current Green Book/national schedule (product in use may differ).",
+   "forms": "Prevenar 13 suspension for injection (pre-filled syringe) [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 10–17 years (unsourced list)",
+     "indication": "",
+     "route": "IM",
+     "dose": "0.5 mL single dose",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Polyethylene glycol (macrogol)",
    "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified); Unsourced list (items 501–550) described as extracted from BNF for Children 2023 — not attributable to a specific page; about half repeats earlier items (unverified)",
    "checked": "",
@@ -3951,6 +4349,23 @@
      "indication": "Hyperthyroidism",
      "route": "Oral",
      "dose": "Initially 4–5 mg/kg daily in 3 divided doses; maintenance 1–2 mg/kg daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Prothrombin complex concentrate",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: The list attached 'FEIBA 500 unit vials' to Octaplex: FEIBA is ACTIVATED prothrombin complex (factor VIII inhibitor bypassing activity), a different product with different dosing and thrombosis risk.",
+   "forms": "Octaplex: powder and solvent for solution for infusion (500, 1000 unit vials) [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Dose by factor deficit and weight (not given)",
      "max": ""
     }
    ]
@@ -4161,11 +4576,11 @@
   },
   {
    "drug": "Rituximab",
-   "source": "Unsourced list (items 601–650) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page (unverified)",
+   "source": "Unsourced list (items 601–650) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page (unverified); Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 601–650).\nCHECK: Screen for hepatitis B; premedicate; check immunoglobulins and B-cell recovery; subcutaneous rituximab is a different product. Specialist biologic: weight-band doses and intervals are product- and indication-specific — use the SPC/specialist protocol.",
-   "forms": "Concentrate for infusion 10 mg/mL (100 mg/10 mL, 500 mg/50 mL) [list 601–650, unsourced]",
+   "notes": "From an unsourced list (items 601–650).\nCHECK: Screen for hepatitis B; premedicate; check immunoglobulins and B-cell recovery; subcutaneous rituximab is a different product. Specialist biologic: weight-band doses and intervals are product- and indication-specific — use the SPC/specialist protocol.\nFrom an unsourced list (items 701–800).",
+   "forms": "Concentrate for infusion 10 mg/mL (100 mg/10 mL, 500 mg/50 mL) [list 601–650, unsourced]\nMabThera, Rixathon, Ruxience, Truxima 100 mg/10 mL and 500 mg/50 mL (biosimilars — prescribe by brand) [list 701–800, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
@@ -4356,6 +4771,23 @@
      "indication": "Corneal oedema",
      "route": "Eye",
      "dose": "1–2 drops as required",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Sodium clodronate",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: Brands are not interchangeable mg-for-mg; paediatric use is specialist.",
+   "forms": "Tablet: Loron 520 mg; listed Clasteon 800 mg — check; capsule 400 mg (Bonefos) [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "800 mg or 520 mg daily (brand-dependent)",
      "max": ""
     }
    ]
@@ -4868,6 +5300,23 @@
    ]
   },
   {
+   "drug": "Unfractionated heparin",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: This sequence does not match a recognised treatment regimen; heparin infusions are titrated to anti-Xa/APTT by protocol (e.g. paediatric loading about 75 units/kg then about 20 units/kg/hour). HIGH-ALERT: multiple strengths.",
+   "forms": "Solution for injection/infusion (several strengths: 1000, 5000, 25 000 units/mL) [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: Child 16–17 years, 55–90 kg: 2500 units bolus, then 400 units/hour for 2 hours, 300 units/hour for 2 hours, 200 units/hour for 5 days). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Urea (topical)",
    "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
    "checked": "",
@@ -5057,6 +5506,23 @@
      "indication": "Deficiency / rickets",
      "route": "Oral",
      "dose": "20–40 micrograms (800–1600 units) daily for treatment; lower for prophylaxis (as listed)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Voxelotor",
+   "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 701–800).\nCHECK: WITHDRAWN worldwide in September 2024 (excess vaso-occlusive crises and deaths) — do not prescribe.",
+   "forms": "Tablet; dispersible tablet [list 701–800, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: Weight-based (e.g. 40 kg and over: 1500 mg daily)). Enter the regimen from your source.",
      "max": ""
     }
    ]
