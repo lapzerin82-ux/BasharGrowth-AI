@@ -900,7 +900,7 @@ function viewSettings() {
     <section class="card stack"><h2>Growth references (bundled, work offline)</h2>
       ${G.allRefs().map((r) => `<div><b>${esc(r.title)}</b><br><small>Version: ${esc(r.version)} · Percentile curves ${r.centiles.join(", ")}</small><br><small class="muted">Source: ${esc(r.source)}</small></div>`).join("<hr>")}
       <p class="hint">Curves are generated from the official LMS parameters. Each measurement is plotted at the exact age (days ÷ 30.4375 months) with no rounding.</p></section>
-    <section class="card stack"><h2>About</h2><p>Pediatric Growth Chart (web app), version 26. Clinical decision support only; verify measurements and interpret results in clinical context.</p>${CREDIT}</section>
+    <section class="card stack"><h2>About</h2><p>Pediatric Growth Chart (web app), version 27. Clinical decision support only; verify measurements and interpret results in clinical context.</p>${CREDIT}</section>
   </main>`;
   bindBack();
   $app.querySelectorAll('input[name="fam"]').forEach((r) => r.onchange = () => { settings.family = r.value; toast("Saved"); });
@@ -1358,12 +1358,14 @@ function viewTreatmentEdit(pid, editIdx) {
 // Regimens the clinician has verified from their own source (e.g. BNF for Children). The app never supplies
 // doses: these notes are entered, dated and owned by the clinician, and shown only as a reference.
 const DOSE_NOTE_LABEL = "Your own dose note — not supplied or checked by the app. Verify against your current formulary.";
+const formLines = (t) => String(t || "").split("\n").map((l) => l.trim()).filter(Boolean);
 function doseNoteHtml(d, open = false) {
   if (!d) return "";
   const rows = (d.entries || []).filter((e) => e.dose);
   return `<details class="dnote${d.unverified ? " unver" : ""}"${open ? " open" : ""}><summary>📘 My dose note: ${esc(d.drug)}${d.unverified ? ` <span class="flag">⚠ Unverified</span>` : d.checked ? ` <small>checked ${G.fmtDate(d.checked)}</small>` : ""}</summary>
     ${d.unverified ? `<p class="flag">Imported and not yet checked. Verify every regimen against the full current source before use, then mark it as checked.</p>` : ""}
     ${rows.length ? `<ul>${rows.map((e) => `<li>${[e.ages, e.indication, e.route].filter(Boolean).map((t) => `<b>${esc(t)}</b>`).join(" · ")}${e.ages || e.indication || e.route ? ": " : ""}${esc(e.dose)}${e.max ? ` <span class="muted">(max ${esc(e.max)})</span>` : ""}</li>`).join("")}</ul>` : `<p class="hint">No regimens entered.</p>`}
+    ${formLines(d.forms).length ? `<p class="dnf"><b>Forms &amp; strengths</b></p><ul class="dnforms">${formLines(d.forms).map((f) => `<li>${esc(f)}</li>`).join("")}</ul>` : ""}
     ${d.notes ? `<p class="hint pre">${esc(d.notes)}</p>` : ""}
     <p class="hint">${d.source ? `Source: ${esc(d.source)}. ` : "No source recorded. "}${esc(DOSE_NOTE_LABEL)}</p></details>`;
 }
@@ -1384,7 +1386,7 @@ function viewDoseNotes() {
   const render = () => {
     const q = document.getElementById("q").value.trim().toLowerCase();
     const l = list.filter((d) => !q || d.drug.toLowerCase().includes(q));
-    document.getElementById("res").innerHTML = l.length ? l.map((d) => `<a class="prow" href="#dose/${d.id}"><span class="av" aria-hidden="true">📘</span><span><b>${esc(d.drug)}</b><small>${(d.entries || []).filter((e) => e.dose).length} regimen(s)${d.source ? ` · ${esc(d.source)}` : ""}</small></span>${d.unverified ? `<em class="unv">⚠ Unverified</em>` : d.checked ? `<em>${G.fmtDate(d.checked)}</em>` : ""}</a>`).join("")
+    document.getElementById("res").innerHTML = l.length ? l.map((d) => `<a class="prow" href="#dose/${d.id}"><span class="av" aria-hidden="true">📘</span><span><b>${esc(d.drug)}</b><small>${(d.entries || []).filter((e) => e.dose).length} regimen(s)${formLines(d.forms).length ? ` · ${formLines(d.forms).length} form(s)` : ""}${d.source ? ` · ${esc(d.source)}` : ""}</small></span>${d.unverified ? `<em class="unv">⚠ Unverified</em>` : d.checked ? `<em>${G.fmtDate(d.checked)}</em>` : ""}</a>`).join("")
       : `<p class="muted">${q ? "No dose note for this drug." : "No dose notes yet. Tap “New dose note” to add your first one."}</p>`;
   };
   document.getElementById("q").oninput = render; render();
@@ -1401,10 +1403,10 @@ function viewDoseNotes() {
     if (data?.format !== "pgc-dose-notes" || !Array.isArray(data.notes)) return toast("This is not a dose-notes file.");
     const str = (v, n = 600) => String(v ?? "").slice(0, n).trim();
     const incoming = data.notes.map((n) => ({
-      drug: str(n.drug, 120), source: str(n.source, 200), checked: /^\d{4}-\d{2}-\d{2}$/.test(n.checked || "") ? n.checked : "", notes: str(n.notes, 2000),
+      drug: str(n.drug, 120), source: str(n.source, 200), checked: /^\d{4}-\d{2}-\d{2}$/.test(n.checked || "") ? n.checked : "", notes: str(n.notes, 2000), forms: formLines(str(n.forms, 3000)).join("\n"),
       unverified: n.unverified !== false || !n.checked, // imported regimens stay unverified until the clinician checks them
       entries: (Array.isArray(n.entries) ? n.entries : []).map((x) => ({ ages: str(x.ages, 120), indication: str(x.indication, 120), route: str(x.route, 60), dose: str(x.dose), max: str(x.max, 120) })).filter((x) => x.dose),
-    })).filter((n) => n.drug && n.entries.length);
+    })).filter((n) => n.drug && (n.entries.length || n.forms));
     // new drugs are added; for drugs you already have, only regimens not yet in your note are appended
     // (the note is then marked unverified again); your own text is never overwritten
     const key = (e) => [e.ages, e.indication, e.route, e.dose, e.max].map((t) => String(t || "").trim().toLowerCase()).join("|");
@@ -1414,12 +1416,13 @@ function viewDoseNotes() {
       const old = byDrug.get(n.drug.toLowerCase());
       if (!old) { add.push(n); continue; }
       const seen = new Set((old.entries || []).map(key)), extra = n.entries.filter((e) => !seen.has(key(e)));
-      if (!extra.length) { same++; continue; }
+      const haveF = new Set(formLines(old.forms).map((f) => f.toLowerCase())), newF = formLines(n.forms).filter((f) => !haveF.has(f.toLowerCase()));
+      if (!extra.length && !newF.length) { same++; continue; }
       const notes = n.notes && !String(old.notes || "").includes(n.notes) ? [old.notes, n.notes].filter(Boolean).join("\n") : old.notes;
-      upd.push({ ...old, entries: [...old.entries, ...extra], notes, unverified: true, added: extra.length });
+      upd.push({ ...old, entries: [...old.entries, ...extra], forms: [...formLines(old.forms), ...newF].join("\n"), notes, unverified: true, added: extra.length });
     }
-    if (!add.length && !upd.length) return toast("Nothing new to import: you already have all of these regimens.");
-    confirmBox("Import dose notes?", `${add.length} new note${add.length === 1 ? "" : "s"}; ${upd.length} existing note${upd.length === 1 ? " gets" : "s get"} new regimens${same ? `; ${same} unchanged` : ""}. Imported regimens are marked “Unverified” until you check them against your source.`, "Import", async () => {
+    if (!add.length && !upd.length) return toast("Nothing new to import: you already have all of these regimens and forms.");
+    confirmBox("Import dose notes?", `${add.length} new note${add.length === 1 ? "" : "s"}; ${upd.length} existing note${upd.length === 1 ? " gets" : "s get"} new regimens or forms${same ? `; ${same} unchanged` : ""}. Imported regimens are marked “Unverified” until you check them against your source.`, "Import", async () => {
       for (const n of add) await session.saveDoseNote(n);
       for (const { added, ...n } of upd) await session.saveDoseNote(n);
       toast(`Imported: ${add.length} new, ${upd.length} updated`); viewDoseNotes();
@@ -1447,9 +1450,11 @@ function viewDoseNote(id) {
       <button type="button" class="ghost" id="addr">+ Add regimen</button>
       <p class="hint">One row per age band, indication or route, e.g. “Child 1 month–11 years · Epilepsy · Oral: initially 10–15 mg/kg daily in 1–2 divided doses; maintenance 25–30 mg/kg daily”.</p>
     </section>
+    <section class="card stack"><label>Available forms &amp; strengths (one per line)<textarea id="dfm" rows="4" placeholder="e.g. Oral suspension: 125 mg/5 mL, 250 mg/5 mL&#10;Capsule: 250 mg, 500 mg">${esc(d?.forms)}</textarea></label>
+      <p class="hint">Useful for choosing a measurable volume or tablet size; check what your pharmacy actually stocks.</p></section>
     <section class="card stack"><label>Notes (monitoring, cautions, renal/hepatic adjustment)<textarea id="dt" rows="3">${esc(d?.notes)}</textarea></label></section>
     <section class="card stack${d?.unverified ? " unvcard" : ""}">${d?.unverified ? `<p class="flag">⚠ This note was imported and has not been checked yet.</p>` : ""}
-      <label class="switch"><input type="checkbox" id="dv" ${d?.unverified ? "" : "checked"}> I have checked these regimens against the source on the date above</label></section>
+      <label class="switch"><input type="checkbox" id="dv" ${d?.unverified ? "" : "checked"}> I have checked these regimens and forms against the source on the date above</label></section>
     <p class="err" id="de" hidden></p>
     <button class="primary" id="dsave">Save dose note</button>
     <p class="hint">${esc(DOSE_NOTE_LABEL)}</p>
@@ -1478,10 +1483,10 @@ function viewDoseNote(id) {
     const drug = $("dn").value.trim();
     const clean = entries.map((e) => Object.fromEntries(Object.entries(e).map(([k, v]) => [k, String(v || "").trim()]))).filter((e) => e.dose);
     const dup = session.doseNoteList().find((x) => x.id !== d?.id && x.drug.trim().toLowerCase() === drug.toLowerCase());
-    const err = !drug ? "Enter the drug name." : !clean.length ? "Enter at least one dose." : dup ? `There is already a dose note for ${dup.drug}; edit that one instead.` : "";
+    const err = !drug ? "Enter the drug name." : !clean.length && !formLines($("dfm").value).length ? "Enter at least one dose or form." : dup ? `There is already a dose note for ${dup.drug}; edit that one instead.` : "";
     $("de").textContent = err; $("de").hidden = !err; if (err) return;
     const verified = $("dv").checked;
-    await session.saveDoseNote({ id: d?.id, drug, source: $("ds").value.trim(), checked: verified ? $("dc").value : (d?.checked || ""), entries: clean, notes: $("dt").value.trim(), unverified: !verified });
+    await session.saveDoseNote({ id: d?.id, drug, source: $("ds").value.trim(), checked: verified ? $("dc").value : (d?.checked || ""), entries: clean, forms: formLines($("dfm").value).join("\n"), notes: $("dt").value.trim(), unverified: !verified });
     toast("Dose note saved"); history.back();
   };
   $("del")?.addEventListener("click", () => confirmBox(`Delete the dose note for ${d.drug}?`, "This removes it from all synced devices.", "Delete", async () => { await session.deleteDoseNote(d.id); toast("Deleted"); go("#doses"); }, true));

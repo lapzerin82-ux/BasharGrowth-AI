@@ -299,6 +299,8 @@ details.opt[open] > summary { margin-bottom: 12px; }
 /* my dose notes */
 .dnote { border: 2px solid color-mix(in srgb, var(--sky) 40%, transparent); background: color-mix(in srgb, var(--sky) 8%, var(--card)); border-radius: 14px; padding: 8px 12px; font-size: 14px; }
 .dnote summary { cursor: pointer; font-weight: 800; color: var(--on-tonal); }
+.dnote .dnf { margin: 6px 0 0; }
+.dnote ul.dnforms { margin-top: 2px; }
 .dnote ul { margin: 8px 0 4px; padding-left: 18px; display: grid; gap: 4px; }
 .dnote .hint { font-size: 12.5px; margin-top: 4px; }
 .dnslot:empty { display: none; }

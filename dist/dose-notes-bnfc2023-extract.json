@@ -2,7 +2,7 @@
  "format": "pgc-dose-notes",
  "version": 1,
  "exported": "2026-10-01",
- "description": "Draft dose notes prepared from a user-supplied extract of BNF for Children 2023. Every note is marked unverified and must be checked against the complete current source before use. Version 3: adds items 81–120 (antimicrobials, cardiovascular drugs, PPIs, rufinamide); 'CHECK' notes mark entries that appear to differ from BNFc or mix indications. Re-importing adds only regimens you do not already have.",
+ "description": "Draft dose notes prepared from a user-supplied extract of BNF for Children 2023. Every note is marked unverified and must be checked against the complete current source before use. Version 4: adds available forms and strengths for 50 drugs (items 1–50 of the forms extract; valproate forms not loaded because the extract listed lithium products). Version 3 added items 81–120; 'CHECK' notes mark entries that appear to differ from BNFc or mix indications. Re-importing adds only regimens and forms you do not already have.",
  "notes": [
   {
    "drug": "Aciclovir",
@@ -25,7 +25,8 @@
      "dose": "20 mg/kg four times daily",
      "max": "800 mg per dose"
     }
-   ]
+   ],
+   "forms": "Tablet: 200 mg, 400 mg, 800 mg\nDispersible tablet: 200 mg\nOral suspension: 200 mg/5 mL, 400 mg/5 mL\nSolution for infusion: 25 mg/mL vials"
   },
   {
    "drug": "Amikacin",
@@ -57,7 +58,8 @@
      "dose": "Initially 2.5 mg once daily, up to 5 mg (or 10 mg in older/heavier children)",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Oral suspension: 1 mg/mL (extract says special order — check)\nTablet: 2.5 mg, 5 mg, 10 mg"
   },
   {
    "drug": "Amoxicillin",
@@ -80,7 +82,8 @@
      "dose": "20–30 mg/kg every 8 hours",
      "max": "1 g per dose"
     }
-   ]
+   ],
+   "forms": "Oral suspension: 125 mg/5 mL, 250 mg/5 mL (described in the extract as implied/standard, not quoted from the source)\nCapsule: 250 mg, 500 mg\nDispersible tablet: 125 mg, 250 mg"
   },
   {
    "drug": "Amphotericin B (conventional)",
@@ -96,7 +99,8 @@
      "dose": "1 mg/kg once daily",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Powder for solution for infusion: 50 mg vial"
   },
   {
    "drug": "Amphotericin B (liposomal)",
@@ -112,7 +116,8 @@
      "dose": "3–5 mg/kg once daily",
      "max": ""
     }
-   ]
+   ],
+   "forms": "⚠ The extract gives 'Abelcet 100 mg/20 mL' as the liposomal product. Abelcet is amphotericin B lipid complex, a different preparation from liposomal amphotericin (e.g. AmBisome), with different doses — check before use."
   },
   {
    "drug": "Atenolol",
@@ -128,7 +133,8 @@
      "dose": "25–50 mg once daily",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Tablet: 25 mg, 50 mg, 100 mg"
   },
   {
    "drug": "Atropine",
@@ -167,7 +173,17 @@
      "dose": "10 mg/kg once daily for 3 days",
      "max": "500 mg per day"
     }
-   ]
+   ],
+   "forms": "Oral suspension: 200 mg/5 mL (powder for reconstitution)\nTablet: 250 mg, 500 mg"
+  },
+  {
+   "drug": "Baclofen",
+   "source": "BNF for Children 2023 — as extracted from fragmentary text (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "Forms only: no oral baclofen regimen was included in the extract.",
+   "forms": "Oral solution: 5 mg/5 mL (Lioresal, Lyflex)\nTablet: 5 mg, 10 mg, 20 mg",
+   "entries": []
   },
   {
    "drug": "Baclofen (intrathecal)",
@@ -183,7 +199,8 @@
      "dose": "Test dose 25–50 micrograms over at least 1 minute, increased in steps of 25 micrograms every 24 hours to determine maintenance",
      "max": "100 micrograms per dose (test phase)"
     }
-   ]
+   ],
+   "forms": "Solution for intrathecal infusion: 500 micrograms/mL, 2000 micrograms/mL"
   },
   {
    "drug": "Baloxavir marboxil",
@@ -206,7 +223,8 @@
      "dose": "80 mg single dose",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Tablet: 20 mg, 40 mg"
   },
   {
    "drug": "Benzylpenicillin (penicillin G)",
@@ -229,7 +247,8 @@
      "dose": "50–100 mg/kg every 6–8 hours",
      "max": "1.2 g per dose"
     }
-   ]
+   ],
+   "forms": "Powder for solution for injection: 600 mg, 1.2 g vials (described in the extract as implied/standard, not quoted from the source)"
   },
   {
    "drug": "Captopril",
@@ -245,7 +264,8 @@
      "dose": "Initially 25–50 micrograms/kg every 8–12 hours, titrated to 1–2 mg/kg every 8 hours",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Tablet: 12.5 mg, 25 mg, 50 mg"
   },
   {
    "drug": "Cefotaxime",
@@ -268,7 +288,8 @@
      "dose": "50 mg/kg every 8 hours",
      "max": "2 g per dose"
     }
-   ]
+   ],
+   "forms": "Powder for solution for injection: 250 mg, 500 mg, 1 g, 2 g vials"
   },
   {
    "drug": "Ceftriaxone",
@@ -291,7 +312,8 @@
      "dose": "80–100 mg/kg once daily",
      "max": "4 g per day"
     }
-   ]
+   ],
+   "forms": "Powder for solution for injection/infusion: 250 mg, 500 mg, 1 g, 2 g vials"
   },
   {
    "drug": "Cefuroxime",
@@ -307,7 +329,8 @@
      "dose": "20–30 mg/kg every 8 hours",
      "max": "1.5 g per dose"
     }
-   ]
+   ],
+   "forms": "Oral suspension: 125 mg/5 mL, 250 mg/5 mL\nTablet: 125 mg, 250 mg, 500 mg\nPowder for injection: 250 mg, 750 mg, 1.5 g"
   },
   {
    "drug": "Chloramphenicol (systemic)",
@@ -323,7 +346,8 @@
      "dose": "25 mg/kg every 6 hours",
      "max": "4 g per day"
     }
-   ]
+   ],
+   "forms": "Capsule: 250 mg (systemic)\nEye drops: 0.5%, 1% (topical — not for systemic dosing)\nEye ointment: 1% (topical — not for systemic dosing)"
   },
   {
    "drug": "Ciprofloxacin",
@@ -339,7 +363,8 @@
      "dose": "20 mg/kg every 12 hours",
      "max": "750 mg per dose"
     }
-   ]
+   ],
+   "forms": "Tablet: 250 mg, 500 mg, 750 mg\nOral suspension: 250 mg/5 mL, 500 mg/5 mL (extract says special order — check; a licensed suspension may be available)\nSolution for infusion: 2 mg/mL (100 mL, 200 mL bags)"
   },
   {
    "drug": "Clozapine",
@@ -355,7 +380,8 @@
      "dose": "12.5 mg 1–2 times a day on day 1, then 25–50 mg on day 2, gradually increased over 14–21 days up to 300 mg daily",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Tablet: 25 mg, 50 mg, 100 mg, 200 mg\nOral suspension (extract says special order — check)"
   },
   {
    "drug": "Co-amoxiclav (amoxicillin–clavulanate)",
@@ -371,7 +397,8 @@
      "dose": "20–30 mg/kg (amoxicillin component) every 8 hours",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Oral suspension: 125/31.25 mg per 5 mL; 250/62.5 mg per 5 mL\nTablet: 250/125 mg; 500/125 mg; 875/125 mg"
   },
   {
    "drug": "Cycloserine (MDR-TB)",
@@ -387,7 +414,8 @@
      "dose": "Initially 5 mg/kg twice daily, increased up to 10 mg/kg twice daily",
      "max": "250 mg per dose"
     }
-   ]
+   ],
+   "forms": "Capsule: 250 mg\nOral solution (special order — unlicensed)"
   },
   {
    "drug": "Diamorphine (incl. intranasal)",
@@ -403,7 +431,8 @@
      "dose": "3 mg (≈ oral morphine 10 mg)",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Powder for solution for injection: 10 mg, 30 mg, 100 mg, 500 mg ampoules"
   },
   {
    "drug": "Digoxin",
@@ -433,7 +462,8 @@
      "dose": "8–10 micrograms/kg daily",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Oral solution/elixir: 50 micrograms/mL; extract also lists 100 micrograms/mL — check (the paediatric elixir is usually 50 micrograms/mL; confirm the strength to avoid 10-fold errors)\nTablet: 62.5 micrograms, 125 micrograms, 250 micrograms"
   },
   {
    "drug": "Dolutegravir",
@@ -486,7 +516,8 @@
      "dose": "4 mg/kg daily in 1–2 divided doses",
      "max": "200 mg per day"
     }
-   ]
+   ],
+   "forms": "Capsule: 100 mg (described in the extract as implied/standard, not quoted from the source)\nTablet: 100 mg (described in the extract as implied/standard, not quoted from the source)\nOral suspension (special order — unlicensed)"
   },
   {
    "drug": "Enalapril",
@@ -502,7 +533,8 @@
      "dose": "Initially 50–100 micrograms/kg once daily, up to 200 micrograms/kg",
      "max": "20 mg per day"
     }
-   ]
+   ],
+   "forms": "Oral solution: 1 mg/mL (extract says special order — check)\nTablet: 2.5 mg, 5 mg, 10 mg, 20 mg"
   },
   {
    "drug": "Ethambutol",
@@ -525,7 +557,8 @@
      "dose": "20 mg/kg once daily for 2 months",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Tablet: 100 mg, 400 mg"
   },
   {
    "drug": "Etravirine",
@@ -541,7 +574,8 @@
      "dose": "As extracted: initially 150–200 mg/m² once daily for the first 14 days",
      "max": "200 mg per dose"
     }
-   ]
+   ],
+   "forms": "Tablet: 100 mg, 200 mg"
   },
   {
    "drug": "Flucloxacillin / cloxacillin",
@@ -557,7 +591,8 @@
      "dose": "12.5–25 mg/kg every 6 hours",
      "max": "1 g per dose"
     }
-   ]
+   ],
+   "forms": "Capsule: 250 mg, 500 mg\nOral suspension: 125 mg/5 mL, 250 mg/5 mL\nPowder for injection: 250 mg, 500 mg, 1 g"
   },
   {
    "drug": "Fluconazole",
@@ -580,7 +615,8 @@
      "dose": "3–6 mg/kg once daily",
      "max": "400 mg per day"
     }
-   ]
+   ],
+   "forms": "Oral suspension: 50 mg/5 mL\nCapsule: 50 mg, 100 mg, 150 mg, 200 mg\nSolution for infusion: 2 mg/mL (100 mL bags)"
   },
   {
    "drug": "Fosfomycin",
@@ -596,7 +632,8 @@
      "dose": "3 g as a single dose",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Granules (sachet) for oral solution: 3 g"
   },
   {
    "drug": "Ganciclovir",
@@ -612,7 +649,8 @@
      "dose": "5 mg/kg every 12 hours",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Powder for solution for infusion: 500 mg vial"
   },
   {
    "drug": "Gentamicin",
@@ -628,7 +666,8 @@
      "dose": "5–7 mg/kg once daily",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Solution for injection: 10 mg/mL, 40 mg/mL ampoules/vials\nInfusion: 240 mg/80 mL, 360 mg/120 mL\n⚠ The extract also lists '80 mg/2 mL' as an infusion bag; 80 mg/2 mL is the volume of a 40 mg/mL ampoule/vial — check."
   },
   {
    "drug": "Isoniazid",
@@ -644,7 +683,8 @@
      "dose": "15 mg/kg 3 times a week for 6 months",
      "max": "900 mg per dose"
     }
-   ]
+   ],
+   "forms": "Tablet: 50 mg, 100 mg, 300 mg (as extracted)\nOral solution (special order — unlicensed)"
   },
   {
    "drug": "Lansoprazole",
@@ -667,7 +707,8 @@
      "dose": "30 mg once daily",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Capsule / orodispersible tablet: 15 mg, 30 mg (as extracted; capsules and orodispersible tablets are separate products — check)"
   },
   {
    "drug": "Levamisole (roundworm)",
@@ -699,7 +740,8 @@
      "dose": "Initially 0.07 mg/kg once daily (max 5 mg), titrated to 0.6 mg/kg",
      "max": "40 mg per day"
     }
-   ]
+   ],
+   "forms": "Oral solution: 1 mg/mL (extract says special order — check)\nTablet: 2.5 mg, 5 mg, 10 mg, 20 mg"
   },
   {
    "drug": "Lithium",
@@ -715,7 +757,8 @@
      "dose": "Camcolit (lithium carbonate): initially 1–1.5 g daily, adjusted according to serum-lithium concentration",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Modified-release tablet (lithium carbonate): Camcolit 400 mg; Liskonum 450 mg; Priadel 200 mg, 400 mg — brands are not interchangeable\n⚠ Extract lists an oral suspension by special order; lithium citrate liquids are separate products and are not mg-for-mg equivalent to lithium carbonate — check."
   },
   {
    "drug": "Losartan",
@@ -731,7 +774,8 @@
      "dose": "Initially 0.7 mg/kg once daily (max 50 mg), titrated to 1.4 mg/kg",
      "max": "100 mg per day"
     }
-   ]
+   ],
+   "forms": "Tablet: 25 mg, 50 mg, 100 mg"
   },
   {
    "drug": "Metronidazole",
@@ -747,7 +791,8 @@
      "dose": "7.5 mg/kg every 8 hours",
      "max": "500 mg per dose"
     }
-   ]
+   ],
+   "forms": "Tablet: 200 mg, 400 mg\nOral suspension: 200 mg/5 mL (extract says special order — check)\nSolution for infusion: 5 mg/mL (100 mL bags)\nSuppository: 500 mg, 1 g"
   },
   {
    "drug": "Micafungin",
@@ -763,7 +808,8 @@
      "dose": "1–2 mg/kg once daily",
      "max": "50–100 mg per day"
     }
-   ]
+   ],
+   "forms": "Powder for solution for infusion: 50 mg vial"
   },
   {
    "drug": "Morphine",
@@ -786,7 +832,8 @@
      "dose": "5 mg",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Immediate-release tablet: 10 mg, 20 mg\nModified-release tablet: MST Continus 5, 10, 15, 30, 60, 100, 200 mg\nOral solution: 10 mg/5 mL, 20 mg/5 mL, 100 mg/5 mL (as extracted — check strength; concentrated solution carries overdose risk)\nInjection: 10 mg/mL, 15 mg/mL, 30 mg/mL"
   },
   {
    "drug": "Nifedipine",
@@ -802,7 +849,8 @@
      "dose": "0.2–0.5 mg/kg every 6–8 hours (as extracted, 'modified release')",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Oral drops: 20 mg/mL (special order — unlicensed)\nModified-release tablet: 10 mg, 20 mg, 30 mg, 60 mg (brand-specific; MR preparations are not interchangeable)\nCapsule (short-acting): 5 mg, 10 mg"
   },
   {
    "drug": "Nitrofurantoin",
@@ -818,7 +866,8 @@
      "dose": "1 mg/kg every 6 hours",
      "max": "50 mg per dose"
     }
-   ]
+   ],
+   "forms": "Tablet: 50 mg, 100 mg\nOral suspension: 25 mg/5 mL (extract says special order — check)"
   },
   {
    "drug": "Omeprazole",
@@ -841,7 +890,8 @@
      "dose": "500 micrograms–1 mg/kg once daily",
      "max": "20–40 mg per day"
     }
-   ]
+   ],
+   "forms": "Gastro-resistant capsule: 10 mg, 20 mg, 40 mg (can be opened)\nDispersible tablet: 10 mg, 20 mg"
   },
   {
    "drug": "Oseltamivir",
@@ -857,7 +907,8 @@
      "dose": "Weight-based; e.g. 60 mg twice daily (as extracted for 15–40 kg)",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Oral suspension: 6 mg/mL (powder for reconstitution)\nCapsule: 30 mg, 45 mg, 75 mg"
   },
   {
    "drug": "Oxycodone",
@@ -912,7 +963,8 @@
      "dose": "10–15 mg/kg every 8 hours",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Tablet: 200 mg, 400 mg (as extracted — check)"
   },
   {
    "drug": "Procainamide",
@@ -944,7 +996,8 @@
      "dose": "0.5–1 mg/kg every 6–8 hours",
      "max": "4 mg/kg per day"
     }
-   ]
+   ],
+   "forms": "Oral solution: 10 mg/5 mL, 40 mg/5 mL, 80 mg/5 mL (as extracted — check; several concentrations exist, confirm on every prescription)\nTablet: 10 mg, 20 mg, 40 mg, 80 mg, 160 mg"
   },
   {
    "drug": "Pyrazinamide",
@@ -960,7 +1013,8 @@
      "dose": "50 mg/kg 3 times a week for 2 months",
      "max": "2 g per dose"
     }
-   ]
+   ],
+   "forms": "Tablet: 500 mg"
   },
   {
    "drug": "Quinidine",
@@ -1015,7 +1069,8 @@
      "dose": "10 mg/kg every 12–24 hours",
      "max": "600 mg per dose"
     }
-   ]
+   ],
+   "forms": "Capsule: 150 mg, 300 mg\nOral suspension: 100 mg/5 mL (special order — unlicensed)\nPowder for solution for infusion: 600 mg vial"
   },
   {
    "drug": "Rufinamide",
@@ -1031,7 +1086,8 @@
      "dose": "Initially 10 mg/kg daily in 2 divided doses, increased every 3 days to a target of about 45 mg/kg daily",
      "max": "2.4 g per day"
     }
-   ]
+   ],
+   "forms": "Oral suspension: Inovelon 40 mg/mL (sugar-free)\nTablet: Inovelon 100 mg, 200 mg, 400 mg"
   },
   {
    "drug": "Sodium valproate",
@@ -1096,7 +1152,8 @@
      "dose": "Initially 10–15 mg/kg daily; maintenance 20–30 mg/kg daily",
      "max": "2 g per day"
     }
-   ]
+   ],
+   "forms": "⚠ Not loaded: the extract listed lithium products (Camcolit 400 mg, Liskonum 450 mg, Priadel) under sodium valproate. Enter valproate forms from your source."
   },
   {
    "drug": "Theophylline",
@@ -1151,7 +1208,8 @@
      "dose": "2 mg/kg every 12 hours",
      "max": "200 mg per dose"
     }
-   ]
+   ],
+   "forms": "Oral suspension: 50 mg/5 mL\nTablet: 100 mg, 200 mg"
   },
   {
    "drug": "Ulipristal acetate (emergency contraception)",
@@ -1190,7 +1248,8 @@
      "dose": "15 mg/kg every 6–8 hours, adjusted by trough level",
      "max": "2 g per day (initial)"
     }
-   ]
+   ],
+   "forms": "Powder for solution for infusion: 250 mg, 500 mg, 1 g vials"
   },
   {
    "drug": "Voriconazole",
@@ -1213,7 +1272,8 @@
      "dose": "200 mg every 12 hours",
      "max": ""
     }
-   ]
+   ],
+   "forms": "Oral suspension: 40 mg/mL (powder for reconstitution)\nTablet: 50 mg, 200 mg\nPowder for solution for infusion: 200 mg vial"
   }
  ]
 }
