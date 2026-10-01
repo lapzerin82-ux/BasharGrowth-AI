@@ -2,7 +2,7 @@
  "format": "pgc-dose-notes",
  "version": 1,
  "exported": "2026-10-01",
- "description": "Items 301–1000 from UNSOURCED lists described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025. Pure repeats of earlier items (etomidate, tigecycline, eravacycline, plazomicin, delafloxacin, omadacycline, baloxavir; and in 351–400 calcipotriol, chloramphenicol eye drops, epoetin, darbepoetin, iron sucrose, ferric carboxymaltose, penicillamine, trientine; and in 401–450 praziquantel, albendazole, mebendazole, ivermectin, permethrin, malathion, atovaquone–proguanil, octreotide; and in 451–500 the many repeats and dose-less entries) are omitted. Fixed doses are labelled 'Adult / age not stated'; weight-based doses 'Age not stated'. Doses that appear incorrect are NOT loaded. All notes unverified.",
+ "description": "Items 301–1050 from UNSOURCED lists described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025. Pure repeats of earlier items (etomidate, tigecycline, eravacycline, plazomicin, delafloxacin, omadacycline, baloxavir; and in 351–400 calcipotriol, chloramphenicol eye drops, epoetin, darbepoetin, iron sucrose, ferric carboxymaltose, penicillamine, trientine; and in 401–450 praziquantel, albendazole, mebendazole, ivermectin, permethrin, malathion, atovaquone–proguanil, octreotide; and in 451–500 the many repeats and dose-less entries) are omitted. Fixed doses are labelled 'Adult / age not stated'; weight-based doses 'Age not stated'. Doses that appear incorrect are NOT loaded. All notes unverified.",
  "notes": [
   {
    "drug": "Abacavir",
@@ -51,6 +51,23 @@
      "indication": "Atopic dermatitis",
      "route": "Oral",
      "dose": "100–200 mg once daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Abrysvo (RSV vaccine)",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Infants are protected via maternal vaccination (or nirsevimab/palivizumab per policy). Follow the current UK Green Book / national schedule for ages, intervals and products.",
+   "forms": "Powder and solvent for solution for injection [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "IM",
+     "dose": "Single dose in pregnancy (about 28–36 weeks) to protect the infant; also older adults",
      "max": ""
     }
    ]
@@ -386,11 +403,11 @@
   },
   {
    "drug": "Arginine",
-   "source": "Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
+   "source": "Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified); Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 951–1000).\nCHECK: High-dose IV arginine hydrochloride causes hyperchloraemic acidosis. Urea-cycle/metabolic emergency doses must follow the BIMDG emergency protocol and the metabolic team.",
-   "forms": "Oral powder; arginine hydrochloride injection 10% (special order) [list 951–1000, unsourced]",
+   "notes": "From an unsourced list (items 951–1000).\nCHECK: High-dose IV arginine hydrochloride causes hyperchloraemic acidosis. Urea-cycle/metabolic emergency doses must follow the BIMDG emergency protocol and the metabolic team.\nFrom an unsourced list (items 1001–1050).",
+   "forms": "Oral powder; arginine hydrochloride injection 10% (special order) [list 951–1000, unsourced]\n⚠ Listed 'arginine alpha-ketoglutarate', 'citrulline malate' and 'ornithine aspartate' are dietary-supplement / non-UK products, NOT the arginine/citrulline preparations used for urea-cycle disorders — do not substitute. [list 1001–1050, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
@@ -577,6 +594,15 @@
      "max": ""
     }
    ]
+  },
+  {
+   "drug": "Baloxavir marboxil",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).",
+   "forms": "Granules for oral suspension (2 mg/mL after reconstitution) [list 1001–1050, unsourced]",
+   "entries": []
   },
   {
    "drug": "Beclometasone (inhaled)",
@@ -863,17 +889,24 @@
   },
   {
    "drug": "Brimonidine",
-   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified); Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: CONTRAINDICATED under 2 years (CNS depression, apnoea, hypotension); use with caution in children 2–12 years.",
-   "forms": "Eye drops 0.2% [list 351–400, unsourced]",
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: CONTRAINDICATED under 2 years (CNS depression, apnoea, hypotension); use with caution in children 2–12 years.\nFrom an unsourced list (items 1001–1050).\nCHECK: Contraindicated under 2 years; not recommended in children 2–12 years (somnolence, CNS depression). Paediatric glaucoma is managed by specialist ophthalmology.",
+   "forms": "Eye drops 0.2% [list 351–400, unsourced]\nEye drops 0.1%, 0.2% [list 1001–1050, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
      "indication": "Glaucoma",
      "route": "Eye",
      "dose": "1 drop three times daily",
+     "max": ""
+    },
+    {
+     "ages": "Child 2 years and over (unsourced list)",
+     "indication": "Glaucoma / ocular hypertension",
+     "route": "Eye",
+     "dose": "1 drop twice daily",
      "max": ""
     }
    ]
@@ -1131,6 +1164,23 @@
    ]
   },
   {
+   "drug": "Casirivimab–imdevimab",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Not active against Omicron-lineage variants — not recommended for current COVID-19.",
+   "forms": "Concentrate for infusion / injection (Ronapreve) [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV / SC",
+     "dose": "Weight-based (doses not given)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Caspofungin",
    "source": "Unsourced list (items 501–550) described as extracted from BNF for Children 2023 — not attributable to a specific page; about half repeats earlier items (unverified)",
    "checked": "",
@@ -1237,6 +1287,23 @@
    ]
   },
   {
+   "drug": "Chenodeoxycholic acid",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Specialist metabolic use; monitor LFTs.",
+   "forms": "Capsule 250 mg [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Cerebrotendinous xanthomatosis",
+     "route": "Oral",
+     "dose": "Dose not given",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Chlorambucil",
    "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified)",
    "checked": "",
@@ -1324,6 +1391,23 @@
      "indication": "",
      "route": "Eye",
      "dose": "⚠ NOT LOADED — there is no licensed cidofovir eye gel; any use would be an unlicensed specialist preparation.",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Ciprofloxacin eye drops",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: UK licensing/dosing for conjunctivitis may differ (e.g. 4 times daily); corneal ulcer regimens are more intensive.",
+   "forms": "Eye drops 0.3% [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Bacterial conjunctivitis",
+     "route": "Eye",
+     "dose": "1–2 drops every 2 hours while awake for 2 days, then every 4 hours",
      "max": ""
     }
    ]
@@ -1874,6 +1958,32 @@
    ]
   },
   {
+   "drug": "Dorzolamide–timolol",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Timolol systemic effects; sulfonamide-related. Paediatric glaucoma is managed by specialist ophthalmology.",
+   "forms": "Eye drops dorzolamide 20 mg/mL + timolol 5 mg/mL [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 2 years and over (unsourced list)",
+     "indication": "Glaucoma",
+     "route": "Eye",
+     "dose": "1 drop twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "DTaP/IPV-containing vaccines",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Follow the current UK Green Book / national schedule for ages, intervals and products.",
+   "forms": "Infanrix-IPV, Repevax (DTaP/IPV boosters — pre-school) [list 1001–1050, unsourced]\nRevaxis (Td/IPV — teenage booster) [list 1001–1050, unsourced]\nPediacel (DTaP/IPV/Hib) [list 1001–1050, unsourced]",
+   "entries": []
+  },
+  {
    "drug": "Dupilumab (atopic dermatitis)",
    "source": "Unsourced list (items 601–650) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page (unverified)",
    "checked": "",
@@ -1937,6 +2047,23 @@
      "indication": "HIV",
      "route": "Oral",
      "dose": "By weight (e.g. 10–<15 kg: 200 mg once daily)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Efinaconazole",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Efinaconazole is applied once daily for 48 WEEKS; it is not marketed in the UK.",
+   "forms": "Nail solution 10% [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Topical",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: Once daily for 4 weeks (onychomycosis)). Enter the regimen from your source.",
      "max": ""
     }
    ]
@@ -2753,6 +2880,23 @@
    ]
   },
   {
+   "drug": "Givosiran",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Monitor liver and renal function; anaphylaxis risk.",
+   "forms": "Solution for injection 189 mg/mL [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 12 years and over (unsourced list)",
+     "indication": "Acute hepatic porphyria",
+     "route": "SC",
+     "dose": "2.5 mg/kg once monthly",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Glecaprevir–pibrentasvir",
    "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
    "checked": "",
@@ -2946,6 +3090,15 @@
      "max": ""
     }
    ]
+  },
+  {
+   "drug": "HPV vaccine (catch-up)",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: The UK moved to a single-dose HPV schedule for most adolescents in 2023. Follow the current UK Green Book / national schedule for ages, intervals and products.",
+   "forms": "Gardasil 9 (pre-filled syringe) [list 1001–1050, unsourced]",
+   "entries": []
   },
   {
    "drug": "Hydralazine",
@@ -3182,6 +3335,23 @@
      "indication": "Crohn's disease / UC (and JIA off-label)",
      "route": "IV",
      "dose": "5 mg/kg at weeks 0, 2 and 6, then every 8 weeks",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Influenza vaccine (live, intranasal)",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: The live intranasal influenza vaccine is 0.2 mL in TOTAL — 0.1 mL into each nostril; contraindicated in severe asthma/immunosuppression. Follow the current UK Green Book / national schedule for ages, intervals and products.",
+   "forms": "Nasal spray (Fluenz Tetra / Fluenz) [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Intranasal",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 0.2 mL per nostril). Enter the regimen from your source.",
      "max": ""
     }
    ]
@@ -3613,6 +3783,23 @@
    ]
   },
   {
+   "drug": "Latanoprost–timolol",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Not licensed under 18 years; timolol systemic effects (apnoea/bradycardia in infants, bronchospasm). Paediatric glaucoma is managed by specialist ophthalmology.",
+   "forms": "Eye drops latanoprost 50 micrograms/mL + timolol 5 mg/mL [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Glaucoma",
+     "route": "Eye",
+     "dose": "1 drop once daily",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Ledipasvir–sofosbuvir",
    "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
    "checked": "",
@@ -3676,6 +3863,23 @@
      "indication": "CF Pseudomonas",
      "route": "Nebulised",
      "dose": "240 mg twice daily (28 days on, 28 days off)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Levofloxacin eye drops",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Licensed from 1 year in the UK — check frequency by day of treatment.",
+   "forms": "Eye drops 0.5% [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Eye",
+     "dose": "1 drop every 2–6 hours",
      "max": ""
     }
    ]
@@ -3807,6 +4011,23 @@
    ]
   },
   {
+   "drug": "Lumasiran",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).",
+   "forms": "Solution for injection 94.5 mg/0.5 mL [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Primary hyperoxaluria type 1",
+     "route": "SC",
+     "dose": "Weight-based loading then maintenance (doses not given)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Magnesium",
    "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified)",
    "checked": "",
@@ -3933,11 +4154,11 @@
   },
   {
    "drug": "Meningococcal ACWY vaccine",
-   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified); Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified)",
+   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified); Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified); Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 901–950).\nCHECK: Follow the current UK Green Book / national schedule for ages, intervals and products.\nFrom an unsourced list (items 951–1000).",
-   "forms": "Powder and solvent for solution for injection [list 901–950, unsourced]\nNimenrix — from 6 weeks of age (0.5 mL) [list 951–1000, unsourced]",
+   "notes": "From an unsourced list (items 901–950).\nCHECK: Follow the current UK Green Book / national schedule for ages, intervals and products.\nFrom an unsourced list (items 951–1000).\nFrom an unsourced list (items 1001–1050).\nCHECK: 'Bexsero + MenQuadfi' (as listed) is not a single product — two separate vaccines. Follow the current UK Green Book / national schedule for ages, intervals and products.",
+   "forms": "Powder and solvent for solution for injection [list 901–950, unsourced]\nNimenrix — from 6 weeks of age (0.5 mL) [list 951–1000, unsourced]\nMenQuadfi solution for injection (pre-filled syringe), from 12 months [list 1001–1050, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
@@ -4233,6 +4454,40 @@
    ]
   },
   {
+   "drug": "Moxifloxacin eye drops",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Usual course for conjunctivitis is about 5 days, with improvement expected within 5 days — check.",
+   "forms": "Eye drops 0.5% [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Eye",
+     "dose": "1 drop three times daily for 7–14 days (as listed)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Mupirocin (topical)",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: NICE: hydrogen peroxide 1% cream first line for localised non-bullous impetigo; reserve mupirocin (MRSA) to limit resistance.",
+   "forms": "Cream 2%; ointment 2%; nasal ointment 2% [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Topical",
+     "dose": "3 times daily for up to 10 days (impetigo); nasal ointment 2–3 times daily for 5 days (MRSA decolonisation)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Naloxegol",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -4271,6 +4526,23 @@
      "indication": "Fungal keratitis",
      "route": "Eye",
      "dose": "1 drop every 1–2 hours initially",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Nedosiran",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Listed as investigational: nedosiran (Rivfloza) has been approved in the US for PH1 from 9 years — check UK status.",
+   "forms": "Solution for injection (pre-filled syringe) [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Primary hyperoxaluria type 1",
+     "route": "SC",
+     "dose": "Dose not given",
      "max": ""
     }
    ]
@@ -4539,6 +4811,23 @@
      "indication": "Epilepsy",
      "route": "Oral",
      "dose": "Initially 8–10 mg/kg/day in 2 divided doses",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Ozenoxacin",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Not marketed in the UK.",
+   "forms": "Cream 1% [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 6 months and over (unsourced list)",
+     "indication": "Impetigo",
+     "route": "Topical",
+     "dose": "Twice daily for 5 days",
      "max": ""
     }
    ]
@@ -4916,6 +5205,23 @@
    ]
   },
   {
+   "drug": "Polymyxin B–neomycin–bacitracin eye ointment",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).",
+   "forms": "Eye ointment (not marketed in the UK) [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Eye",
+     "dose": "Apply a small amount 2–3 times daily",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Ponatinib",
    "source": "Unsourced list (items 601–650) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page (unverified)",
    "checked": "",
@@ -4945,6 +5251,23 @@
      "indication": "Hypokalaemia",
      "route": "Oral / IV",
      "dose": "1–2 mmol/kg/day in divided doses; IV maximum rate 0.5 mmol/kg/hour (as listed)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Potassium citrate",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Doses are expressed as mmol of potassium (and citrate) — check product content.",
+   "forms": "Oral solution; tablets (effervescent / modified-release) [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "Dose not given (renal tubular acidosis / cystinuria)",
      "max": ""
     }
    ]
@@ -5209,6 +5532,23 @@
    ]
   },
   {
+   "drug": "Regdanvimab",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Regdanvimab was a single-agent 40 mg/kg infusion (not combined with sotrovimab) and has been withdrawn in the EU/UK.",
+   "forms": "",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: Combination therapy with sotrovimab (as listed)). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Regorafenib",
    "source": "Unsourced list (items 651–700) described as extracted from BNF for Children 2023 — most oncology entries are ADULT solid-tumour regimens not found in BNFc (unverified)",
    "checked": "",
@@ -5238,6 +5578,23 @@
      "indication": "",
      "route": "IV infusion",
      "dose": "0.05–0.2 micrograms/kg/minute",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Retapamulin",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Check UK/EU availability (Altargo).",
+   "forms": "Ointment 1% [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Impetigo",
+     "route": "Topical",
+     "dose": "Twice daily for 5 days",
      "max": ""
     }
    ]
@@ -5553,6 +5910,23 @@
    ]
   },
   {
+   "drug": "Shingrix (recombinant zoster vaccine)",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Not a paediatric vaccine. Follow the current UK Green Book / national schedule for ages, intervals and products.",
+   "forms": "Powder and suspension for injection [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "IM",
+     "dose": "2 doses (adults)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Silver sulfadiazine",
    "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified)",
    "checked": "",
@@ -5616,6 +5990,23 @@
      "indication": "Corneal oedema",
      "route": "Eye",
      "dose": "1–2 drops as required",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Sodium citrate",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).",
+   "forms": "Oral solution (special order) [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "Dose not given (metabolic acidosis / cystinuria)",
      "max": ""
     }
    ]
@@ -5740,6 +6131,23 @@
    ]
   },
   {
+   "drug": "Sotrovimab",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Sotrovimab is a FIXED 500 mg single IV dose (adults/adolescents 12 years and over, 40 kg and over); 30 mg/kg is wrong. Efficacy against current variants and NICE guidance should be checked.",
+   "forms": "Concentrate for infusion 500 mg/8 mL [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 30 mg/kg once (COVID-19)). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Spironolactone",
    "source": "Unsourced list (items 401–450) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier items and wrong doses (unverified)",
    "checked": "",
@@ -5820,6 +6228,23 @@
      "indication": "Atopic dermatitis",
      "route": "Topical",
      "dose": "Apply twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Tafluprost",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Not licensed under 18 years. Paediatric glaucoma is managed by specialist ophthalmology.",
+   "forms": "Eye drops 0.0015% (preservative-free unit doses) [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Glaucoma",
+     "route": "Eye",
+     "dose": "1 drop once daily in the evening",
      "max": ""
     }
    ]
@@ -6060,6 +6485,23 @@
    ]
   },
   {
+   "drug": "Tixagevimab–cilgavimab",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Not active against current variants; no longer recommended (NICE did not recommend).",
+   "forms": "Solution for injection (pre-filled syringes) [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "IM",
+     "dose": "300 mg of each antibody (600 mg total) — pre-exposure prophylaxis",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Tobramycin (inhaled)",
    "source": "Unsourced list (items 601–650) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page (unverified)",
    "checked": "",
@@ -6072,6 +6514,23 @@
      "indication": "CF Pseudomonas",
      "route": "Nebulised",
      "dose": "300 mg twice daily (28 days on, 28 days off)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Tobramycin–dexamethasone eye drops",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Steroid-containing: avoid in undiagnosed red eye (herpes simplex keratitis); ophthalmology use; monitor IOP.",
+   "forms": "Eye drops suspension tobramycin 3 mg/mL + dexamethasone 1 mg/mL [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Eye",
+     "dose": "1–2 drops every 4–6 hours",
      "max": ""
     }
    ]
@@ -6174,6 +6633,23 @@
      "indication": "HER2-positive cancer",
      "route": "IV",
      "dose": "Loading 8 mg/kg, then 6 mg/kg every 3 weeks",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Travoprost",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Paediatric glaucoma is managed by specialist ophthalmology.",
+   "forms": "Eye drops 0.004% (40 micrograms/mL) [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 2 years and over (unsourced list)",
+     "indication": "Glaucoma",
+     "route": "Eye",
+     "dose": "1 drop once daily in the evening",
      "max": ""
     }
    ]
@@ -6476,11 +6952,11 @@
   },
   {
    "drug": "Vitamin D (cholecalciferol)",
-   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified); Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified)",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified); Unsourced list (items 551–600) described as extracted from BNF for Children 2023 — not attributable to a specific page (unverified); Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Units per drop vary widely between products — check the specific product to avoid overdose.\nFrom an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: BNFc treatment courses for deficiency are usually higher (e.g. 3000–10 000 units daily by age for 8–12 weeks) — check; 1 microgram = 40 units.",
-   "forms": "Tablet 400, 1000, 5000 units; oral drops (listed 400 units/drop — check product) [list 351–400, unsourced]\nCapsule 400, 1000, 2000, 5000, 10 000, 20 000 units [list 551–600, unsourced]",
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Units per drop vary widely between products — check the specific product to avoid overdose.\nFrom an unsourced list (items 551–600) said to be from BNFc 2023.\nCHECK: BNFc treatment courses for deficiency are usually higher (e.g. 3000–10 000 units daily by age for 8–12 weeks) — check; 1 microgram = 40 units.\nFrom an unsourced list (items 1001–1050).\nCHECK: Adult-type regimens; children are dosed by age per BNFc/RCPCH — check.",
+   "forms": "Tablet 400, 1000, 5000 units; oral drops (listed 400 units/drop — check product) [list 351–400, unsourced]\nCapsule 400, 1000, 2000, 5000, 10 000, 20 000 units [list 551–600, unsourced]\nCapsule (high-strength); oral drops [list 1001–1050, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
@@ -6494,6 +6970,30 @@
      "indication": "Deficiency / rickets",
      "route": "Oral",
      "dose": "20–40 micrograms (800–1600 units) daily for treatment; lower for prophylaxis (as listed)",
+     "max": ""
+    },
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "20 000 units monthly or 50 000 units weekly (deficiency treatment, as listed)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Vitamin K (phytomenadione) at birth",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Preterm neonates receive a smaller dose (e.g. 400 micrograms/kg, max 1 mg); oral regimens need repeat doses. Check volume carefully (10-fold error risk).",
+   "forms": "Solution for injection: listed as 1 mg/0.5 mL (check: Konakion MM Paediatric is 2 mg/0.2 mL — 1 mg = 0.1 mL) [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Term neonate (unsourced list)",
+     "indication": "Prophylaxis of vitamin K deficiency bleeding",
+     "route": "IM",
+     "dose": "1 mg single dose at birth",
      "max": ""
     }
    ]
@@ -6514,6 +7014,15 @@
      "max": ""
     }
    ]
+  },
+  {
+   "drug": "Wound dressings",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).\nCHECK: Choose by wound type with tissue-viability advice; medical-grade honey is not suitable for honey allergy.",
+   "forms": "Hydrocolloid (sheets, paste, granules) [list 1001–1050, unsourced]\nAlginate (sheets, ropes, powder) — exuding wounds [list 1001–1050, unsourced]\nFoam (sheets, cavity) — moderate/heavy exudate [list 1001–1050, unsourced]\nSilicone contact layers — fragile skin [list 1001–1050, unsourced]\nHoney-impregnated (sheets, gel) — sloughy/infected wounds [list 1001–1050, unsourced]",
+   "entries": []
   },
   {
    "drug": "Xylometazoline / oxymetazoline nasal drops",
@@ -6590,6 +7099,23 @@
      "indication": "",
      "route": "IV",
      "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 160 mg/m² every 6 hours). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Zinc oxide (nappy rash)",
+   "source": "Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1001–1050).",
+   "forms": "Paste / ointment 15%, 30% (e.g. zinc and castor oil) [list 1001–1050, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Topical",
+     "dose": "Apply to affected area at nappy changes",
      "max": ""
     }
    ]
