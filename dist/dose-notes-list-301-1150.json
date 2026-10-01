@@ -2,7 +2,7 @@
  "format": "pgc-dose-notes",
  "version": 1,
  "exported": "2026-10-01",
- "description": "Items 301–1100 from UNSOURCED lists described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025. Pure repeats of earlier items (etomidate, tigecycline, eravacycline, plazomicin, delafloxacin, omadacycline, baloxavir; and in 351–400 calcipotriol, chloramphenicol eye drops, epoetin, darbepoetin, iron sucrose, ferric carboxymaltose, penicillamine, trientine; and in 401–450 praziquantel, albendazole, mebendazole, ivermectin, permethrin, malathion, atovaquone–proguanil, octreotide; and in 451–500 the many repeats and dose-less entries) are omitted. Fixed doses are labelled 'Adult / age not stated'; weight-based doses 'Age not stated'. Doses that appear incorrect are NOT loaded. All notes unverified.",
+ "description": "Items 301–1150 from UNSOURCED lists described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025. Pure repeats of earlier items (etomidate, tigecycline, eravacycline, plazomicin, delafloxacin, omadacycline, baloxavir; and in 351–400 calcipotriol, chloramphenicol eye drops, epoetin, darbepoetin, iron sucrose, ferric carboxymaltose, penicillamine, trientine; and in 401–450 praziquantel, albendazole, mebendazole, ivermectin, permethrin, malathion, atovaquone–proguanil, octreotide; and in 451–500 the many repeats and dose-less entries) are omitted. Fixed doses are labelled 'Adult / age not stated'; weight-based doses 'Age not stated'. Doses that appear incorrect are NOT loaded. All notes unverified.",
  "notes": [
   {
    "drug": "Abacavir",
@@ -312,6 +312,40 @@
      "indication": "Severe chronic hand eczema",
      "route": "Oral",
      "dose": "30 mg daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Almond oil ear drops",
+   "source": "Unsourced list (items 1101–1150) described as from the BNF for Children 2023 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1101–1150).\nCHECK: Avoid in nut allergy; do not use with perforated eardrum.",
+   "forms": "Ear drops (almond oil) [list 1101–1150, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Ear",
+     "dose": "Instil to soften ear wax (dose not given)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Alverine",
+   "source": "Unsourced list (items 1101–1150) described as from the BNF for Children 2023 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1101–1150).",
+   "forms": "Capsule 60 mg, 120 mg [list 1101–1150, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 12–17 years (unsourced list)",
+     "indication": "IBS",
+     "route": "Oral",
+     "dose": "60 mg three times daily or 120 mg twice daily",
      "max": ""
     }
    ]
@@ -1598,17 +1632,24 @@
   },
   {
    "drug": "Coal tar",
-   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified); Unsourced list (items 1101–1150) described as from the BNF for Children 2023 — about half repeats earlier items (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.",
-   "forms": "Ointment 1–10%; solution; shampoo [list 351–400, unsourced]",
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nFrom an unsourced list (items 1101–1150).\nCHECK: Tar products stain and smell; salicylic acid combinations — avoid large areas in young children; dithranol-containing products irritate normal skin.",
+   "forms": "Ointment 1–10%; solution; shampoo [list 351–400, unsourced]\nCoal tar with zinc oxide ointment [list 1101–1150, unsourced]\nCoal tar + coconut oil + salicylic acid (e.g. Cocois / Sebco) — scalp [list 1101–1150, unsourced]\nCoal tar + dithranol + salicylic acid ointment [list 1101–1150, unsourced]\nCoal tar + salicylic acid + precipitated sulfur ointment [list 1101–1150, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
      "indication": "Psoriasis / eczema",
      "route": "Topical",
      "dose": "Apply as directed",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Psoriasis / eczema",
+     "route": "Topical",
+     "dose": "Apply 1–2 times daily (coal tar with zinc oxide); others as directed",
      "max": ""
     }
    ]
@@ -1627,6 +1668,23 @@
      "route": "Oral",
      "dose": "0.5–1 mg/kg every 4–6 hours",
      "max": "60 mg per dose"
+    }
+   ]
+  },
+  {
+   "drug": "Colestipol",
+   "source": "Unsourced list (items 1101–1150) described as from the BNF for Children 2023 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1101–1150).\nCHECK: Bile acid sequestrant: separate other medicines by 1 hour before / 4 hours after; check UK availability.",
+   "forms": "Granules 5 g sachets [list 1101–1150, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "5 g sachet mixed with 100 mL water or juice (dose frequency not given)",
+     "max": ""
     }
    ]
   },
@@ -1921,6 +1979,23 @@
    ]
   },
   {
+   "drug": "Dicycloverine",
+   "source": "Unsourced list (items 1101–1150) described as from the BNF for Children 2023 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1101–1150).\nCHECK: Usual BNFc maximum is about 10–20 mg three times daily; contraindicated under 6 months (apnoea).",
+   "forms": "Tablet 10 mg, 20 mg; syrup 10 mg/5 mL [list 1101–1150, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 12–17 years (unsourced list)",
+     "indication": "IBS",
+     "route": "Oral",
+     "dose": "20 mg four times daily (as listed)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Dithranol",
    "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
    "checked": "",
@@ -1950,6 +2025,23 @@
      "indication": "",
      "route": "IV",
      "dose": "60–100 mg/m² every 3 weeks",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Docusate",
+   "source": "Unsourced list (items 1101–1150) described as from the BNF for Children 2023 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1101–1150).\nCHECK: Paediatric and adult oral solutions differ in strength.",
+   "forms": "Ear drops 0.5% [list 1101–1150, unsourced]\nCapsule 100 mg; oral solution 12.5 mg/5 mL (paediatric), 50 mg/5 mL [list 1101–1150, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Ear / oral",
+     "dose": "Ear wax softening; or stool softener (dose not given)",
      "max": ""
     }
    ]
@@ -2265,6 +2357,23 @@
      "indication": "Chronic hepatitis B",
      "route": "Oral",
      "dose": "By weight (e.g. 10–<15 kg: 0.2 mg once daily)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Entrectinib",
+   "source": "Unsourced list (items 1101–1150) described as from the BNF for Children 2023 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1101–1150).\nCHECK: Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Capsule 100 mg, 200 mg [list 1101–1150, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "Dose not given (NTRK fusion-positive solid tumours)",
      "max": ""
     }
    ]
@@ -2748,6 +2857,23 @@
    ]
   },
   {
+   "drug": "Fluocinolone acetonide (topical)",
+   "source": "Unsourced list (items 1101–1150) described as from the BNF for Children 2023 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1101–1150).\nCHECK: Potency depends on concentration — check which strength.",
+   "forms": "Cream/ointment/gel 0.025% (potent); diluted 0.00625% (moderate) and 0.0025% (mild) [list 1101–1150, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Eczema / psoriasis",
+     "route": "Topical",
+     "dose": "Apply 1–2 times daily",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Fluocinolone intravitreal implant",
    "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified)",
    "checked": "",
@@ -3147,6 +3273,30 @@
    ]
   },
   {
+   "drug": "H. pylori triple therapy",
+   "source": "Unsourced list (items 1101–1150) described as from the BNF for Children 2023 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1101–1150).\nCHECK: Children are dosed by weight (ESPGHAN/NASPGHAN), ideally guided by antibiotic susceptibility testing; fluoroquinolone and rifabutin rescue regimens are specialist only.",
+   "forms": "Vonoprazan tablet 20 mg (not licensed in the UK) [list 1101–1150, unsourced]\nRifabutin capsule 150 mg [list 1101–1150, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "Clarithromycin 500 mg twice daily + amoxicillin 1 g twice daily + acid suppression (as listed)",
+     "max": ""
+    },
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "Rescue: levofloxacin 500 mg daily or rifabutin-based regimens (as listed)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Hepatitis B vaccine",
    "source": "Unsourced list (items 701–800) described as extracted from BNF for Children 2023 / ICU Quick Drug Guide 2025 — about half repeats earlier items (unverified); Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified)",
    "checked": "",
@@ -3329,6 +3479,23 @@
      "indication": "Sickle cell disease",
      "route": "Oral",
      "dose": "15–30 mg/kg daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Hyoscine butylbromide",
+   "source": "Unsourced list (items 1101–1150) described as from the BNF for Children 2023 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1101–1150).\nCHECK: Oral doses are usually 10–20 mg four times daily; parenteral max about 80 mg/day. MHRA: injection can cause serious cardiac adverse effects in patients with heart disease.",
+   "forms": "Tablet 10 mg; injection 20 mg/mL [list 1101–1150, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 12–17 years (unsourced list)",
+     "indication": "Abdominal cramps",
+     "route": "Oral / IM / IV",
+     "dose": "20 mg three to four times daily (as listed)",
      "max": ""
     }
    ]
@@ -3526,6 +3693,23 @@
      "indication": "Hepatitis B / C",
      "route": "SC / IM",
      "dose": "3–10 million units/m² three times a week (as listed)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Ipilimumab",
+   "source": "Unsourced list (items 1101–1150) described as from the BNF for Children 2023 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1101–1150).\nCHECK: Immune-related adverse events. Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Concentrate for infusion 5 mg/mL (50 mg/10 mL, 200 mg/40 mL) [list 1101–1150, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV",
+     "dose": "Dose not given (melanoma; other cancers)",
      "max": ""
     }
    ]
@@ -4283,6 +4467,23 @@
    ]
   },
   {
+   "drug": "Mebeverine",
+   "source": "Unsourced list (items 1101–1150) described as from the BNF for Children 2023 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1101–1150).\nCHECK: Younger children (from about 3 years) receive smaller age-banded doses of the liquid.",
+   "forms": "Tablet 135 mg; modified-release capsule 200 mg [list 1101–1150, unsourced]",
+   "entries": [
+    {
+     "ages": "Child 12–17 years (unsourced list)",
+     "indication": "IBS",
+     "route": "Oral",
+     "dose": "135 mg three times daily (modified-release 200 mg twice daily)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Meningococcal ACWY vaccine",
    "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified); Unsourced list (items 951–1000) described as strictly from BNF for Children 2023 / ICU Quick Drug Guide 2025 — mostly repeats 901–950 (unverified); Unsourced list (items 1001–1050) described as from the BNF for Children 2023 index/monographs — includes products not in BNFc and withdrawn agents (unverified)",
    "checked": "",
@@ -4368,12 +4569,29 @@
    ]
   },
   {
-   "drug": "Metabolic protein substitutes",
-   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified)",
+   "drug": "Mesna",
+   "source": "Unsourced list (items 1101–1150) described as from the BNF for Children 2023 — about half repeats earlier items (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 901–950).\nCHECK: ACBS borderline substances: amounts are set by the metabolic dietitian from protein targets and plasma levels.",
-   "forms": "PKU Lophlex LQ (liquid), PKU Lophlex powder — phenylketonuria [list 901–950, unsourced]\nTYR Lophlex, TYR Gel — tyrosinaemia [list 901–950, unsourced]\nHCU Anamix Infant — homocystinuria [list 901–950, unsourced]\nMSUD Maxamum — maple syrup urine disease [list 901–950, unsourced]\nGlutaric aciduria type 1, isovaleric, methylmalonic and propionic acidaemia formulas [list 901–950, unsourced]",
+   "notes": "From an unsourced list (items 1101–1150).\nCHECK: Cytotoxic chemotherapy: doses, schedules and cumulative limits come from the treatment PROTOCOL and the oncology team only — never prescribe from this note.",
+   "forms": "Solution for injection 100 mg/mL (1 g/10 mL) [list 1101–1150, unsourced]\nTablet 400 mg, 600 mg [list 1101–1150, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "IV / oral",
+     "dose": "Given with ifosfamide/high-dose cyclophosphamide per protocol (dose not given)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Metabolic protein substitutes",
+   "source": "Unsourced list (items 901–950 and 'corrections') described as strictly from BNF for Children 2023 — still repeats earlier wrong doses (unverified); Unsourced list (items 1101–1150) described as from the BNF for Children 2023 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 901–950).\nCHECK: ACBS borderline substances: amounts are set by the metabolic dietitian from protein targets and plasma levels.\nFrom an unsourced list (items 1101–1150).",
+   "forms": "PKU Lophlex LQ (liquid), PKU Lophlex powder — phenylketonuria [list 901–950, unsourced]\nTYR Lophlex, TYR Gel — tyrosinaemia [list 901–950, unsourced]\nHCU Anamix Infant — homocystinuria [list 901–950, unsourced]\nMSUD Maxamum — maple syrup urine disease [list 901–950, unsourced]\nGlutaric aciduria type 1, isovaleric, methylmalonic and propionic acidaemia formulas [list 901–950, unsourced]\nPKU Lophlex LQ liquid (berry, neutral, orange; listed as 100 mL — check pack sizes) [list 1101–1150, unsourced]\nPKU Lophlex powder 28 g sachets; TYR Lophlex / TYR Gel 24 g sachets [list 1101–1150, unsourced]\nHCU Anamix Infant — under 3 years [list 1101–1150, unsourced]",
    "entries": []
   },
   {
@@ -4546,6 +4764,23 @@
      "indication": "Refractory hypertension",
      "route": "Oral",
      "dose": "0.1–0.2 mg/kg/day in 2 divided doses",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Mometasone furoate (topical)",
+   "source": "Unsourced list (items 1101–1150) described as from the BNF for Children 2023 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1101–1150).\nCHECK: Potent steroid — avoid on the face and in infants unless specialist-advised; licensed from 2 years.",
+   "forms": "Cream 0.1%; ointment 0.1%; scalp lotion 0.1% (potent) [list 1101–1150, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Eczema / psoriasis",
+     "route": "Topical",
+     "dose": "Apply once daily",
      "max": ""
     }
    ]
@@ -5031,6 +5266,23 @@
      "indication": "",
      "route": "IV",
      "dose": "175 mg/m² every 3 weeks or 80 mg/m² weekly",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Palivizumab (RSV prophylaxis)",
+   "source": "Unsourced list (items 1101–1150) described as from the BNF for Children 2023 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1101–1150).\nCHECK: Eligibility is set nationally (Green Book chapter 27a); nirsevimab is replacing palivizumab for many infants.",
+   "forms": "Solution for injection 100 mg/mL (50 mg/0.5 mL, 100 mg/1 mL) [list 1101–1150, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "RSV prophylaxis (high-risk infants)",
+     "route": "IM",
+     "dose": "15 mg/kg once a month during the RSV season",
      "max": ""
     }
    ]
@@ -6189,11 +6441,11 @@
   },
   {
    "drug": "Sodium chloride 5% eye drops",
-   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified); Unsourced list (items 1101–1150) described as from the BNF for Children 2023 — about half repeats earlier items (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.",
-   "forms": "Eye drops 2%, 5% [list 351–400, unsourced]",
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nFrom an unsourced list (items 1101–1150).",
+   "forms": "Eye drops 2%, 5% [list 351–400, unsourced]\nEye ointment 5% [list 1101–1150, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
@@ -6931,6 +7183,15 @@
      "max": ""
     }
    ]
+  },
+  {
+   "drug": "Uncooked cornstarch (GSD)",
+   "source": "Unsourced list (items 1101–1150) described as from the BNF for Children 2023 — about half repeats earlier items (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 1101–1150).\nCHECK: Dose and timing set by the metabolic team (overnight glucose monitoring).",
+   "forms": "Glycosade (modified waxy maize starch) oral powder 60 g sachets — lemon, unflavoured [list 1101–1150, unsourced]",
+   "entries": []
   },
   {
    "drug": "Unfractionated heparin",
