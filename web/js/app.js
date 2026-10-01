@@ -31,16 +31,52 @@ const settings = {
   set alerts(v) { try { localStorage.setItem("pgc.alerts", v ? "1" : "0"); } catch {} },
   get corr() { try { return localStorage.getItem("pgc.corr") !== "0"; } catch { return true; } },
   set corr(v) { try { localStorage.setItem("pgc.corr", v ? "1" : "0"); } catch {} G.setCorrection(v); },
+  get uiZoom() { try { const z = parseFloat(localStorage.getItem("pgc.zoom")); return z >= 0.8 && z <= 2 ? z : 1; } catch { return 1; } },
+  set uiZoom(v) { try { localStorage.setItem("pgc.zoom", String(v)); } catch {} },
   get clinician() { try { return JSON.parse(localStorage.getItem("pgc.clin") || "{}"); } catch { return {}; } },
   set clinician(v) { try { localStorage.setItem("pgc.clin", JSON.stringify(v)); } catch {} },
 };
 G.setCorrection(settings.corr);
+
+// ------------------------------------------------------------ screen zoom (whole app; growth charts keep their own pinch-zoom)
+const ZOOM_MIN = 0.8, ZOOM_MAX = 2, ZOOM_STEP = 0.1;
+function applyZoom(z = settings.uiZoom) { document.documentElement.style.setProperty("--ui-zoom", String(z)); }
+function setZoom(z) {
+  z = Math.round(Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z)) * 10) / 10;
+  settings.uiZoom = z; applyZoom(z);
+  const lbl = document.getElementById("zoomval"); if (lbl) lbl.textContent = Math.round(z * 100) + "%";
+  return z;
+}
+function zoomDialog() {
+  const d = document.createElement("dialog"); d.className = "zoomdlg";
+  d.innerHTML = `<h3>Screen size</h3><p class="hint">Make text, buttons and tables bigger or smaller on this device.</p>
+    <div class="row zoomrow"><button class="round" data-z="-" aria-label="Smaller">−</button><b id="zoomval">${Math.round(settings.uiZoom * 100)}%</b><button class="round" data-z="+" aria-label="Bigger">+</button></div>
+    <div class="row end"><button class="ghost" data-z="0">Reset (100%)</button><button class="primary" value="c">Done</button></div>`;
+  document.body.append(d); d.showModal();
+  d.addEventListener("click", (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.z === "+") setZoom(settings.uiZoom + ZOOM_STEP);
+    else if (b.dataset.z === "-") setZoom(settings.uiZoom - ZOOM_STEP);
+    else if (b.dataset.z === "0") setZoom(1);
+    else { d.close(); d.remove(); }
+  });
+  d.addEventListener("close", () => d.remove());
+}
+document.addEventListener("click", (e) => { if (e.target.closest("[data-zoom]")) zoomDialog(); });
+// keyboard on a computer: Ctrl/Cmd + and − already zoom the browser; Alt + / − / 0 zoom only the app
+document.addEventListener("keydown", (e) => {
+  if (!e.altKey || e.ctrlKey || e.metaKey) return;
+  if (e.key === "+" || e.key === "=") { setZoom(settings.uiZoom + ZOOM_STEP); e.preventDefault(); }
+  else if (e.key === "-") { setZoom(settings.uiZoom - ZOOM_STEP); e.preventDefault(); }
+  else if (e.key === "0") { setZoom(1); e.preventDefault(); }
+});
+applyZoom();
 function toast(msg) {
   const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.append(t);
   setTimeout(() => t.remove(), 3200);
 }
 function bar(title, back, actions = "") {
-  return `<header class="bar">${back ? `<button class="icon" data-back aria-label="Back">←</button>` : ""}<h1>${esc(title)}</h1><div class="acts">${actions}</div></header>`;
+  return `<header class="bar">${back ? `<button class="icon" data-back aria-label="Back">←</button>` : ""}<h1>${esc(title)}</h1><div class="acts">${actions}<button class="icon zoombtn" data-zoom aria-label="Screen size (zoom)">Aa</button></div></header>`;
 }
 function bindBack() { $app.querySelector("[data-back]")?.addEventListener("click", () => history.length > 1 ? history.back() : go("#home")); }
 function rangeErr(txt, lo, hi, unit) {
@@ -76,6 +112,7 @@ async function saveOrShare(blob, name, share) {
 async function route() {
   const h = location.hash.slice(1) || "home";
   const [view, a, b] = h.split("/");
+  document.body.classList.toggle("nozoom", view === "chart"); // growth charts have their own pinch-zoom
   window.scrollTo(0, 0);
   if (!session) return viewUnlock();
   switch (view) {
@@ -847,6 +884,8 @@ function viewSettings() {
       ${Object.entries(G.FAMILIES).map(([k, v]) => `<label class="radio"><input type="radio" name="fam" value="${k}" ${settings.family === k ? "checked" : ""}> ${v}</label>`).join("")}
       <p class="hint">Chooses the chart from the child's age and is used for the percentiles in tables and reports. Any chart can still be picked on the chart screen.</p></section>
     <section class="card stack"><h2>Display</h2>
+      <div class="row wrap"><span class="grow">Screen size (zoom) on this device</span><button class="round" id="zm" aria-label="Smaller">−</button><b id="zoomval">${Math.round(settings.uiZoom * 100)}%</b><button class="round" id="zp" aria-label="Bigger">+</button><button class="ghost small" id="z0">Reset</button></div>
+      <p class="hint">Also available from the <b>Aa</b> button at the top of every screen. You can still pinch to zoom on a phone; growth charts have their own zoom (pinch, + / −).</p>
       <label class="switch"><input type="checkbox" id="cl" ${settings.connect ? "checked" : ""}> Connect measurements with a line (trajectory)</label></section>
     <section class="card stack"><h2>Clinical tools</h2>
       <label class="switch"><input type="checkbox" id="sal" ${settings.alerts ? "checked" : ""}> Show growth &amp; clinical alerts on the patient record</label>
@@ -861,11 +900,14 @@ function viewSettings() {
     <section class="card stack"><h2>Growth references (bundled, work offline)</h2>
       ${G.allRefs().map((r) => `<div><b>${esc(r.title)}</b><br><small>Version: ${esc(r.version)} · Percentile curves ${r.centiles.join(", ")}</small><br><small class="muted">Source: ${esc(r.source)}</small></div>`).join("<hr>")}
       <p class="hint">Curves are generated from the official LMS parameters. Each measurement is plotted at the exact age (days ÷ 30.4375 months) with no rounding.</p></section>
-    <section class="card stack"><h2>About</h2><p>Pediatric Growth Chart (web app), version 23. Clinical decision support only; verify measurements and interpret results in clinical context.</p>${CREDIT}</section>
+    <section class="card stack"><h2>About</h2><p>Pediatric Growth Chart (web app), version 24. Clinical decision support only; verify measurements and interpret results in clinical context.</p>${CREDIT}</section>
   </main>`;
   bindBack();
   $app.querySelectorAll('input[name="fam"]').forEach((r) => r.onchange = () => { settings.family = r.value; toast("Saved"); });
   document.getElementById("cl").onchange = (e) => { settings.connect = e.target.checked; };
+  document.getElementById("zp").onclick = () => setZoom(settings.uiZoom + ZOOM_STEP);
+  document.getElementById("zm").onclick = () => setZoom(settings.uiZoom - ZOOM_STEP);
+  document.getElementById("z0").onclick = () => setZoom(1);
   document.getElementById("sal").onchange = (e) => { settings.alerts = e.target.checked; };
   document.getElementById("scor").onchange = (e) => { settings.corr = e.target.checked; };
   renderSyncCard();
