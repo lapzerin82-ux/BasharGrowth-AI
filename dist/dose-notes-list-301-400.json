@@ -2,8 +2,25 @@
  "format": "pgc-dose-notes",
  "version": 1,
  "exported": "2026-10-01",
- "description": "Items 301–350 from an UNSOURCED list described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025. Pure repeats of earlier items (etomidate, tigecycline, eravacycline, plazomicin, delafloxacin, omadacycline, baloxavir) are omitted. Fixed doses are labelled 'Adult / age not stated'; weight-based doses 'Age not stated'. Doses that appear incorrect are NOT loaded. All notes unverified.",
+ "description": "Items 301–400 from UNSOURCED lists described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025. Pure repeats of earlier items (etomidate, tigecycline, eravacycline, plazomicin, delafloxacin, omadacycline, baloxavir; and in 351–400 calcipotriol, chloramphenicol eye drops, epoetin, darbepoetin, iron sucrose, ferric carboxymaltose, penicillamine, trientine) are omitted. Fixed doses are labelled 'Adult / age not stated'; weight-based doses 'Age not stated'. Doses that appear incorrect are NOT loaded. All notes unverified.",
  "notes": [
+  {
+   "drug": "Acetic acid ear spray",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: UK acetic acid 2% (EarCalm) is a spray, 1 spray three times daily, for 12 years and over — check.",
+   "forms": "Ear spray / drops 2% [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Otitis externa",
+     "route": "Ear",
+     "dose": "2–3 drops three to four times daily (as listed)",
+     "max": ""
+    }
+   ]
+  },
   {
    "drug": "Acitretin",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
@@ -22,6 +39,47 @@
    ]
   },
   {
+   "drug": "Adapalene",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Licensed from 12 years; avoid in pregnancy.",
+   "forms": "Gel 0.1%; cream 0.1% [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Acne",
+     "route": "Topical",
+     "dose": "Apply once daily at night",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Albendazole",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Unlicensed in the UK; age limits and repeat doses depend on the infection.",
+   "forms": "Tablet 200 mg, 400 mg; oral suspension [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "400 mg single dose (threadworm / hookworm)",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "400 mg twice daily for 3 days (strongyloidiasis)",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Alitretinoin",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -34,6 +92,40 @@
      "indication": "Severe chronic hand eczema",
      "route": "Oral",
      "dose": "30 mg daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Artificial tears",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.",
+   "forms": "Hypromellose eye drops 0.3%, 1%; carbomer eye gel [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Dry eye",
+     "route": "Eye",
+     "dose": "1 drop as required",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Atovaquone–proguanil",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Prophylaxis and treatment use different weight-band doses (treatment for 11–20 kg is 1 ADULT-strength tablet daily for 3 days) — confirm which tablet.",
+   "forms": "Tablet 250 mg atovaquone/100 mg proguanil; paediatric tablet 62.5 mg/25 mg [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "By weight band (e.g. 11–20 kg: 1 paediatric tablet daily for prophylaxis)",
      "max": ""
     }
    ]
@@ -63,6 +155,40 @@
    ]
   },
   {
+   "drug": "Benzoyl peroxide",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Bleaches fabric and hair.",
+   "forms": "Gel 2.5%, 4%, 5%, 10%; cream; wash [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Acne",
+     "route": "Topical",
+     "dose": "Apply once or twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Betamethasone ear drops",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.",
+   "forms": "Ear drops 0.1% (betamethasone sodium phosphate; also eye/ear/nose) [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Otitis externa",
+     "route": "Ear",
+     "dose": "2–3 drops three to four times daily",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Betamethasone valerate",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -75,6 +201,40 @@
      "indication": "",
      "route": "Topical",
      "dose": "Apply once or twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Bisacodyl",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.",
+   "forms": "Tablet 5 mg; suppository 10 mg (5 mg paediatric suppository) [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "Constipation",
+     "route": "Oral / rectal",
+     "dose": "5–10 mg at night",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Brimonidine",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: CONTRAINDICATED under 2 years (CNS depression, apnoea, hypotension); use with caution in children 2–12 years.",
+   "forms": "Eye drops 0.2% [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Glaucoma",
+     "route": "Eye",
+     "dose": "1 drop three times daily",
      "max": ""
     }
    ]
@@ -114,6 +274,30 @@
    ]
   },
   {
+   "drug": "Chloroquine",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Doses are in mg BASE. Chloroquine prophylaxis is rarely appropriate now — check current travel guidance.",
+   "forms": "Tablet 155 mg base (250 mg phosphate); syrup 50 mg base/5 mL [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Malaria prophylaxis",
+     "route": "Oral",
+     "dose": "Prophylaxis: 5 mg/kg (base) once weekly",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Non-falciparum malaria",
+     "route": "Oral",
+     "dose": "Treatment: 10 mg/kg (base), then 5 mg/kg at 6, 24 and 48 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Clobetasol propionate",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -127,6 +311,23 @@
      "route": "Topical",
      "dose": "Apply once or twice daily",
      "max": "2 weeks of treatment"
+    }
+   ]
+  },
+  {
+   "drug": "Coal tar",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.",
+   "forms": "Ointment 1–10%; solution; shampoo [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Psoriasis / eczema",
+     "route": "Topical",
+     "dose": "Apply as directed",
+     "max": ""
     }
    ]
   },
@@ -172,6 +373,57 @@
    ]
   },
   {
+   "drug": "Deferasirox",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Film-coated tablets need about 30% LOWER doses than dispersible tablets (not interchangeable mg-for-mg). Monitor renal/hepatic function.",
+   "forms": "Dispersible tablet 125, 250, 500 mg; film-coated tablet [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Iron overload",
+     "route": "Oral",
+     "dose": "20–40 mg/kg daily (dispersible tablets)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Deferiprone",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Agranulocytosis — weekly neutrophil count.",
+   "forms": "Tablet (listed 150, 300 mg — check: UK tablets 500 mg, 1000 mg); oral solution 100 mg/mL [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Iron overload",
+     "route": "Oral",
+     "dose": "20–30 mg/kg three times daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Dithranol",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Start with the lowest strength; stains skin and fabric; avoid the face and flexures.",
+   "forms": "Cream / ointment 0.1–2% [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Psoriasis",
+     "route": "Topical",
+     "dose": "Apply once daily as short-contact therapy",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Eluxadoline",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -184,6 +436,66 @@
      "indication": "IBS with diarrhoea",
      "route": "Oral",
      "dose": "100 mg twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Ergocalciferol",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Many UK products/regimens now use colecalciferol; check calcium and the specific product.",
+   "forms": "Tablet 1000, 5000 units; capsule [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Rickets / osteomalacia",
+     "route": "Oral",
+     "dose": "1000–5000 units daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Erythromycin (topical)",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.",
+   "forms": "Gel 2%; ointment 2% (as listed; UK products include erythromycin/zinc solution) [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Acne",
+     "route": "Topical",
+     "dose": "Apply twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Filgrastim (G-CSF)",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.",
+   "forms": "Solution for injection: 30 million units (300 micrograms)/0.5 mL, 48 million units (480 micrograms)/0.5 mL [list 351–400, unsourced]",
+   "entries": []
+  },
+  {
+   "drug": "Fluorescein (eye)",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.",
+   "forms": "Eye drops 1% (UK minims also 2%); impregnated paper strips [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Eye",
+     "dose": "Instil for examination (no dose)",
      "max": ""
     }
    ]
@@ -240,6 +552,23 @@
    ]
   },
   {
+   "drug": "Glycerin suppository",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Choose the size by age.",
+   "forms": "Suppository 1 g (infant), 2 g (child), 4 g (adult) [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Constipation",
+     "route": "Rectal",
+     "dose": "1 suppository when required",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Hydrocortisone butyrate",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -257,6 +586,23 @@
    ]
   },
   {
+   "drug": "Hydroxyurea (hydroxycarbamide)",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Monitor blood counts; titrate to maximum tolerated dose by protocol.",
+   "forms": "Capsule 500 mg; tablet 1 g (also 100 mg tablets; oral solution 100 mg/mL) [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Sickle cell disease",
+     "route": "Oral",
+     "dose": "15–30 mg/kg daily",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Isotretinoin",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -269,6 +615,23 @@
      "indication": "Severe acne",
      "route": "Oral",
      "dose": "0.5–1 mg/kg daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Ivermectin",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Scabies usually needs a second dose after 7–14 days; generally avoided under 15 kg.",
+   "forms": "Tablet 3 mg; oral solution [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "150–200 micrograms/kg single dose (scabies / head lice, off-label)",
      "max": ""
     }
    ]
@@ -293,6 +656,47 @@
      "indication": "",
      "route": "IV",
      "dose": "Analgesia 0.1–0.5 mg/kg",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Lactulose",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Children's doses are by age (e.g. 2.5–10 mL twice daily in young children).",
+   "forms": "Oral solution about 3.35 g/5 mL (UK products 3.1–3.7 g/5 mL) [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "Constipation",
+     "route": "Oral",
+     "dose": "15–30 mL daily",
+     "max": ""
+    },
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "Hepatic encephalopathy",
+     "route": "Oral",
+     "dose": "30–50 mL three times daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Latanoprost",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.",
+   "forms": "Eye drops 0.005% (50 micrograms/mL) [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Glaucoma",
+     "route": "Eye",
+     "dose": "1 drop once daily in the evening",
      "max": ""
     }
    ]
@@ -327,6 +731,54 @@
      "indication": "Constipation (IBS-C)",
      "route": "Oral",
      "dose": "290 micrograms daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Malathion / dimeticone (head lice)",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Repeat after 7 days; dimeticone is flammable until washed out.",
+   "forms": "Malathion aqueous liquid 0.5%; mousse 0.5% [list 351–400, unsourced]\nDimeticone lotion 4%; gel [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Head lice",
+     "route": "Topical",
+     "dose": "Malathion 0.5%: apply to hair, wash off after 12 hours",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Head lice",
+     "route": "Topical",
+     "dose": "Dimeticone 4%: apply to hair, wash off after 8 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Mebendazole",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Licensed from 2 years in the UK.",
+   "forms": "Chewable tablet 100 mg; oral suspension 100 mg/5 mL [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "100 mg single dose (threadworm; repeat after 2 weeks if needed)",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "100 mg twice daily for 3 days (whipworm / roundworm)",
      "max": ""
     }
    ]
@@ -492,6 +944,23 @@
    ]
   },
   {
+   "drug": "Permethrin 5% (scabies)",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Repeat after 7 days. The 1% head-lice product is a 10-minute rinse, not an 8–12 hour application.",
+   "forms": "Cream 5%; lotion / creme rinse 1% (head lice) [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Scabies",
+     "route": "Topical",
+     "dose": "Apply to the whole body; wash off after 8–12 hours",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Phenylephrine eye drops",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -526,6 +995,71 @@
    ]
   },
   {
+   "drug": "Polyethylene glycol (macrogol)",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: 8 sachets within 6 hours is the adult Movicol FAECAL IMPACTION regimen, not bowel preparation; Moviprep is a different bowel-cleansing product. Paediatric disimpaction uses an escalating age-based Movicol Paediatric regimen.",
+   "forms": "Powder for oral solution: sachets (Movicol; Movicol Paediatric 6.9 g) [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "Constipation",
+     "route": "Oral",
+     "dose": "1–3 sachets daily",
+     "max": ""
+    },
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "8 sachets over 6 hours (listed as bowel cleansing)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Praziquantel",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: For schistosomiasis praziquantel is usually 40 mg/kg as a single dose, or 20 mg/kg two or three times in one day; a single 20 mg/kg dose would under-treat.",
+   "forms": "Tablet 600 mg [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: 20 mg/kg single dose for schistosomiasis). Enter the regimen from your source.",
+     "max": ""
+    },
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Tapeworm",
+     "route": "Oral",
+     "dose": "5–10 mg/kg single dose",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Proguanil",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Proguanil prophylaxis is taken DAILY, not weekly; chloroquine + proguanil is now rarely recommended.",
+   "forms": "Tablet 100 mg [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "⚠ NOT LOADED — the listed dose appears incorrect (listed: Prophylaxis 3 mg/kg once weekly (with chloroquine)). Enter the regimen from your source.",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Propofol",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -545,6 +1079,23 @@
      "indication": "",
      "route": "IV infusion",
      "dose": "Maintenance 4–12 mg/kg/hour",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Proxymetacaine",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: For examination only — not for repeated use or to take home.",
+   "forms": "Eye drops 0.5% [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Surface anaesthesia",
+     "route": "Eye",
+     "dose": "1–2 drops",
      "max": ""
     }
    ]
@@ -618,6 +1169,57 @@
    ]
   },
   {
+   "drug": "Salicylic acid (warts)",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Avoid the face, broken skin and use in diabetes/poor circulation; salicylate toxicity on large areas in young children.",
+   "forms": "Ointment 2–10%; gel; collodion 12–17% [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Warts / psoriasis",
+     "route": "Topical",
+     "dose": "Apply as directed",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Senna",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Children's doses are age-banded.",
+   "forms": "Tablet 7.5 mg; syrup 7.5 mg/5 mL [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "Constipation",
+     "route": "Oral",
+     "dose": "7.5–15 mg at night",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Sodium chloride 5% eye drops",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.",
+   "forms": "Eye drops 2%, 5% [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Corneal oedema",
+     "route": "Eye",
+     "dose": "1–2 drops as required",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Sugammadex",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -669,6 +1271,74 @@
    ]
   },
   {
+   "drug": "Thiamine",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Wernicke's encephalopathy needs high-dose parenteral thiamine (e.g. Pabrinex) — anaphylaxis precautions.",
+   "forms": "Tablet 50 mg, 100 mg; injection 100 mg/mL [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Adult / age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral / IV",
+     "dose": "50–100 mg three times daily (alcohol withdrawal / beriberi)",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Timolol eye drops (glaucoma)",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Systemic beta-blockade: apnoea and bradycardia in infants, bronchospasm in asthma. Different from timolol gel used for haemangioma.",
+   "forms": "Eye drops 0.25%, 0.5%; eye gel 0.1% [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Glaucoma",
+     "route": "Eye",
+     "dose": "1 drop twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Topical clindamycin",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Use with benzoyl peroxide to limit resistance.",
+   "forms": "Gel 1%; lotion 1%; solution 1% [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Acne",
+     "route": "Topical",
+     "dose": "Apply twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Tretinoin (topical)",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Tretinoin is not a psoriasis treatment; in the UK topical tretinoin is mainly available in combination products. Avoid in pregnancy.",
+   "forms": "Cream 0.025%, 0.05%, 0.1%; gel 0.025%, 0.05% [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Acne (listed also for psoriasis — check)",
+     "route": "Topical",
+     "dose": "Apply once daily at night",
+     "max": ""
+    }
+   ]
+  },
+  {
    "drug": "Tropicamide",
    "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
    "checked": "",
@@ -686,12 +1356,29 @@
    ]
   },
   {
-   "drug": "Ursodeoxycholic acid",
-   "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified)",
+   "drug": "Urea (topical)",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
    "checked": "",
    "unverified": true,
-   "notes": "From an unsourced list (items 301–350). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.",
-   "forms": "Capsule: 250 mg, 300 mg [list 301–350, unsourced]\nTablet: 250 mg, 500 mg [list 301–350, unsourced]",
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Stinging on broken/eczematous skin, especially in children.",
+   "forms": "Cream 10%, 25%, 40%; ointment 40% [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "Hyperkeratosis / dry skin",
+     "route": "Topical",
+     "dose": "Apply twice daily",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Ursodeoxycholic acid",
+   "source": "Unsourced list (items 301–350) described as extracted from BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; it repeats several doses already found to be wrong (unverified); Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 301–350). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nFrom an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.",
+   "forms": "Capsule: 250 mg, 300 mg [list 301–350, unsourced]\nTablet: 250 mg, 500 mg [list 301–350, unsourced]\nOral suspension (250 mg/5 mL) [list 351–400, unsourced]",
    "entries": [
     {
      "ages": "Age not stated (unsourced list)",
@@ -715,6 +1402,23 @@
      "indication": "",
      "route": "IV",
      "dose": "Intubation 0.1 mg/kg; maintenance 0.01–0.02 mg/kg",
+     "max": ""
+    }
+   ]
+  },
+  {
+   "drug": "Vitamin D (cholecalciferol)",
+   "source": "Unsourced list (items 351–400) described as a sequential review of BNF Children 2023 / ICU Quick Drug Guide 2025 — not attributable to a specific page; repeats earlier wrong doses (unverified)",
+   "checked": "",
+   "unverified": true,
+   "notes": "From an unsourced list (items 351–400). Fixed doses are presumed adult; weight-based doses are not confirmed as paediatric.\nCHECK: Units per drop vary widely between products — check the specific product to avoid overdose.",
+   "forms": "Tablet 400, 1000, 5000 units; oral drops (listed 400 units/drop — check product) [list 351–400, unsourced]",
+   "entries": [
+    {
+     "ages": "Age not stated (unsourced list)",
+     "indication": "",
+     "route": "Oral",
+     "dose": "400–1000 units daily (prophylaxis); higher doses for deficiency",
      "max": ""
     }
    ]
