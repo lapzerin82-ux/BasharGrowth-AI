@@ -182,6 +182,16 @@ OUT.mkdir()
 (OUT / "manifest.webmanifest").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
 (OUT / "sw.js").write_text(sw, encoding="utf-8")
 (OUT / "_headers").write_text(headers, encoding="utf-8")
+# Same caching rules for Vercel (the folder can be deployed there as a static site as-is).
+vercel = {
+    "headers": [
+        {"source": "/sw.js", "headers": [{"key": "Cache-Control", "value": "no-cache"}]},
+        {"source": "/", "headers": [{"key": "Cache-Control", "value": "no-cache"}]},
+        {"source": "/index.html", "headers": [{"key": "Cache-Control", "value": "no-cache"}]},
+        {"source": "/manifest.webmanifest", "headers": [{"key": "Content-Type", "value": "application/manifest+json"}]},
+    ]
+}
+(OUT / "vercel.json").write_text(json.dumps(vercel, indent=2), encoding="utf-8")
 for name in ICONS:
     shutil.copy(HERE / "icons" / name, OUT / name)
 
